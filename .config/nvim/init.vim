@@ -17,6 +17,9 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+set title
+set clipboard^=unnamedplus
+
 colorscheme gruvbox
 
 nnoremap <Space>f :NERDTreeToggle <cr>
@@ -27,6 +30,15 @@ nnoremap <Space>k :wincmd k <cr>
 nnoremap <Space>l :wincmd l <cr>
 
 inoremap jk <ESC>
+
+" Go to start of line with H and to the end with L
+noremap H ^
+noremap L $
+
+" Yank and paste to system's clipboard
+noremap <Space>y "+y
+noremap <Space>p "+p
+noremap <Space>P +P""
 
 
 " NERDTree config
@@ -49,9 +61,7 @@ function! SyncTree()
   endif
 endfunction
 
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
-
+autocmd BufRead * call SyncTree()
 
 " coc config
 " prettier command for coc
@@ -67,5 +77,16 @@ let g:coc_global_extensions = [
   \ ]
 
 nmap <silent> gd <Plug>(coc-definition)
+nnoremap go <c-o>
 
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
 
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
