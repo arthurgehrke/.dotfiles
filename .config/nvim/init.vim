@@ -4,10 +4,16 @@ Plug 'morhetz/gruvbox'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'neoclide/coc.nvim'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'tmux-plugins/tmux-yank'
 call plug#end()
 
 syntax enable
 
+set hidden
 set number
 set relativenumber
 set background=dark
@@ -18,7 +24,7 @@ set shiftwidth=2
 set expandtab
 
 set title
-set clipboard^=unnamedplus
+set clipboard=unnamedplus
 
 colorscheme gruvbox
 
@@ -90,3 +96,6 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+
+" Airline config
+let g:airline_theme = 'LanguageClient'

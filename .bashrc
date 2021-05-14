@@ -6,6 +6,14 @@ if [ -e $HOME/.bash_aliases ]; then
     source $HOME/.bash_aliases
 fi
 
+# WSL 2 specific settings.
+if grep -q "microsoft" /proc/version &>/dev/null; then
+    # Requires: https://sourceforge.net/projects/vcxsrv/ (or alternative)
+    export DISPLAY="$(/sbin/ip route | awk '/default/ { print $3 }'):0"
+    # Allows your gpg passphrase prompt to spawn (useful for signing commits).
+    export GPG_TTY=$(tty)
+fi
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
