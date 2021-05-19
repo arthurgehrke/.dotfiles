@@ -31,11 +31,36 @@
 
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-    os_icon                 # os identifier
+    user
+    os_icon_joined
+    # os_icon                 # os identifier
     dir                     # current directory
     vcs                     # git status
     # prompt_char           # prompt symbol
   )
+
+
+  POWERLEVEL9K_USER_FOREGROUND='007'
+  POWERLEVEL9K_OS_ICON_JOINED_FOREGROUND='007'
+
+  POWERLEVEL9K_DIR_WRITABLE_FOREGROUND='015'
+  POWERLEVEL9K_DIR_BACKGROUND='236'
+  POWERLEVEL9K_DIR_FOREGROUND='015'
+
+  POWERLEVEL9K_DIR_HOME_FOREGROUND='015'
+  POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='015'
+  POWERLEVEL9K_DIR_HOME_DEFAULT_FOREGROUND='015'
+  POWERLEVEL9K_DIR_HOME_ETC_FOREGROUND='015'
+  POWERLEVEL9K_DIR_HOME_NOT_WRITABLE_FOREGROUND='015'
+
+  # GIT
+	POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
+	POWERLEVEL9K_VCS_CLEAN_BACKGROUND='082'
+	POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
+	POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='red'
+	POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
+	POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
+
 
   # The list of segments shown on the right. Fill it with less important segments.
   # Right prompt on the last prompt line (where you are typing your commands) gets
@@ -205,7 +230,7 @@
 
   ##################################[ dir: current directory ]##################################
   # Default current directory color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=31
+  # typeset -g POWERLEVEL9K_DIR_FOREGROUND=31
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
@@ -215,7 +240,7 @@
   typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=103
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=39
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=015
   # Display anchor directory segments in bold.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
   # Don't shorten directories that contain any of these files. They are anchors.
@@ -365,18 +390,18 @@
 
     if (( $1 )); then
       # Styling for up-to-date Git status.
-      local       meta='%246F'  # grey foreground
-      local      clean='%76F'   # green foreground
-      local   modified='%178F'  # yellow foreground
-      local  untracked='%39F'   # blue foreground
-      local conflicted='%196F'  # red foreground
+      # local       meta='%246F'  # grey foreground
+      # local      clean='%76F'   # green foreground
+      # local   modified='%178F'  # yellow foreground
+      # local  untracked='%39F'   # blue foreground
+      # local conflicted='%196F'  # red foreground
     else
       # Styling for incomplete and stale Git status.
-      local       meta='%244F'  # grey foreground
-      local      clean='%244F'  # grey foreground
-      local   modified='%244F'  # grey foreground
-      local  untracked='%244F'  # grey foreground
-      local conflicted='%244F'  # grey foreground
+      # local       meta='%244F'  # grey foreground
+      # local      clean='%244F'  # grey foreground
+      # local   modified='%244F'  # grey foreground
+      # local  untracked='%244F'  # grey foreground
+      # local conflicted='%244F'  # grey foreground
     fi
 
     local res
@@ -485,9 +510,9 @@
 
   # These settings are used for repositories other than Git or when gitstatusd fails and
   # Powerlevel10k has to fall back to using vcs_info.
-  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=76
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=76
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=178
+  # typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=76
+  # typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=76
+  # typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=178
 
   ##########################[ status: exit code of the last command ]###########################
   # Enable OK_PIPE, ERROR_PIPE and ERROR_SIGNAL status states to allow us to enable, disable and
