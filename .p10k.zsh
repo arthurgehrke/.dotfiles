@@ -39,6 +39,7 @@
     # prompt_char           # prompt symbol
   )
 
+  POWERLEVEL9K_DIR_CLASSES=()
 
   POWERLEVEL9K_USER_FOREGROUND='007'
   POWERLEVEL9K_OS_ICON_JOINED_FOREGROUND='007'
@@ -54,12 +55,12 @@
   POWERLEVEL9K_DIR_HOME_NOT_WRITABLE_FOREGROUND='015'
 
   # GIT
-	POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-	POWERLEVEL9K_VCS_CLEAN_BACKGROUND='082'
-	POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
+	POWERLEVEL9K_VCS_CLEAN_FOREGROUND='236'
+	POWERLEVEL9K_VCS_CLEAN_BACKGROUND='#73c05d'
+	POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='236'
 	POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='red'
-	POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
-	POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='220'
+	POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='236'
+	POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='#c7c524'
 
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -390,7 +391,7 @@
 
     if (( $1 )); then
       # Styling for up-to-date Git status.
-      # local       meta='%246F'  # grey foreground
+      local       meta='%236F'  # grey foreground
       # local      clean='%76F'   # green foreground
       # local   modified='%178F'  # yellow foreground
       # local  untracked='%39F'   # blue foreground
@@ -496,7 +497,7 @@
   typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED,CONFLICTED,COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=-1
 
   # Icon color.
-  typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_COLOR=76
+  typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_COLOR=235
   typeset -g POWERLEVEL9K_VCS_LOADING_VISUAL_IDENTIFIER_COLOR=244
   # Custom icon.
   # typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_EXPANSION='⭐'
