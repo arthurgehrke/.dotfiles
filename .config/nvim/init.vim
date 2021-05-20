@@ -7,11 +7,14 @@ Plug 'neoclide/coc.nvim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 
-
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tmux-plugins/tmux-yank'
+
+Plug 'leshill/vim-json'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -194,3 +197,13 @@ let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffse
 
 " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" vim-javascript
+let g:javascript_plugin_jsdoc = 1
+
+" vim-jsx
+let g:jsx_ext_required = 1
+let g:jsx_pragma_required = 1
+
+
+
