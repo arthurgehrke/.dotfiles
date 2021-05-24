@@ -18,3 +18,6 @@ alias zshsource='source ~/.zshrc'
 alias tl='tmux attach || tmux new-session\; new-window\; new-window'
 
 alias attach_ide='~/attach_ide.sh'
+
+alias alder='alder --exclude='"'"'.git|node_modules'"'"''
+alias tree_dir='tree -I '""'node_modules|.git'""''
