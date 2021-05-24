@@ -6,19 +6,19 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'neoclide/coc.nvim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-rooter'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tmux-plugins/tmux-yank'
+Plug 'tmux-plugins/vim-tmux'
 
-Plug 'leshill/vim-json'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'airblade/vim-rooter'
 call plug#end()
 
 syntax enable
@@ -32,6 +32,7 @@ set cindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
 " Display long lines as just one line
 set nowrap                              
 
@@ -72,9 +73,9 @@ noremap L $
 
 
 " Yank and paste to system's clipboard
-" noremap <Space>y "+y
-" noremap <Space>p "+p
-" noremap <Space>P +P""
+noremap <Space>y "+y
+noremap <Space>p "+p
+noremap <Space>P +P""
 
 
 " NERDTree config
@@ -197,13 +198,4 @@ let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffse
 
 " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" vim-javascript
-let g:javascript_plugin_jsdoc = 1
-
-" vim-jsx
-let g:jsx_ext_required = 1
-let g:jsx_pragma_required = 1
-
-
 
