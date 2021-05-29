@@ -35,6 +35,4 @@ DISABLE_AUTO_UPDATE="true"
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-alias config='/usr/bin/git --git-dir=/home/arthurgehrke/dotfiles/.git --work-tree=/home/arthurgehrke'
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

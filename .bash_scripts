@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/zsh 
 
 function ide() {
-# session="ide"
+session="ide"
 export SESSIONS="ide"
 
 set -uo pipefail
 
 for session in ${SESSIONS}; do
+
     tmux has-session -t ${session} 2>/dev/null
+
     if [[ $? == 0 ]]; then
         echo "Session '${session}' already exists"
         continue
@@ -18,7 +20,6 @@ for session in ${SESSIONS}; do
 
 		# Select pane 1, set dir to api, run vim
 		tmux selectp -t 1 
-		tmux send-keys "api;vim" C-m 
 		# Split pane 1 horizontal by 65%, start redis-server
 		tmux splitw -h -p 35
 
