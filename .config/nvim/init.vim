@@ -3,7 +3,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'morhetz/gruvbox'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-rooter'
@@ -27,6 +27,8 @@ call plug#end()
 
 syntax enable
 
+set termguicolors
+set encoding=utf-8
 set hidden
 set number
 set relativenumber
@@ -36,13 +38,36 @@ set cindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+set nobackup
+set nowritebackup
 
 set nowrap                              
+
+set shortmess+=c
+set pumheight=10                        " Makes popup menu smaller
 
 set title
 set clipboard=unnamedplus
 
+" open new split panes to right and below
+set splitright
+set splitbelow
+
+set cursorline
+set shortmess+=c             " Don't give ins-completion-menu messages
+
 colorscheme gruvbox
+
+
+" If vim is resized, resize any splits
+autocmd VimResized * wincmd =
+" Wrap lines in quickfix windows
+autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
+" More predictable syntax highlighting
+autocmd BufEnter * syntax sync fromstart
+" Automatically close preview windows after autocompletion
+autocmd CompleteDone * pclose
+
 
 nnoremap <Space>f :NERDTreeToggle <cr>
 
@@ -52,7 +77,9 @@ nnoremap <Space>k :wincmd k <cr>
 nnoremap <Space>l :wincmd l <cr>
 
 inoremap jk <ESC>
-
+inoremap kj <ESC>
+inoremap JK <ESC>
+inoremap jj <ESC>
 
 " TAB in general mode will move to text buffer
 nnoremap <TAB> :bnext<CR>
@@ -69,26 +96,35 @@ nnoremap <M-k>    :resize +2<CR>
 nnoremap <M-h>    :vertical resize -2<CR>
 nnoremap <M-l>    :vertical resize +2<CR>
 
+" Insert new line without entering insert mode
+nmap <S-Enter> O<Esc>
+nmap <CR> o<Esc>
 
 " Go to start of line with H and to the end with L
 noremap H ^
 noremap L $
-
 
 " Yank and paste to system's clipboard
 noremap <Space>y "+y
 noremap <Space>p "+p
 noremap <Space>P +P""
 
+" space to clear search highlights
+noremap <silent> <space> :noh<cr>
 
+" Plugins Config
 " NERDTree config
 let g:NERDTreeGitStatusWithFlags = 1
-let g:NERDTreeIgnore = ['^node_modules$']
+let g:NERDTreeIgnore = ['^node_modules$', '\.git$']
+let g:NERDTreeShowHidden=1
+let g:NERDTreeMinimalUI = 1
 
 autocmd BufWinEnter * setlocal modifiable
 
-" sync open file with NERDTree
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" sync open file with NERDTree
 " " Check if NERDTree is open or active
 function! IsNERDTreeOpen()        
   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
@@ -138,6 +174,17 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" coc diagnostics theme
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+highlight Error            ctermbg=161
+highlight ErrorMsg         NONE
+highlight link ErrorMsg    Error
+hi! CocErrorSign guifg=#d1666a
+
+" fix syntax highlight for Coc plugin floating errors
+" hi CocErrorFloat guifg=Magenta guibg=Magenta
+
 " Use <c-space> to trigger completion.
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
@@ -179,6 +226,16 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
+" Add CoC Prettier if prettier is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+" Add CoC ESLint if ESLint is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
+
 " Airline config
 let g:airline_theme = 'onedark'
 " Always show tabs
@@ -189,8 +246,12 @@ nnoremap <space>/ :Commentary<CR>
 vnoremap <space>/ :Commentary<CR>
 
 " Fzf config
-" Customize fzf colors to match your color scheme
-" let g:fzf_history_dir = '~/.local/share/fzf-history'
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
 
 let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline'
 let $FZF_DEFAULT_COMMAND="rg --files --hidden"
@@ -213,9 +274,8 @@ let g:fzf_colors =
 " Border color
 let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
 
-" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
+" ts and jsx config
+" vim-jsx
 let g:jsx_ext_required = 1
 
 " set filetypes as typescriptreact
@@ -223,3 +283,16 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 
 " set filetypes as typescriptreact
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+
+" some weird error with Fugitive
+let g:fugitive_pty = 0
+
+" Change cursor to solid vertical line
+" There are problems with Vim's floating window setting cursor to a solid
+" block. So these lines below are resetting it to a solid vertical line.
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[6 q"
+
