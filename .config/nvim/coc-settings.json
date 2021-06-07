@@ -1,5 +1,13 @@
 {
   "suggest.noselect": false,
+  "suggest.maxPreviewWidth": 80,
+  "dialog.maxWidth": 80,
+  "diagnostic.maxWindowHeight": 20,
+  "diagnostic.maxWindowWidth": 80,
+  "diagnostic.errorSign": "✖",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.infoSign": "●",
+  "diagnostic.hintSign": "○",
   "coc.preferences.formatOnType": true,
   "tsserver.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
@@ -10,5 +18,6 @@
     "javascriptreact",
     "typescript.tsx"
   ],
-  "coc.preferences.colorSupport": false
+  "coc.preferences.colorSupport": false,
+  "eslint.autoFixOnSave": false
 }

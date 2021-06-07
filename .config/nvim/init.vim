@@ -1,13 +1,17 @@
+"*****************************************************************************
+" Plugins
+"*****************************************************************************
 call plug#begin()
 Plug 'scrooloose/nerdtree'
-Plug 'morhetz/gruvbox'
-Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'airblade/vim-gitgutter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-rooter'
 
+Plug 'tpope/vim-fugitive'
+
+Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -25,6 +29,10 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 call plug#end()
 
+"*****************************************************************************
+" Nvim config
+"*****************************************************************************
+
 syntax enable
 
 set termguicolors
@@ -40,6 +48,15 @@ set shiftwidth=2
 set expandtab
 set nobackup
 set nowritebackup
+
+" Always show tabs
+set showtabline=2
+
+" Search
+set ignorecase " case insensitive searching
+set smartcase " case-sensitive if expresson contains a capital letter
+set hlsearch " highlight search results
+set incsearch " set incremental search, like modern browsers
 
 set nowrap                              
 
@@ -58,19 +75,6 @@ set shortmess+=c             " Don't give ins-completion-menu messages
 
 colorscheme gruvbox
 
-
-" If vim is resized, resize any splits
-autocmd VimResized * wincmd =
-" Wrap lines in quickfix windows
-autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
-" More predictable syntax highlighting
-autocmd BufEnter * syntax sync fromstart
-" Automatically close preview windows after autocompletion
-autocmd CompleteDone * pclose
-
-
-nnoremap <Space>f :NERDTreeToggle <cr>
-
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
@@ -81,6 +85,21 @@ inoremap kj <ESC>
 inoremap JK <ESC>
 inoremap jj <ESC>
 
+" Use alt + hjkl to resize windows
+nnoremap <M-j>    :resize -2<CR>
+nnoremap <M-k>    :resize +2<CR>
+nnoremap <M-h>    :vertical resize -2<CR>
+nnoremap <M-l>    :vertical resize +2<CR>
+
+" If vim is resized, resize any splits
+autocmd VimResized * wincmd =
+" Wrap lines in quickfix windows
+autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
+" More predictable syntax highlighting
+autocmd BufEnter * syntax sync fromstart
+" Automatically close preview windows after autocompletion
+autocmd CompleteDone * pclose
+
 " TAB in general mode will move to text buffer
 nnoremap <TAB> :bnext<CR>
 " SHIFT-TAB will go back
@@ -89,12 +108,6 @@ nnoremap <S-TAB> :bprevious<CR>
 " Better tabbing
 vnoremap < <gv
 vnoremap > >gv
-
-" Use alt + hjkl to resize windows
-nnoremap <M-j>    :resize -2<CR>
-nnoremap <M-k>    :resize +2<CR>
-nnoremap <M-h>    :vertical resize -2<CR>
-nnoremap <M-l>    :vertical resize +2<CR>
 
 " Insert new line without entering insert mode
 nmap <S-Enter> O<Esc>
@@ -110,41 +123,69 @@ noremap <Space>p "+p
 noremap <Space>P +P""
 
 " space to clear search highlights
-noremap <silent> <space> :noh<cr>
+" noremap <silent> <space> :noh<cr>
+noremap <space> :set hlsearch! hlsearch?<cr>
 
+"*****************************************************************************
 " Plugins Config
-" NERDTree config
-let g:NERDTreeGitStatusWithFlags = 1
+"*****************************************************************************
+" NERDTree 
+"*****************************************************************************
+nnoremap <Space>f :NERDTreeToggle <cr>
+
+" let g:NERDTreeGitStatusWithFlags = 1
 let g:NERDTreeIgnore = ['^node_modules$', '\.git$']
 let g:NERDTreeShowHidden=1
 let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeWinSize = 30
+
+" Automatically close NerdTree when you open a file
+let g:NERDTreeQuitOnOpen = 1
+
+" Automatically delete the buffer of the file you just deleted with NerdTree
+let g:NERDTreeAutoDeleteBuffer = 1
 
 autocmd BufWinEnter * setlocal modifiable
+autocmd BufEnter * lcd %:p:h
 
-" Automaticaly close nvim if NERDTree is only thing left open
+" Exit Vim if NERDTree is the only window left.
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " sync open file with NERDTree
-" " Check if NERDTree is open or active
 function! IsNERDTreeOpen()        
   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
 endfunction
 
 " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
+" function! SyncTree()
+"   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+"     NERDTreeFind
+"     wincmd p
+"   endif
+" endfunction
 
-autocmd BufRead * call SyncTree()
+" autocmd BufRead * call SyncTree()
 
-" coc config
-" prettier command for coc
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+"*****************************************************************************
+" NERDTree Git 
+"*****************************************************************************
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+	\ 'Modified'  :'✹',
+	\ 'Staged'    :'✚',
+	\ 'Untracked' :'✭',
+	\ 'Renamed'   :'➜',
+	\ 'Unmerged'  :'═',
+	\ 'Deleted'   :'✖',
+	\ 'Dirty'     :'✗',
+	\ 'Ignored'   :'☒',
+	\ 'Clean'     :'✔︎',
+	\ 'Unknown'   :'?',
+	\ }
 
+"*****************************************************************************
+" Coc 
+"*****************************************************************************
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
@@ -181,9 +222,6 @@ highlight Error            ctermbg=161
 highlight ErrorMsg         NONE
 highlight link ErrorMsg    Error
 hi! CocErrorSign guifg=#d1666a
-
-" fix syntax highlight for Coc plugin floating errors
-" hi CocErrorFloat guifg=Magenta guibg=Magenta
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -236,16 +274,20 @@ if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
 
-" Airline config
+"*****************************************************************************
+" Airline 
+"*****************************************************************************
 let g:airline_theme = 'onedark'
-" Always show tabs
-set showtabline=2
 
-" Vim commentary
+"*****************************************************************************
+" Vim Commentary 
+"*****************************************************************************
 nnoremap <space>/ :Commentary<CR>
 vnoremap <space>/ :Commentary<CR>
 
-" Fzf config
+"*****************************************************************************
+" Fzf 
+"*****************************************************************************
 nnoremap <C-p> :FZF<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -274,8 +316,9 @@ let g:fzf_colors =
 " Border color
 let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
 
-" ts and jsx config
-" vim-jsx
+"*****************************************************************************
+" Vim-jsx 
+"*****************************************************************************
 let g:jsx_ext_required = 1
 
 " set filetypes as typescriptreact
@@ -287,8 +330,6 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 
-" some weird error with Fugitive
-let g:fugitive_pty = 0
 
 " Change cursor to solid vertical line
 " There are problems with Vim's floating window setting cursor to a solid
