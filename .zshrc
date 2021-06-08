@@ -21,12 +21,15 @@ export ZSH="/home/arthurgehrke/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
+export FZF_BASE="$HOME/.fzf"
+
 plugins=(
   git 
   nvm 
   zsh-z
   zsh-syntax-highlighting
   zsh-autosuggestions
+  fzf
 )
 
 source $ZSH/oh-my-zsh.sh
