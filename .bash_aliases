@@ -10,12 +10,23 @@ alias la="ls -lha"
 # List only directories
 alias lsd='ls -l | grep "^d"'
 
+# easier to read disk human-readable sizes
+alias df='df -h'                          
+# show sizes in MB
+alias free='free -m'                      
+
+# get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4 | head -5'
+# get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3 | head -5'
+
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-alias grep='grep --color'
+alias grep='grep --color=auto'
 
 # git commands
 alias gs='git status'
