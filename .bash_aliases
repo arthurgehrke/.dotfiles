@@ -37,4 +37,3 @@ alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
 
 alias alder='alder --exclude='"'"'.git|node_modules'"'"''
-alias tree_dir='tree -I '"''"'node_modules|.git'"''"''
