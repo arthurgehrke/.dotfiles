@@ -15,8 +15,8 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'tmux-plugins/tmux-yank'
-Plug 'tmux-plugins/vim-tmux'
+"Plug 'tmux-plugins/tmux-yank'
+"Plug 'tmux-plugins/vim-tmux'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
@@ -62,7 +62,7 @@ set shortmess+=c
 set pumheight=10                        " Makes popup menu smaller
 
 set title
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 
 " open new split panes to right and below
 set splitright
@@ -118,10 +118,19 @@ nmap <CR> o<Esc>
 noremap H ^
 noremap L $
 
-" Yank and paste to system's clipboard
-noremap <Space>y "+y
-noremap <Space>p "+p
-noremap <Space>P +P""
+" WSL clipboard with win32yank
+let g:clipboard = {
+	\   'name': 'WslClipboard',
+	\   'copy': {
+	\      '+': 'clip.exe',
+	\      '*': 'clip.exe',
+	\    },
+	\   'paste': {
+	\      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+	\      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+	\   },
+	\   'cache_enabled': 0,
+	\ }
 
 " space to clear search highlights
 " noremap <silent> <space> :noh<cr>
