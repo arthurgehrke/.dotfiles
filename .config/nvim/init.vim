@@ -15,8 +15,7 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-"Plug 'tmux-plugins/tmux-yank'
-"Plug 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
