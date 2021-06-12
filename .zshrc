@@ -19,14 +19,8 @@ source $HOME/.fzf.zsh
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
 
-
-if [ -e $HOME/.bash_aliases ]; then
-	source $HOME/.bash_aliases
-fi
-
-if [ -e $HOME/.bash_scripts ]; then
- 	source $HOME/.bash_scripts
-fi
+source $HOME/.shell_aliases
+source $HOME/.shell_scripts
 
 ##############################################################################
 # History

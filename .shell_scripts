@@ -1,0 +1,55 @@
+#!/usr/bin/zsh 
+
+function ide() {
+  session="ide"
+
+  set -uo pipefail
+
+  tmux has-session -t ${session} 2>/dev/null
+
+  if [[ $? == 0 ]]; then
+      echo "Session '${session}' already exists"
+      continue
+  fi
+
+  # tmux start-server
+  tmux new-session -d -s ${session} -n vim
+  # Select pane 1, set dir to api, run vim
+  tmux selectp -t 1 
+  # Split pane 1 horizontal by 65%, start redis-server
+  tmux splitw -h -p 35
+  # Select pane 2 
+  tmux selectp -t 2
+  # Split pane 2 vertiacally by 25%
+  tmux splitw -v -p 75
+  # select pane 3, set to api root
+  tmux selectp -t 3
+  # Select pane 1
+  tmux selectp -t 1
+  # create a new window called scratch
+  # tmux new-window -t $session:1 -n scratch
+  # return to main vim window
+  # tmux select-window -t $session:0
+  # Finished setup, attach to the tmux session!
+  tmux attach-session -t $session
+
+  echo "Session '${session}' was created"
+}
+
+PROMPT_COMMAND=ide
+
+function attach_ide() {
+  tmux split-window -v -p 30
+  tmux split-window -h -p 75
+  tmux split-window -h -p 50
+}
+
+PROMPT_COMMAND=attach_ide
+
+# Uses tree - install first:
+function t() {
+  # Defaults to 3 levels deep, do more with `t 5` or `t 1` pass additional args after
+  tree -I '.git|node_modules|bower_components|.DS_Store' --dirsfirst --filelimit 15 -L ${1:-3} -aC $2
+}
+
+PROMPT_COMMAND=t
