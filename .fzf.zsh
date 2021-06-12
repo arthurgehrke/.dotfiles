@@ -16,6 +16,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden'  # Respect .gitignore, show hid
 export FZF_DEFAULT_OPTS='--bind ctrl-l:select-all,ctrl-n:toggle+up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,::abort'
 export FZF_COMPLETION_OPTS='-m'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"    # Respect .gitignore for ^t
+# install bat
 export FZF_CTRL_T_OPTS="--preview 'bat --color \"always\" {}'"
 export FZF_TMUX_HEIGHT=70%
 

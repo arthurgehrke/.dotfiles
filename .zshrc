@@ -22,6 +22,16 @@ source $INCLUDES/z/z.sh
 source $HOME/.shell_aliases
 source $HOME/.shell_scripts
 
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
 ##############################################################################
 # History
 ##############################################################################
@@ -75,3 +85,18 @@ bindkey '^j' down-line-or-search
 ##############################################################################
 
 DISABLE_AUTO_UPDATE="true"
+
+# Share a same ssh-agent across sessions.
+if [ -f ~/.ssh-agent.generated.env ]; then
+  . ~/.ssh-agent.generated.env >/dev/null
+  # If the $SSH_AGENT_PID is occupied by other process, we need to manually
+  # remove ~/.ssh-agent.generated.env.
+  if ! kill -0 $SSH_AGENT_PID &>/dev/null; then
+    # Stale ssh-agent env file found. Spawn a new ssh-agent.
+    eval `ssh-agent | tee ~/.ssh-agent.generated.env`
+    ssh-add
+  fi
+else
+  eval `ssh-agent | tee ~/.ssh-agent.generated.env`
+  ssh-add
+fi
