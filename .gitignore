@@ -1,0 +1,35 @@
+# Ignore everything by default.
+*
+
+# Bash stuff (profile just sources bashrc, since it's the only thing sourced
+# when a shell is a login shell).
+!.bash*
+.*.swp
+.bash_history
+.bash_local
+.bash_logout
+
+# Zsh
+!.zshrc
+#
+# Git aliases, identification info
+!.gitconfig
+# The gitignore of this repository itself (!)
+!.gitignore
+
+!.tmux.config
+!.tmux.powerline.conf
+
+!.p10k.zsh
+
+!.fzf.zsh
+
+!.bashrc
+
+!.shell_aliases
+!.shell_scripts
+
+!.config/nvim/*
+!.config/alacritty/*
+
+
