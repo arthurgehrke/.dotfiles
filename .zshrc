@@ -47,18 +47,17 @@ zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower
 autoload -U compinit && compinit
 zmodload -i zsh/complist
 
-unsetopt menu_complete
-unsetopt flowcontrol
-
+# history
 setopt append_history
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_verify
+setopt hist_expire_dups_first
 setopt inc_append_history
+# completion
 setopt always_to_end
 setopt complete_in_word
 setopt extended_history
-setopt hist_expire_dups_first
 setopt share_history
 setopt prompt_subst
 
@@ -66,9 +65,7 @@ setopt prompt_subst
 # Various
 ##############################################################################
 
-setopt auto_menu
-setopt interactivecomments
-setopt auto_cd
+# setopt auto_cd
 setopt auto_remove_slash 
 
 ##############################################################################
