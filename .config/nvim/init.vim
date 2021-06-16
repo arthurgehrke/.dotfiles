@@ -27,27 +27,37 @@ Plug 'styled-components/vim-styled-components'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 call plug#end()
-
 "*****************************************************************************
 " Nvim config
 "*****************************************************************************
 syntax enable
 
+set shell=$SHELL
+
+autocmd BufEnter * highlight Normal guibg=0
+" autocmd BufRead,BufNewFile * setlocal signcolumn=yes
+autocmd FileType tagbar,nerdtree setlocal signcolumn=no
+
+" set signcolumn=yes
 set termguicolors
+set title
 set encoding=utf-8
 set hidden
-set number
+" set number
 set relativenumber
 set background=dark
 set smarttab
-set cindent
 set tabstop=2
 set shiftwidth=2
-set showtabline=2
+" set showtabline=2
+set nowrap                              
+" set wrapmargin=8 " wrap lines when coming within n characters from side
+" set linebreak " set soft wrapping
 
-set expandtab
+" set expandtab
 set nobackup
 set nowritebackup
+set noswapfile
 
 " Search
 set ignorecase " case insensitive searching
@@ -55,20 +65,28 @@ set smartcase " case-sensitive if expresson contains a capital letter
 set hlsearch " highlight search results
 set incsearch " set incremental search, like modern browsers
 
-set nowrap                              
-
 set shortmess+=c
 set pumheight=10                        " Makes popup menu smaller
 
-set title
 set clipboard+=unnamedplus
+set copyindent
 
 " open new split panes to right and below
 set splitright
 set splitbelow
 
-set cursorline
-set shortmess+=c             " Don't give ins-completion-menu messages
+" set cursorline
+
+" set cmdheight=1 " command bar height
+set noshowcmd
+" set nolazyredraw " don't redraw while executing macros
+" set noshowmode " don't show which mode disabled for PowerLine
+" set laststatus=0
+" set noruler
+" set inccommand=nosplit
+
+" source init.vim
+map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 colorscheme gruvbox
 
@@ -77,6 +95,7 @@ nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
 nnoremap <Space>l :wincmd l <cr>
 
+" autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
 inoremap jk <ESC>
 inoremap kj <ESC>
 inoremap JK <ESC>
@@ -88,8 +107,8 @@ nnoremap <M-k>    :resize +2<CR>
 nnoremap <M-h>    :vertical resize -2<CR>
 nnoremap <M-l>    :vertical resize +2<CR>
 
-" Save with CW too
-noremap :W :w
+" S))ave with CW too
+" noremap :W :w
 
 " If vim is resized, resize any splits
 autocmd VimResized * wincmd =
@@ -138,18 +157,15 @@ noremap <space> :set hlsearch! hlsearch?<cr>
 " Update a buffer's contents on focus if it changed outside of Vim.
 au FocusGained,BufEnter * :checktime
 
-" Make sure all types of requirements.txt files get syntax highlighting.
-autocmd BufNewFile,BufRead requirements*.txt set syntax=python
-
 " Ensure tabs don't get converted to spaces in Makefiles.
-autocmd FileType make setlocal noexpandtab
+" autocmd FileType make setlocal noexpandtab
 
 " Only show the cursor line in the active buffer.
-augroup CursorLine
-    au!
-    au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-    au WinLeave * setlocal nocursorline
-augroup END
+" augroup CursorLine
+"     au!
+"     au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+"     au WinLeave * setlocal nocursorline
+" augroup END
 
 "*****************************************************************************
 " Commands
@@ -187,41 +203,40 @@ nnoremap <leader>pe :Find <c-r>=expand("<cword>")<CR><CR>
 "*****************************************************************************
 nnoremap <Space>f :NERDTreeToggle <cr>
 
-" let g:NERDTreeGitStatusWithFlags = 1
 let g:NERDTreeIgnore = ['^node_modules$', '\.git$']
 let g:NERDTreeShowHidden=1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeDirArrows = 1
-let g:NERDTreeWinSize = 30
+" let g:NERDTreeWinSize = 30
 " Automatically close NerdTree when you open a file
-let g:NERDTreeQuitOnOpen = 1
+" let g:NERDTreeQuitOnOpen = 1
 " Automatically delete the buffer of the file you just deleted with NerdTree
-let g:NERDTreeAutoDeleteBuffer = 1
+" let g:NERDTreeAutoDeleteBuffer = 1
 
-autocmd BufWinEnter * setlocal modifiable
 
 " Prevent buffers dont open on NERDTree buffer
-autocmd FileType nerdtree let t:nerdtree_winnr = bufwinnr('%')
-autocmd BufWinEnter * call PreventBuffersInNERDTree()
-function! PreventBuffersInNERDTree()
-  if bufname('#') =~ 'NERD_tree' && bufname('%') !~ 'NERD_tree'
-    \ && exists('t:nerdtree_winnr') && bufwinnr('%') == t:nerdtree_winnr
-    \ && &buftype == '' && !exists('g:launching_fzf')
-    let bufnum = bufnr('%')
-    close
-    exe 'b ' . bufnum
-    NERDTree
-  endif
-  if exists('g:launching_fzf') | unlet g:launching_fzf | endif
-endfunction
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 " Exit Vim if NERDTree is the only window left.
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
 
 " sync open file with NERDTree
-function! IsNERDTreeOpen()        
+function! IsNERDTreeOpen()
   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
 endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+
+" Highlight currently open buffer in NERDTree
+autocmd BufRead * call SyncTree()
 
 "*****************************************************************************
 " NERDTree Git 
@@ -238,6 +253,11 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 	\ 'Clean'     :'✔︎',
 	\ 'Unknown'   :'?',
 	\ }
+
+"*****************************************************************************
+" GitGutter  
+"*****************************************************************************
+let g:gitgutter_sign_column_always = 1
 
 "*****************************************************************************
 " Coc 
@@ -289,16 +309,16 @@ endif
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" if exists('*complete_info')
+"   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" else
+"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" endif
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -418,11 +438,4 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
-
-
-" Change cursor to solid vertical line
-" There are problems with Vim's floating window setting cursor to a solid
-" block. So these lines below are resetting it to a solid vertical line.
-let &t_SI = "\e[6 q"
-let &t_EI = "\e[6 q"
 
