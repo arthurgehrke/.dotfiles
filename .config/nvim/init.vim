@@ -40,9 +40,10 @@ set hidden
 set smarttab
 set expandtab
 set tabstop=2
-set shiftwidth=2
+set shiftwidth=4
 set showtabline=2
 set nowrap                              
+
 
 set nobackup
 set nowritebackup
@@ -73,11 +74,14 @@ set noshowcmd
 " set inccommand=nosplit
 
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
+highlight clear SignColumn
 set signcolumn=number
+" signcolumn margin
+set numberwidth=4
 
 set termguicolors
 set background=dark
-autocmd ColorScheme * highlight! link SignColumn LineNr
+" autocmd ColorScheme * highlight! link SignColumn LineNr
 colorscheme gruvbox
 
 map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
@@ -245,6 +249,9 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " GitGutter  
 "*****************************************************************************
 let g:gitgutter_sign_column_always = 1
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 
 "*****************************************************************************
 " Coc 
