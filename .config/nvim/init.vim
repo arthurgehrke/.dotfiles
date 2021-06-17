@@ -33,28 +33,17 @@ call plug#end()
 syntax enable
 
 set shell=$SHELL
-
-autocmd BufEnter * highlight Normal guibg=0
-" autocmd BufRead,BufNewFile * setlocal signcolumn=yes
-autocmd FileType tagbar,nerdtree setlocal signcolumn=no
-
-" set signcolumn=yes
-set termguicolors
 set title
 set encoding=utf-8
-set hidden
-" set number
 set relativenumber
-set background=dark
+set hidden
 set smarttab
+set expandtab
 set tabstop=2
 set shiftwidth=2
-" set showtabline=2
+set showtabline=2
 set nowrap                              
-" set wrapmargin=8 " wrap lines when coming within n characters from side
-" set linebreak " set soft wrapping
 
-" set expandtab
 set nobackup
 set nowritebackup
 set noswapfile
@@ -75,8 +64,6 @@ set copyindent
 set splitright
 set splitbelow
 
-" set cursorline
-
 " set cmdheight=1 " command bar height
 set noshowcmd
 " set nolazyredraw " don't redraw while executing macros
@@ -85,10 +72,15 @@ set noshowcmd
 " set noruler
 " set inccommand=nosplit
 
-" source init.vim
-map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
+autocmd FileType tagbar,nerdtree setlocal signcolumn=no
+set signcolumn=number
 
+set termguicolors
+set background=dark
+autocmd ColorScheme * highlight! link SignColumn LineNr
 colorscheme gruvbox
+
+map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
@@ -106,9 +98,6 @@ nnoremap <M-j>    :resize -2<CR>
 nnoremap <M-k>    :resize +2<CR>
 nnoremap <M-h>    :vertical resize -2<CR>
 nnoremap <M-l>    :vertical resize +2<CR>
-
-" S))ave with CW too
-" noremap :W :w
 
 " If vim is resized, resize any splits
 autocmd VimResized * wincmd =
@@ -138,34 +127,33 @@ noremap L $
 
 " WSL clipboard with win32yank
 let g:clipboard = {
-	\   'name': 'WslClipboard',
+	\   'name': 'win32yank-wsl',
 	\   'copy': {
-	\      '+': 'clip.exe',
-	\      '*': 'clip.exe',
+	\      '+': 'win32yank.exe -i --crlf',
+	\      '*': 'win32yank.exe -i --crlf',
 	\    },
 	\   'paste': {
-	\      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-	\      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+	\      '+': 'win32yank.exe -o --lf',
+	\      '*': 'win32yank.exe -o --lf',
 	\   },
 	\   'cache_enabled': 0,
 	\ }
 
 " space to clear search highlights
-" noremap <silent> <space> :noh<cr>
 noremap <space> :set hlsearch! hlsearch?<cr>
 
 " Update a buffer's contents on focus if it changed outside of Vim.
 au FocusGained,BufEnter * :checktime
 
 " Ensure tabs don't get converted to spaces in Makefiles.
-" autocmd FileType make setlocal noexpandtab
+autocmd FileType make setlocal noexpandtab
 
 " Only show the cursor line in the active buffer.
-" augroup CursorLine
-"     au!
-"     au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-"     au WinLeave * setlocal nocursorline
-" augroup END
+augroup CursorLine
+    au!
+    au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    au WinLeave * setlocal nocursorline
+augroup END
 
 "*****************************************************************************
 " Commands
@@ -207,12 +195,11 @@ let g:NERDTreeIgnore = ['^node_modules$', '\.git$']
 let g:NERDTreeShowHidden=1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeDirArrows = 1
-" let g:NERDTreeWinSize = 30
 " Automatically close NerdTree when you open a file
-" let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeQuitOnOpen = 1
 " Automatically delete the buffer of the file you just deleted with NerdTree
 " let g:NERDTreeAutoDeleteBuffer = 1
-
+" let g:NERDTreeWinSize = 30
 
 " Prevent buffers dont open on NERDTree buffer
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
@@ -309,16 +296,15 @@ endif
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-" if exists('*complete_info')
-"   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" else
-"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" endif
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>

@@ -6,8 +6,10 @@
   "diagnostic.maxWindowWidth": 80,
   "diagnostic.errorSign": "✖",
   "diagnostic.warningSign": "⚠",
-  "diagnostic.infoSign": "●",
-  "diagnostic.hintSign": "○",
+  // "diagnostic.infoSign": "●",
+  // "diagnostic.hintSign": "○",
+  "diagnostic.level": "warning",
+  "diagnostic.enableHighlightLineNumber": false,
   "coc.preferences.formatOnType": true,
   "tsserver.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
