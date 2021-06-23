@@ -86,6 +86,11 @@ colorscheme gruvbox
 
 map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
+" save with :W and :w
+cnoreabbrev W w
+" quit with :Q and :q
+cnoreabbrev Q q
+
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
