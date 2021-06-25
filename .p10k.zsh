@@ -33,10 +33,8 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     user
     os_icon_joined
-    # os_icon                 # os identifier
     dir                     # current directory
     vcs                     # git status
-    # prompt_char           # prompt symbol
   )
 
   POWERLEVEL9K_DIR_CLASSES=()
@@ -55,12 +53,12 @@
   POWERLEVEL9K_DIR_HOME_NOT_WRITABLE_FOREGROUND='015'
 
   # GIT
-	POWERLEVEL9K_VCS_CLEAN_FOREGROUND='236'
-	POWERLEVEL9K_VCS_CLEAN_BACKGROUND='#73c05d'
-	POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='236'
-	POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='red'
-	POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='236'
-	POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='#c7c524'
+  POWERLEVEL9K_VCS_CLEAN_FOREGROUND='236'
+  POWERLEVEL9K_VCS_CLEAN_BACKGROUND='#73c05d'
+  POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='236'
+  POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='red'
+  POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='236'
+  POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='#c7c524'
 
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -72,14 +70,14 @@
     command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
-    asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
+    # asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
     virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
-    anaconda                # conda environment (https://conda.io/)
-    pyenv                   # python environment (https://github.com/pyenv/pyenv)
-    goenv                   # go environment (https://github.com/syndbg/goenv)
-    nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
+    # anaconda                # conda environment (https://conda.io/)
+    # pyenv                   # python environment (https://github.com/pyenv/pyenv)
+    # goenv                   # go environment (https://github.com/syndbg/goenv)
+    # nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
     nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
-    nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
+    # nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
     # node_version          # node.js version
     # go_version            # go version (https://golang.org)
     # rust_version          # rustc version (https://www.rust-lang.org)
@@ -88,36 +86,36 @@
     # laravel_version       # laravel php framework version (https://laravel.com/)
     # java_version          # java version (https://www.java.com/)
     # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
-    rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
-    rvm                     # ruby version from rvm (https://rvm.io)
-    fvm                     # flutter version management (https://github.com/leoafarias/fvm)
-    luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
-    jenv                    # java version from jenv (https://github.com/jenv/jenv)
-    plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
-    phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
-    scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
-    haskell_stack           # haskell version from stack (https://haskellstack.org/)
-    kubecontext             # current kubernetes context (https://kubernetes.io/)
-    terraform               # terraform workspace (https://www.terraform.io)
-    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
-    aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
-    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
-    gcloud                  # google cloud cli account and project (https://cloud.google.com/)
-    google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
-    context                 # user@hostname
-    nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
-    ranger                  # ranger shell (https://github.com/ranger/ranger)
-    nnn                     # nnn shell (https://github.com/jarun/nnn)
-    vim_shell               # vim shell indicator (:sh)
-    midnight_commander      # midnight commander shell (https://midnight-commander.org/)
-    nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
+    # rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
+    # rvm                     # ruby version from rvm (https://rvm.io)
+    # fvm                     # flutter version management (https://github.com/leoafarias/fvm)
+    # luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
+    # jenv                    # java version from jenv (https://github.com/jenv/jenv)
+    # plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
+    # phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
+    # scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
+    # haskell_stack           # haskell version from stack (https://haskellstack.org/)
+    # kubecontext             # current kubernetes context (https://kubernetes.io/)
+    # terraform               # terraform workspace (https://www.terraform.io)
+    # aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+    # aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
+    # azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
+    # gcloud                  # google cloud cli account and project (https://cloud.google.com/)
+    # google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
+    # context                 # user@hostname
+    # nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
+    # ranger                  # ranger shell (https://github.com/ranger/ranger)
+    # nnn                     # nnn shell (https://github.com/jarun/nnn)
+    # vim_shell               # vim shell indicator (:sh)
+    # midnight_commander      # midnight commander shell (https://midnight-commander.org/)
+    # nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
     vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     # vpn_ip                # virtual private network indicator
     # load                  # CPU load
     # disk_usage            # disk usage
     # ram                   # free RAM
     # swap                  # used swap
-    todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
+    # todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
     timewarrior             # timewarrior tracking status (https://timewarrior.net/)
     taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
     time                    # current time
@@ -181,6 +179,9 @@
   # Default background color.
   typeset -g POWERLEVEL9K_BACKGROUND=236
 
+  # Add padding into right side 
+  ZLE_RPROMPT_INDENT=0
+
   # Separator between same-color segments on the left.
   typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='%244F\uE0B1'
   # Separator between same-color segments on the right.
@@ -198,7 +199,7 @@
   # The right end of right prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=''
   # Left prompt terminator for lines without any segments.
-  typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
+  typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=''
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
