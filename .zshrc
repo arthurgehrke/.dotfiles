@@ -48,20 +48,19 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt hist_expire_dups_first
+setopt share_history
 setopt inc_append_history
+setopt extended_history
+
 # completion
 setopt always_to_end
 setopt complete_in_word
-setopt extended_history
-setopt share_history
-setopt prompt_subst
-
-##############################################################################
-# Various
-##############################################################################
-
-# setopt auto_cd
+setopt auto_list
 setopt auto_remove_slash 
+
+# various
+setopt auto_cd
+# setopt prompt_subst
 
 ##############################################################################
 # Bindings
@@ -92,3 +91,12 @@ else
   eval `ssh-agent | tee ~/.ssh-agent.generated.env`
   ssh-add
 fi
+
+# add custom terminal title
+function settitle() {
+  export PS1="\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
+  echo -ne "\e]0;$1\a"
+}
+
+settitle "MinTTY - $(pwd)@$HOST"
+
