@@ -37,13 +37,17 @@ set title
 set encoding=utf-8
 set relativenumber
 set hidden
-set smarttab
-set expandtab
-set tabstop=2
-set shiftwidth=4
-set showtabline=2
 set nowrap                              
 
+" on pressing tab, insert 2 spaces
+set expandtab
+" show existing tab with 2 spaces width
+set tabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+
+" set smarttab
+set showtabline=2
 
 set nobackup
 set nowritebackup
