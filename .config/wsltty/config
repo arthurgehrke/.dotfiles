@@ -1,13 +1,30 @@
-# To use common configuration in %APPDATA%\mintty, simply remove this file
-ThemeFile=gruvbox
+#Themes
+ThemeFile=gruvbox-dark.minttyrc
+#ThemeFile=eighties.minttyrc
+#ThemeFile=one-dark.minttyrc
+#ThemeFile=solarized.minttyrc
+#ThemeFile=ocean.minttyrc
+
+Term=xterm-256color
 Transparency=low
+OpaqueWhenFocused=yes
+
 Font=MesloLGS NF
+FontHeight=12
 CursorType=block
 CursorBlinks=no
-FontHeight=12
-Term=xterm-256color
+
 BellType=0
-CtrlShiftShortcuts=yes
 PgUpDnScroll=yes
 Scrollbar=none
 BellTaskbar=no
+
+CtrlShiftShortcuts=yes
+CtrlExchangeShift=yes
+
+BoldAsFont=yes
+BoldAsColour=yes
+FontSmoothing=default
+
+Columns=255
+Rows=48
