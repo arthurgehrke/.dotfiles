@@ -71,6 +71,68 @@ bindkey '^e' end-of-line
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
 
+# custom bind copy cut paste and quit
+if [[ -t 0 && $- = *i* ]]
+then
+# change Ctrl+C to Ctrl+I
+stty start ''
+stty stop ''
+stty quit ''
+stty erase ''
+stty kill ''
+stty eof '' # Ctrl + D
+stty rprnt ''
+stty werase ''
+stty lnext ''
+stty discard ''
+fi
+
+# change Ctrl+C to Ctrl+Q
+stty intr '^q'
+
+# change Ctrl+z to Ctrl+j
+stty susp '^j'
+
+# change Ctrl+V to Ctrl+K
+bindkey '^k' quoted-insert # for zle
+
+_copy-using-win32yank() {
+  if ((REGION_ACTIVE)) then
+    zle copy-region-as-kill
+    printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
+    ((REGION_ACTIVE = 0))
+  fi
+}
+
+zle -N _copy-using-win32yank
+bindkey '^C' _copy-using-win32yank
+
+_cut-using-win32yank() {
+  if ((REGION_ACTIVE)) then
+     zle copy-region-as-kill
+     printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
+     zle kill-region
+  fi
+}
+
+zle -N _cut-using-win32yank
+bindkey '^X' _cut-using-win32yank 
+
+_paste-copy-using-win32yank() {
+	if ((REGION_ACTIVE)); then
+    zle kill-region
+  fi
+  LBUFFER+="$(win32yank.exe -o)"
+}
+
+zle -N _paste-copy-using-win32yank
+bindkey '^V' _paste-copy-using-win32yank 
+
+exit_zsh() { exit }
+
+zle -N exit_zsh
+bindkey '^W' exit_zsh
+
 ##############################################################################
 # Various
 ##############################################################################
