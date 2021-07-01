@@ -19,8 +19,12 @@ PgUpDnScroll=yes
 Scrollbar=none
 BellTaskbar=no
 
-CtrlShiftShortcuts=yes
-CtrlExchangeShift=yes
+CtrlShiftShortcuts=no
+CtrlExchangeShift=no
+ComposeKey=off
+ClipShortcuts=no
+AltFnShortcuts=no
+BackspaceSendsBS=no
 
 BoldAsFont=yes
 BoldAsColour=yes
