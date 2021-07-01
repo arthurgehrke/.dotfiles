@@ -1,17 +1,3 @@
-if [ -e $HOME/.bash_aliases ]; then
-    source $HOME/.bash_aliases
-fi
-
-if [ -e $HOME/.bash_scripts ]; then
-    source $HOME/.bash_scripts
-fi
-
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
-
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -82,10 +68,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 if [ -t 1 ]; then
 	exec zsh
