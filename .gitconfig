@@ -1,5 +1,14 @@
 [include]
-  # For username / creds / etc
-  path = ~/.gitconfig.local
+    # For username / creds / etc
+    path = ~/.gitconfig.local
+[user]
+	user = arthurgehrke
+    email = arthugehrke07@gmail.com
+[github]
+	user = arthurgehrke
+[core]
+	editor = nvim
 [diff]
-  tool = vimdiff
+    tool = vimdiff
+[merge]
+	tool = vimdiff
