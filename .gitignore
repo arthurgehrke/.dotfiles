@@ -1,5 +1,5 @@
 # Ignore everything by default.
-*
+# *
 
 # Bash stuff (profile just sources bashrc, since it's the only thing sourced
 # when a shell is a login shell).

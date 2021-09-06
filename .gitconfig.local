@@ -1,0 +1,8 @@
+[user]
+  user = 
+  name = 
+  email = 
+  token = 
+
+[credential]
+  helper = osxkeychain

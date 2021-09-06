@@ -1,20 +1,5 @@
-[user]
-	email = arthurgehrke07@gmail.com
-	name = arthurgehrke
-
-[core]
-	excludesfile = ~/.gitignore
-	editor = nvim
-
-[color]
-  status = auto
-  diff = auto
-  branch = auto
-  interactive = auto
-  grep = auto
-  ui = auto
-
-[hub]
-  protocol = https
-[github]
-	user = arthurgehrke
+[include]
+  # For username / creds / etc
+  path = ~/.gitconfig.local
+[diff]
+  tool = vimdiff
