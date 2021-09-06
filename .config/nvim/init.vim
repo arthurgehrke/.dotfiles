@@ -17,10 +17,14 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tmux-plugins/vim-tmux'
 
+" Plug 'puremourning/vimspector'
+
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
+
+Plug 'https://github.com/OmniSharp/omnisharp-vim', {'for':['cs','csx','cshtml.html','csproj','solution'], 'on': ['OmniSharpInstall']}
 
 Plug 'styled-components/vim-styled-components'
 
@@ -39,15 +43,13 @@ set relativenumber
 set hidden
 set nowrap                              
 
-" on pressing tab, insert 2 spaces
-set expandtab
-" show existing tab with 2 spaces width
-set tabstop=2
-" when indenting with '>', use 2 spaces width
-set shiftwidth=2
+" JS
+" set tabstop=2
+" set shiftwidth=2
 
-" set smarttab
-set showtabline=2
+" C#
+autocmd BufRead *.cs,*.aspx setlocal tabstop=4 shiftwidth=4 softtabstop=-1 noexpandtab
+
 
 set nobackup
 set nowritebackup
@@ -203,6 +205,8 @@ nnoremap <leader>pe :Find <c-r>=expand("<cword>")<CR><CR>
 " NERDTree 
 "*****************************************************************************
 nnoremap <Space>f :NERDTreeToggle <cr>
+nnoremap <Space>t :Files <cr>
+nnoremap <Space>g :GFiles<cr>
 
 let g:NERDTreeIgnore = ['^node_modules$', '\.git$']
 let g:NERDTreeShowHidden=1
@@ -274,12 +278,12 @@ let g:coc_global_extensions = [
   \ 'coc-json', 
   \ ]
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nnoremap go <c-o>
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" Remap keys for gotos - js
+" nmap <silent> gd <Plug>(coc-definition)
+" nnoremap go <c-o>
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
 " COC-VIM TAB SETTINGS START
 " Use tab for trigger completion with characters ahead and navigate.
@@ -351,6 +355,13 @@ endif
 if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
+"*****************************************************************************
+" OmniSharp 
+"*****************************************************************************
+autocmd FileType cs nmap <silent> gd :OmniSharpGotoDefinition<CR>
+autocmd FileType cs nmap <silent> gu :OmniSharpFindUsages<CR>
+autocmd FileType cs nmap <silent> gi :OmniSharpFindImplementations<CR>
+nnoremap go <c-o>
 
 "*****************************************************************************
 " Airline 
