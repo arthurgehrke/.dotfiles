@@ -39,23 +39,27 @@ syntax enable
 set shell=$SHELL
 set title
 set encoding=utf-8
+set number
 set relativenumber
 set hidden
 set nowrap                              
 
-" JS
-" set tabstop=2
-" set shiftwidth=2
+" set completeopt=menuone,noinsert,noselect
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" C#
-autocmd BufRead *.cs,*.aspx setlocal tabstop=4 shiftwidth=4 softtabstop=-1 noexpandtab
+set autoindent
+set copyindent
+set smarttab
 
+autocmd BufRead *.js,*.ts setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
+autocmd BufRead *.json setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
+autocmd BufRead *.cs,*.aspx setlocal tabstop=4 shiftwidth=4 softtabstop=-1 noexpandtab backspace=indent,eol,start 
 
 set nobackup
 set nowritebackup
 set noswapfile
 
-" Search
 set ignorecase " case insensitive searching
 set smartcase " case-sensitive if expresson contains a capital letter
 set hlsearch " highlight search results
@@ -67,27 +71,19 @@ set pumheight=10                        " Makes popup menu smaller
 set clipboard+=unnamedplus
 set copyindent
 
-" open new split panes to right and below
 set splitright
 set splitbelow
 
 " set cmdheight=1 " command bar height
 set noshowcmd
-" set nolazyredraw " don't redraw while executing macros
-" set noshowmode " don't show which mode disabled for PowerLine
-" set laststatus=0
-" set noruler
-" set inccommand=nosplit
 
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
 highlight clear SignColumn
 set signcolumn=number
-" signcolumn margin
 set numberwidth=4
 
 set termguicolors
 set background=dark
-" autocmd ColorScheme * highlight! link SignColumn LineNr
 colorscheme gruvbox
 
 map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
@@ -116,25 +112,28 @@ nnoremap <M-l>    :vertical resize +2<CR>
 
 " If vim is resized, resize any splits
 autocmd VimResized * wincmd =
-" Wrap lines in quickfix windows
-autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
 " More predictable syntax highlighting
-autocmd BufEnter * syntax sync fromstart
+" autocmd BufEnter * syntax sync fromstart
 " Automatically close preview windows after autocompletion
 autocmd CompleteDone * pclose
 
-" TAB in general mode will move to text buffer
+" TAB in general mode will move to buffer
 nnoremap <TAB> :bnext<CR>
 " SHIFT-TAB will go back
 nnoremap <S-TAB> :bprevious<CR>
+" close all buffers but the current one
+command! BufOnly execute '%bdelete|edit #|normal `"'
 
 " Better tabbing
 vnoremap < <gv
 vnoremap > >gv
 
+
 " Insert new line without entering insert mode
-nmap <S-Enter> O<Esc>
-nmap <CR> o<Esc>
+" nmap <S-CR> O<Esc>
+" nmap <CR> o<Esc>
+nnoremap <silent> [<space>  :<c-u>put!=repeat([''],v:count)<bar>']+1<cr>
+nnoremap <silent> ]<space>  :<c-u>put =repeat([''],v:count)<bar>'[-1<cr>
 
 " Go to start of line with H and to the end with L
 noremap H ^
@@ -160,9 +159,6 @@ noremap <space> :set hlsearch! hlsearch?<cr>
 " Update a buffer's contents on focus if it changed outside of Vim.
 au FocusGained,BufEnter * :checktime
 
-" Ensure tabs don't get converted to spaces in Makefiles.
-autocmd FileType make setlocal noexpandtab
-
 " Only show the cursor line in the active buffer.
 augroup CursorLine
     au!
@@ -173,8 +169,6 @@ augroup END
 "*****************************************************************************
 " Commands
 "*****************************************************************************
-" close all buffers
-command! Bdall %bd|e#|bd#"
 
 "*****************************************************************************
 " Mappings
@@ -184,20 +178,13 @@ noremap <Leader>t :<C-u>split<CR>
 noremap <Leader>s :<C-u>vsplit<CR>
 
 " open new tab
-nnoremap <leader>aa :tabnew<CR>
+nnoremap <leader>a :tabnew<CR>
 " go to next tab
 nnoremap <leader>an :tabnext<CR>
 " go to previous tab
 nnoremap <leader>ap :tabprevious<CR>
 " close tab
-nnoremap <leader>ac :tabclose<CR>
-
-" search file on actual dir
-nnoremap <silent> <leader>pf :Files<CR>
-" search into files 
-nnoremap <leader>ps :Find 
-" search text on cursor files
-nnoremap <leader>pe :Find <c-r>=expand("<cword>")<CR><CR>
+nnoremap <Space>ac :tabclose<CR>
 
 "*****************************************************************************
 " Plugins Config
@@ -274,60 +261,34 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-eslint', 
-  \ 'coc-prettier', 
-  \ 'coc-json', 
+  \ 'coc-prettier' 
   \ ]
 
-" Remap keys for gotos - js
-" nmap <silent> gd <Plug>(coc-definition)
-" nnoremap go <c-o>
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
+autocmd FileType ts nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
+" autocmd FileType ts,js nmap <silent> gd <Plug>(coc-definition)
+autocmd FileType html nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
+autocmd FileType ts,js nmap <silent> gy <Plug>(coc-type-definition)
+autocmd FileType ts,js nmap <silent> gi <Plug>(coc-implementation)
+autocmd FileType ts,js nmap <silent> gr <Plug>(coc-references)
+autocmd FileType ts,js nnoremap go <c-o>
 
-" COC-VIM TAB SETTINGS START
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" coc diagnostics theme
-autocmd FileType json syntax match Comment +\/\/.\+$+
-
-highlight Error            ctermbg=161
-highlight ErrorMsg         NONE
-highlight link ErrorMsg    Error
-hi! CocErrorSign guifg=#d1666a
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" highlight Error            ctermbg=161
+" highlight ErrorMsg         NONE
+" highlight link ErrorMsg    Error
+" hi! CocErrorSign guifg=#d1666a
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" if exists('*complete_info')
+"   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" else
+"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" endif
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -336,15 +297,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
 " Add CoC Prettier if prettier is installed
 if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
@@ -355,13 +307,43 @@ endif
 if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
+
 "*****************************************************************************
 " OmniSharp 
 "*****************************************************************************
 autocmd FileType cs nmap <silent> gd :OmniSharpGotoDefinition<CR>
 autocmd FileType cs nmap <silent> gu :OmniSharpFindUsages<CR>
 autocmd FileType cs nmap <silent> gi :OmniSharpFindImplementations<CR>
+autocmd FileType cs nmap <silent> gt :OmniSharpSignatureHelp<CR>
 nnoremap go <c-o>
+
+" Use Roslyin and also better performance than HTTP
+let g:OmniSharp_server_stdio = 1
+let g:omnicomplete_fetch_full_documentation = 1
+
+" Timeout in seconds to wait for a response from the server
+let g:OmniSharp_timeout = 30
+
+" let g:OmniSharp_popup_options = {
+" \ 'highlight': 'Normal',
+" \ 'padding': [1],
+" \ 'border': [1]
+" \}
+
+if has('patch-8.1.1880')
+  set completeopt=longest,menuone,popuphidden
+  " Highlight the completion documentation popup background/foreground the same as
+  " the completion menu itself, for better readability with highlighted
+  " documentation.
+  set completepopup=highlight:Pmenu,border:off
+else
+  set completeopt=longest,menuone,preview
+  " Set desired preview window height for viewing documentation.
+  set previewheight=5
+endif
+
+inoremap <expr> <Tab> pumvisible() ? '<C-n>' :                                                                                                                    
+\ getline('.')[col('.')-2] =~# '[[:alnum:].-_#$]' ? '<C-x><C-o>' : '<Tab>'
 
 "*****************************************************************************
 " Airline 
