@@ -24,7 +24,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
-Plug 'https://github.com/OmniSharp/omnisharp-vim', {'for':['cs','csx','cshtml.html','csproj','solution'], 'on': ['OmniSharpInstall']}
+Plug 'OmniSharp/omnisharp-vim'
 
 Plug 'styled-components/vim-styled-components'
 
@@ -35,6 +35,7 @@ call plug#end()
 " Nvim config
 "*****************************************************************************
 syntax enable
+filetype plugin on
 
 set shell=$SHELL
 set title
@@ -44,17 +45,13 @@ set relativenumber
 set hidden
 set nowrap                              
 
-" set completeopt=menuone,noinsert,noselect
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
 set autoindent
 set copyindent
 set smarttab
 
 autocmd BufRead *.js,*.ts setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
 autocmd BufRead *.json setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
-autocmd BufRead *.cs,*.aspx setlocal tabstop=4 shiftwidth=4 softtabstop=-1 noexpandtab backspace=indent,eol,start 
+autocmd BufRead *.cs,*.aspx setlocal tabstop=4 shiftwidth=4 softtabstop=-1 expandtab backspace=indent,eol,start indentexpr=-1
 
 set nobackup
 set nowritebackup
@@ -66,16 +63,19 @@ set hlsearch " highlight search results
 set incsearch " set incremental search, like modern browsers
 
 set shortmess+=c
-set pumheight=10                        " Makes popup menu smaller
+set cmdheight=2
+
+set previewheight=5
+" set pumheight=10                        " Makes popup menu smaller
+" set previewheight=10
 
 set clipboard+=unnamedplus
-set copyindent
 
 set splitright
 set splitbelow
 
 " set cmdheight=1 " command bar height
-set noshowcmd
+" set noshowcmd
 
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
 highlight clear SignColumn
@@ -98,7 +98,6 @@ nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
 nnoremap <Space>l :wincmd l <cr>
 
-" autocmd FileType qf setlocal wrap linebreak nolist breakindent breakindentopt=shift:2
 inoremap jk <ESC>
 inoremap kj <ESC>
 inoremap JK <ESC>
@@ -113,10 +112,12 @@ nnoremap <M-l>    :vertical resize +2<CR>
 " If vim is resized, resize any splits
 autocmd VimResized * wincmd =
 " More predictable syntax highlighting
-" autocmd BufEnter * syntax sync fromstart
+autocmd BufEnter * syntax sync fromstart
 " Automatically close preview windows after autocompletion
 autocmd CompleteDone * pclose
 
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " TAB in general mode will move to buffer
 nnoremap <TAB> :bnext<CR>
 " SHIFT-TAB will go back
@@ -127,7 +128,6 @@ command! BufOnly execute '%bdelete|edit #|normal `"'
 " Better tabbing
 vnoremap < <gv
 vnoremap > >gv
-
 
 " Insert new line without entering insert mode
 " nmap <S-CR> O<Esc>
@@ -175,7 +175,7 @@ augroup END
 "*****************************************************************************
 " split screen
 noremap <Leader>t :<C-u>split<CR>
-noremap <Leader>s :<C-u>vsplit<CR>
+noremap <Leader>s :<C-u>vsplit<CR> 
 
 " open new tab
 nnoremap <leader>a :tabnew<CR>
@@ -219,15 +219,15 @@ function! IsNERDTreeOpen()
 endfunction
 
 " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
+" function! SyncTree()
+"   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+"     NERDTreeFind
+"     wincmd p
+"   endif
+" endfunction
 
-" Highlight currently open buffer in NERDTree
-autocmd BufRead * call SyncTree()
+" " Highlight currently open buffer in NERDTree
+" autocmd BufRead * call SyncTree()
 
 "*****************************************************************************
 " NERDTree Git 
@@ -261,42 +261,18 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-eslint', 
-  \ 'coc-prettier' 
+  \ 'coc-prettier'
   \ ]
 
+" nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
+" nmap <silent> gs :call CocActionAsync('jumpDefinition', 'split')<CR>
 autocmd FileType ts nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
-" autocmd FileType ts,js nmap <silent> gd <Plug>(coc-definition)
+autocmd FileType ts,js nmap <silent> gd <Plug>(coc-definition)
 autocmd FileType html nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
 autocmd FileType ts,js nmap <silent> gy <Plug>(coc-type-definition)
 autocmd FileType ts,js nmap <silent> gi <Plug>(coc-implementation)
 autocmd FileType ts,js nmap <silent> gr <Plug>(coc-references)
 autocmd FileType ts,js nnoremap go <c-o>
-
-" highlight Error            ctermbg=161
-" highlight ErrorMsg         NONE
-" highlight link ErrorMsg    Error
-" hi! CocErrorSign guifg=#d1666a
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-" if exists('*complete_info')
-"   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-" else
-"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" endif
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
 
 " Add CoC Prettier if prettier is installed
 if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
@@ -311,39 +287,20 @@ endif
 "*****************************************************************************
 " OmniSharp 
 "*****************************************************************************
+filetype indent plugin on
+nnoremap gr :<C-u>pedit %<Bar>wincmd P<Bar>norm! gd<Bar>wincmd p<CR>
 autocmd FileType cs nmap <silent> gd :OmniSharpGotoDefinition<CR>
 autocmd FileType cs nmap <silent> gu :OmniSharpFindUsages<CR>
 autocmd FileType cs nmap <silent> gi :OmniSharpFindImplementations<CR>
-autocmd FileType cs nmap <silent> gt :OmniSharpSignatureHelp<CR>
+autocmd FileType cs nmap <silent> gt :OmniSharpDocumentation<CR>
+nmap <buffer> <leader>gg :OmniSharpFindUsages<CR>
 nnoremap go <c-o>
 
-" Use Roslyin and also better performance than HTTP
-let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_typeLookupInPreview = 1
 let g:omnicomplete_fetch_full_documentation = 1
-
-" Timeout in seconds to wait for a response from the server
+let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_timeout = 30
-
-" let g:OmniSharp_popup_options = {
-" \ 'highlight': 'Normal',
-" \ 'padding': [1],
-" \ 'border': [1]
-" \}
-
-if has('patch-8.1.1880')
-  set completeopt=longest,menuone,popuphidden
-  " Highlight the completion documentation popup background/foreground the same as
-  " the completion menu itself, for better readability with highlighted
-  " documentation.
-  set completepopup=highlight:Pmenu,border:off
-else
-  set completeopt=longest,menuone,preview
-  " Set desired preview window height for viewing documentation.
-  set previewheight=5
-endif
-
-inoremap <expr> <Tab> pumvisible() ? '<C-n>' :                                                                                                                    
-\ getline('.')[col('.')-2] =~# '[[:alnum:].-_#$]' ? '<C-x><C-o>' : '<Tab>'
+let g:OmniSharp_server_path = '/home/arthurgehrke/.cache/omnisharp-vim/omnisharp-roslyn/run'
 
 "*****************************************************************************
 " Airline 
