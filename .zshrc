@@ -162,3 +162,4 @@ function settitle() {
 
 settitle "MinTTY - $(pwd)@$HOST"
 
+stty erase '^?'
