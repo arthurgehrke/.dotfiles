@@ -8,16 +8,14 @@ map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
-" source $HOME/.config/nvim/plugconf/nord.vim
 source $HOME/.config/nvim/plugconf/onedark.vim
-source $HOME/.config/nvim/plugconf/gitgutter.vim
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/fzfvim.vim
 source $HOME/.config/nvim/plugconf/nerdTREEgit.vim
 source $HOME/.config/nvim/plugconf/tagbar.vim
-source $HOME/.config/nvim/plugconf/airline.vim
-source $HOME/.config/nvim/plugconf/sneak.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
+source $HOME/.config/nvim/plugconf/gitsigns.vim
+source $HOME/.config/nvim/plugconf/lualine.vim
 au VimEnter * source $HOME/.config/nvim/plugconf/nerdTREE.vim
 
 set title
@@ -26,10 +24,11 @@ set updatetime=300
 set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
-set hidden
 set formatoptions-=cro 
+set hidden
+set nobuflisted
 
-set signcolumn=auto:1
+set signcolumn=auto
 set numberwidth=4
 highlight clear SignColumn
 

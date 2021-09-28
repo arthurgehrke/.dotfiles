@@ -5,18 +5,20 @@ call plug#begin()
   Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
   Plug 'arcticicestudio/nord-vim'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-
+  Plug 'mhinz/vim-startify'
+  Plug 'shadmansaleh/lualine.nvim'
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'ap/vim-buftabline'
   Plug 'majutsushi/tagbar'
 
   Plug 'jiangmiao/auto-pairs'
-  Plug 'justinmk/vim-sneak'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
-  Plug 'airblade/vim-gitgutter'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
+
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'lewis6991/gitsigns.nvim'
 
   Plug 'haorenW1025/completion-nvim'
   Plug 'neovim/nvim-lspconfig'
