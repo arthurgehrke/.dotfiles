@@ -16,6 +16,7 @@ source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
+source $HOME/.config/nvim/plugconf/airline.vim
 au VimEnter * source $HOME/.config/nvim/plugconf/nerdTREE.vim
 
 set title
@@ -44,9 +45,11 @@ set smartcase
 set hlsearch 
 set incsearch 
 
-set shortmess+=c
 set cmdheight=1
-" set noshowcmd
+set noshowcmd
+set noshowmode
+
+set shortmess+=c
 set previewheight=5
 set pumheight=10                        
 " set previewheight=10

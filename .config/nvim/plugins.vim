@@ -8,8 +8,10 @@ call plug#begin()
   Plug 'mhinz/vim-startify'
   Plug 'shadmansaleh/lualine.nvim'
   Plug 'kyazdani42/nvim-web-devicons'
-  Plug 'ap/vim-buftabline'
   Plug 'majutsushi/tagbar'
+  " Plug 'ap/vim-buftabline'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
 
   Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-surround'

@@ -1,6 +1,9 @@
 let g:airline_theme = 'onedark'
 let g:airline_powerline_fonts = 1
 
+" Disable statusline in order to use lualine
+let g:airline_disable_statusline = 1
+
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_close_button = 0 
 let g:airline#extensions#tabline#formatter = 'unique_tail'

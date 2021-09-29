@@ -3,7 +3,8 @@
     path = ~/.gitconfig.local
 [user]
 	user = arthurgehrke
-    email = arthugehrke07@gmail.com
+	email = arthurgehrke07@gmail.com
+	name = arthurgehrke
 [github]
 	user = arthurgehrke
 [core]
