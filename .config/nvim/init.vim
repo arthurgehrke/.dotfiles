@@ -17,7 +17,9 @@ source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
-au VimEnter * source $HOME/.config/nvim/plugconf/nerdTREE.vim
+source $HOME/.config/nvim/plugconf/indent_blankline.vim
+source $HOME/.config/nvim/plugconf/nvim_tree.vim
+source $HOME/.config/nvim/plugconf/better_scape.vim
 
 set title
 set shell=$SHELL
@@ -60,7 +62,7 @@ set splitbelow
 set nostartofline
 set expandtab
 set autoindent
-"set copyindent
+set copyindent
 set smartindent
 set shiftwidth=2
 set tabstop=2
@@ -119,8 +121,6 @@ au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 autocmd VimResized * wincmd =
 " More predictable syntax highlighting
 autocmd BufEnter * syntax sync fromstart
-" Automatically close preview windows after autocompletion
-autocmd CompleteDone * pclose
 
 " WSL clipboard with win32yank
 let g:clipboard = {
@@ -136,12 +136,3 @@ let g:clipboard = {
 	\   'cache_enabled': 0,
 	\ }
 
-" Update a buffer's contents on focus if it changed outside of Vim.
-au FocusGained,BufEnter * :checktime
-
-" Only show the cursor line in the active buffer.
-" augroup CursorLine
-"     au!
-"     au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-"     au WinLeave * setlocal nocursorline
-" augroup END

@@ -3,11 +3,6 @@ cnoreabbrev W w
 " quit with :Q and :q
 cnoreabbrev Q q
 
-inoremap jk <ESC>
-inoremap kj <ESC>
-inoremap JK <ESC>
-inoremap jj <ESC>
-
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>

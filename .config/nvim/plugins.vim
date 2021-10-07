@@ -1,19 +1,24 @@
 call plug#begin()
-  Plug 'preservim/nerdtree'
-  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'kyazdani42/nvim-tree.lua'
+  Plug 'kyazdani42/nvim-web-devicons'
 
   Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
   Plug 'arcticicestudio/nord-vim'
+
   Plug 'mhinz/vim-startify'
   Plug 'shadmansaleh/lualine.nvim'
-  Plug 'kyazdani42/nvim-web-devicons'
   Plug 'majutsushi/tagbar'
   " Plug 'ap/vim-buftabline'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
 
-  Plug 'jiangmiao/auto-pairs'
+  Plug 'kazhala/close-buffers.nvim'
+
+  Plug 'lukas-reineke/indent-blankline.nvim'
+  " Plug 'jiangmiao/auto-pairs'
+  Plug 'cohama/lexima.vim'
+  Plug 'jdhao/better-escape.vim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'junegunn/fzf'
@@ -25,3 +30,5 @@ call plug#begin()
   Plug 'haorenW1025/completion-nvim'
   Plug 'neovim/nvim-lspconfig'
 call plug#end()
+
+
