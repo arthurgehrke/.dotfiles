@@ -14,7 +14,7 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
-source $HOME/.p10k.zsh 
+source $HOME/.themes/zsh/.p10k.zsh 
 source $HOME/.fzf.zsh
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
@@ -35,67 +35,9 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=1024
 SAVEHIST=1024
 
-zstyle ':completion:*' menu select
-zstyle ':completion:*' completer _complete
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
-
-autoload -U compinit && compinit
-zmodload -i zsh/complist
-
-# history
-setopt append_history
-setopt hist_ignore_all_dups
-setopt hist_ignore_space
-setopt hist_verify
-setopt hist_expire_dups_first
-setopt share_history
-setopt inc_append_history
-setopt extended_history
-
-# completion
-setopt always_to_end
-setopt complete_in_word
-setopt auto_list
-setopt auto_remove_slash 
-
-# various
-setopt auto_cd
-# setopt prompt_subst
-
 ##############################################################################
 # Bindings
 ##############################################################################
-
-bindkey '^$' beginning-of-line
-bindkey '^e' end-of-line
-bindkey '^k' up-line-or-search
-bindkey '^j' down-line-or-search
-
-# custom bind copy cut paste and quit
-if [[ -t 0 && $- = *i* ]]
-then
-# change Ctrl+C to Ctrl+I
-stty start ''
-stty stop ''
-stty quit ''
-stty erase ''
-stty kill ''
-stty eof '' # Ctrl + D
-stty rprnt ''
-stty werase ''
-stty lnext ''
-stty discard ''
-fi
-
-# change Ctrl+C to Ctrl+Q
-stty intr '^q'
-
-# change Ctrl+z to Ctrl+j
-stty susp '^j'
-
-# change Ctrl+V to Ctrl+K
-bindkey '^k' quoted-insert # for zle
-
 _copy-using-win32yank() {
   if ((REGION_ACTIVE)) then
     zle copy-region-as-kill
@@ -136,7 +78,6 @@ bindkey '^W' exit_zsh
 ##############################################################################
 # Various
 ##############################################################################
-
 DISABLE_AUTO_UPDATE="true"
 
 # Share a same ssh-agent across sessions.
@@ -161,5 +102,3 @@ function settitle() {
 }
 
 settitle "MinTTY - $(pwd)@$HOST"
-
-stty erase '^?'
