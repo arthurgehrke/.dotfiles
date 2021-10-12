@@ -28,12 +28,41 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 ##############################################################################
+# Configs
+##############################################################################
+DISABLE_AUTO_UPDATE="true"
+EDITOR=nvim
+
+autoload -U colors
+autoload -U compinit
+
+setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
+##############################################################################
 # History
 ##############################################################################
-
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=1024
-SAVEHIST=1024
+HISTSIZE=5000
+SAVEHIST=5000
+DIRSTACKSIZE=8
+
+setopt auto_pushd
+setopt append_history            
+setopt interactivecomments       # Enable comments in interactive mode (useful)
+setopt extended_glob             # More powerful glob features
+setopt append_history            # Append to history on exit, don't overwrite it.
+setopt extended_history          # Save timestamps with history
+setopt hist_no_store             # Don't store history commands
+setopt hist_save_no_dups         # Don't save duplicate history entries
+setopt hist_ignore_all_dups      # Ignore old command duplicates (in current session)
+setopt pushdsilent
+
+##############################################################################
+# Completions
+##############################################################################
+
+##############################################################################
+# KeyMappings
+##############################################################################
 
 ##############################################################################
 # Bindings
@@ -78,8 +107,6 @@ bindkey '^W' exit_zsh
 ##############################################################################
 # Various
 ##############################################################################
-DISABLE_AUTO_UPDATE="true"
-
 # Share a same ssh-agent across sessions.
 if [ -f ~/.ssh-agent.generated.env ]; then
   . ~/.ssh-agent.generated.env >/dev/null
