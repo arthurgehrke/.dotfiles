@@ -14,7 +14,7 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
-source $HOME/.themes/zsh/.p10k.zsh 
+source $HOME/.themes/zsh/circular/.p10k.zsh 
 source $HOME/.fzf.zsh
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
