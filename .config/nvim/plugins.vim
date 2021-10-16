@@ -7,6 +7,8 @@ call plug#begin()
   Plug 'arcticicestudio/nord-vim'
 
   Plug 'mhinz/vim-startify'
+  Plug 'tjdevries/train.nvim'
+  
   Plug 'shadmansaleh/lualine.nvim'
   Plug 'majutsushi/tagbar'
   " Plug 'ap/vim-buftabline'

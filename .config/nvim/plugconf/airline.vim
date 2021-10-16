@@ -16,7 +16,7 @@ let g:airline#extensions#tabline#right_alt_sep = ''
 
 let g:airline#extensions#tabline#tabs_label = ''       
 let g:airline#extensions#tabline#buffers_label = ''  
-"
+ 
 " disable file paths in the tab 
 let g:airline#extensions#tabline#fnamemod = ':t'
 
@@ -42,8 +42,3 @@ let g:airline_section_y = ''
 let g:airline_skip_empty_sections = 1
 
 let g:airline_exclude_preview = 0
-" hide nerdtree status line
-let g:airline_filetype_overrides = {
-  \ 'nerdtree': [ get(g:, 'NERDTreeStatusline', ''), '' ],
-  \ 'list': [ '%y', '%l/%L'],
-  \ }
