@@ -18,7 +18,6 @@ call plug#begin()
   Plug 'kazhala/close-buffers.nvim'
 
   Plug 'lukas-reineke/indent-blankline.nvim'
-  " Plug 'jiangmiao/auto-pairs'
   Plug 'cohama/lexima.vim'
   Plug 'jdhao/better-escape.vim'
   Plug 'tpope/vim-surround'

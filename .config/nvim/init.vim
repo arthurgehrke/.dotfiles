@@ -8,17 +8,20 @@ map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
-source $HOME/.config/nvim/plugconf/onedark.vim
+
+" source $HOME/.config/nvim/plugconf/onedark.vim
+source $HOME/.config/nvim/plugconf/gruvbox.vim
+" source $HOME/.config/nvim/plugconf/nord.vim
+
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/fzfvim.vim
-source $HOME/.config/nvim/plugconf/nerdTREEgit.vim
 source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
-au VimEnter * source $HOME/.config/nvim/plugconf/nvim_tree.vim
+source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 
 set title
@@ -62,7 +65,7 @@ set splitbelow
 set nostartofline
 set expandtab
 set autoindent
-" set copyindent
+set copyindent
 set smartindent
 set shiftwidth=2
 set tabstop=2
@@ -83,7 +86,7 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-autocmd FileType tagbar,nerdtree setlocal signcolumn=no
+autocmd FileType tagbar setlocal signcolumn=no
 
 function! FourSpacesStyle()
   set tabstop=4
