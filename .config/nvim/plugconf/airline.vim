@@ -18,9 +18,16 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 let g:airline#extensions#tabline#right_sep = ''
 let g:airline#extensions#tabline#right_alt_sep = ''
 
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+let g:airline_section_b = ''
+let g:airline_section_z = ''
+let g:airline_section_y = ''
+
 let g:airline#extensions#tabline#tabs_label = ''       
 let g:airline#extensions#tabline#buffers_label = ''  
- 
+
 " disable file paths in the tab 
 let g:airline#extensions#tabline#fnamemod = ':t'
 

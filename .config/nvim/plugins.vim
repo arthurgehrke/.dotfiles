@@ -17,6 +17,7 @@ call plug#begin()
 
   Plug 'kazhala/close-buffers.nvim'
 
+  Plug 'ntpeters/vim-better-whitespace'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'cohama/lexima.vim'
   Plug 'jdhao/better-escape.vim'
