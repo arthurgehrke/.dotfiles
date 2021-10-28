@@ -14,17 +14,22 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
-source $HOME/.themes/zsh/circular/.p10k.zsh 
+source $HOME/.themes/zsh/.p10k.zsh 
 source $HOME/.fzf.zsh
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
+source $INCLUDES/asdf/asdf.sh
+
+# Plugins configs
+source $HOME/zshrc/completions.zsh
+source $HOME/zshrc/autosuggestions.zsh
 
 source $HOME/.shell_aliases
 source $HOME/.shell_scripts
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+  PATH="$HOME/bin:$PATH"
 fi
 
 ##############################################################################
@@ -32,10 +37,7 @@ fi
 ##############################################################################
 DISABLE_AUTO_UPDATE="true"
 EDITOR=nvim
-
 autoload -U colors
-autoload -U compinit
-
 setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
 ##############################################################################
 # History
@@ -45,19 +47,31 @@ HISTSIZE=5000
 SAVEHIST=5000
 DIRSTACKSIZE=8
 
-setopt auto_pushd
-setopt append_history            
-setopt interactivecomments       # Enable comments in interactive mode (useful)
-setopt extended_glob             # More powerful glob features
-setopt append_history            # Append to history on exit, don't overwrite it.
-setopt extended_history          # Save timestamps with history
-setopt hist_no_store             # Don't store history commands
-setopt hist_save_no_dups         # Don't save duplicate history entries
-setopt hist_ignore_all_dups      # Ignore old command duplicates (in current session)
-setopt pushdsilent
+setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
 
 ##############################################################################
-# Completions
+# Navigation
+##############################################################################
+setopt AUTO_CD              # Go to folder path without using cd.
+
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+
+setopt CORRECT              # Spelling correction
+setopt CDABLE_VARS          # Change directory to a path stored in a variable.
+setopt EXTENDED_GLOB        # Use extended globbing syntax.
+
+##############################################################################
+# Completion
 ##############################################################################
 
 ##############################################################################
@@ -67,11 +81,35 @@ setopt pushdsilent
 ##############################################################################
 # Bindings
 ##############################################################################
+if [[ -t 0 && $- = *i* ]]
+then
+# change Ctrl+C to Ctrl+I
+stty start ''
+stty stop ''
+stty quit ''
+stty erase ''
+stty kill ''
+stty eof '' # Ctrl + D
+stty rprnt ''
+stty werase ''
+stty lnext ''
+stty discard ''
+fi
+
+# change Ctrl+C to Ctrl+Q
+stty intr '^q'
+
+# change Ctrl+z to Ctrl+j
+stty susp '^j'
+
+# change Ctrl+V to Ctrl+K
+bindkey '^k' quoted-insert # for zle
+
 _copy-using-win32yank() {
   if ((REGION_ACTIVE)) then
     zle copy-region-as-kill
     printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
-    ((REGION_ACTIVE = 0))
+    zle kill-region
   fi
 }
 
@@ -82,7 +120,7 @@ _cut-using-win32yank() {
   if ((REGION_ACTIVE)) then
      zle copy-region-as-kill
      printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
-     zle kill-region
+    ((REGION_ACTIVE = 0))
   fi
 }
 
