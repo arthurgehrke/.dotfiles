@@ -31,7 +31,6 @@ set updatetime=300
 set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
-set formatoptions-=cro 
 set hidden
 set nobuflisted
 
@@ -65,11 +64,15 @@ set pumheight=10
 set splitright
 set splitbelow
 
-set nostartofline
-set expandtab
+" disable automatic comment insertion
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 set autoindent
 set copyindent
 set smartindent
+
+set nostartofline
+set expandtab
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
