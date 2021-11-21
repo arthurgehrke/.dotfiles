@@ -14,8 +14,10 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
-source $HOME/.themes/zsh/.p10k.zsh 
 source $HOME/.fzf.zsh
+source $HOME/.fzf-functions.zsh
+
+source $HOME/.themes/zsh/.p10k.zsh 
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
 source $INCLUDES/asdf/asdf.sh
@@ -36,6 +38,7 @@ fi
 # Configs
 ##############################################################################
 DISABLE_AUTO_UPDATE="true"
+DISABLE_MAGIC_FUNCTIONS=true
 EDITOR=nvim
 autoload -U colors
 setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
