@@ -1,28 +1,30 @@
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
-
-  Plug 'joshdick/onedark.vim'
-  Plug 'morhetz/gruvbox'
-  Plug 'arcticicestudio/nord-vim'
+  Plug 'nvim-lualine/lualine.nvim'
+  Plug 'majutsushi/tagbar'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  
+  Plug 'mhartington/oceanic-next'
+  " Plug 'joshdick/onedark.vim'
+  " Plug 'morhetz/gruvbox'
+  " Plug 'arcticicestudio/nord-vim'
 
   Plug 'mhinz/vim-startify'
   Plug 'tjdevries/train.nvim'
-  
-  Plug 'shadmansaleh/lualine.nvim'
-  Plug 'majutsushi/tagbar'
-  " Plug 'ap/vim-buftabline'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
 
   Plug 'kazhala/close-buffers.nvim'
-
+  
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'junegunn/vim-peekaboo'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'cohama/lexima.vim'
   Plug 'jdhao/better-escape.vim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
+  
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
 

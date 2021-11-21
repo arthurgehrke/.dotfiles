@@ -1,8 +1,3 @@
-" default
-nnoremap <C-p> :FZF<CR>
-" search into files with silver search (install with apt)
-nnoremap <C-f> :Rg<CR>
-
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
@@ -46,4 +41,3 @@ command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
-

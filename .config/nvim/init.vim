@@ -8,9 +8,8 @@ map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
-
 " source $HOME/.config/nvim/plugconf/onedark.vim
-source $HOME/.config/nvim/plugconf/gruvbox.vim
+" source $HOME/.config/nvim/plugconf/gruvbox.vim
 " source $HOME/.config/nvim/plugconf/nord.vim
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
@@ -24,6 +23,9 @@ source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/better_whitespace.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
+source $HOME/.config/nvim/plugconf/telescope.vim
+
+colorscheme OceanicNext
 
 set title
 set shell=$SHELL
@@ -32,9 +34,8 @@ set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
 set hidden
+" buffer unlisted but still visible on screen
 set nobuflisted
-
-set nojoinspaces
 
 set signcolumn=auto
 set numberwidth=4
@@ -51,6 +52,8 @@ set ignorecase
 set smartcase 
 set hlsearch 
 set incsearch 
+" time redrawing the display to hlsearch
+set redrawtime=10000
 
 set cmdheight=1
 set noshowcmd
@@ -58,28 +61,33 @@ set noshowmode
 
 set shortmess+=c
 set previewheight=5
-set pumheight=10                        
-" set previewheight=10
+set pumheight=10
 
 set splitright
 set splitbelow
 
-" disable automatic comment insertion
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
 set autoindent
 set copyindent
 set smartindent
+set nojoinspaces
 
-set nostartofline
 set expandtab
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
-set nowrap                              
+set nowrap
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
+
+" highlight from start of file
+autocmd BufEnter * :syntax sync fromstart
+
+" disable automatic comment insertion
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" If vim is resized, resize any splits
+autocmd VimResized * wincmd =
 
 augroup vimrc-remember-cursor-position
     autocmd!
@@ -126,11 +134,6 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
-" If vim is resized, resize any splits
-autocmd VimResized * wincmd =
-" More predictable syntax highlighting
-autocmd BufEnter * syntax sync fromstart
-
 " WSL clipboard with win32yank
 let g:clipboard = {
 	\   'name': 'win32yank-wsl',
@@ -147,10 +150,10 @@ let g:clipboard = {
 
 " Tell Vim which characters to show for expanded TABs,
 " trailing whitespace, and end-of-lines. VERY useful!
-if &listchars ==# 'eol:$'
-  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-endif
-set list                " Show problematic characters.
+" if &listchars ==# 'eol:$'
+"   set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+" endif
+" set list                " Show problematic characters.
 
 " Also highlight all tabs and trailing whitespace characters.
 " highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen

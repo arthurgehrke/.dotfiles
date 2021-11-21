@@ -1,4 +1,3 @@
-let g:airline_theme='gruvbox'
 " let g:airline_theme='wombat'
 " let g:airline_theme = 'iceberg'
 " let g:airline_theme = 'onedark'
