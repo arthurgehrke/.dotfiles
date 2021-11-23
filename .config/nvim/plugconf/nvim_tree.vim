@@ -1,3 +1,6 @@
+let g:nvim_tree_quit_on_open = 1
+let g:nvim_tree_special_files = { 'README.md': 0, 'Makefile': 0, 'MAKEFILE': 0 }
+
 let g:nvim_tree_show_icons = {
     \ 'git': 1,
     \ 'folders': 0,
@@ -44,7 +47,7 @@ require'nvim-tree'.setup {
   open_on_setup = true,
   open_on_tab = false,
   update_cwd = true, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
-  update_to_buf_dir = { -- hijacks new directory buffers when they are opened TODO What is this
+  update_to_buf_dir = { -- hijacks new directory buffers when they are opened 
     enable = false,
     auto_open = false
   },
@@ -71,7 +74,7 @@ require'nvim-tree'.setup {
     }
   },
   filters = {
-    dotfiles = true,
+    dotfiles = false,
     custom = { ".git", "venv", "env", "node_modules" }
   }
 }

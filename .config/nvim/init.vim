@@ -16,6 +16,7 @@ source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/fzfvim.vim
 source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
+" source $HOME/.config/nvim/plugconf/lsp.lua
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
@@ -76,6 +77,9 @@ set shiftwidth=2
 set tabstop=2
 set softtabstop=2
 set nowrap
+
+" improve fold explorer
+set viewoptions-=curdir
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
