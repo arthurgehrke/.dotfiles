@@ -1,14 +1,7 @@
-#Themes
-ThemeFile=gruvbox-dark.minttyrc
-#ThemeFile=eighties.minttyrc
-#ThemeFile=one-dark.minttyrc
-#ThemeFile=solarized.minttyrc
-#ThemeFile=ocean.minttyrc
+ThemeFile=solarized.minttyrc
 
-Term=xterm-256color
-Transparency=low
 OpaqueWhenFocused=yes
-
+Term=xterm-256color
 Font=MesloLGS NF
 FontHeight=12
 CursorType=block
@@ -19,16 +12,16 @@ PgUpDnScroll=yes
 Scrollbar=none
 BellTaskbar=no
 
-CtrlShiftShortcuts=no
-CtrlExchangeShift=no
-ComposeKey=off
-ClipShortcuts=no
-AltFnShortcuts=no
-BackspaceSendsBS=no
-
 BoldAsFont=yes
 BoldAsColour=yes
 FontSmoothing=default
+ClipShortcuts=no
+CtrlShiftShortcuts=no
+ClicksTargetApp=yes
 
-Columns=255
-Rows=48
+CtrlExchangeShift=no
+ComposeKey=ctrl
+AltFnShortcuts=no
+BackspaceSendsBS=no
+ClickTargetMod=off
+MiddleClickAction=void
