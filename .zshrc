@@ -20,7 +20,6 @@ source $HOME/.fzf-functions.zsh
 source $HOME/.themes/zsh/.p10k.zsh 
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
-source $INCLUDES/asdf/asdf.sh
 
 # Plugins configs
 source $HOME/zshrc/completions.zsh

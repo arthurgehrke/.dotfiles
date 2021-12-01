@@ -1,5 +1,6 @@
 let g:nvim_tree_quit_on_open = 1
 let g:nvim_tree_special_files = { 'README.md': 0, 'Makefile': 0, 'MAKEFILE': 0 }
+let g:nvim_tree_indent_markers = 0
 
 let g:nvim_tree_show_icons = {
     \ 'git': 1,
@@ -45,7 +46,7 @@ require'nvim-tree'.setup {
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_close = true,
   open_on_setup = true,
-  open_on_tab = false,
+  open_on_tab = true,
   update_cwd = true, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
   update_to_buf_dir = { -- hijacks new directory buffers when they are opened 
     enable = false,
@@ -63,6 +64,11 @@ require'nvim-tree'.setup {
     -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
     ignore_list = {}
   },
+  git = {
+    enable = true,
+    ignore = true,
+    timeout = 500,
+  },
   view = {
     side = 'left',
     width = 40,
@@ -71,25 +77,26 @@ require'nvim-tree'.setup {
     mappings = {
       custom_only = false,
       list = {}
-    }
+    },
+    number = false,
+    relativenumber = false
   },
   filters = {
     dotfiles = false,
     custom = { ".git", "venv", "env", "node_modules" }
+  },
+  system_open = {
+    cmd  = nil,
+    args = {}
   }
 }
-
-require'nvim-tree.view'.View.winopts.relativenumber = false
-require'nvim-tree.view'.View.winopts.number = false
-
 local opts = {silent = true, noremap = true}
-vim.api.nvim_set_keymap('n', '<Space>f', '<Cmd>NvimTreeToggle<CR>', opts)
-vim.api.nvim_set_keymap('n', '<Space>c', '<Cmd>NvimTreeFindFile<CR>', opts)
-EOF
-" vim.api.nvim_set_keymap('n', '<Space>r', '<Cmd>NvimTreeRefresh<CR>', opts)
 
-" nnoremap <Space>f :NvimTreeToggle<CR>
+EOF
+
+nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
-" nnoremap <Space>c :NvimTreeFindFile<CR>
+nnoremap <Space>c :NvimTreeFindFile<CR>
+
 set termguicolors 
 highlight NvimTreeFolderIcon guibg=blue

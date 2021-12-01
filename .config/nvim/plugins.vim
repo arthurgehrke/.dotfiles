@@ -7,9 +7,11 @@ call plug#begin()
   Plug 'vim-airline/vim-airline-themes'
   
   Plug 'mhartington/oceanic-next'
-  " Plug 'joshdick/onedark.vim'
-  " Plug 'morhetz/gruvbox'
-  " Plug 'arcticicestudio/nord-vim'
+  Plug 'joshdick/onedark.vim'
+  Plug 'morhetz/gruvbox'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'ayu-theme/ayu-vim'
 
   Plug 'mhinz/vim-startify'
   Plug 'tjdevries/train.nvim'
@@ -35,4 +37,16 @@ call plug#begin()
   Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
+source $HOME/.config/nvim/plugconf/vimcommentary.vim
+source $HOME/.config/nvim/plugconf/fzfvim.vim
+source $HOME/.config/nvim/plugconf/tagbar.vim
+source $HOME/.config/nvim/plugconf/lsp.vim
+source $HOME/.config/nvim/plugconf/gitsigns.vim
+source $HOME/.config/nvim/plugconf/lualine.vim
+source $HOME/.config/nvim/plugconf/airline.vim
+source $HOME/.config/nvim/plugconf/indent_blankline.vim
+source $HOME/.config/nvim/plugconf/better_whitespace.vim
+source $HOME/.config/nvim/plugconf/nvim_tree.vim
+source $HOME/.config/nvim/plugconf/better_scape.vim
+source $HOME/.config/nvim/plugconf/telescope.vim
 

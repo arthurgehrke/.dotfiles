@@ -1,32 +1,12 @@
-filetype on
-filetype plugin on
-filetype plugin indent on
-syntax on
-syntax enable
-
 map <silent> <F1> :source $HOME/.config/nvim/init.vim<CR>
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
-" source $HOME/.config/nvim/plugconf/onedark.vim
-" source $HOME/.config/nvim/plugconf/gruvbox.vim
-" source $HOME/.config/nvim/plugconf/nord.vim
+source $HOME/.config/nvim/themes.vim
 
-source $HOME/.config/nvim/plugconf/vimcommentary.vim
-source $HOME/.config/nvim/plugconf/fzfvim.vim
-source $HOME/.config/nvim/plugconf/tagbar.vim
-source $HOME/.config/nvim/plugconf/lsp.vim
-" source $HOME/.config/nvim/plugconf/lsp.lua
-source $HOME/.config/nvim/plugconf/gitsigns.vim
-source $HOME/.config/nvim/plugconf/lualine.vim
-source $HOME/.config/nvim/plugconf/airline.vim
-source $HOME/.config/nvim/plugconf/indent_blankline.vim
-source $HOME/.config/nvim/plugconf/better_whitespace.vim
-source $HOME/.config/nvim/plugconf/nvim_tree.vim
-source $HOME/.config/nvim/plugconf/better_scape.vim
-source $HOME/.config/nvim/plugconf/telescope.vim
-
-colorscheme OceanicNext
+filetype indent on " use filetype indentation
+filetype plugin indent on " allow plugins to use filetype indentation
+syntax on " turn on syntax highlighting
 
 set title
 set shell=$SHELL
