@@ -7,6 +7,7 @@ source $HOME/.config/nvim/themes.vim
 filetype indent on " use filetype indentation
 filetype plugin indent on " allow plugins to use filetype indentation
 syntax on " turn on syntax highlighting
+syntax enable
 
 set title
 set shell=$SHELL
@@ -48,6 +49,8 @@ set splitright
 set splitbelow
 
 set autoindent
+set nocompatible
+
 set copyindent
 set smartindent
 set nojoinspaces
@@ -130,15 +133,4 @@ let g:clipboard = {
 	\      '*': 'win32yank.exe -o --lf',
 	\   },
 	\   'cache_enabled': 0,
-	\ }
-
-" Tell Vim which characters to show for expanded TABs,
-" trailing whitespace, and end-of-lines. VERY useful!
-" if &listchars ==# 'eol:$'
-"   set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-" endif
-" set list                " Show problematic characters.
-
-" Also highlight all tabs and trailing whitespace characters.
-" highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
-" match ExtraWhitespace /\s\+$\|\t/
+  \ }

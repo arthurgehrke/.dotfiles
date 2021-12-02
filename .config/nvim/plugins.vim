@@ -1,3 +1,5 @@
+filetype plugin indent on 
+
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
@@ -12,6 +14,7 @@ call plug#begin()
   Plug 'arcticicestudio/nord-vim'
   Plug 'NLKNguyen/papercolor-theme'
   Plug 'ayu-theme/ayu-vim'
+  Plug 'tyrannicaltoucan/vim-deep-space'
 
   Plug 'mhinz/vim-startify'
   Plug 'tjdevries/train.nvim'
@@ -26,6 +29,7 @@ call plug#begin()
   Plug 'jdhao/better-escape.vim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
+  Plug 'bkad/camelcasemotion'
   
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
@@ -49,4 +53,5 @@ source $HOME/.config/nvim/plugconf/better_whitespace.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/telescope.vim
+source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 
