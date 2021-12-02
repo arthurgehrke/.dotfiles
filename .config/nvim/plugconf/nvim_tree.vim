@@ -72,7 +72,7 @@ require'nvim-tree'.setup {
   view = {
     side = 'left',
     width = 40,
-    auto_resize = false,
+    auto_resize = true,
     hide_root_folder = false,
     mappings = {
       custom_only = false,
