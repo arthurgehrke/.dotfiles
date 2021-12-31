@@ -17,7 +17,7 @@ set encoding=utf-8
 set autoread
 set hidden
 " buffer unlisted but still visible on screen
-set nobuflisted
+" set nobuflisted
 
 set signcolumn=auto
 set numberwidth=4

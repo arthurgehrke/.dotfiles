@@ -50,3 +50,7 @@ nnoremap <Space>ac :tabclose<CR>
 
 " close all buffers but the current one
 command! BufOnly execute '%bdelete|edit #|normal `"'
+
+" jumps from buffers
+nnoremap <silent> <space><C-o> :call jumps#fileCO(v:true)<CR>
+nnoremap <silent> <space><C-i> :call jumps#fileCO(v:false)<CR>
