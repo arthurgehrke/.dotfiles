@@ -54,3 +54,18 @@ command! BufOnly execute '%bdelete|edit #|normal `"'
 " jumps from buffers
 nnoremap <silent> <space><C-o> :call jumps#fileCO(v:true)<CR>
 nnoremap <silent> <space><C-i> :call jumps#fileCO(v:false)<CR>
+
+" Substitute the word under the cursor.
+nmap <space>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+
+" Insert common snippets
+inoremap <C-c> console.log(
+inoremap <C-d> describe('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+inoremap <C-t> test('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
+" highlight and search word
+nnoremap <space>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
+
+nnoremap <space>+ :vertical resize +5<CR>
+nnoremap <space>- :vertical resize -5<CR>
+nnoremap <space>rp :resize 100<CR>

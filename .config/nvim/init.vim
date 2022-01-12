@@ -17,7 +17,7 @@ set encoding=utf-8
 set autoread
 set hidden
 " buffer unlisted but still visible on screen
-" set nobuflisted
+set nobuflisted
 
 set signcolumn=auto
 set numberwidth=4
@@ -134,3 +134,13 @@ let g:clipboard = {
 	\   },
 	\   'cache_enabled': 0,
   \ }
+
+" clear highlighting if edit text
+inoremap <expr> <Plug>(StopHL) execute('nohlsearch')[-1]
+fu! StopHL()
+    if !v:hlsearch || mode() isnot 'n'
+        return
+    endif
+    sil call feedkeys("\<Plug>(StopHL)", 'm')
+endfu
+au InsertEnter * call StopHL()
