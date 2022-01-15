@@ -10,14 +10,14 @@ export INCLUDES=$HOME/.local/share/dotfiles
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh 
+source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
 source $HOME/.fzf.zsh
 source $HOME/.fzf-functions.zsh
 
-source $HOME/.themes/zsh/.p10k.zsh 
+source $HOME/.themes/zsh/.p10k.zsh
 source $INCLUDES/nvm/nvm.sh
 source $INCLUDES/z/z.sh
 
@@ -79,6 +79,16 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 ##############################################################################
 # KeyMappings
 ##############################################################################
+## zsh-autosuggestions
+# use ctrl+T to toggle autosuggestions
+bindkey '^T' autosuggest-toggle
+# accept the suggested words
+bindkey '^I' autosuggest-accept
+
+## history-substring-search
+# Control-P/N keys
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
 
 ##############################################################################
 # Bindings
@@ -127,7 +137,7 @@ _cut-using-win32yank() {
 }
 
 zle -N _cut-using-win32yank
-bindkey '^X' _cut-using-win32yank 
+bindkey '^X' _cut-using-win32yank
 
 _paste-copy-using-win32yank() {
 	if ((REGION_ACTIVE)); then
@@ -137,7 +147,7 @@ _paste-copy-using-win32yank() {
 }
 
 zle -N _paste-copy-using-win32yank
-bindkey '^V' _paste-copy-using-win32yank 
+bindkey '^V' _paste-copy-using-win32yank
 
 exit_zsh() { exit }
 

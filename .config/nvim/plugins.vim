@@ -1,4 +1,4 @@
-filetype plugin indent on 
+filetype plugin indent on
 
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
@@ -7,7 +7,7 @@ call plug#begin()
   Plug 'majutsushi/tagbar'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  
+
   Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
   Plug 'arcticicestudio/nord-vim'
@@ -20,7 +20,7 @@ call plug#begin()
   Plug 'tjdevries/train.nvim'
 
   Plug 'asheq/close-buffers.vim'
-  
+
   Plug 'pechorin/any-jump.vim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
@@ -38,6 +38,7 @@ call plug#begin()
   Plug 'rhysd/git-messenger.vim'
   Plug 'tpope/vim-fugitive'
 
+  Plug 'dense-analysis/ale'
   Plug 'haorenW1025/completion-nvim'
   Plug 'neovim/nvim-lspconfig'
 call plug#end()
@@ -57,3 +58,4 @@ source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 source $HOME/.config/nvim/plugconf/git_messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/any_jump.vim
+source $HOME/.config/nvim/plugconf/ale.vim

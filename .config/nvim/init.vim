@@ -30,10 +30,10 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-set ignorecase 
-set smartcase 
-set hlsearch 
-set incsearch 
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
 " time redrawing the display to hlsearch
 set redrawtime=10000
 
@@ -61,11 +61,16 @@ set tabstop=2
 set softtabstop=2
 set nowrap
 
+let mapleader =" "
+
 " improve fold explorer
 set viewoptions-=curdir
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
+
+" Automatically removing all trailing whitespace
+autocmd BufWritePre * :%s/\s\+$//e
 
 " highlight from start of file
 autocmd BufEnter * :syntax sync fromstart
@@ -94,7 +99,7 @@ function! FourSpacesStyle()
   set softtabstop=-1
   set shiftwidth=4
   set expandtab
-  set backspace=indent,eol,start 
+  set backspace=indent,eol,start
   set indentexpr=-1
 endfunction
 

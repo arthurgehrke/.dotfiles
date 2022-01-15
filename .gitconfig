@@ -1,6 +1,5 @@
-[include]
-    # For username / creds / etc
-    path = ~/.gitconfig.local
+; [include]
+;     path = ~/.gitconfig.local
 [user]
 	user = arthurgehrke
 	email = arthurgehrke07@gmail.com
@@ -10,6 +9,14 @@
 [core]
 	editor = nvim
 [diff]
-    tool = vimdiff
+    tool = nvimdiff
+[difftool]
+    prompt = false
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
-	tool = vimdiff
+    tool = nvimdiff
+[mergetool]
+    prompt = true
+[mergetool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
