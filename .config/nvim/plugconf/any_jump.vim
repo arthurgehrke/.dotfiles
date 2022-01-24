@@ -1,8 +1,10 @@
+let g:any_jump_disable_default_keybindings = 1
+
 " Normal mode: Jump to definition under cursor
-nnoremap <space>j :AnyJump<CR>
+nnoremap <space>jp :AnyJump<CR>
 
 " Visual mode: jump to selected text in visual mode
-xnoremap <space>j :AnyJumpVisual<CR>
+xnoremap <space>jp :AnyJumpVisual<CR>
 
 " Normal mode: open previous opened file (after jump)
 nnoremap <space>ab :AnyJumpBack<CR>

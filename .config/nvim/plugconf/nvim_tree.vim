@@ -40,15 +40,16 @@ let g:nvim_tree_icons = {
     \ }
 
 lua << EOF
+local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
-  disable_netrw = true, -- disables netrw completely 
-  hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities) 
+  disable_netrw = true, -- disables netrw completely
+  hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_close = true,
   open_on_setup = true,
   open_on_tab = true,
   update_cwd = true, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
-  update_to_buf_dir = { -- hijacks new directory buffers when they are opened 
+  update_to_buf_dir = { -- hijacks new directory buffers when they are opened
     enable = false,
     auto_open = false
   },
@@ -74,12 +75,24 @@ require'nvim-tree'.setup {
     width = 40,
     auto_resize = true,
     hide_root_folder = false,
+    signcolumn = "yes",
     mappings = {
       custom_only = false,
-      list = {}
+      list = {
+        { key = "v",                        cb = tree_cb("vsplit") },
+        { key = "V",                        cb = tree_cb("split") },
+        { key = "R",                            cb = tree_cb("refresh") },
+        { key = "D",                            cb = tree_cb("trash") },
+        { key = "r",                            cb = tree_cb("rename") },
+        { key = "y",                            cb = tree_cb("copy_name") },
+        { key = "Y",                            cb = tree_cb("copy_path") },
+        { key = "gy",                           cb = tree_cb("copy_absolute_path") },
+        { key = "[c",                           cb = tree_cb("prev_git_item") },
+        { key = "]c",                           cb = tree_cb("next_git_item") },
+        },
     },
     number = false,
-    relativenumber = false
+    relativenumber = false,
   },
   filters = {
     dotfiles = false,
@@ -98,5 +111,5 @@ nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeFindFile<CR>
 
-set termguicolors 
+set termguicolors
 highlight NvimTreeFolderIcon guibg=blue

@@ -88,11 +88,13 @@ augroup END
 
 augroup numbertoggle
     autocmd!
+    " au WinEnter set norelativenumber
     autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-autocmd FileType tagbar setlocal signcolumn=no
+" autocmd FileType tagbar setlocal signcolumn=no
+" autocmd FileType NvimTree setlocal norelativenumber
 
 function! FourSpacesStyle()
   set tabstop=4
