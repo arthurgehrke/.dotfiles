@@ -39,7 +39,17 @@ fi
 DISABLE_AUTO_UPDATE="true"
 DISABLE_MAGIC_FUNCTIONS=true
 EDITOR=nvim
+
 autoload -U colors
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# colors for ls
+if [[ -f ~/.dircolors ]] ; then
+    eval $(dircolors -b ~/.dircolors)
+elif [[ -f /etc/DIR_COLORS ]] ; then
+    eval $(dircolors -b /etc/DIR_COLORS)
+fi
+
 setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
 ##############################################################################
 # History
@@ -47,6 +57,7 @@ setopt no_nomatch                # Don't error when there's nothing to glob, lea
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
+HISTFILESIZE=2000
 DIRSTACKSIZE=8
 
 setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
@@ -54,7 +65,7 @@ setopt SHARE_HISTORY             # Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
 setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
-setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+# setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
@@ -75,6 +86,12 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 ##############################################################################
 # Completion
 ##############################################################################
+zmodload zsh/complist
+bindkey '^[[Z' reverse-menu-complete
+# bindkey '^I' menu-complete
+# bindkey '^I'   complete-word       # tab          | complete
+
+# zstyle ':completion:*' insert-tab true
 
 ##############################################################################
 # KeyMappings
@@ -82,8 +99,10 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 ## zsh-autosuggestions
 # use ctrl+T to toggle autosuggestions
 bindkey '^T' autosuggest-toggle
+
 # accept the suggested words
-bindkey '^I' autosuggest-accept
+# bindkey '^I' autosuggest-accept # with tab
+bindkey '^o' autosuggest-accept
 
 ## history-substring-search
 # Control-P/N keys
