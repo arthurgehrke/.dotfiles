@@ -13,9 +13,9 @@ alias lS='exa -1'			                                                  # one colu
 alias lt='exa --tree --level=2'                                         # tree
 
 # easier to read disk human-readable sizes
-alias df='df -h'                          
+alias df='df -h'
 # show sizes in MB
-alias free='free -m'                      
+alias free='free -m'
 
 # get top process eating memory
 alias psmem='ps auxf | sort -nr -k 4 | head -5'
@@ -39,3 +39,12 @@ alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
 
 alias alder='alder --exclude='"'"'.git|node_modules'"'"''
+
+alias pbcopy='win32yank.exe -i'
+alias pbpaste='win32yank.exe -o'
+
+# alias pbcopy='xclip -selection clipboard'
+# alias pbpaste='xclip -selection clipboard -o'
+
+# alias pbcopy='xclip -selection clipboard'
+# alias pbpaste='xclip -selection clipboard -o'

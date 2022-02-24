@@ -64,10 +64,14 @@ set nowrap
 let mapleader =" "
 
 " improve fold explorer
-set viewoptions-=curdir
+" set viewoptions-=curdir
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
+
+" au BufEnter,BufWinEnter,WinEnter,CmdwinEnter * if bufname('%') == "NvimTree" | set laststatus=0 | else | set laststatus=2 | endif
+" autocmd FileType NvimTree setlocal winhighlight=Normal:NvimTreeBg
+" autocmd FileType NvimTree setlocal colorscheme
 
 " Automatically removing all trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e

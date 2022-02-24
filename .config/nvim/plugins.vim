@@ -8,6 +8,7 @@ call plug#begin()
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
 
+  Plug 'folke/lsp-colors.nvim'
   Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
   Plug 'arcticicestudio/nord-vim'

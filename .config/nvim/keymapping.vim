@@ -37,7 +37,7 @@ noremap L $
 
 " split screen
 noremap <Space>s :<C-u>split<CR>
-noremap <Space>v :<C-u>vsplit<CR> 
+noremap <Space>v :<C-u>vsplit<CR>
 
 " open new tab
 nnoremap <Space>a :tabnew<CR>
@@ -63,9 +63,29 @@ inoremap <C-c> console.log(
 inoremap <C-d> describe('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 inoremap <C-t> test('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
-" highlight and search word
-nnoremap <space>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
-
 nnoremap <space>+ :vertical resize +5<CR>
 nnoremap <space>- :vertical resize -5<CR>
 nnoremap <space>rp :resize 100<CR>
+
+" highlight and search word
+function! s:getSelectedText()
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  norm gvy
+  let l:ret = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  exe "norm \<Esc>"
+  return l:ret
+endfunction
+
+vnoremap <silent> * :call setreg("/",
+    \ substitute(<SID>getSelectedText(),
+    \ '\_s\+',
+    \ '\\_s\\+', 'g')
+    \ )<Cr>n
+
+vnoremap <silent> # :call setreg("?",
+    \ substitute(<SID>getSelectedText(),
+    \ '\_s\+',
+    \ '\\_s\\+', 'g')
+    \ )<Cr>n

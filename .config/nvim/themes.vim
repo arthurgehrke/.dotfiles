@@ -1,27 +1,18 @@
 syntax on
 set termguicolors
 
+"---------------------------------------
 " gruvbox
 set background=dark
 colorscheme gruvbox
-" let g:gruvbox_contrast_dark='hard'
-
-" let g:gruvbox_contrast_dark = 'hard'
-" if exists('+termguicolors')
-"     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-" endif
-" let g:gruvbox_invert_selection='0'
 
 "---------------------------------------
-
 " nord
 " set termguicolors
 " set background=dark
 " colorscheme nord
 
 "---------------------------------------
-
 " onedark
 " if (has("autocmd") && !has("gui_running"))
 "   augroup colorset
@@ -49,6 +40,7 @@ colorscheme gruvbox
 " railscasts (dark):
 
 "---------------------------------------
+
 " palenight (dark):
 " set background=dark
 " colorscheme palenight
