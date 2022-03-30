@@ -8,15 +8,19 @@
 	user = arthurgehrke
 [core]
 	editor = nvim
+	excludesfile = ~/.gitignore
+[color]
+  ui = true
 [diff]
-    tool = nvimdiff
+  tool = nvimdiff
 [difftool]
-    prompt = false
-[difftool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+  prompt = true
+[difftool "nvim"]
+  cmd= nvim -d $REMOTE $LOCAL
 [merge]
-    tool = nvimdiff
+  tool = nvim
+  conflictstyle = diff3
 [mergetool]
-    prompt = true
-[mergetool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
+  prompt = false
+[mergetool "nvim"]
+  cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'

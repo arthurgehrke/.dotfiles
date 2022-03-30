@@ -2,10 +2,10 @@ lua << END
 require'lualine'.setup {
   options = {
     icons_enabled = true,
-    theme = 'OceanicNext',
+    theme = 'auto',
     component_separators = '',
     section_separators = '',
-    disabled_filetypes = {}
+    -- disabled_types = { 'NvimTree' }
   },
   sections = {
     lualine_a = {'mode'},

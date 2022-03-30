@@ -61,10 +61,9 @@ set tabstop=2
 set softtabstop=2
 set nowrap
 
-let mapleader =" "
+set autochdir
 
-" improve fold explorer
-" set viewoptions-=curdir
+let mapleader =" "
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
@@ -132,6 +131,8 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
 " WSL clipboard with win32yank
 let g:clipboard = {
 	\   'name': 'win32yank-wsl',
@@ -155,3 +156,24 @@ fu! StopHL()
     sil call feedkeys("\<Plug>(StopHL)", 'm')
 endfu
 au InsertEnter * call StopHL()
+
+nnoremap <leader>cd :NvimTreeOpen %:p:h<CR>
+nnoremap <leader>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
+
+set foldlevel=20
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+" Use persistent history.
+if !isdirectory("/tmp/.vim-undo-dir")
+    call mkdir("/tmp/.vim-undo-dir", "", 0700)
+endif
+set undodir=/tmp/.vim-undo-dir
+set undofile
+
+if &diff
+  syntax off
+  colorscheme jellybeans
+  set diffopt-=internal
+  set diffopt+=iwhite
+endif

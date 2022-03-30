@@ -29,8 +29,6 @@ let g:nvim_tree_show_icons = {
 \ 'folder_arrows': 1,
 \ }
 
-let g:nvim_tree_quit_on_open = 1 "0 by default, closes the tree when you open a file
-
 nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeFindFile<CR>
@@ -42,18 +40,14 @@ lua << EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
   indent_markers = 1, -- this option shows indent markers when folders are open
-
   disable_netrw = true, -- disables netrw completely
+  auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_close = true,
   open_on_setup = true,
-  open_on_tab = true,
+  open_on_tab = false,
   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
-  update_to_buf_dir = { -- hijacks new directory buffers when they are opened
-    enable = false,
-    auto_open = false
-  },
   diagnostics = {
     enable = false,
   },
@@ -61,6 +55,7 @@ require'nvim-tree'.setup {
     enable = true,
     -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
     -- only relevant when `update_focused_file.enable` is true
+    update_cwd = false,
   },
   git = {
     enable = true,
@@ -69,11 +64,12 @@ require'nvim-tree'.setup {
   },
   view = {
     side = 'left',
-    width = 45,
+    width = 40,
     height = 30,
-    number = false,
     auto_resize = true,
+    preserve_window_proportions = false,
     relativenumber = false,
+    number = false,
     signcolumn = "no",
     mappings = {
       custom_only = false,
@@ -94,7 +90,25 @@ require'nvim-tree'.setup {
   filters = {
     dotfiles = false,
     custom = { ".git", "node_modules", '.cache', 'dist', '.dist', 'build' }
+  },
+  actions = {
+    change_dir = {
+      enable = true,
+      global = false,
+    },
+    open_file = {
+      quit_on_open = true,
+      resize_window = false,
+      window_picker = {
+        enable = true,
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+        exclude = {
+          filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame", },
+          buftype  = { "nofile", "terminal", "help", },
+        }
+      }
+    }
   }
 }
-local opts = {silent = true, noremap = true}
+local opts = { silent = true, noremap = true }
 EOF
