@@ -44,7 +44,7 @@ require'nvim-tree'.setup {
   auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
-  auto_close = true,
+  auto_reload_on_write = true,
   open_on_setup = true,
   open_on_tab = false,
   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
@@ -98,7 +98,7 @@ require'nvim-tree'.setup {
     },
     open_file = {
       quit_on_open = true,
-      resize_window = false,
+      resize_window = true,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",

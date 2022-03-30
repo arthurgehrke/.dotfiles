@@ -41,16 +41,22 @@ call plug#begin()
   Plug 'rhysd/git-messenger.vim'
   Plug 'tpope/vim-fugitive'
 
+  Plug 'folke/trouble.nvim'
+  Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'dense-analysis/ale'
   Plug 'haorenW1025/completion-nvim'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'williamboman/nvim-lsp-installer'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
+source $HOME/.config/nvim/plugconf/lsp_config.vim
+source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
+source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
