@@ -23,6 +23,7 @@ call plug#begin()
 
   Plug 'asheq/close-buffers.vim'
 
+  Plug 'junegunn/fzf.vim'
   Plug 'pechorin/any-jump.vim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
@@ -36,6 +37,7 @@ call plug#begin()
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'bkad/camelcasemotion'
+  Plug 'roxma/vim-paste-easy'
 
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'rhysd/git-messenger.vim'
@@ -66,6 +68,7 @@ source $HOME/.config/nvim/plugconf/better_whitespace.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/telescope.vim
+source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 source $HOME/.config/nvim/plugconf/git_messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
