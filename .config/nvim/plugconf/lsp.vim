@@ -2,8 +2,6 @@
 
 lua << EOF
   local nvim_lsp = require("lspconfig")
-  local completion = require("completion")
-
   local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap=true, silent=true }
@@ -15,7 +13,6 @@ end
  	}
  )
    nvim_lsp.tsserver.setup {
-   on_attach = completion.on_attach,
    handlers = {
       ['textDocument/publishDiagnostics'] = function() end,
     },
@@ -56,7 +53,6 @@ end
 
 vim.lsp.handlers["textDocument/definition"] = goto_definition('split')
 EOF
-
 let g:completion_enable_auto_popup = 0
 
 nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>

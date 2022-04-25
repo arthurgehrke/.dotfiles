@@ -51,7 +51,6 @@ call plug#begin()
   Plug 'andymass/vim-matchup'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'dense-analysis/ale'
-  Plug 'haorenW1025/completion-nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
 call plug#end()
@@ -79,3 +78,4 @@ source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/any_jump.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
+source $HOME/.config/nvim/plugconf/matchup.vim
