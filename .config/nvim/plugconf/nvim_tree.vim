@@ -33,9 +33,6 @@ nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeFindFile<CR>
 
-set termguicolors
-highlight NvimTreeFolderIcon guibg=blue
-
 lua << EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
@@ -111,7 +108,4 @@ require'nvim-tree'.setup {
   }
 }
 local opts = { silent = true, noremap = true }
-local previous_buf = vim.api.nvim_get_current_buf()
-require("nvim-tree").open_replacing_current_buffer()
-require("nvim-tree").find_file(false, previous_buf)
 EOF
