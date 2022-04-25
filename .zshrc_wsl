@@ -1,4 +1,11 @@
 ##############################################################################
+# Wsl
+##############################################################################
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+  PATH="$HOME/bin:$PATH"
+fi
+##############################################################################
 # Bindings
 ##############################################################################
 # if [[ -t 0 && $- = *i* ]]
@@ -59,7 +66,7 @@ _paste-copy-using-win32yank() {
   LBUFFER+="$(win32yank.exe -o)"
 }
 
-Share a same ssh-agent across sessions.
+# Share a same ssh-agent across sessions.
 if [ -f ~/.ssh-agent.generated.env ]; then
   . ~/.ssh-agent.generated.env >/dev/null
   # If the $SSH_AGENT_PID is occupied by other process, we need to manually
@@ -74,7 +81,7 @@ else
   ssh-add
 fi
 
-add custom terminal title
+# add custom terminal title
 function settitle() {
   export PS1="\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
   echo -ne "\e]0;$1\a"
@@ -82,9 +89,17 @@ function settitle() {
 
 settitle "MinTTY - $(pwd)@$HOST"
 
-colors for ls
+# colors for ls
 if [[ -f ~/.dircolors ]] ; then
   eval $(dircolors -b ~/.dircolors)
 elif [[ -f /etc/DIR_COLORS ]] ; then
   eval $(dircolors -b /etc/DIR_COLORS)
 fi
+
+# add custom terminal title
+function settitle() {
+  export PS1="\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
+  echo -ne "\e]0;$1\a"
+}
+
+settitle "MinTTY - $(pwd)@$HOST"

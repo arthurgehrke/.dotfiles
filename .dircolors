@@ -1,36 +1,42 @@
+#!/usr/bin/env dircolors
+# ======================================================================
 # Configuration file for dircolors, a utility to help you set the
 # LS_COLORS environment variable used by GNU ls with the --color option.
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
-# Copying and distribution of this file, with or without modification,
-# are permitted provided the copyright notice and this notice are preserved.
+#
 # The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
 # slackware version of dircolors) are recognized but ignored.
-# Below are TERM entries, which can be a glob patterns, to match
-# against the TERM environment variable to determine if it is colorizable.
-TERM Eterm
-TERM ansi
-TERM *color*
-TERM con[0-9]*x[0-9]*
-TERM cons25
-TERM console
-TERM cygwin
-TERM dtterm
-TERM gnome
-TERM hurd
-TERM jfbterm
-TERM konsole
-TERM kterm
+#
+# Below, there should be one TERM entry for each termtype that is colorizable
+#
+# ----------------------------------------------------------------------
+# AUTHOR: Nathaniel Hellabyte
+# https://github.com/hellabyte/myconfig
+# ======================================================================
+
 TERM linux
 TERM linux-c
-TERM mlterm
-TERM putty
-TERM rxvt*
-TERM screen*
-TERM st
-TERM terminator
-TERM tmux*
+TERM mach-color
+TERM console
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM xterm
+TERM xterm-color
+TERM xterm-debian
+TERM xterm-256color
+TERM rxvt
+TERM screen
+TERM screen-w
+TERM screen-256color
 TERM vt100
-TERM xterm*
+
 # Below are the color init strings for the basic file types. A color init
 # string consists of one or more of the following numeric codes:
 # Attribute codes:
@@ -39,8 +45,6 @@ TERM xterm*
 # 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
 # Background color codes:
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
-#NORMAL 00 # no color code at all
-#FILE 00 # regular file: use no color at all
 RESET 0 # reset to "normal" color
 DIR 01;34 # directory
 LINK 01;36 # symbolic link. (If you set this to 'target' instead of a

@@ -1,9 +1,7 @@
 #!/usr/bin/env zsh
-
 ##############################################################################
 # Source's
 ##############################################################################
-
 export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
@@ -13,9 +11,6 @@ source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
-
-source $HOME/.fzf.zsh
-source $HOME/.fzf-functions.zsh
 
 source $HOME/.themes/zsh/.p10k.zsh
 source $INCLUDES/nvm/nvm.sh
@@ -41,6 +36,7 @@ load-nvmrc() {
     nvm use default
   fi
 }
+
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 source $INCLUDES/z/z.sh
@@ -52,10 +48,37 @@ source $HOME/zshrc/autosuggestions.zsh
 source $HOME/.shell_aliases
 source $HOME/.shell_scripts
 
+source $HOME/.fzf.zsh
+source $HOME/.fzf-functions.zsh
+
+##############################################################################
+# MacOs
+##############################################################################
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
   PATH="$HOME/bin:$PATH"
 fi
+
+# Setting PATH for Python 3
+# The original version is saved in .bash_profile.pysave
+eval "$(pyenv init -)"
+
+#export PATH
+alias python='python3'
+alias py='python3'
+
+if [[ "$TERM" == "tmux-256color" ]]; then
+  export TERM=screen-256color
+fi
+
+# npm global
+export NPM_PACKAGES="/usr/local/npm_packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+
+# prefer US English & utf-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
 
 ##############################################################################
 # Configs
@@ -67,11 +90,12 @@ EDITOR=nvim
 autoload -U colors
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# brew install coreutils
 # colors for ls
 if [[ -f ~/.dircolors ]] ; then
-    eval $(dircolors -b ~/.dircolors)
+  eval $(gdircolors -b ~/.dircolors)
 elif [[ -f /etc/DIR_COLORS ]] ; then
-    eval $(dircolors -b /etc/DIR_COLORS)
+  eval $(gdircolors -b /etc/DIR_COLORS)
 fi
 
 setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
@@ -136,89 +160,10 @@ bindkey -M emacs '^N' history-substring-search-down
 ##############################################################################
 # Bindings
 ##############################################################################
-if [[ -t 0 && $- = *i* ]]
-then
-# change Ctrl+C to Ctrl+I
-stty start ''
-stty stop ''
-stty quit ''
-stty erase ''
-stty kill ''
-stty eof '' # Ctrl + D
-stty rprnt ''
-stty werase ''
-stty lnext ''
-stty discard ''
-fi
-
 # change Ctrl+C to Ctrl+Q
-stty intr '^q'
-
-# change Ctrl+z to Ctrl+j
-stty susp '^j'
-
-# change Ctrl+V to Ctrl+K
-bindkey '^k' quoted-insert # for zle
-
-_copy-using-win32yank() {
-  if ((REGION_ACTIVE)) then
-    zle copy-region-as-kill
-    printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
-    zle kill-region
-  fi
-}
-
-zle -N _copy-using-win32yank
-bindkey '^C' _copy-using-win32yank
-
-_cut-using-win32yank() {
-  if ((REGION_ACTIVE)) then
-     zle copy-region-as-kill
-     printf -rn -- $CUTBUFFER | win32yank.exe -i < "${1:-/dev/stdin}"
-    ((REGION_ACTIVE = 0))
-  fi
-}
-
-zle -N _cut-using-win32yank
-bindkey '^X' _cut-using-win32yank
-
-_paste-copy-using-win32yank() {
-	if ((REGION_ACTIVE)); then
-    zle kill-region
-  fi
-  LBUFFER+="$(win32yank.exe -o)"
-}
-
-zle -N _paste-copy-using-win32yank
-bindkey '^V' _paste-copy-using-win32yank
-
-exit_zsh() { exit }
-
-zle -N exit_zsh
-bindkey '^W' exit_zsh
+stty intr '^d'
+stty erase '^?'
 
 ##############################################################################
 # Various
 ##############################################################################
-# Share a same ssh-agent across sessions.
-if [ -f ~/.ssh-agent.generated.env ]; then
-  . ~/.ssh-agent.generated.env >/dev/null
-  # If the $SSH_AGENT_PID is occupied by other process, we need to manually
-  # remove ~/.ssh-agent.generated.env.
-  if ! kill -0 $SSH_AGENT_PID &>/dev/null; then
-    # Stale ssh-agent env file found. Spawn a new ssh-agent.
-    eval `ssh-agent | tee ~/.ssh-agent.generated.env`
-    ssh-add
-  fi
-else
-  eval `ssh-agent | tee ~/.ssh-agent.generated.env`
-  ssh-add
-fi
-
-# add custom terminal title
-function settitle() {
-  export PS1="\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
-  echo -ne "\e]0;$1\a"
-}
-
-settitle "MinTTY - $(pwd)@$HOST"
