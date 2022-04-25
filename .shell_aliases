@@ -1,4 +1,4 @@
-alias config='/usr/bin/git --git-dir=/home/arthurgehrke/dotfiles/.git --work-tree=/home/arthurgehrke'
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles/.git --work-tree=$HOME'
 
 # dir commands
 # using exa
