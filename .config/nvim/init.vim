@@ -11,7 +11,6 @@ syntax enable
 
 set title
 set shell=$SHELL
-set updatetime=300
 set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
@@ -32,8 +31,6 @@ set noswapfile
 
 set ignorecase
 set smartcase
-set hlsearch
-set incsearch
 " time redrawing the display to hlsearch
 set redrawtime=10000
 
@@ -49,7 +46,6 @@ set splitright
 set splitbelow
 
 set autoindent
-set nocompatible
 
 set copyindent
 set smartindent
@@ -67,10 +63,6 @@ let mapleader =" "
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
-
-" au BufEnter,BufWinEnter,WinEnter,CmdwinEnter * if bufname('%') == "NvimTree" | set laststatus=0 | else | set laststatus=2 | endif
-" autocmd FileType NvimTree setlocal winhighlight=Normal:NvimTreeBg
-" autocmd FileType NvimTree setlocal colorscheme
 
 " Automatically removing all trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
@@ -99,6 +91,7 @@ augroup END
 " autocmd FileType tagbar setlocal signcolumn=no
 " autocmd FileType NvimTree setlocal norelativenumber
 
+set backspace=indent,eol,start
 function! FourSpacesStyle()
   set tabstop=4
   set softtabstop=-1
@@ -133,20 +126,6 @@ au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 
-" WSL clipboard with win32yank
-let g:clipboard = {
-	\   'name': 'win32yank-wsl',
-	\   'copy': {
-	\      '+': 'win32yank.exe -i --crlf',
-	\      '*': 'win32yank.exe -i --crlf',
-	\    },
-	\   'paste': {
-	\      '+': 'win32yank.exe -o --lf',
-	\      '*': 'win32yank.exe -o --lf',
-	\   },
-	\   'cache_enabled': 0,
-  \ }
-
 " clear highlighting if edit text
 inoremap <expr> <Plug>(StopHL) execute('nohlsearch')[-1]
 fu! StopHL()
@@ -171,9 +150,16 @@ endif
 set undodir=/tmp/.vim-undo-dir
 set undofile
 
-if &diff
-  syntax off
-  colorscheme jellybeans
-  set diffopt-=internal
-  set diffopt+=iwhite
-endif
+" Don’t offer to open certain files/directories
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*        " Version control
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png    " Binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " Compiled object files
+set wildignore+=*.spl                            " Compiled spelling word lists
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=*.DS_Store                       " OSX bullshit
+set wildignore+=*.pdf,*.psd
+set wildignore+=*.map,*.min.css
+set wildignore+=node_modules/*,bower_components/*
+
+" Save as root
+cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
