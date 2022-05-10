@@ -32,7 +32,6 @@
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     user
-    os_icon_joined
     dir                     # current directory
     vcs                     # git status
   )
@@ -122,7 +121,7 @@
   # Default background color.
   typeset -g POWERLEVEL9K_BACKGROUND=236
 
-  # Add padding into right side 
+  # Add padding into right side
   ZLE_RPROMPT_INDENT=0
 
   # Separator between same-color segments on the left.

@@ -1,13 +1,13 @@
 # Setup fzf
 # ---------
-FZF_COMMON_OPTIONS="
-  --bind='?:toggle-preview'
-  --bind='ctrl-u:preview-page-up'
-  --bind='ctrl-d:preview-page-down'
-  --preview-window 'right:60%:hidden:wrap'
-  --preview '([[ -d {} ]] && tree -C {}) || ([[ -f {} ]] && bat --style=full --color=always {}) || echo {}'"
+if [[ ! "$PATH" == */Users/arthurrodrigues/.fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/Users/arthurrodrigues/.fzf/bin"
+fi
 
-command -v fd > /dev/null && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-command -v bat > /dev/null && command -v tree > /dev/null && export FZF_DEFAULT_OPTS="$FZF_COMMON_OPTIONS"
-command -v fd > /dev/null && export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
-command -v fd > /dev/null && export FZF_CTRL_T_COMMAND='fd --type f --type d --hidden --follow --exclude .git'
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "/Users/arthurrodrigues/.fzf/shell/completion.zsh" 2> /dev/null
+
+# Key bindings
+# ------------
+source "/Users/arthurrodrigues/.fzf/shell/key-bindings.zsh"

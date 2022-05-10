@@ -32,7 +32,6 @@
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
-    os_icon                 # os identifier
     time                    # current time
     dir                     # current directory
     vcs                     # git status
@@ -876,7 +875,7 @@
   typeset -g POWERLEVEL9K_NPM_PROMPT_ALWAYS_SHOW=false
   # typeset -g POWERLEVEL9K_NPM_SHOW_ON_COMMAND='npm'
   typeset -g POWERLEVEL9K_NPM_VISUAL_IDENTIFIER_EXPANSION='${P9K_VISUAL_IDENTIFIER}'
-  
+
   ###[ virtualenv: python virtual environment (https://docs.python.org/3/library/venv.html) ]###
   # Python virtual environment color.
   typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=6

@@ -3,12 +3,12 @@
 [user]
 	user = arthurgehrke
 	email = arthurgehrke07@gmail.com
-	name = arthurgehrke
+	name = Arthur Gehrke
 [github]
 	user = arthurgehrke
 [core]
 	editor = nvim
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/arthurrodrigues/.gitignore
 [color]
   ui = true
 [diff]
@@ -24,3 +24,9 @@
   prompt = false
 [mergetool "nvim"]
   cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
