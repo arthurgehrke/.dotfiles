@@ -24,7 +24,7 @@ call plug#begin()
   Plug 'asheq/close-buffers.vim'
 
   Plug 'nvim-lua/popup.nvim'
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'pechorin/any-jump.vim'
   Plug 'nvim-lua/plenary.nvim'
@@ -53,6 +53,8 @@ call plug#begin()
   Plug 'dense-analysis/ale'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
+  Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+  Plug 'jose-elias-alvarez/null-ls.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
@@ -60,6 +62,7 @@ source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/lsp_config.vim
 source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
+source $HOME/.config/nvim/plugconf/nvim_lsp_ts_utils.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/trouble.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim

@@ -1,65 +1,129 @@
+nnoremap <space>af <Plug>(ale_fix)
+nnoremap <space>al <Plug>(ale_lint)
+nnoremap <silent><space>ro :ALEFix<CR>
+nnoremap <silent><space>rn :ALERename<CR>
+nnoremap <silent><space>ct  :ALELint<CR>
+nnoremap <silent><space>mt :ALEList<CR>
+
 " start disabled
 let g:ale_enabled = 0
-
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_linters_explicit = 1
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_delay = 200
+let g:ale_sign_error = '>'
 let g:ale_fix_on_save = 0
-" let g:ale_lint_on_save = 0
+let g:ale_completion_enabled = 0
+let g:ale_sign_column_always = 0
 
-let g:ale_fixers = {
-\   'typescript': ['eslint'],
-\}
+" Set this flag so that other plugins can use it, like airline.
+let g:loaded_ale = 1
 
-let g:ale_linters = {
-\   'typescript': ['eslint'],
-\}
+let g:ale_javascript_eslint_executable = 'eslint'
+let g:ale_javascript_eslint_options = ''
+let g:ale_javascript_eslint_suppress_eslintignore = 0
+let g:ale_javascript_eslint_use_global = 0
+
+" let g:ale_typescript_tsserver_config_path = ''
+let g:ale_typescript_tsserver_executable = 'tsserver'
+let g:ale_typescript_tsserver_use_global = 1
+let g:ale_typescript_tslint_use_global = 0
+let g:ale_typescript_prettier_use_local_config = 1
 
 let g:ale_linters = {}
-let g:ale_linters.typescript = ['eslint', 'tsserver']
-let g:ale_linters.javascript = ['eslint']
+let g:ale_fixers = {}
 
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 0 " Disable lint-as-you-type
-let g:ale_typescript_tslint_use_global = 0
-let g:ale_typescript_tsserver_use_global = 0
-let g:ale_typescript_prettier_use_local_config = 1
-let g:ale_sign_column_always = 0
-let g:ale_completion_enabled = 0
-" let g:ale_completion_tsserver_autoimport = 0
+" Other
+let g:ale_fixers['*'] = ['remove_trailing_lines', 'trim_whitespace']
+let g:ale_fixers.yaml = ['remove_trailing_lines', 'trim_whitespace']
 
-let g:ale_linters_explicit = 1
+" Javascript / Typescript
+let g:ale_linters.javascript = [
+     \ 'eslint',
+     \ 'tsserver'
+      \ ]
 
-" move between errors
-" nmap <silent> <C-n> <Plug>(ale_next_wrap)
-" nmap <silent> <C-p> <Plug>(ale_previous_wrap)
+let g:ale_linters.typescript = [
+      \ 'eslint',
+      \ 'tsserver',
+      \ ]
 
-" move between linting errors
-nmap ]r <Plug>(ale_next_wrap)zz
-nmap [r <Plug>(ale_previous_wrap)zz
+let g:ale_fixers.javascript = [
+      \ 'eslint',
+      \ 'prettier',
+      \ 'prettier-eslint',
+      \ ]
 
-nnoremap <leader>qf :ALECodeAction<CR>
-vnoremap <leader>qf :ALECodeAction<CR>
-nnoremap K :ALEHover<CR>
-nnoremap <silent> gr :ALEFindReferences<CR>
-nnoremap <leader>rn :ALERename<CR>
+let g:ale_fixers.typescript = [
+      \ 'eslint',
+      \ 'prettier',
+      \ 'prettier-eslint',
+      \ ]
 
-let mapleader = ' '
-function! s:ale_list()
-  let g:ale_open_list = 1
-  call ale#Queue(0, 'lint_file')
-endfunction
-command! ALEList call s:ale_list()
-nnoremap <leader>m  :ALEList<CR>
+let g:ale_fixers['typescript.tsx'] = [
+      \ 'eslint',
+      \ 'prettier',
+      \ 'tslint',
+      \ ]
 
-function! s:ale_clean()
-  let g:ale_open_list = 0
-  call ale#Queue(0, 'lint_file')
-endfunction
-command! ALEClean call s:ale_clean()
+let g:ale_fixers['typescriptreact'] = [
+      \ 'prettier',
+      \ 'tslint',
+      \ ]
 
-nnoremap <leader>ct  :ALEClean<CR>
-nnoremap <leader>mt :ALEList<CR>
+let g:ale_linters['typescriptreact'] = [
+      \ 'tslint',
+      \ 'tsserver',
+      \ 'typecheck'
+      \ ]
 
-augroup alegroup
-    autocmd!
-    autocmd FileType qf nnoremap <silent><buffer> q :let g:ale_open_list=0<CR>:q!<CR>
-    autocmd FileType help,qf,man,ref let b:ale_enabled = 0
-augroup end
+let g:ale_json_jq_options = '-S'
+
+"  \ 'jq',
+let g:ale_fixers.json = [
+      \ 'remove_trailing_lines',
+      \ 'trim_whitespace',
+      \ 'prettier'
+      \ ]
+
+" scss"
+let g:ale_fixers.scss = [
+      \ 'remove_trailing_lines',
+      \ 'trim_whitespace',
+      \ 'prettier',
+      \ 'stylelint'
+      \ ]
+
+
+" HTML
+let g:ale_fixers.html = [
+      \ 'prettier',
+      \ 'tidy',
+      \ ]
+
+" A command for showing error details.
+command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
+" Define commands for turning ALE on or off.
+command! -bar ALEToggle :call ale#toggle#Toggle()
+command! -bar ALEEnable :call ale#toggle#Enable()
+command! -bar ALEDisable :call ale#toggle#Disable()
+command! -bar ALEReset :call ale#toggle#Reset()
+" Commands for turning ALE on or off for a buffer.
+command! -bar ALEToggleBuffer :call ale#toggle#ToggleBuffer(bufnr(''))
+command! -bar ALEEnableBuffer :call ale#toggle#EnableBuffer(bufnr(''))
+command! -bar ALEDisableBuffer :call ale#toggle#DisableBuffer(bufnr(''))
+command! -bar ALEResetBuffer :call ale#toggle#ResetBuffer(bufnr(''))
+" A command to stop all LSP-like clients, including tsserver.
+command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
+
+" Find references for tsserver and LSP
+command! -bar -nargs=* ALEFindReferences :call ale#references#Find(<f-args>)
+
+" Try to find completions for the current symbol that add additional text.
+command! -bar ALEImport :call ale#completion#Import()
+
+ " Fix problems in files.
+command! -bar -bang -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '<bang>', <f-args>)
+
+

@@ -1,30 +1,9 @@
-" This is the default extra key bindings
-let g:fzf_action = {
-  \ 'ctrl-T': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-i': 'vsplit' }
-
-" map <C-p>         :FZF<CR>
-map <space>;     :Rg<CR>
-" map <C-b>         :Buffers<CR>
-" map <leader>b     :Lines<CR>
-
-" let $FZF_DEFAULT_OPTS = '--bind alt-n:next-history,alt-p:previous-history,ctrl-n:down,ctrl-p:up'
-
-" Hide statusline
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
-
 " Enable per-command history.
 " CTRL-N and CTRL-P will be automatically bound to next-history and
 " previous-history instead of down and up. If you don't like the change,
 " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_buffers_jump = 1
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-" let g:fzf_preview_window = 'right:50%'
-let s:ctags_bin = get(g:, 'ctags_bin', 'ctags')
-let g:fzf_commits_log_options = '--graph --color=always --pretty="%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset" --abbrev-commit'
-let g:fzf_tags_command = s:ctags_bin . ' -R'
-let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_colors = {
   \ 'fg': ['fg', 'Normal'],
   \ 'bg': ['bg', 'Normal'],
@@ -43,6 +22,11 @@ let g:fzf_colors = {
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
 let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind alt-n:next-history,alt-p:previous-history,ctrl-n:down,ctrl-p:up"
+let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_files_options = 'bat --color=always --theme=OneHalfDark --style=changes --line-range :300 {}'
+
+autocmd! FileType fzf
+autocmd  FileType fzf set noshowmode noruler nonu
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -76,3 +60,34 @@ command! -bang -nargs=* GGrep
   \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)l
 
 
+" Prevent FZF commands from opening in none modifiable buffers
+function! FZFOpen(cmd)
+    " If more than 1 window, and buffer is not modifiable or file type is
+    if winnr('$') > 1 && (!&modifiable || &ft == 'NvimTree' || &ft == 'NvimTreeToggle' || &ft == 'qf')
+        " Move one window to the right, then up
+        wincmd l
+        wincmd k
+    endif
+    exe a:cmd
+endfunction
+
+command! -bang -nargs=* LinesWithPreview
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'down:40%', '?'),
+    \   1)
+" nnoremap H :LinesWithPreview<CR>
+
+let g:fzf_action = {
+  \ 'ctrl-T': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-i': 'vsplit' }
+
+map <C-e> :call FZFOpen(':Buffers')<CR>
+nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
+nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
+nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
+nnoremap <silent> <C-f>l :call FZFOpen(':LinesWithPreview')<CR>
+
+" open FZF in current file's directory
+nnoremap <silent> <space>_ :Files <C-R>=expand('%:h')<CR><CR>

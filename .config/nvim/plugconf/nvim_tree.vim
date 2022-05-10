@@ -1,3 +1,5 @@
+autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif
+
 let g:nvim_tree_icons = {
 \ 'default': '',
 \ 'symlink': '',
@@ -22,6 +24,7 @@ let g:nvim_tree_icons = {
 \   }
 \ }
 
+set termguicolors
 let g:nvim_tree_show_icons = {
 \ 'git': 1,
 \ 'folders': 1,
@@ -36,12 +39,16 @@ nnoremap <Space>c :NvimTreeFindFile<CR>
 lua << EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
-  indent_markers = 1, -- this option shows indent markers when folders are open
   disable_netrw = true, -- disables netrw completely
   auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_reload_on_write = true,
+  hijack_unnamed_buffer_when_opening = true,
+  hijack_directories = {
+    enable = true,
+    auto_open = false,
+  },
   open_on_setup = true,
   open_on_tab = false,
   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
@@ -59,11 +66,23 @@ require'nvim-tree'.setup {
     ignore = false,
     timeout = 500,
   },
+  renderer = {
+    indent_markers = {
+      enable = false,
+      icons = {
+        corner = "└ ",
+        edge = "│ ",
+        none = "  ",
+        },
+      },
+    icons = {
+      webdev_colors = true,
+      },
+    },
   view = {
     side = 'left',
     width = 40,
     height = 30,
-    auto_resize = true,
     preserve_window_proportions = false,
     relativenumber = false,
     number = false,
@@ -82,20 +101,33 @@ require'nvim-tree'.setup {
         { key = "[c",                           cb = tree_cb("prev_git_item") },
         { key = "]c",                           cb = tree_cb("next_git_item") },
         },
+      },
     },
-  },
   filters = {
     dotfiles = false,
     custom = { ".git", "node_modules", '.cache', 'dist', '.dist', 'build' }
   },
+  log = {
+    enable = false,
+    truncate = false,
+    types = {
+      all = false,
+      config = false,
+      copy_paste = false,
+      diagnostics = false,
+      git = false,
+      profile = false,
+      },
+    },
   actions = {
     change_dir = {
-      enable = true,
+      enable = false,
       global = false,
+      restrict_above_cwd = false,
     },
     open_file = {
       quit_on_open = true,
-      resize_window = true,
+      resize_window = false,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
