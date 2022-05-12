@@ -12,7 +12,7 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
-source $HOME/.themes/zsh/simple-theme/.p10k.zsh
+source $HOME/.themes/zsh/.p10k.zsh
 source $INCLUDES/nvm/nvm.sh
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
