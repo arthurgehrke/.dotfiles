@@ -46,6 +46,10 @@ nnoremap <leader>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-to
 """""""""""""""""""""
 nnoremap <space>cD :lcd %:p:h<CR>:pwd<CR>
 
+" Toggle relative line numbers and regular line numbers.
+nnoremap <leader>tt :set relativenumber!<CR>
+inoremap <leader>tt <C-o>:set relativenumber!<CR>
+
 " Go to start of line with H and to the end with L
 noremap H ^
 noremap L $

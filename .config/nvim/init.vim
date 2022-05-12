@@ -7,7 +7,6 @@ source $HOME/.config/nvim/themes.vim
 filetype indent on " use filetype indentation
 filetype plugin indent on " allow plugins to use filetype indentation
 syntax on " turn on syntax highlighting
-syntax enable
 
 set title
 set shell=$SHELL
@@ -49,10 +48,10 @@ set splitright
 set splitbelow
 
 set autoindent
-
 set copyindent
 set smartindent
 set nojoinspaces
+set smarttab
 
 set expandtab
 set shiftwidth=2
@@ -125,6 +124,9 @@ au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
+" Prevent selecting and pasting from overwriting what you originally copied.
+xnoremap p pgvy
 
 " clear highlighting if edit text
 inoremap <expr> <Plug>(StopHL) execute('nohlsearch')[-1]

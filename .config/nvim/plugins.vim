@@ -39,6 +39,7 @@ call plug#begin()
   Plug 'rhysd/git-messenger.vim'
   Plug 'tpope/vim-fugitive'
 
+  Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'folke/trouble.nvim'

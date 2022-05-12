@@ -1,4 +1,4 @@
-autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif
+autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTreeToggle' . tabpagenr() | quit | endif
 
 let g:nvim_tree_icons = {
 \ 'default': '',
@@ -24,7 +24,6 @@ let g:nvim_tree_icons = {
 \   }
 \ }
 
-set termguicolors
 let g:nvim_tree_show_icons = {
 \ 'git': 1,
 \ 'folders': 1,
