@@ -34,6 +34,8 @@ set ignorecase
 set smartcase
 " time redrawing the display to hlsearch
 set redrawtime=10000
+set incsearch
+set hlsearch
 
 set cmdheight=1
 set noshowcmd
@@ -66,7 +68,7 @@ let mapleader =" "
 let g:loaded_matchparen=1
 
 " Automatically removing all trailing whitespace
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " highlight from start of file
 autocmd BufEnter * :syntax sync fromstart
@@ -88,9 +90,6 @@ augroup numbertoggle
     autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
-
-" autocmd FileType tagbar setlocal signcolumn=no
-" autocmd FileType NvimTree setlocal norelativenumber
 
 set backspace=indent,eol,start
 function! FourSpacesStyle()
@@ -137,9 +136,6 @@ fu! StopHL()
 endfu
 au InsertEnter * call StopHL()
 
-nnoremap <leader>cd :NvimTreeOpen %:p:h<CR>
-nnoremap <leader>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
-
 set foldlevel=20
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
@@ -151,33 +147,7 @@ endif
 set undodir=/tmp/.vim-undo-dir
 set undofile
 
-" Save as root
-cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
-
-" Blank a line
-nnoremap <space>bL cc<ESC>
-" Blank line above
-nnoremap <space>bq mzO<ESC>`z
-" Blank line below
-nnoremap <space>bt mzo<ESC>`z
-
-" Scroll one line at a time, but keep cursor position relative to the window
-" rather than moving with the line
-noremap <C-j> j<C-e>
-noremap <C-k> k<C-y>
-"""""""""""""""""""""
-" Change to directory of current file, and then print the working
-" directory
-"""""""""""""""""""""
-nnoremap <space>cD :lcd %:p:h<CR>:pwd<CR>
-
- " change dir to current file's dir
- nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
-
-" remove highlighting on escape
-nnoremap <silent> <esc> :nohlsearch<cr>
-
-  " Open files relative to current path:
+" Open files relative to current path:
 nnoremap <space>ed :edit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <space>sp :split <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>

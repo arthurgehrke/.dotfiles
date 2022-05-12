@@ -32,8 +32,6 @@ let g:completion_enable_auto_popup = 0
 nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
-
-nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <space>vrr :lua vim.lsp.buf.references()<CR>
 nnoremap <space>vrh :lua vim.lsp.buf.signature_help()<CR>
 nnoremap go <c-o>

@@ -57,8 +57,8 @@ nvim_lsp.tsserver.setup {
   ts_utils.setup_client(client)
 
   -- no default maps, so you may want to define some here
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>lo", ":TSLspOrganize<CR>", {silent = true})
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>li", ":TSLspImportAll<CR>:TSLspOrganize<CR>", {silent = true})
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ao", ":TSLspOrganize<CR>", {silent = true})
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ai", ":TSLspImportAll<CR>:TSLspOrganize<CR>", {silent = true})
   end
 }
 EOF

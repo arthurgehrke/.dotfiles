@@ -48,9 +48,6 @@ lua << EOF
 }
 EOF
 
-nnoremap <space>xx <cmd>TroubleToggle<cr>
-nnoremap <space>xw <cmd>TroubleToggle workspace_diagnostics<cr>
-nnoremap <space>xd <cmd>TroubleToggle document_diagnostics<cr>
-nnoremap <space>xq <cmd>TroubleToggle quickfix<cr>
-nnoremap <space>xl <cmd>TroubleToggle loclist<cr>
-nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+nnoremap <space>txx <cmd>TroubleToggle<cr>
+nnoremap <space>txw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <space>txd <cmd>TroubleToggle document_diagnostics<cr>

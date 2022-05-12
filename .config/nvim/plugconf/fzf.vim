@@ -3,7 +3,7 @@
 " previous-history instead of down and up. If you don't like the change,
 " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
 let g:fzf_buffers_jump = 1
-let g:fzf_history_dir = '~/.local/share/fzf-history'
+" let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_colors = {
   \ 'fg': ['fg', 'Normal'],
   \ 'bg': ['bg', 'Normal'],
@@ -21,9 +21,8 @@ let g:fzf_colors = {
   \ }
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
-let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind alt-n:next-history,alt-p:previous-history,ctrl-n:down,ctrl-p:up"
+let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_files_options = 'bat --color=always --theme=OneHalfDark --style=changes --line-range :300 {}'
 
 autocmd! FileType fzf
 autocmd  FileType fzf set noshowmode noruler nonu
@@ -76,7 +75,6 @@ command! -bang -nargs=* LinesWithPreview
     \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
     \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'down:40%', '?'),
     \   1)
-" nnoremap H :LinesWithPreview<CR>
 
 let g:fzf_action = {
   \ 'ctrl-T': 'tab split',
@@ -87,7 +85,5 @@ map <C-e> :call FZFOpen(':Buffers')<CR>
 nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
 nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
 nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
-nnoremap <silent> <C-f>l :call FZFOpen(':LinesWithPreview')<CR>
-
 " open FZF in current file's directory
 nnoremap <silent> <space>_ :Files <C-R>=expand('%:h')<CR><CR>

@@ -4,7 +4,6 @@ call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
-  Plug 'majutsushi/tagbar'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
 
@@ -26,10 +25,8 @@ call plug#begin()
   Plug 'nvim-lua/popup.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
-  Plug 'pechorin/any-jump.vim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'junegunn/vim-peekaboo'
-  Plug 'ntpeters/vim-better-whitespace'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'cohama/lexima.vim'
   Plug 'jdhao/better-escape.vim'
@@ -43,12 +40,10 @@ call plug#begin()
   Plug 'tpope/vim-fugitive'
 
   Plug 'haya14busa/incsearch.vim'
-  Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'folke/trouble.nvim'
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'MaxMEllon/vim-jsx-pretty'
-  Plug 'andymass/vim-matchup'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'dense-analysis/ale'
   Plug 'neovim/nvim-lspconfig'
@@ -58,7 +53,6 @@ call plug#begin()
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
-source $HOME/.config/nvim/plugconf/tagbar.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/lsp_config.vim
 source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
@@ -70,15 +64,11 @@ source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
-source $HOME/.config/nvim/plugconf/better_whitespace.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
-source $HOME/.config/nvim/plugconf/leaderf.vim
 source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 source $HOME/.config/nvim/plugconf/git_messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
-source $HOME/.config/nvim/plugconf/any_jump.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
-source $HOME/.config/nvim/plugconf/matchup.vim

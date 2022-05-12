@@ -2,8 +2,6 @@ nnoremap <space>af <Plug>(ale_fix)
 nnoremap <space>al <Plug>(ale_lint)
 nnoremap <silent><space>ro :ALEFix<CR>
 nnoremap <silent><space>rn :ALERename<CR>
-nnoremap <silent><space>ct  :ALELint<CR>
-nnoremap <silent><space>mt :ALEList<CR>
 
 " start disabled
 let g:ale_enabled = 0
@@ -101,29 +99,5 @@ let g:ale_fixers.html = [
       \ 'prettier',
       \ 'tidy',
       \ ]
-
-" A command for showing error details.
-command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
-" Define commands for turning ALE on or off.
-command! -bar ALEToggle :call ale#toggle#Toggle()
-command! -bar ALEEnable :call ale#toggle#Enable()
-command! -bar ALEDisable :call ale#toggle#Disable()
-command! -bar ALEReset :call ale#toggle#Reset()
-" Commands for turning ALE on or off for a buffer.
-command! -bar ALEToggleBuffer :call ale#toggle#ToggleBuffer(bufnr(''))
-command! -bar ALEEnableBuffer :call ale#toggle#EnableBuffer(bufnr(''))
-command! -bar ALEDisableBuffer :call ale#toggle#DisableBuffer(bufnr(''))
-command! -bar ALEResetBuffer :call ale#toggle#ResetBuffer(bufnr(''))
-" A command to stop all LSP-like clients, including tsserver.
-command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
-
-" Find references for tsserver and LSP
-command! -bar -nargs=* ALEFindReferences :call ale#references#Find(<f-args>)
-
-" Try to find completions for the current symbol that add additional text.
-command! -bar ALEImport :call ale#completion#Import()
-
- " Fix problems in files.
-command! -bar -bang -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '<bang>', <f-args>)
 
 

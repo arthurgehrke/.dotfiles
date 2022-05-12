@@ -122,12 +122,12 @@ require'nvim-tree'.setup {
   actions = {
     change_dir = {
       enable = false,
-      global = false,
+      global = true,
       restrict_above_cwd = false,
     },
     open_file = {
       quit_on_open = true,
-      resize_window = false,
+      resize_window = true,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
