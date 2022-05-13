@@ -5,6 +5,8 @@
 export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
+source $HOME/.zprofile
+
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -132,6 +134,25 @@ setopt CDABLE_VARS          # Change directory to a path stored in a variable.
 setopt EXTENDED_GLOB        # Use extended globbing syntax.
 
 ##############################################################################
+# SSH
+# brew install keychain
+if hash keychain 2>/dev/null; then
+  alias ssh_start='eval `keychain --eval --agents ssh --inherit any github-arthur gitlab-arthur`'
+  alias ssh-agent-stop='keychain --stop all'
+fi
+
+##############################################################################
+setopt AUTO_CD              # Go to folder path without using cd.
+
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+
+setopt CORRECT              # Spelling correction
+setopt CDABLE_VARS          # Change directory to a path stored in a variable.
+setopt EXTENDED_GLOB        # Use extended globbing syntax.
+
+##############################################################################
 # Completion
 ##############################################################################
 zmodload zsh/complist
@@ -167,5 +188,4 @@ stty erase '^?'
 ##############################################################################
 # Various
 ##############################################################################
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
