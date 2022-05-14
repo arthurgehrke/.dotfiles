@@ -5,8 +5,6 @@
 export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
-source $HOME/.zprofile
-
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -56,6 +54,8 @@ source $HOME/.fzf-functions.zsh
 ##############################################################################
 # MacOs
 ##############################################################################
+export PATH="/opt/homebrew/bin:$PATH" 
+
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
   PATH="$HOME/bin:$PATH"
