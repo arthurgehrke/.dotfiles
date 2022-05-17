@@ -8,19 +8,12 @@ call plug#begin()
   Plug 'vim-airline/vim-airline-themes'
 
   Plug 'folke/lsp-colors.nvim'
-  Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
-  Plug 'arcticicestudio/nord-vim'
-  Plug 'chriskempson/base16-vim'
-  Plug 'tyrannicaltoucan/vim-deep-space'
-  Plug 'jpo/vim-railscasts-theme'
-  Plug 'drewtempelmeyer/palenight.vim'
 
-  Plug 'glepnir/dashboard-nvim'
-  " Plug 'mhinz/vim-startify'
-  Plug 'tjdevries/train.nvim'
+  " Plug 'glepnir/dashboard-nvim'
+  Plug 'mhinz/vim-startify'
 
-  Plug 'asheq/close-buffers.vim'
+  Plug 'moll/vim-bbye'
 
   Plug 'nvim-lua/popup.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -28,16 +21,14 @@ call plug#begin()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'junegunn/vim-peekaboo'
   Plug 'lukas-reineke/indent-blankline.nvim'
-  Plug 'cohama/lexima.vim'
-  Plug 'jdhao/better-escape.vim'
+  Plug 'townk/vim-autoclose'
+  Plug 'max397574/better-escape.nvim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'bkad/camelcasemotion'
-  Plug 'roxma/vim-paste-easy'
 
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'rhysd/git-messenger.vim'
-  Plug 'tpope/vim-fugitive'
 
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
@@ -66,7 +57,7 @@ source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
-source $HOME/.config/nvim/plugconf/better_scape.vim
+source $HOME/.config/nvim/plugconf/better_scape_nvim.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 source $HOME/.config/nvim/plugconf/git_messenger.vim

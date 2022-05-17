@@ -14,51 +14,40 @@ set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
 set hidden
-" buffer unlisted but still visible on screen
-set nobuflisted
-
+set nobuflisted " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 highlight clear SignColumn
-
 set number relativenumber
 set cursorline
-
 set nobackup
 set nowritebackup
 set noswapfile
-
 set ttimeoutlen=100
 set ignorecase
-set smartcase
-" time redrawing the display to hlsearch
+set smartcase " time redrawing the display to hlsearch
 set redrawtime=10000
 set incsearch
 set hlsearch
-
+set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
 set cmdheight=1
 set noshowcmd
 set noshowmode
-
 set shortmess+=c
 set previewheight=5
 set pumheight=10
-
 set splitright
 set splitbelow
-
 set autoindent
 set copyindent
 set smartindent
 set nojoinspaces
 set smarttab
-
 set expandtab
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
 set nowrap
-
 set autochdir
 
 let mapleader =" "

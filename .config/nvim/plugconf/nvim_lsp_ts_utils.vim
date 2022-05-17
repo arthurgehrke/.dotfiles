@@ -12,9 +12,11 @@ nvim_lsp.tsserver.setup {
   local null_ls = require("null-ls")
   null_ls.setup({
       sources = {
+          null_ls.builtins.diagnostics.eslint.with({
+            prefer_local = "node_modules/.bin",
+          }),
           null_ls.builtins.diagnostics.eslint, -- eslint or eslint_d
           null_ls.builtins.code_actions.eslint, -- eslint or eslint_d
-          null_ls.builtins.formatting.prettierd
       },
   })
 
@@ -33,7 +35,7 @@ nvim_lsp.tsserver.setup {
     import_all_scan_buffers = 100,
     import_all_select_source = false,
     -- if false will avoid organizing imports
-    always_organize_imports = true,
+    always_organize_imports = false,
 
     -- eslint
     eslint_enable_code_actions = true,
@@ -43,9 +45,7 @@ nvim_lsp.tsserver.setup {
     eslint_enable_diagnostics = true,
 
     -- formatting
-    enable_formatting = true,
-    formatter = "prettierd",
-    formatter_config_fallback = nil,
+    enable_formatting = false,
 
     -- update imports on file move
     update_imports_on_move = false,
@@ -57,8 +57,8 @@ nvim_lsp.tsserver.setup {
   ts_utils.setup_client(client)
 
   -- no default maps, so you may want to define some here
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ao", ":TSLspOrganize<CR>", {silent = true})
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ai", ":TSLspImportAll<CR>:TSLspOrganize<CR>", {silent = true})
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>to", ":TSLspOrganize<CR>", {silent = true})
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ti", ":TSLspImportAll<CR>:TSLspOrganize<CR>", {silent = true})
   end
 }
 EOF

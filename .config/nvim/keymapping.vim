@@ -29,7 +29,7 @@ function! StripWhitespace()
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call StripWhitespace()<CR>
+noremap <space>ss :call StripWhitespace()<CR>
 
 " Insert new line without entering insert mode
 nnoremap <space>bL cc<ESC>
@@ -38,8 +38,8 @@ nnoremap <space>bq mzO<ESC>`z
 " Blank line below
 nnoremap <space>bt mzo<ESC>`z
 
-nnoremap <leader>cd :NvimTreeOpen %:p:h<CR>
-nnoremap <leader>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
+nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
+nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
 """""""""""""""""""""
 " Change to directory of current file, and then print the working
 " directory
@@ -58,33 +58,22 @@ noremap L $
 command! BufOnly execute '%bdelete|edit #|normal `"'
 
 " jumps from buffers
-nnoremap <silent> <space><C-o> :call jumps#fileCO(v:true)<CR>
-nnoremap <silent> <space><C-i> :call jumps#fileCO(v:false)<CR>
+" nnoremap <silent> <space><C-o> :call jumps#fileCO(v:true)<CR>
+" nnoremap <silent> <space><C-i> :call jumps#fileCO(v:false)<CR>
 
 " Insert common snippets
 inoremap <C-c> console.log(
 inoremap <C-d> describe('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 inoremap <C-t> test('', () => {});<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 
-" highlight and search word
-function! s:getSelectedText()
-  let l:old_reg = getreg('"')
-  let l:old_regtype = getregtype('"')
-  norm gvy
-  let l:ret = getreg('"')
-  call setreg('"', l:old_reg, l:old_regtype)
-  exe "norm \<Esc>"
-  return l:ret
-endfunction
-
-vnoremap <silent> * :call setreg("/",
-    \ substitute(<SID>getSelectedText(),
-    \ '\_s\+',
-    \ '\\_s\\+', 'g')
-    \ )<Cr>n
-
-vnoremap <silent> # :call setreg("?",
-    \ substitute(<SID>getSelectedText(),
-    \ '\_s\+',
-    \ '\\_s\\+', 'g')
-    \ )<Cr>n
+" Search for visually-selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
