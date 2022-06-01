@@ -2,8 +2,8 @@ nnoremap <space>af <Plug>(ale_fix)
 nnoremap <space>al <Plug>(ale_lint)
 nnoremap <silent><space>ro :ALEFix<CR>
 nnoremap <silent><space>rn :ALERename<CR>
-nnoremap <silent><space>ri :ALEImport<CR>
-nnoremap <silent><space>raw :ALEOrganizeImports<cr>
+" nnoremap <silent><space>ri :ALEImport<CR>
+" nnoremap <silent><space>raw :ALEOrganizeImports<cr>
 
 " start disabled
 let g:ale_enabled = 0

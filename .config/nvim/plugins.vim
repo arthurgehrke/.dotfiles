@@ -21,7 +21,7 @@ call plug#begin()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'junegunn/vim-peekaboo'
   Plug 'lukas-reineke/indent-blankline.nvim'
-  Plug 'townk/vim-autoclose'
+  Plug 'raimondi/delimitmate'
   Plug 'max397574/better-escape.nvim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
@@ -30,25 +30,25 @@ call plug#begin()
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'rhysd/git-messenger.vim'
 
+  Plug 'folke/trouble.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'dense-analysis/ale'
+  Plug 'galooshi/vim-import-js'
+  Plug 'MaxMEllon/vim-jsx-pretty'
+  Plug 'vim-scripts/lastpos.vim'
+
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
   Plug 'michaeljsmith/vim-indent-object'
-  Plug 'folke/trouble.nvim'
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
-  Plug 'MaxMEllon/vim-jsx-pretty'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'dense-analysis/ale'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
-  Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
-  Plug 'jose-elias-alvarez/null-ls.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/lsp_config.vim
 source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
-source $HOME/.config/nvim/plugconf/nvim_lsp_ts_utils.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/trouble.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
@@ -64,3 +64,4 @@ source $HOME/.config/nvim/plugconf/git_messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
+source $HOME/.config/nvim/plugconf/vim_import_js.vim

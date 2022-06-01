@@ -23,9 +23,10 @@ set cursorline
 set nobackup
 set nowritebackup
 set noswapfile
-set ttimeoutlen=100
+set timeoutlen=400
+set ttimeoutlen=20
 set ignorecase
-set smartcase " time redrawing the display to hlsearch
+" set smartcase 
 set redrawtime=10000
 set incsearch
 set hlsearch
@@ -93,6 +94,8 @@ function! TwoSpacesStyle()
   set tabstop=2
   set softtabstop=2
   set shiftwidth=2
+  set smartindent
+  set expandtab
 endfunction
 
 function! TabStyle()

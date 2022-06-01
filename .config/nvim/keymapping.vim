@@ -4,7 +4,7 @@ cnoreabbrev W w
 cnoreabbrev Q q
 
 " Save as root
-cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
+" cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
@@ -47,8 +47,7 @@ nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-top
 nnoremap <space>cD :lcd %:p:h<CR>:pwd<CR>
 
 " Toggle relative line numbers and regular line numbers.
-nnoremap <leader>tt :set relativenumber!<CR>
-inoremap <leader>tt <C-o>:set relativenumber!<CR>
+nnoremap <space>tt :set relativenumber!<CR>
 
 " Go to start of line with H and to the end with L
 noremap H ^
@@ -56,10 +55,6 @@ noremap L $
 
 " close all buffers but the current one
 command! BufOnly execute '%bdelete|edit #|normal `"'
-
-" jumps from buffers
-" nnoremap <silent> <space><C-o> :call jumps#fileCO(v:true)<CR>
-" nnoremap <silent> <space><C-i> :call jumps#fileCO(v:false)<CR>
 
 " Insert common snippets
 inoremap <C-c> console.log(

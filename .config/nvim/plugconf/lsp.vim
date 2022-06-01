@@ -15,7 +15,6 @@ local opts = { noremap=true, silent=true }
 
 require('lspconfig').tsserver.setup {
   filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  root_dir = require"lspconfig/util".root_pattern("package.json", ".eslintrc", ".git"),
      handlers = {
        ["textDocument/publishDiagnostics"] = vim.lsp.with(
          vim.lsp.diagnostic.on_publish_diagnostics, {

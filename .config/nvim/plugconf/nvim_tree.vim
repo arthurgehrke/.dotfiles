@@ -33,7 +33,7 @@ let g:nvim_tree_show_icons = {
 
 nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
-nnoremap <Space>c :NvimTreeFindFile<CR>
+nnoremap <Space>c :NvimTreeCollapseKeepBuffers<CR>
 
 lua << EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback

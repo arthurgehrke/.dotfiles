@@ -31,17 +31,6 @@ local tsopts = {
         --nvim_command('autocmd CursorHold <buffer> lua vim.lsp.util.show_line_diagnostics()')
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
-	local ts_utils = require("nvim-lsp-ts-utils")
-        ts_utils.setup({
-            eslint_bin = "eslint_d",
-            eslint_enable_diagnostics = false,
-            eslint_enable_code_actions = false,
-            enable_formatting = false,
-            formatter = "prettierd",
-        })
-        ts_utils.setup_client(client)
-        buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
-        buf_map(bufnr, "n", "fai", ":TSLspImportAll<CR>")
 	on_attach(client, bufnr)
     end,
 }
