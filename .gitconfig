@@ -23,9 +23,10 @@
 [mergetool]
   prompt = false
 [mergetool "nvim"]
-  cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+  ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
+  cmd = nvim -d -u ~/.config/nvim/init.vim $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	cmd = " "
 	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
