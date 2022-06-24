@@ -11,6 +11,11 @@ nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
 nnoremap <Space>l :wincmd l <cr>
 
+" Open files relative to current path:
+nnoremap <space>ed :edit <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <space>sp :split <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " TAB in general mode will move to buffer
@@ -32,11 +37,11 @@ endfunction
 noremap <space>ss :call StripWhitespace()<CR>
 
 " Insert new line without entering insert mode
-nnoremap <space>bL cc<ESC>
+nnoremap <space>bl cc<ESC>
 " Blank line above
-nnoremap <space>bq mzO<ESC>`z
+nnoremap <space>bo mzO<ESC>`z
 " Blank line below
-nnoremap <space>bt mzo<ESC>`z
+nnoremap <space>bi mzo<ESC>`z
 
 nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
 nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>

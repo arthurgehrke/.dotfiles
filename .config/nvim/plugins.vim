@@ -15,21 +15,22 @@ call plug#begin()
 
   Plug 'moll/vim-bbye'
 
-  Plug 'nvim-lua/popup.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'junegunn/vim-peekaboo'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'raimondi/delimitmate'
-  Plug 'max397574/better-escape.nvim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'bkad/camelcasemotion'
 
+  Plug 'jdhao/better-escape.vim'
+
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'rhysd/git-messenger.vim'
 
+  Plug 'nvim-lua/popup.nvim'
   Plug 'folke/trouble.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'dense-analysis/ale'
@@ -39,7 +40,6 @@ call plug#begin()
 
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
-  Plug 'michaeljsmith/vim-indent-object'
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
@@ -57,7 +57,7 @@ source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/airline.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
-source $HOME/.config/nvim/plugconf/better_scape_nvim.vim
+source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/camel_case_motion.vim
 source $HOME/.config/nvim/plugconf/git_messenger.vim

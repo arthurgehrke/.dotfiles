@@ -24,7 +24,7 @@ set nobackup
 set nowritebackup
 set noswapfile
 set timeoutlen=400
-set ttimeoutlen=20
+set ttimeoutlen=10
 set ignorecase
 " set smartcase 
 set redrawtime=10000
@@ -123,10 +123,10 @@ xnoremap p pgvy
 " clear highlighting if edit text
 inoremap <expr> <Plug>(StopHL) execute('nohlsearch')[-1]
 fu! StopHL()
-    if !v:hlsearch || mode() isnot 'n'
-        return
-    endif
-    sil call feedkeys("\<Plug>(StopHL)", 'm')
+  if !v:hlsearch || mode() isnot 'n'
+    return
+  endif
+  sil call feedkeys("\<Plug>(StopHL)", 'm')
 endfu
 au InsertEnter * call StopHL()
 
@@ -136,12 +136,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 
 " Use persistent history.
 if !isdirectory("/tmp/.vim-undo-dir")
-    call mkdir("/tmp/.vim-undo-dir", "", 0700)
+  call mkdir("/tmp/.vim-undo-dir", "", 0700)
 endif
 set undodir=/tmp/.vim-undo-dir
 set undofile
-
-" Open files relative to current path:
-nnoremap <space>ed :edit <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <space>sp :split <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>

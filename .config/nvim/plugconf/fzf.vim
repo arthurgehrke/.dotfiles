@@ -79,11 +79,39 @@ command! -bang -nargs=* LinesWithPreview
 let g:fzf_action = {
   \ 'ctrl-T': 'tab split',
   \ 'ctrl-s': 'split',
-  \ 'ctrl-i': 'vsplit' }
+  \ 'ctrl-v': 'vsplit' }
 
 map <C-e> :call FZFOpen(':Buffers')<CR>
 nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
 nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
 nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
-" open FZF in current file's directory
-nnoremap <silent> <space>_ :Files <C-R>=expand('%:h')<CR><CR>
+
+nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
+nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
+
+    " Open fzf in vertical split
+    nnoremap <silent> <SPACE>v :call fzf#run(fzf#vim#with_preview({
+    \  'right': '50%',
+    \  'sink':  'vertical botright split' }))<CR>
+
+function! FzfExplore(...)
+    let inpath = substitute(a:1, "'", '', 'g')
+    if inpath == "" || matchend(inpath, '/') == strlen(inpath)
+        execute "cd" getcwd() . '/' . inpath
+        let cwpath = getcwd() . '/'
+        call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'ls -1ap', 'dir': cwpath, 'sink': 'FZFExplore', 'options': ['--prompt', cwpath]})))
+    else
+        let file = getcwd() . '/' . inpath
+        execute "e" file
+    endif
+endfunction
+
+command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
+
+function! RgFzf(...)
+    let input = input('Enter expression: ')
+    let git_root = system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+    let rg_command = printf("rg --column --line-number --no-heading --color=always --fixed-strings '%s' %s", input, git_root)
+    call fzf#vim#grep(rg_command, 1, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}))
+endfunction
+command! -bang -nargs=* Rgz call RgFzf(shellescape(<q-args>), {}, <bang>0)

@@ -23,7 +23,8 @@ alias psmem='ps auxf | sort -nr -k 4 | head -5'
 alias pscpu='ps auxf | sort -nr -k 3 | head -5'
 
 alias rmorigfiles="find . -name '*.orig' -delete"
-alias rmojsfiles="find . -type f -name '*.js' -exec rm {} +"
+alias rmjsfiles="find . -type f -name '*.js' -exec rm {} +"
+alias rmdsfiles="find . -type f -name '*.DS_Store' -exec rm {} +"
 
 alias ..='cd ..'
 alias ...='cd ../..'

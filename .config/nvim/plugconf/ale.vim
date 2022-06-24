@@ -1,7 +1,6 @@
 nnoremap <space>af <Plug>(ale_fix)
 nnoremap <space>al <Plug>(ale_lint)
 nnoremap <silent><space>ro :ALEFix<CR>
-nnoremap <silent><space>rn :ALERename<CR>
 " nnoremap <silent><space>ri :ALEImport<CR>
 " nnoremap <silent><space>raw :ALEOrganizeImports<cr>
 

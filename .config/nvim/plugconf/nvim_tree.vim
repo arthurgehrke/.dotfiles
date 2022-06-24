@@ -1,36 +1,5 @@
 autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTreeToggle' . tabpagenr() | quit | endif
 
-let g:nvim_tree_icons = {
-\ 'default': '',
-\ 'symlink': '',
-\ 'git': {
-\   'unstaged': '',
-\   'staged': "✓",
-\   'unmerged': "",
-\   'renamed': "➜",
-\   'untracked': "U",
-\   'deleted': "",
-\   'ignored': "◌"
-\   },
-\ 'folder': {
-\   'arrow_open': "",
-\   'arrow_closed': "",
-\   'default': "",
-\   'open': "",
-\   'empty': "",
-\   'empty_open': "",
-\   'symlink': "",
-\   'symlink_open': "",
-\   }
-\ }
-
-let g:nvim_tree_show_icons = {
-\ 'git': 1,
-\ 'folders': 1,
-\ 'files': 0,
-\ 'folder_arrows': 1,
-\ }
-
 nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeCollapseKeepBuffers<CR>
@@ -76,8 +45,37 @@ require'nvim-tree'.setup {
       },
     icons = {
       webdev_colors = true,
+      show = {
+        file = false,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+    glyphs = {
+      default = "",
+      symlink = "",
+      folder = {
+        arrow_closed = "",
+        arrow_open = "",
+        default = "",
+        open = "",
+        empty = "",
+        empty_open = "",
+        symlink = "",
+        symlink_open = "",
+        },
+      git = {
+        unstaged = "",
+        staged = "✓",
+        unmerged = "",
+        renamed = "➜",
+        untracked = "★",
+        deleted = "",
+        ignored = "◌",
+        },
       },
     },
+  },
   view = {
     side = 'left',
     width = 40,
@@ -104,7 +102,7 @@ require'nvim-tree'.setup {
     },
   filters = {
     dotfiles = false,
-    custom = { ".git", "node_modules", '.cache', 'dist', '.dist', 'build' }
+    custom = { ".git$", "node_modules", '.cache', 'dist', '.dist', 'build' }
   },
   log = {
     enable = false,
@@ -126,7 +124,7 @@ require'nvim-tree'.setup {
     },
     open_file = {
       quit_on_open = true,
-      resize_window = false,
+      resize_window = true,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
