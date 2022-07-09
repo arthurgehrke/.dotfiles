@@ -36,12 +36,12 @@ function! StripWhitespace()
 endfunction
 noremap <space>ss :call StripWhitespace()<CR>
 
-" Insert new line without entering insert mode
-nnoremap <space>bl cc<ESC>
 " Blank line above
-nnoremap <space>bo mzO<ESC>`z
+" nnoremap <space>o mzO<ESC>`z
+nnoremap <leader>o m`o<esc>``
 " Blank line below
-nnoremap <space>bi mzo<ESC>`z
+" nnoremap <space>O mzo<ESC>`z
+nnoremap <leader>O m`O<esc>``
 
 nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
 nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>

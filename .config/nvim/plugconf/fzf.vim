@@ -115,3 +115,5 @@ function! RgFzf(...)
     call fzf#vim#grep(rg_command, 1, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}))
 endfunction
 command! -bang -nargs=* Rgz call RgFzf(shellescape(<q-args>), {}, <bang>0)
+
+command! -nargs=* RGExplore call RgFzf(shellescape(<q-args>))
