@@ -137,7 +137,7 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 # SSH
 # brew install keychain
 if hash keychain 2>/dev/null; then
-  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any github-arthur gitlab-arthur`'
+  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any github-arthur gitlab-arthur-key`'
   alias ssh-agent-stop='keychain --stop all'
 fi
 

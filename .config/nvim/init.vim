@@ -14,6 +14,8 @@ set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
 set hidden
+set scrolloff=2         " Keep at least 2 lines above/below
+set noincsearch
 set nobuflisted " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
@@ -28,7 +30,6 @@ set ttimeoutlen=10
 set ignorecase
 " set smartcase 
 set redrawtime=10000
-set incsearch
 set hlsearch
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
 set cmdheight=1

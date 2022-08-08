@@ -37,11 +37,11 @@ endfunction
 noremap <space>ss :call StripWhitespace()<CR>
 
 " Blank line above
-" nnoremap <space>o mzO<ESC>`z
-nnoremap <leader>o m`o<esc>``
+nnoremap <space>o mzo<ESC>`z
+" nnoremap <leader>o m`o<esc>``
 " Blank line below
-" nnoremap <space>O mzo<ESC>`z
-nnoremap <leader>O m`O<esc>``
+nnoremap <space>O mzO<ESC>`z
+" nnoremap <leader>O m`O<esc>``
 
 nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
 nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
@@ -77,3 +77,13 @@ vnoremap <silent> # :<C-U>
   \gvy?<C-R><C-R>=substitute(
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+" relative path  (src/foo.txt)
+nnoremap <space>cs :let @*=expand("%")<CR>
+" absolute path  (/something/src/foo.txt)
+nnoremap <space>ct :let @*=expand("%:p")<CR>
+" filename       (foo.txt)
+nnoremap <space>cT :let @*=expand("%:t")<CR>
+" directory name (/something/src)
+nnoremap <space>ch :let @*=expand("%:p:h")<CR>
+

@@ -1,8 +1,7 @@
 autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTreeToggle' . tabpagenr() | quit | endif
-
-nnoremap <Space>f :NvimTreeToggle<CR>
 nnoremap <Space>r :NvimTreeRefresh<CR>
-nnoremap <Space>c :NvimTreeCollapseKeepBuffers<CR>
+nnoremap <Space>c :NvimTreeCollapse<CR>
+nnoremap <Space>f :NvimTreeFindFileToggle<CR>
 
 lua << EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
@@ -136,5 +135,6 @@ require'nvim-tree'.setup {
     }
   }
 }
+require "nvim-tree.events".on_file_created(function(file) vim.cmd("edit " .. file.fname) end)
 local opts = { silent = true, noremap = true }
 EOF

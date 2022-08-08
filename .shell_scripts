@@ -38,18 +38,16 @@ function ide() {
 
 PROMPT_COMMAND=ide
 
-function attach_ide() {
+function attachIde() {
   tmux split-window -v -p 30
   tmux split-window -h -p 75
   tmux split-window -h -p 50
 }
 
-PROMPT_COMMAND=attach_ide
+PROMPT_COMMAND=attachIde
 
-# Uses tree - install first:
-function t() {
-  # Defaults to 3 levels deep, do more with `t 5` or `t 1` pass additional args after
-  tree -I '.git|node_modules|bower_components|.DS_Store' --dirsfirst --filelimit 15 -L ${1:-3} -aC $2
+function attachSidePanel() {
+  tmux split-window -h -p 20
 }
 
-PROMPT_COMMAND=t
+PROMPT_COMMAND=attachSidePanel
