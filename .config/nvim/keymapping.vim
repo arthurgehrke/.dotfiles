@@ -18,6 +18,7 @@ nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 " TAB in general mode will move to buffer
 nnoremap <TAB> :bnext<CR>
 " SHIFT-TAB will go back
@@ -37,10 +38,10 @@ endfunction
 noremap <space>ss :call StripWhitespace()<CR>
 
 " Blank line above
-nnoremap <space>o mzo<ESC>`z
+nnoremap <space>j mzo<ESC>`z
 " nnoremap <leader>o m`o<esc>``
 " Blank line below
-nnoremap <space>O mzO<ESC>`z
+nnoremap <space>k mzO<ESC>`z
 " nnoremap <leader>O m`O<esc>``
 
 nnoremap <space>cd :NvimTreeOpen %:p:h<CR>

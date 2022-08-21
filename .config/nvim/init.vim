@@ -50,15 +50,14 @@ set shiftwidth=2
 set tabstop=2
 set softtabstop=2
 set nowrap
-set autochdir
+" set autochdir
+set updatetime=100
+set formatexpr=
 
 let mapleader =" "
 
 " stop highlighting matching pairs
 let g:loaded_matchparen=1
-
-" Automatically removing all trailing whitespace
-" autocmd BufWritePre * :%s/\s\+$//e
 
 " highlight from start of file
 autocmd BufEnter * :syntax sync fromstart
@@ -141,3 +140,4 @@ if !isdirectory("/tmp/.vim-undo-dir")
 endif
 set undodir=/tmp/.vim-undo-dir
 set undofile
+

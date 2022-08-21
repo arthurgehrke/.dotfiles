@@ -6,25 +6,19 @@ call plug#begin()
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-
-  Plug 'folke/lsp-colors.nvim'
   Plug 'morhetz/gruvbox'
-
-  " Plug 'glepnir/dashboard-nvim'
   Plug 'mhinz/vim-startify'
-
-  Plug 'moll/vim-bbye'
+  Plug 'folke/lsp-colors.nvim'
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'junegunn/vim-peekaboo'
   Plug 'lukas-reineke/indent-blankline.nvim'
-  Plug 'raimondi/delimitmate'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'bkad/camelcasemotion'
-
+  Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
 
   Plug 'lewis6991/gitsigns.nvim'
@@ -37,17 +31,18 @@ call plug#begin()
   Plug 'galooshi/vim-import-js'
   Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'vim-scripts/lastpos.vim'
-
-  Plug 'haya14busa/is.vim'
-  Plug 'haya14busa/incsearch.vim'
+  
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
+  Plug 'neovim/nvim-lspconfig'
+
+  Plug 'haya14busa/is.vim'
+  Plug 'haya14busa/incsearch.vim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
-source $HOME/.config/nvim/plugconf/lsp_config.vim
 source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/trouble.vim
@@ -65,3 +60,4 @@ source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
 source $HOME/.config/nvim/plugconf/vim_import_js.vim
+source $HOME/.config/nvim/plugconf/nvim-autopairs.vim
