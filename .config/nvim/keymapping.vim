@@ -38,11 +38,14 @@ endfunction
 noremap <space>ss :call StripWhitespace()<CR>
 
 " Blank line above
-nnoremap <space>j mzo<ESC>`z
+" nnoremap <space>j mzo<ESC>`z
 " nnoremap <leader>o m`o<esc>``
 " Blank line below
-nnoremap <space>k mzO<ESC>`z
+" nnoremap <space>k mzO<ESC>`z
 " nnoremap <leader>O m`O<esc>``
+
+nnoremap <silent><C-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
+nnoremap <silent><C-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
 nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
 nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>

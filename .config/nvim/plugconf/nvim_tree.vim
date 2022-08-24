@@ -123,7 +123,7 @@ require'nvim-tree'.setup {
     },
     open_file = {
       quit_on_open = true,
-      resize_window = true,
+      resize_window = false,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",

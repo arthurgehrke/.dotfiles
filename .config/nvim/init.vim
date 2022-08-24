@@ -19,7 +19,6 @@ set noincsearch
 set nobuflisted " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
-highlight clear SignColumn
 set number relativenumber
 set cursorline
 set nobackup
@@ -28,7 +27,7 @@ set noswapfile
 set timeoutlen=400
 set ttimeoutlen=10
 set ignorecase
-" set smartcase 
+set smartcase 
 set redrawtime=10000
 set hlsearch
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
@@ -43,6 +42,7 @@ set splitbelow
 set autoindent
 set copyindent
 set smartindent
+set backspace=indent,eol,start
 set nojoinspaces
 set smarttab
 set expandtab
@@ -52,7 +52,7 @@ set softtabstop=2
 set nowrap
 " set autochdir
 set updatetime=100
-set formatexpr=
+highlight clear SignColumn
 
 let mapleader =" "
 
@@ -80,7 +80,6 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-set backspace=indent,eol,start
 function! FourSpacesStyle()
   set tabstop=4
   set softtabstop=-1
