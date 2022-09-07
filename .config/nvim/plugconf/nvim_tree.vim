@@ -1,17 +1,28 @@
-autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTreeToggle' . tabpagenr() | quit | endif
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeCollapse<CR>
 nnoremap <Space>f :NvimTreeFindFileToggle<CR>
 
 lua << EOF
+-- Write autoclose command in lua
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+      vim.cmd "quit"
+    end
+  end
+})
+
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
   disable_netrw = true, -- disables netrw completely
   auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
+  create_in_closed_folder = false,
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_reload_on_write = true,
-  hijack_unnamed_buffer_when_opening = true,
+  prefer_startup_root = true,
+  hijack_unnamed_buffer_when_opening = false,
   hijack_directories = {
     enable = true,
     auto_open = false,
@@ -68,7 +79,7 @@ require'nvim-tree'.setup {
         staged = "✓",
         unmerged = "",
         renamed = "➜",
-        untracked = "★",
+        untracked = "*",
         deleted = "",
         ignored = "◌",
         },
@@ -96,6 +107,8 @@ require'nvim-tree'.setup {
         { key = "gy",                           cb = tree_cb("copy_absolute_path") },
         { key = "[c",                           cb = tree_cb("prev_git_item") },
         { key = "]c",                           cb = tree_cb("next_git_item") },
+        { key = "f",                              action = "live_filter" },
+        { key = "F",                              action = "clear_live_filter" },
         },
       },
     },
@@ -115,6 +128,10 @@ require'nvim-tree'.setup {
       profile = false,
       },
     },
+  live_filter = {
+    prefix = "[FILTER]: ",
+    always_show_folders = false,
+  },
   actions = {
     change_dir = {
       enable = true,
@@ -123,7 +140,7 @@ require'nvim-tree'.setup {
     },
     open_file = {
       quit_on_open = true,
-      resize_window = false,
+      resize_window = true,
       window_picker = {
         enable = true,
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
@@ -132,9 +149,10 @@ require'nvim-tree'.setup {
           buftype  = { "nofile", "terminal", "help", },
         }
       }
-    }
+    },
+  remove_file = {
+    close_window = true,
+    },
   }
 }
-require "nvim-tree.events".on_file_created(function(file) vim.cmd("edit " .. file.fname) end)
-local opts = { silent = true, noremap = true }
 EOF

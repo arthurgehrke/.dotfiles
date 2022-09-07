@@ -84,11 +84,6 @@ nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
 nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
 nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
 
-    " Open fzf in vertical split
-    nnoremap <silent> <SPACE>v :call fzf#run(fzf#vim#with_preview({
-    \  'right': '50%',
-    \  'sink':  'vertical botright split' }))<CR>
-
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
     if inpath == "" || matchend(inpath, '/') == strlen(inpath)

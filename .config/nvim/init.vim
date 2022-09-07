@@ -51,7 +51,7 @@ set tabstop=2
 set softtabstop=2
 set nowrap
 " set autochdir
-set updatetime=100
+" set updatetime=100
 highlight clear SignColumn
 
 let mapleader =" "

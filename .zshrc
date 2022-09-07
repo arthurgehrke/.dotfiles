@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 ##############################################################################
 # Source's
 ##############################################################################
@@ -37,7 +36,7 @@ load-nvmrc() {
   fi
 }
 
-add-zsh-hook chpwd load-nvmrc
+# add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 source $INCLUDES/z/z.sh
 
@@ -85,8 +84,6 @@ export LANG="en_US"
 ##############################################################################
 # Configs
 ##############################################################################
-DISABLE_AUTO_UPDATE="true"
-DISABLE_MAGIC_FUNCTIONS=true
 EDITOR=nvim
 
 autoload -U colors
@@ -115,7 +112,7 @@ setopt SHARE_HISTORY             # Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
 setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
-# setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
@@ -123,8 +120,6 @@ setopt HIST_VERIFY               # Do not execute immediately upon history expan
 ##############################################################################
 # Navigation
 ##############################################################################
-setopt AUTO_CD              # Go to folder path without using cd.
-
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
@@ -142,7 +137,7 @@ if hash keychain 2>/dev/null; then
 fi
 
 ##############################################################################
-setopt AUTO_CD              # Go to folder path without using cd.
+# setopt AUTO_CD              # Go to folder path without using cd.
 
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
@@ -157,8 +152,8 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 ##############################################################################
 zmodload zsh/complist
 bindkey '^[[Z' reverse-menu-complete
-# bindkey '^I' menu-complete
-# bindkey '^I'   complete-word       # tab          | complete
+bindkey '^I' menu-complete
+bindkey '^I'   complete-word       # tab          | complete
 
 # zstyle ':completion:*' insert-tab true
 
@@ -189,3 +184,5 @@ stty erase '^?'
 # Various
 ##############################################################################
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export BAT_THEME="gruvbox-dark"

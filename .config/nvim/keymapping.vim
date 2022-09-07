@@ -90,4 +90,3 @@ nnoremap <space>ct :let @*=expand("%:p")<CR>
 nnoremap <space>cT :let @*=expand("%:t")<CR>
 " directory name (/something/src)
 nnoremap <space>ch :let @*=expand("%:p:h")<CR>
-
