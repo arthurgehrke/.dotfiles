@@ -1,4 +1,4 @@
-filetype plugin indent on
+syntax on
 
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
@@ -26,11 +26,14 @@ call plug#begin()
 
   Plug 'nvim-lua/popup.nvim'
   Plug 'folke/trouble.nvim'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'dense-analysis/ale'
   Plug 'galooshi/vim-import-js'
   Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'vim-scripts/lastpos.vim'
+
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'euclidianace/betterlua.vim'
+  Plug 'chr4/nginx.vim'
   
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'neovim/nvim-lspconfig'

@@ -101,9 +101,9 @@ setopt no_nomatch                # Don't error when there's nothing to glob, lea
 ##############################################################################
 # History
 ##############################################################################
-HISTFILE=$HOME/.zsh_history
-HISTSIZE=5000
-SAVEHIST=5000
+export HISTFILE=$HOME/.zsh_history
+export HISTSIZE=5000
+export SAVEHIST=5000
 HISTFILESIZE=2000
 DIRSTACKSIZE=8
 
@@ -186,3 +186,4 @@ stty erase '^?'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export BAT_THEME="gruvbox-dark"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"

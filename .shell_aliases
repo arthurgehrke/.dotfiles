@@ -43,3 +43,6 @@ alias zshsource='source ~/.zshrc'
 
 alias alder='alder --exclude='"'"'.git|node_modules'"'"''
 
+# ip
+alias localip='ipconfig getifaddr en0'
+

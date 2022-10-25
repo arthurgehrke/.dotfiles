@@ -87,9 +87,7 @@ require'nvim-tree'.setup {
     },
   },
   view = {
-    side = 'left',
-    width = 40,
-    height = 30,
+    adaptive_size = true,
     preserve_window_proportions = false,
     relativenumber = false,
     number = false,

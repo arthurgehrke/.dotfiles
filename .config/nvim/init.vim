@@ -6,7 +6,7 @@ source $HOME/.config/nvim/themes.vim
 
 filetype indent on " use filetype indentation
 filetype plugin indent on " allow plugins to use filetype indentation
-syntax on " turn on syntax highlighting
+syntax on
 
 set title
 set shell=$SHELL
@@ -42,7 +42,6 @@ set splitbelow
 set autoindent
 set copyindent
 set smartindent
-set backspace=indent,eol,start
 set nojoinspaces
 set smarttab
 set expandtab
@@ -51,7 +50,9 @@ set tabstop=2
 set softtabstop=2
 set nowrap
 " set autochdir
-" set updatetime=100
+
+set updatetime=100
+set backspace=indent,eol,start
 highlight clear SignColumn
 
 let mapleader =" "
@@ -75,7 +76,7 @@ augroup END
 
 augroup numbertoggle
     autocmd!
-    " au WinEnter set norelativenumber
+    au WinEnter set norelativenumber
     autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
@@ -114,6 +115,11 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
+au BufRead,BufNewFile *.nginx set ft=nginx
+au BufRead,BufNewFile */etc/nginx/* set ft=nginx
+au BufRead,BufNewFile */usr/local/nginx/conf/* set ft=nginx
+au BufRead,BufNewFile nginx.conf set ft=nginx
+
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 
 " Prevent selecting and pasting from overwriting what you originally copied.
@@ -129,9 +135,9 @@ fu! StopHL()
 endfu
 au InsertEnter * call StopHL()
 
-set foldlevel=20
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+" set foldlevel=20
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
 
 " Use persistent history.
 if !isdirectory("/tmp/.vim-undo-dir")
