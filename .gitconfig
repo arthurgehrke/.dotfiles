@@ -14,22 +14,14 @@
 [diff]
   tool = nvimdiff
 [difftool]
-  prompt = true
+  prompt = false
 [difftool "nvim"]
   cmd= nvim -d $REMOTE $LOCAL
 [merge]
   tool = nvim
   conflictstyle = diff3
 [mergetool]
-  prompt = false
+  prompt = true
 [mergetool "nvim"]
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
   cmd = nvim -d -u ~/.config/nvim/init.vim $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
-[difftool "sourcetree"]
-	cmd = " "
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[commit]
-	template = /Users/arthurrodrigues/.stCommitMsg

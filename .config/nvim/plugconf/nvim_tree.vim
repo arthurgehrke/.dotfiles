@@ -4,14 +4,14 @@ nnoremap <Space>f :NvimTreeFindFileToggle<CR>
 
 lua << EOF
 -- Write autoclose command in lua
-vim.api.nvim_create_autocmd("BufEnter", {
-  nested = true,
-  callback = function()
-    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
-      vim.cmd "quit"
-    end
-  end
-})
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--  nested = true,
+--  callback = function()
+--    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+--      vim.cmd "quit"
+--    end
+--  end
+--})
 
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
@@ -112,7 +112,7 @@ require'nvim-tree'.setup {
     },
   filters = {
     dotfiles = false,
-    custom = { ".git$", "node_modules", '.cache', 'dist', '.dist', 'build' }
+    custom = { ".git$", "node_modules", '.cache', 'dist', '.dist', 'build', '.next' }
   },
   log = {
     enable = false,
