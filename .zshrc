@@ -12,11 +12,13 @@ source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 
 source $HOME/.themes/zsh/.p10k.zsh
-source $INCLUDES/nvm/nvm.sh
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# source $INCLUDES/nvm/nvm.sh
+
 autoload -U add-zsh-hook
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 load-nvmrc() {
   local node_version="$(nvm version)"
@@ -37,7 +39,7 @@ load-nvmrc() {
 }
 
 # add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+# load-nvmrc
 source $INCLUDES/z/z.sh
 
 # Plugins configs
@@ -54,6 +56,7 @@ source $HOME/.fzf-functions.zsh
 # MacOs
 ##############################################################################
 export PATH="/opt/homebrew/bin:$PATH" 
+export PATH="/usr/local/bin:$PATH"
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -132,7 +135,7 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 # SSH
 # brew install keychain
 if hash keychain 2>/dev/null; then
-  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any github-arthur gitlab-arthur-key`'
+  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab id_rsa`'
   alias ssh-agent-stop='keychain --stop all'
 fi
 
@@ -187,3 +190,8 @@ stty erase '^?'
 
 export BAT_THEME="gruvbox-dark"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+export KUBECONFIG=.kubeconfig:$HOME/.kube/config
