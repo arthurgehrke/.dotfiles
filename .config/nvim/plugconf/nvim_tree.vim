@@ -88,7 +88,7 @@ require'nvim-tree'.setup {
   },
   view = {
     adaptive_size = true,
-    preserve_window_proportions = false,
+    preserve_window_proportions = true,
     relativenumber = false,
     number = false,
     signcolumn = "no",
