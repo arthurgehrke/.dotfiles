@@ -8,14 +8,29 @@ source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $INCLUDES/z/z.sh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
-
 source $HOME/.themes/zsh/.p10k.zsh
-# source $INCLUDES/nvm/nvm.sh
 
 autoload -U add-zsh-hook
 
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
+
+# Plugins configs
+source $HOME/zshrc/completions.zsh
+source $HOME/zshrc/autosuggestions.zsh
+
+source $HOME/.shell_aliases
+source $HOME/.shell_scripts
+
+source $HOME/.fzf.zsh
+source $HOME/.fzf-functions.zsh
+
+source $HOME/.zprofile
+
+# Setup for nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
@@ -38,38 +53,60 @@ load-nvmrc() {
   fi
 }
 
-# add-zsh-hook chpwd load-nvmrc
-# load-nvmrc
-source $INCLUDES/z/z.sh
+##############################################################################
+# Homebrew
+##############################################################################
+if [[ "$(/usr/bin/uname -m)" == "arm64" ]]; then
+  # ARM macOS
+  HOMEBREW_PREFIX="/opt/homebrew"
+else
+  # Intel macOS
+  HOMEBREW_PREFIX="/usr/local"
+fi
 
-# Plugins configs
-source $HOME/zshrc/completions.zsh
-source $HOME/zshrc/autosuggestions.zsh
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
-source $HOME/.shell_aliases
-source $HOME/.shell_scripts
+# mysql client
+# export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
-source $HOME/.fzf.zsh
-source $HOME/.fzf-functions.zsh
+# brew packages
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+export PATH="/opt/homebrew/bin:$PATH" 
+export PATH="/usr/local/bin:$PATH"
+
+# python
+# python2 deprecated so ...
+# export PIP_REQUIRE_VIRTUALENV=false
+
+# Setting PATH for Python 3
+# The original version is saved in .bash_profile.pysave
+# eval "$(pyenv init -)"
+
+# Setup for pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
+
+# # Pyenv Python version management
+# if type pyenv 1>/dev/null 2>&1; then
+#     eval "$(pyenv init --path)"
+#     eval "$(pyenv init -)"
+#     pyenv virtualenvwrapper
+# fi
 
 ##############################################################################
 # MacOs
 ##############################################################################
-export PATH="/opt/homebrew/bin:$PATH" 
-export PATH="/usr/local/bin:$PATH"
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
   PATH="$HOME/bin:$PATH"
 fi
-
-# Setting PATH for Python 3
-# The original version is saved in .bash_profile.pysave
-eval "$(pyenv init -)"
-
-#export PATH
-alias python='python3'
-alias py='python3'
 
 if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
@@ -189,9 +226,7 @@ stty erase '^?'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export BAT_THEME="gruvbox-dark"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+# kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
+

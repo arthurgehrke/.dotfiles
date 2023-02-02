@@ -46,3 +46,7 @@ alias alder='alder --exclude='"'"'.git|node_modules'"'"''
 # ip
 alias localip='ipconfig getifaddr en0'
 
+# python
+alias python='python3'
+alias py='python3'
+
