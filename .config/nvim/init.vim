@@ -4,9 +4,8 @@ source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
-filetype indent on " use filetype indentation
 filetype plugin indent on " allow plugins to use filetype indentation
-syntax on
+syntax enable
 
 set title
 set shell=$SHELL
@@ -37,8 +36,6 @@ set noshowmode
 set shortmess+=c
 set previewheight=5
 set pumheight=10
-set splitright
-set splitbelow
 set autoindent
 set copyindent
 set smartindent
@@ -50,7 +47,8 @@ set tabstop=2
 set softtabstop=2
 set nowrap
 " set autochdir
-
+set splitbelow " when splitting horizontally, move coursor to lower pane
+set splitright " when splitting vertically, mnove coursor to right pane
 set updatetime=100
 set backspace=indent,eol,start
 highlight clear SignColumn
@@ -120,7 +118,12 @@ au BufRead,BufNewFile */etc/nginx/* set ft=nginx
 au BufRead,BufNewFile */usr/local/nginx/conf/* set ft=nginx
 au BufRead,BufNewFile nginx.conf set ft=nginx
 
+au BufRead,BufNewFile *.md          set ft=mkd tw=80 syntax=markdown
+au BufRead,BufNewFile *.ppmd          set ft=mkd tw=80 syntax=markdown
+au BufRead,BufNewFile *.markdown    set ft=mkd tw=80 syntax=markdown
+
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+  autocmd BufRead,BufNew *scss :setlocal filetype=css
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy
@@ -135,9 +138,6 @@ fu! StopHL()
 endfu
 au InsertEnter * call StopHL()
 
-" set foldlevel=20
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
 
 " Use persistent history.
 if !isdirectory("/tmp/.vim-undo-dir")
@@ -145,4 +145,57 @@ if !isdirectory("/tmp/.vim-undo-dir")
 endif
 set undodir=/tmp/.vim-undo-dir
 set undofile
+
+" Unset paste on InsertLeave.
+autocmd InsertLeave * silent! set nopaste
+
+" Make sure Kubernetes yaml files end up being set as helm files.
+au BufNewFile,BufRead *.{yaml,yml} if getline(1) =~ '^apiVersion:' || getline(2) =~ '^apiVersion:' | setlocal filetype=helm | endif
+
+" Ensure tabs don't get converted to spaces in Makefiles.
+autocmd FileType make setlocal noexpandtab
+
+" Prevent x and the delete key from overriding what's in the clipboard.
+noremap x "_x
+noremap X "_x
+noremap <Del> "_x
+
+" Prevent selecting and pasting from overwriting what you originally copied.
+xnoremap p pgvy
+
+" Keep cursor at the bottom of the visual selection after you yank it.
+vmap y ygv<Esc>
+
+" fzf with brew 
+set rtp+=/opt/homebrew/opt/fzf
+
+set foldlevel=20
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+set nolist " do not display white characters
+" set nofoldenable
+" set foldlevel=4 " limit folding to 4 levels
+" set foldmethod=syntax " use language syntax to generate folds
+set noeol " show if there's no eol char
+set showbreak=↪ " character to show when line is broken
+
+
+" Keep search matches in the middle of the window.
+" nnoremap n nzzzv
+" nnoremap N Nzzzv
+
+" Same when jumping around
+" nnoremap g; g;zz
+" nnoremap g, g,zz
+
+" more natural movement with wrap on
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
 

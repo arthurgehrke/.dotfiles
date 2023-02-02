@@ -1,0 +1,15 @@
+# Maximize windows on double clicking them:
+defaults write -g AppleActionOnDoubleClick 'Maximize'
+
+# === Finder ===
+
+# Keep folders on top when sorting by name:
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Show Finder path bar:
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Show hidden files in Finder:
+defaults write com.apple.finder AppleShowAllFiles YES
+
+# === Safari ===

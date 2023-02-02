@@ -19,6 +19,7 @@ call plug#begin()
   Plug 'bkad/camelcasemotion'
   Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
+  Plug 'scrooloose/nerdcommenter'
 
   Plug 'lewis6991/gitsigns.nvim'
   " Plug 'rhysd/git-messenger.vim'
@@ -39,10 +40,10 @@ call plug#begin()
   Plug 'euclidianace/betterlua.vim'
   Plug 'chr4/nginx.vim'
   
-  Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'williamboman/nvim-lsp-installer'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'kabouzeid/nvim-lspinstall'
 
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
@@ -51,7 +52,7 @@ call plug#end()
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/nvim_lsp_installer.vim
-source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
+" source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/trouble.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim

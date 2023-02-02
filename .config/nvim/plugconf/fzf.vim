@@ -76,7 +76,6 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-map <C-e> :call FZFOpen(':Buffers')<CR>
 nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
 nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
 nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>

@@ -3,29 +3,18 @@ nnoremap <Space>c :NvimTreeCollapse<CR>
 nnoremap <Space>f :NvimTreeFindFileToggle<CR>
 
 lua << EOF
--- Write autoclose command in lua
--- vim.api.nvim_create_autocmd("BufEnter", {
---  nested = true,
---  callback = function()
---    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
---      vim.cmd "quit"
---    end
---  end
---})
-
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 require'nvim-tree'.setup {
-  disable_netrw = true, -- disables netrw completely
+  disable_netrw = false, -- disables netrw completely
   auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
-  create_in_closed_folder = false,
   hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_reload_on_write = true,
   prefer_startup_root = true,
   hijack_unnamed_buffer_when_opening = false,
   hijack_directories = {
     enable = true,
-    auto_open = false,
+    auto_open = true,
   },
   open_on_setup = true,
   open_on_tab = false,
@@ -88,7 +77,7 @@ require'nvim-tree'.setup {
   },
   view = {
     adaptive_size = true,
-    preserve_window_proportions = true,
+    preserve_window_proportions = false,
     relativenumber = false,
     number = false,
     signcolumn = "no",
@@ -96,7 +85,7 @@ require'nvim-tree'.setup {
       custom_only = false,
       list = {
         { key = "v",                        cb = tree_cb("vsplit") },
-        { key = "V",                        cb = tree_cb("split") },
+        { key = "s",                        cb = tree_cb("split") },
         { key = "R",                            cb = tree_cb("refresh") },
         { key = "D",                            cb = tree_cb("trash") },
         { key = "r",                            cb = tree_cb("rename") },
@@ -107,6 +96,9 @@ require'nvim-tree'.setup {
         { key = "]c",                           cb = tree_cb("next_git_item") },
         { key = "f",                              action = "live_filter" },
         { key = "F",                              action = "clear_live_filter" },
+        { key = "x",                              action = "cut" },
+        { key = "c",                              action = "copy" },
+        { key = "p",                              action = "paste" },
         },
       },
     },
@@ -131,10 +123,12 @@ require'nvim-tree'.setup {
     always_show_folders = false,
   },
   actions = {
+    use_system_clipboard = true,
     change_dir = {
       enable = true,
-      global = true,
-      restrict_above_cwd = false,
+      global = false,
+      -- restrict_above_cwd = false,
+      restrict_above_cwd = true,
     },
     open_file = {
       quit_on_open = true,
