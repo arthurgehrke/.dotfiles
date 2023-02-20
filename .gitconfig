@@ -26,8 +26,8 @@
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
   cmd = nvim -d -u ~/.config/nvim/init.vim $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
 
-; [url "git@gitlab.com:"]
-;   insteadOf = https://gitlab.com/
+[url "git@gitlab.com:"]
+  insteadOf = https://gitlab.com/
 
-; [url "git@gitlab.com:doare/api-v2.git"]
-;   insteadOf = https://gitlab.com/
+[url "git@gitlab.com:doare/api-v2.git"]
+  insteadOf = https://gitlab.com/

@@ -73,7 +73,8 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+ export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH" 
 export PATH="/usr/local/bin:$PATH"
 
@@ -144,8 +145,9 @@ setopt no_nomatch                # Don't error when there's nothing to glob, lea
 export HISTFILE=$HOME/.zsh_history
 export HISTSIZE=5000
 export SAVEHIST=5000
-HISTFILESIZE=2000
-DIRSTACKSIZE=8
+export HISTFILESIZE=5000
+export DIRSTACKSIZE=8
+export HISTTIMEFORMAT="%c "
 
 setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
 setopt SHARE_HISTORY             # Share history between all sessions.
@@ -156,6 +158,9 @@ setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+setopt APPENDHISTORY     #Append history to the history file (no overwriting)
+setopt SHAREHISTORY      #Share history across terminals
+setopt INCAPPENDHISTORY  #Immediately append to the history file, not just when a term is killed
 
 ##############################################################################
 # Navigation
