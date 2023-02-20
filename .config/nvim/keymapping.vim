@@ -81,9 +81,6 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" Don't jump when using * for search
-" nnoremap * *<c-o>
-
 " get file name on clipboard
 nnoremap <space>fn :let @*=expand("%:t")<CR>
 "Opens a vertical split and switches over (\v)
@@ -100,13 +97,3 @@ nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
 
-" if !exists("*DeleteHiddenBuffers") " Clear all hidden buffers when running 
-" 	function DeleteHiddenBuffers() " Vim with the 'hidden' option
-" 		let tpbl=[]
-" 		call map(range(1, tabpagenr('$')), 'extend(tpbl, tabpagebuflist(v:val))')
-" 		for buf in filter(range(1, bufnr('$')), 'bufexists(v:val) && index(tpbl, v:val)==-1')
-" 			silent execute 'bwipeout' buf
-" 		endfor
-" 	endfunction
-" endif
-" command! DeleteHiddenBuffers call DeleteHiddenBuffers()

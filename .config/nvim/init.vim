@@ -1,11 +1,11 @@
 nnoremap <space>so :source $HOME/.config/nvim/init.vim<cr>
 
+syntax on " turn on syntax highlighting
+filetype plugin indent on " allow plugins to use filetype indentation
+
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
-
-filetype plugin indent on " allow plugins to use filetype indentation
-syntax enable
 
 set title
 set shell=$SHELL
@@ -14,20 +14,26 @@ set encoding=utf-8
 set autoread
 set hidden
 set scrolloff=2         " Keep at least 2 lines above/below
+set lazyredraw
+syntax sync minlines=256
+" set redrawtime=10000
+" set timeoutlen=400
+" set ttimeoutlen=10
+" set updatetime=100
+
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
 set noincsearch
+set ignorecase
+set smartcase 
+
 set nobuflisted " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber
 set cursorline
-set nobackup
-set nowritebackup
-set noswapfile
-set timeoutlen=400
-set ttimeoutlen=10
-set ignorecase
-set smartcase 
-set redrawtime=10000
 set hlsearch
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
 set cmdheight=1
@@ -46,10 +52,9 @@ set shiftwidth=2
 set tabstop=2
 set softtabstop=2
 set nowrap
-" set autochdir
 set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
-set updatetime=100
+set noerrorbells
 set backspace=indent,eol,start
 highlight clear SignColumn
 
@@ -84,8 +89,8 @@ function! FourSpacesStyle()
   set softtabstop=-1
   set shiftwidth=4
   set expandtab
-  set backspace=indent,eol,start
-  set indentexpr=-1
+  " set backspace=indent,eol,start
+  " set indentexpr=-1
 endfunction
 
 function! TwoSpacesStyle()
@@ -123,7 +128,7 @@ au BufRead,BufNewFile *.ppmd          set ft=mkd tw=80 syntax=markdown
 au BufRead,BufNewFile *.markdown    set ft=mkd tw=80 syntax=markdown
 
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
-  autocmd BufRead,BufNew *scss :setlocal filetype=css
+autocmd BufRead,BufNew *scss :setlocal filetype=css
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy
@@ -138,30 +143,10 @@ fu! StopHL()
 endfu
 au InsertEnter * call StopHL()
 
-
-" Use persistent history.
-if !isdirectory("/tmp/.vim-undo-dir")
-  call mkdir("/tmp/.vim-undo-dir", "", 0700)
-endif
-set undodir=/tmp/.vim-undo-dir
-set undofile
-
-" Unset paste on InsertLeave.
-autocmd InsertLeave * silent! set nopaste
-
-" Make sure Kubernetes yaml files end up being set as helm files.
-au BufNewFile,BufRead *.{yaml,yml} if getline(1) =~ '^apiVersion:' || getline(2) =~ '^apiVersion:' | setlocal filetype=helm | endif
-
-" Ensure tabs don't get converted to spaces in Makefiles.
-autocmd FileType make setlocal noexpandtab
-
 " Prevent x and the delete key from overriding what's in the clipboard.
 noremap x "_x
 noremap X "_x
 noremap <Del> "_x
-
-" Prevent selecting and pasting from overwriting what you originally copied.
-xnoremap p pgvy
 
 " Keep cursor at the bottom of the visual selection after you yank it.
 vmap y ygv<Esc>
@@ -169,25 +154,10 @@ vmap y ygv<Esc>
 " fzf with brew 
 set rtp+=/opt/homebrew/opt/fzf
 
-set foldlevel=20
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
-
 set nolist " do not display white characters
-" set nofoldenable
-" set foldlevel=4 " limit folding to 4 levels
-" set foldmethod=syntax " use language syntax to generate folds
 set noeol " show if there's no eol char
 set showbreak=↪ " character to show when line is broken
 
-
-" Keep search matches in the middle of the window.
-" nnoremap n nzzzv
-" nnoremap N Nzzzv
-
-" Same when jumping around
-" nnoremap g; g;zz
-" nnoremap g, g,zz
 
 " more natural movement with wrap on
 nnoremap j gj
@@ -198,4 +168,3 @@ vnoremap k gk
 " Reselect visual block after indent/outdent
 vnoremap < <gv
 vnoremap > >gv
-
