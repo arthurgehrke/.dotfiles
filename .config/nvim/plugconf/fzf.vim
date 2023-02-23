@@ -80,8 +80,8 @@ nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
 nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
 nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
 
-nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
-nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
+" nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
+" nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
 
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
@@ -103,6 +103,7 @@ function! RgFzf(...)
     let rg_command = printf("rg --column --line-number --no-heading --color=always --fixed-strings '%s' %s", input, git_root)
     call fzf#vim#grep(rg_command, 1, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}))
 endfunction
-command! -bang -nargs=* Rgz call RgFzf(shellescape(<q-args>), {}, <bang>0)
 
-command! -nargs=* RGExplore call RgFzf(shellescape(<q-args>))
+" command! -bang -nargs=* Rgz call RgFzf(shellescape(<q-args>), {}, <bang>0)
+
+" command! -nargs=* RGExplore call RgFzf(shellescape(<q-args>))

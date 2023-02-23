@@ -34,3 +34,6 @@ let g:airline#extensions#tabline#show_tab_nr = 0
 let g:airline#extensions#wordcount#enabled = 0
 let g:airline_skip_empty_sections = 1
 let g:airline_exclude_preview = 0
+
+let g:airline_theme='base16_gruvbox_light_medium'
+

@@ -1,14 +1,47 @@
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeCollapse<CR>
-nnoremap <Space>f :NvimTreeFindFileToggle<CR>
+nnoremap <Space>s :NvimTreeFindFileToggle<CR>
+nnoremap <Space>f :NvimTreeToggle<CR>
 
 lua << EOF
+
+local function open_nvim_tree(data)
+  local IGNORED_FT = {
+    "markdown",
+  }
+
+  -- buffer is a real file on the disk
+  local real_file = vim.fn.filereadable(data.file) == 1
+
+  -- buffer is a [No Name]
+  local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
+
+  -- &ft
+  local filetype = vim.bo[data.buf].ft
+
+  -- only files please
+  if not real_file and not no_name then
+    return
+  end
+
+  -- skip ignored filetypes
+  if vim.tbl_contains(IGNORED_FT, filetype) then
+    return
+  end
+
+  -- open the tree but don't focus it
+  require("nvim-tree.api").tree.toggle({ focus = false })
+end
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
 require'nvim-tree'.setup {
-  disable_netrw = false, -- disables netrw completely
+  sync_root_with_cwd = true,
+  hijack_cursor = true, -- hijack the cursor in the tree to put it at the start of the filename
+  disable_netrw = true, -- disables netrw completely
   auto_reload_on_write = true,
   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
-  hijack_cursor = false, -- hijack the cursor in the tree to put it at the start of the filename
   auto_reload_on_write = true,
   prefer_startup_root = true,
   hijack_unnamed_buffer_when_opening = false,
@@ -16,7 +49,6 @@ require'nvim-tree'.setup {
     enable = true,
     auto_open = true,
   },
-  open_on_setup = true,
   open_on_tab = false,
   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
   diagnostics = {
@@ -26,7 +58,8 @@ require'nvim-tree'.setup {
     enable = true,
     -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
     -- only relevant when `update_focused_file.enable` is true
-    update_cwd = false,
+    update_cwd = true,
+    update_root = false,
   },
   git = {
     enable = true,
@@ -77,7 +110,7 @@ require'nvim-tree'.setup {
   },
   view = {
     adaptive_size = true,
-    preserve_window_proportions = false,
+    preserve_window_proportions = true,
     relativenumber = false,
     number = false,
     signcolumn = "no",
@@ -123,6 +156,12 @@ require'nvim-tree'.setup {
     always_show_folders = false,
   },
   actions = {
+    expand_all = {
+      max_folder_discovery = 50,
+      exclude = {},
+    },
+
+
     use_system_clipboard = true,
     change_dir = {
       enable = true,
@@ -143,7 +182,7 @@ require'nvim-tree'.setup {
       }
     },
   remove_file = {
-    close_window = true,
+    close_window = false,
     },
   }
 }

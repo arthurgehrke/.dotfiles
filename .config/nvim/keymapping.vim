@@ -30,7 +30,7 @@ nnoremap <C-h>   :bprevious<CR>
 
 " Edit alternate file with <leader><leader>. See `:help CTRL-^`.
 " Note: `:bprevious` is different because it "wraps around".
-nnoremap <space><space> <c-^>
+nnoremap tt <c-^><CR>
 
 " Don't jump when using * for search
 " nnoremap * *<c-o>
@@ -96,4 +96,6 @@ nnoremap <space>cp :let @" = expand("%")<cr>
 nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
+
+let g:loaded_python3_provider = 0
 

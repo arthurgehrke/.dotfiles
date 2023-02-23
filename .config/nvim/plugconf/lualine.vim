@@ -5,7 +5,7 @@ require'lualine'.setup {
     theme = 'auto',
     component_separators = '',
     section_separators = '',
-    -- disabled_types = { 'NvimTree' }
+    disabled_types = { 'NvimTree' }
   },
   sections = {
     lualine_a = {'mode'},

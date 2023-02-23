@@ -4,8 +4,6 @@ call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
   Plug 'ellisonleao/gruvbox.nvim'
   Plug 'mhinz/vim-startify'
   Plug 'folke/lsp-colors.nvim'
@@ -18,6 +16,7 @@ call plug#begin()
   Plug 'bkad/camelcasemotion'
   Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
+  Plug 'ap/vim-buftabline'
 
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'tpope/vim-fugitive'
@@ -46,13 +45,13 @@ call plug#end()
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/prettier.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
+source $HOME/.config/nvim/plugconf/buftabline.vim
 source $HOME/.config/nvim/plugconf/git-conflict.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
-source $HOME/.config/nvim/plugconf/airline.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
