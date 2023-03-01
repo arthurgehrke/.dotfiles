@@ -1,16 +1,4 @@
 " npm i -g eslint prettier eslint_d
-nmap <space>af <Plug>(ale_fix)
-nmap <space>al <Plug>(ale_lint)
-nmap <space><space>ro :ALEFix<CR>
-nmap <silent><space>ri :ALEImport<CR>
-nmap <silent><space>ral :ALEOrganizeImports<cr>
-nnoremap <space>ao :ALEOrganizeImports \| sleep 1 \| ALEFix<CR>
-nnoremap K :ALEHover<CR>
-nnoremap <space>e mF:%!eslint_d --stdin --fix-to-stdout<CR>`F
-" Autofix visual selection with eslint_d:
-vnoremap <space>e :!eslint_d --stdin --fix-to-stdout<CR>gv
-" Expand %% to directory of current buffer
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " let g:ale_javascript_eslint_executable = 'eslint_d'
 let g:ale_linters = {
@@ -53,9 +41,10 @@ let g:ale_set_loclist = 0
 let g:ale_sign_info = 0
 
 let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 0
 let g:ale_lint_delay = 100
 let g:ale_fix_on_save = 0
 let g:ale_lint_on_save = 0
 let g:ale_completion_enabled = 0
 
+let g:ale_lint_on_enter = 1
+let g:ale_fix_on_enter = 1

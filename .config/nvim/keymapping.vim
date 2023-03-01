@@ -3,9 +3,6 @@ cnoreabbrev W w
 " quit with :Q and :q
 cnoreabbrev Q q
 
-" Save as root
-" cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
-
 nnoremap <Space>h :wincmd h <cr>
 nnoremap <Space>j :wincmd j <cr>
 nnoremap <Space>k :wincmd k <cr>
@@ -16,14 +13,6 @@ nnoremap <space>ed :edit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <space>sp :split <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" TAB in general mode will move to buffer
-" nnoremap <TAB> :bnext<CR>
-" SHIFT-TAB will go back
-" nnoremap <S-TAB> :bprevious<CR>
-
 " Ctrl H and L will move to buffer
 nnoremap <C-l>   :bnext<CR>
 nnoremap <C-h>   :bprevious<CR>
@@ -32,32 +21,12 @@ nnoremap <C-h>   :bprevious<CR>
 " Note: `:bprevious` is different because it "wraps around".
 nnoremap tt <c-^><CR>
 
-" Don't jump when using * for search
-" nnoremap * *<c-o>
-
 " Better tabbing
 vnoremap < <gv
 vnoremap > >gv
 
-function! StripWhitespace()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-noremap <space>ss :call StripWhitespace()<CR>
-
 nnoremap <silent><C-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><C-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
-
-nnoremap <space>cd :NvimTreeOpen %:p:h<CR>
-nnoremap <space>dc :exec('NvimTreeOpen ' . trim(system('git rev-parse --show-toplevel')))<CR>
-"""""""""""""""""""""
-" Change to directory of current file, and then print the working
-" directory
-"""""""""""""""""""""
-nnoremap <space>cD :lcd %:p:h<CR>:pwd<CR>
 
 " Toggle relative line numbers and regular line numbers.
 nnoremap <space>tt :set relativenumber!<CR>
@@ -81,8 +50,6 @@ vnoremap <silent> # :<C-U>
   \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" get file name on clipboard
-nnoremap <space>fn :let @*=expand("%:t")<CR>
 "Opens a vertical split and switches over (\v)
 nnoremap <space>sv <C-w>vs
 "Opens a horizontal split and switches over (\v)
@@ -90,12 +57,37 @@ nnoremap <space>ss <C-w>v
 " Closes the split
 nnoremap <space>sx :close<CR>
 
-nnoremap <space>cp :let @" = expand("%")<cr>
-
 " Easy window split; C-w v -> vv, C-w - s -> ss
 nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
 
-let g:loaded_python3_provider = 0
+" lsp
+nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <space>vrr :lua vim.lsp.buf.references()<CR>
+nnoremap <space>vrh :lua vim.lsp.buf.signature_help()<CR>
+nnoremap go <c-o>
+nnoremap <space>= :lua vim.lsp.buf.formatting()<CR>
 
+" diff view
+nnoremap <space>do :DiffviewOpen<CR>
+nnoremap <space>dc :DiffviewClose<CR>
+nnoremap <space>dh :DiffviewFileHistory<CR>
+nnoremap <space>dt :DiffviewToggleFiles<CR>
+nnoremap <silent><space>doc :DiffviewFileHistory %<CR>
+
+" ale
+nmap <space>af <Plug>(ale_fix)
+nmap <space>al <Plug>(ale_lint)
+nmap <space><space>ro :ALEFix<CR>
+nmap <silent><space>ri :ALEImport<CR>
+nmap <silent><space>ral :ALEOrganizeImports<cr>
+nnoremap <space>ao :ALEOrganizeImports \| sleep 1 \| ALEFix<CR>
+nnoremap K :ALEHover<CR>
+nnoremap <space>e mF:%!eslint_d --stdin --fix-to-stdout<CR>`F
+" Autofix visual selection with eslint_d:
+vnoremap <space>e :!eslint_d --stdin --fix-to-stdout<CR>gv
+" Expand %% to directory of current buffer
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
