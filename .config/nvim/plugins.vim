@@ -11,8 +11,6 @@ call plug#begin()
   Plug 'windwp/nvim-autopairs'
 
   Plug 'lewis6991/gitsigns.nvim'
-  " Plug 'tpope/vim-fugitive'
-  " Plug 'shumphrey/fugitive-gitlab.vim'
   Plug 'akinsho/git-conflict.nvim'
   Plug 'tpope/vim-rhubarb'
   Plug 'andrewradev/linediff.vim'
@@ -27,7 +25,6 @@ call plug#begin()
   Plug 'neovim/nvim-lspconfig'
   Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
-  " Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
 call plug#end()
@@ -39,7 +36,7 @@ source $HOME/.config/nvim/plugconf/startify.lua
 source $HOME/.config/nvim/plugconf/bufferline.lua
 source $HOME/.config/nvim/plugconf/git-conflict.vim
 source $HOME/.config/nvim/plugconf/lsp.lua
-" source $HOME/.config/nvim/plugconf/null-ls.vim
+source $HOME/.config/nvim/plugconf/null-ls.lua
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/treesitter.lua
 source $HOME/.config/nvim/plugconf/gitsigns.vim

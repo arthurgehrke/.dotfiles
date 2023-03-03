@@ -36,7 +36,7 @@ return require('packer').startup(function()
   use 'nvim-tree/nvim-web-devicons'
   use 'kyazdani42/nvim-tree.lua'
   use {
-    "nvim-treesitter/nvim-treesitter",
+    'nvim-treesitter/nvim-treesitter',
     run = ":TSUpdate",
   }
   use 'ellisonleao/gruvbox.nvim'
@@ -52,7 +52,9 @@ return require('packer').startup(function()
     end,
   }
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use { 'dense-analysis/ale' }
+  use 'dense-analysis/ale' 
+  use 'jose-elias-alvarez/null-ls.nvim'
+  use 'jose-elias-alvarez/nvim-lsp-ts-utils' 
 
   -- lua with packer.nvim
   -- Put this at the end after all plugins

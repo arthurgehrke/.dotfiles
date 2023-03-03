@@ -8,12 +8,12 @@ vim.opt.termguicolors = true
 local tree_cb = require 'nvim-tree.config'.nvim_tree_callback
 
 require 'nvim-tree'.setup {
+  hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
+  auto_reload_on_write = true,
+  prefer_startup_root = true,
   sync_root_with_cwd = true,
   hijack_cursor = true, -- hijack the cursor in the tree to put it at the start of the filename
   disable_netrw = true, -- disables netrw completely
-  auto_reload_on_write = true,
-  auto_reload_on_write = true,
-  prefer_startup_root = true,
   hijack_unnamed_buffer_when_opening = true,
   open_on_tab = false,
   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
@@ -81,6 +81,7 @@ require 'nvim-tree'.setup {
     },
   },
   view = {
+    width = 30,
     adaptive_size = true,
     preserve_window_proportions = true,
     relativenumber = false,
@@ -138,12 +139,10 @@ require 'nvim-tree'.setup {
       max_folder_discovery = 50,
       exclude = {},
     },
-
     use_system_clipboard = true,
     change_dir = {
       enable = true,
       global = false,
-      -- restrict_above_cwd = false,
       restrict_above_cwd = true,
     },
     open_file = {

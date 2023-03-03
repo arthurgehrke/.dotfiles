@@ -15,6 +15,27 @@ function setTheme(theme, set_custom)
       vim.g.gruvbox_material_better_performance = 1
     end
 
+    if theme == "gruvbox" then
+      require("gruvbox").setup({
+        undercurl = true,
+        underline = true,
+        bold = true,
+        italic = false,
+        strikethrough = true,
+        invert_selection = false,
+        invert_signs = false,
+        invert_tabline = false,
+        invert_intend_guides = false,
+        inverse = true, -- invert background for search, diffs, statuslines and errors
+        contrast = "hard", -- can be "hard", "soft" or empty string
+        palette_overrides = {},
+        overrides = {},
+        -- dim_inactive = false,
+        transparent_mode = false,
+      })
+
+    end
+
     -- Nvim-Tree
     vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "#222222" })
     vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "#222222", fg = "#222222" })
@@ -38,20 +59,3 @@ end
 
 setTheme("gruvbox", true)
 
-require("gruvbox").setup({
-  undercurl = true,
-  underline = true,
-  bold = true,
-  italic = false,
-  strikethrough = true,
-  invert_selection = false,
-  invert_signs = false,
-  invert_tabline = false,
-  invert_intend_guides = false,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
-  contrast = "hard", -- can be "hard", "soft" or empty string
-  palette_overrides = {},
-  overrides = {},
-  -- dim_inactive = false,
-  transparent_mode = false,
-})

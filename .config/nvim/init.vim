@@ -9,7 +9,6 @@ source $HOME/.config/nvim/lua/colors.lua
 source $HOME/.config/nvim/lua/autocommands.lua
 source $HOME/.config/nvim/lua/plugins.lua
 source $HOME/.config/nvim/lua/options.lua
-source $HOME/.config/nvim/lua/mappings.lua
 
 set title
 set shell=$SHELL
