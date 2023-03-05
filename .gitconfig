@@ -7,12 +7,17 @@
 [github]
 	user = arthurgehrke
 [core]
+
+	pager = delta
 	editor = nvim
 	excludesfile = /Users/arthurrodrigues/.gitignore
+[interactive]
+	diffFilter = delta --color-only
 [color]
   ui = true
 [diff]
   tool = nvimdiff
+  colorMoved = default
 [difftool]
   prompt = false
 [difftool "nvim"]
@@ -31,3 +36,7 @@
 
 [url "git@gitlab.com:doare/api-v2.git"]
   insteadOf = https://gitlab.com/
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
