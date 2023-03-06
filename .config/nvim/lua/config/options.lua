@@ -32,19 +32,21 @@ opt.undofile = true
 opt.undodir = fn.stdpath("data") .. "undo"
 opt.shell = "/bin/zsh"
 opt.writebackup = false
-opt.backup = false
 opt.swapfile = false
+opt.autowrite = true
+opt.autoread = true
+opt.hidden = true
 
 -- Shorter messages
-vim.opt.shortmess:append("c")
--- opt.shortmess:append { W = true, I = true, c = true }
+opt.shortmess:append { W = true, I = true, c = true }
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 
 -- Indent Settings
-opt.shiftwidth = 4 -- Size of an indent
+opt.shiftwidth = 2 -- Size of an indent
 opt.expandtab = true -- Use spaces instead of tabs
-opt.tabstop = 4 -- Number of spaces tabs count for
+opt.tabstop = 2 -- Number of spaces tabs count for
 opt.smartindent = true -- Insert indents automatically
-opt.softtabstop = 4
+opt.softtabstop = 2
 opt.wrap = false -- Disable line wrap
 
 -- Line Numbers
@@ -52,14 +54,16 @@ opt.number = true
 opt.relativenumber = true
 
 -- Splits
-opt.splitbelow = true
 opt.splitright = true
+opt.splitbelow = true
 
 -- Clipboard
 opt.clipboard = "unnamedplus"
 
 -- Completion
 opt.completeopt = "menu,menuone,noselect"
+
+opt.sidescrolloff = 8 -- Columns of context
 
 -- Prefer ripgrep if it exists
 if fn.executable("rg") > 0 then
@@ -68,3 +72,4 @@ if fn.executable("rg") > 0 then
   opt.grepprg = "rg --vimgrep"
 end
 
+opt.showmatch = false

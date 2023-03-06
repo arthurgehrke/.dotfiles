@@ -5,42 +5,20 @@ vim.g.maplocalleader = ' ';
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
-
 vim.keymap.set('i', 'jk', '<Esc>')
 
-vim.keymap.set('n', '<leader>f', function() 
-  local ft = vim.bo.filetype
-  if ft == 'alpha' then 
-    vim.cmd('bd')
-  end
-  vim.cmd('NeoTreeFocusToggle')
-end)
 
-vim.keymap.set('n', '<leader>o', function() 
-  local ft = vim.bo.filetype
-  if ft == 'alpha' then 
-    vim.cmd('bd')
-  end
-  vim.cmd('NeoTreeFocus')
-end)
+-- vim.keymap.set("n", "<C-j>", ":wincmd j<CR>")
+-- vim.keymap.set("n", "<C-k>", ":wincmd k<CR>")
+-- vim.keymap.set("n", "<C-l>", ":wincmd l<CR>")
+-- vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
 
-vim.keymap.set("n", "<C-j>", ":wincmd j<CR>")
-vim.keymap.set("n", "<C-k>", ":wincmd k<CR>")
-vim.keymap.set("n", "<C-l>", ":wincmd l<CR>")
-vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
+vim.keymap.set("n", "<C-h>", ":bprevious<CR>", { silent = true })
+vim.keymap.set("n", "<C-l>", ":bnext<CR>", { silent = true })
+vim.keymap.set("n", "<C-q>", ":bprevious<CR>:bdelete #<CR>", { silent = true })
 
-vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
-
--- H/L to jump to the start/end of a line
-vim.keymap.set({"n", "v"}, "H", "^")
--- vim.keymap.set("v", "H", "^", { noremap = true })
-vim.keymap.set({"n", "v"}, "L", "$")
--- vim.keymap.set("v", "L", "$", { noremap = true })
-
-vim.keymap.set("n", "ss", ":wa!<cr>", { desc = "(NaaVim) Buffer: Force Write everything" })
+-- vim.keymap.set("n", "ss", ":wa!<cr>", { desc = "(NaaVim) Buffer: Force Write everything" })
 vim.keymap.set("n", "qq", ":wqa!<cr>", { desc = "(NaaVim) Buffer: Force Write and Quit everything" })
-vim.keymap.set("n", "<TAB>", ":write<cr>:bprev<cr>", { desc = "(NaaVim) Buffer: Next Tab and Write Buffer" })
-vim.keymap.set("n", "<S-TAB>", ":write<cr>:bnext<cr>", { desc = "(NaaVim) Buffer: Previous Tab and Write Buffer" })
 
 -- Manage splits
 vim.keymap.set("n", "sv", ":vsplit<cr>", { desc = "(NaaVim) Buffer: Vertical Split" })
