@@ -1,15 +1,11 @@
 nnoremap <space>so :source $HOME/.config/nvim/init.vim<cr>
 
-filetype plugin on 
-syntax on 
+syntax on " turn on syntax highlighting
+filetype plugin indent on " allow plugins to use filetype indentation
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
-source $HOME/.config/nvim/lua/colors.lua
-source $HOME/.config/nvim/lua/autocommands.lua
-source $HOME/.config/nvim/lua/plugins.lua
-source $HOME/.config/nvim/lua/options.lua
-source $HOME/.config/nvim/lua/mappings.lua
+source $HOME/.config/nvim/themes.vim
 
 set title
 set shell=$SHELL
@@ -18,7 +14,12 @@ set encoding=utf-8
 set autoread
 set hidden
 set scrolloff=2         " Keep at least 2 lines above/below
-" syntax sync minlines=256
+set lazyredraw
+syntax sync minlines=256
+" set redrawtime=10000
+" set timeoutlen=400
+" set ttimeoutlen=10
+" set updatetime=100
 
 set noswapfile
 set nobackup
@@ -26,8 +27,9 @@ set undodir=~/.vim/undodir
 set undofile
 set noincsearch
 set ignorecase
-set smartcase
+set smartcase 
 
+set nobuflisted " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber
@@ -62,10 +64,10 @@ let mapleader =" "
 let g:loaded_matchparen=1
 
 " highlight from start of file
-" autocmd BufEnter * :syntax sync fromstart
+autocmd BufEnter * :syntax sync fromstart
 
 " disable automatic comment insertion
-" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " If vim is resized, resize any splits
 autocmd VimResized * wincmd =
@@ -116,6 +118,18 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
+au BufRead,BufNewFile *.nginx set ft=nginx
+au BufRead,BufNewFile */etc/nginx/* set ft=nginx
+au BufRead,BufNewFile */usr/local/nginx/conf/* set ft=nginx
+au BufRead,BufNewFile nginx.conf set ft=nginx
+
+au BufRead,BufNewFile *.md          set ft=mkd tw=80 syntax=markdown
+au BufRead,BufNewFile *.ppmd          set ft=mkd tw=80 syntax=markdown
+au BufRead,BufNewFile *.markdown    set ft=mkd tw=80 syntax=markdown
+
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+autocmd BufRead,BufNew *scss :setlocal filetype=css
+
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy
 
@@ -137,8 +151,13 @@ noremap <Del> "_x
 " Keep cursor at the bottom of the visual selection after you yank it.
 vmap y ygv<Esc>
 
-" fzf with brew
+" fzf with brew 
 set rtp+=/opt/homebrew/opt/fzf
+
+set nolist " do not display white characters
+set noeol " show if there's no eol char
+set showbreak=↪ " character to show when line is broken
+
 
 " more natural movement with wrap on
 nnoremap j gj
@@ -146,5 +165,6 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-" lsp
-let g:completion_enable_auto_popup = 0
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv

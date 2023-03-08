@@ -1,54 +1,50 @@
 syntax on
 
 call plug#begin()
-  Plug 'folke/lsp-colors.nvim'
-
+  Plug 'kyazdani42/nvim-tree.lua'
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'nvim-lualine/lualine.nvim'
+  Plug 'ellisonleao/gruvbox.nvim'
+  Plug 'mhinz/vim-startify'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'windwp/nvim-autopairs'
-
+  Plug 'jdhao/better-escape.vim'
+  Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
-  " Plug 'tpope/vim-fugitive'
-  " Plug 'shumphrey/fugitive-gitlab.vim'
-  Plug 'akinsho/git-conflict.nvim'
-  Plug 'tpope/vim-rhubarb'
-  Plug 'andrewradev/linediff.vim'
-
   Plug 'nvim-lua/plenary.nvim'
+  Plug 'sindrets/diffview.nvim'
   Plug 'nvim-lua/popup.nvim'
+  Plug 'dense-analysis/ale'
   Plug 'galooshi/vim-import-js'
-  Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'vim-scripts/lastpos.vim'
-
-  Plug 'euclidianace/betterlua.vim'
+  Plug 'dstein64/vim-startuptime'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'neovim/nvim-lspconfig'
   Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
-  " Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
 call plug#end()
 
+source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/prettier.vim
-source $HOME/.config/nvim/plugconf/diffview.lua
-source $HOME/.config/nvim/plugconf/startify.lua
-source $HOME/.config/nvim/plugconf/bufferline.lua
-source $HOME/.config/nvim/plugconf/git-conflict.vim
-source $HOME/.config/nvim/plugconf/lsp.lua
-" source $HOME/.config/nvim/plugconf/null-ls.vim
+source $HOME/.config/nvim/plugconf/bufferline.vim
+source $HOME/.config/nvim/plugconf/diffview.vim
+source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
-source $HOME/.config/nvim/plugconf/treesitter.lua
+source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
-source $HOME/.config/nvim/plugconf/lualine.lua
+source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
-source $HOME/.config/nvim/plugconf/nvim_tree.lua
-source $HOME/.config/nvim/plugconf/better_scape.lua
+source $HOME/.config/nvim/plugconf/nvim_tree.vim
+source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
 source $HOME/.config/nvim/plugconf/vim_import_js.vim
-source $HOME/.config/nvim/plugconf/nvim-autopairs.lua
+source $HOME/.config/nvim/plugconf/nvim-autopairs.vim
