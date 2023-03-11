@@ -1,10 +1,10 @@
 let g:startify_session_dir = '~/.config/nvim/session'
 
 let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
       \ { 'type': 'sessions',  'header': ['   Sessions']       },
       \ { 'type': 'files',     'header': ['   Files']            },
-      \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
       \ ]
 
 let g:startify_change_to_vcs_root = 1

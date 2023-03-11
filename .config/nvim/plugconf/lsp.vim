@@ -2,102 +2,123 @@
 " npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
 
 lua << EOF
-local status, nvim_lsp = pcall(require, "lspconfig")
-if (not status) then return end
+require("mason").setup({
+ui = {
+    icons = {
+        package_installed = "✓",
+        package_pending = "➜",
+        package_uninstalled = "✗"
+        }
+    }
+})
+require("mason-lspconfig").setup()
 
+local lsp_formatting = function(bufnr)
+    vim.lsp.buf.format({
+        filter = function(client)
+            -- apply whatever logic you want (in this example, we'll only use null-ls)
+            return client.name == "null-ls"
+        end,
+        bufnr = bufnr,
+    })
+end
+
+local nvim_lsp = require('lspconfig')
 local protocol = require('vim.lsp.protocol')
 
-local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
-local enable_format_on_save = function(_, bufnr)
-  vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    group = augroup_format,
-    buffer = bufnr,
-    callback = function()
-      vim.lsp.buf.format({ bufnr = bufnr })
-    end,
-  })
-end
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  local opts = { silent = true, noremap = true }
 
   -- Mappings.
-  local opts = { noremap = true, silent = true }
-
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  --buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  --buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>a', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  if client.name == "tsserver" then                                                                                                   
+      client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
+  end
 end
 
--- Set up completion using nvim_cmp with LSP source
-nvim_lsp.flow.setup {
-  on_attach = on_attach
-}
+-- Set up clients
 
-nvim_lsp.tsserver.setup {
-  on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  cmd = { "typescript-language-server", "--stdio" },
-}
-
-nvim_lsp.sourcekit.setup {
-  on_attach = on_attach,
-}
-
-nvim_lsp.lua_ls.setup {
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-    enable_format_on_save(client, bufnr)
-  end,
-  settings = {
-    Lua = {
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
-      },
-
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false
-      },
+local null_ls = require("null-ls")
+null_ls.setup({
+    on_attach = custom_attach,
+    should_attach = function(bufnr)
+        local cur_ft = vim.bo[bufnr].filetype
+        return vim.tbl_contains({ "vue", "typescript", "javascript", "python", "lua" }, cur_ft)
+    end,
+    sources = {
+        --#formatters
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.eslint_d
     },
-  },
-}
+})
+
+  nvim_lsp.tsserver.setup {
+    on_attach = on_attach,
+    filetypes = { "typescript" },
+    cmd = { "typescript-language-server", "--stdio" },
+  }
+
+  nvim_lsp.lua_ls.setup {
+    on_attach = on_attach
+  }
+
+  nvim_lsp.vimls.setup {
+    on_attach = on_attach,
+    filetypes = { 
+        "vim"
+      }
+  }
+  
+  require("typescript").setup({
+    disable_commands = false, -- prevent the plugin from creating Vim commands
+    debug = false, -- enable debug logging for commands
+    server = { -- pass options to lspconfig's setup method
+        on_attach = on_attach
+    },
+})
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = false,
-  update_in_insert = false,
-  virtual_text = false,
-  loclist = false,
-  -- virtual_text = { spacing = 4, prefix = "●" },
-  severity_sort = true,
-})
+vim.lsp.diagnostic.on_publish_diagnostics, {
+    underline = false,
+    update_in_insert = true,
+    virtual_text = false,
+    loclist = false,
+    signs = false,
+    -- virtual_text = { spacing = 4, prefix = "●" },
+    severity_sort = true,
+  }
+)
 
 -- Show line diagnostics automatically in hover window
 vim.o.updatetime = 250
-
--- Diagnostic symbols in the sign column (gutter)
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
-
 EOF
 
 let g:completion_enable_auto_popup = 0
 
-nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <space>vrr :lua vim.lsp.buf.references()<CR>
-nnoremap <space>vrh :lua vim.lsp.buf.signature_help()<CR>
 nnoremap go <c-o>
-nnoremap <space>= :lua vim.lsp.buf.formatting()<CR>

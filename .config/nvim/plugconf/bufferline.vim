@@ -1,6 +1,7 @@
 lua <<EOF
 require('bufferline').setup {
   options = {
+    -- mode                        = 'buffers',
     numbers                      = "ordinal", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
     close_command                = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
     right_mouse_command          = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
@@ -28,8 +29,9 @@ require('bufferline').setup {
     -- can also be a table containing 2 custom separators
     -- [focused and unfocused]. eg: { '|', '|' }
     separator_style              = "thin",
-    enforce_regular_tabs         = true,
     always_show_bufferline       = true,
+    enforce_regular_tabs         = true,
+    sort_by = 'insert_at_end' -- 'insert_after_current' |'insert_at_end' | 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs' | function(buffer_a, buffer_b)
   },
 }
 EOF

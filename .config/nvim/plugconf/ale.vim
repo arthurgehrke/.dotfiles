@@ -5,7 +5,6 @@ nmap <space><space>ro :ALEFix<CR>
 nmap <silent><space>ri :ALEImport<CR>
 nmap <silent><space>ral :ALEOrganizeImports<cr>
 nnoremap <space>ao :ALEOrganizeImports \| sleep 1 \| ALEFix<CR>
-nnoremap K :ALEHover<CR>
 nnoremap <space>e mF:%!eslint_d --stdin --fix-to-stdout<CR>`F
 " Autofix visual selection with eslint_d:
 vnoremap <space>e :!eslint_d --stdin --fix-to-stdout<CR>gv

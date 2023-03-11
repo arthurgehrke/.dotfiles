@@ -23,19 +23,26 @@ call plug#begin()
   Plug 'vim-scripts/lastpos.vim'
   Plug 'dstein64/vim-startuptime'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'neovim/nvim-lspconfig'
   Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
+  Plug 'tpope/vim-fugitive'
+  Plug 'shumphrey/fugitive-gitlab.vim'
+  Plug 'williamboman/mason.nvim'
+  Plug 'williamboman/mason-lspconfig.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'jose-elias-alvarez/null-ls.nvim'
+  Plug 'jose-elias-alvarez/typescript.nvim'
+  Plug 'mhartington/formatter.nvim'
 call plug#end()
 
+source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
 source $HOME/.config/nvim/plugconf/prettier.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
-source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim

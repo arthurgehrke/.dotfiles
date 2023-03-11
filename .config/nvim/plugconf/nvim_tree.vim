@@ -160,8 +160,6 @@ require'nvim-tree'.setup {
       max_folder_discovery = 50,
       exclude = {},
     },
-
-
     use_system_clipboard = true,
     change_dir = {
       enable = true,

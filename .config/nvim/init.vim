@@ -7,7 +7,6 @@ source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
-set title
 set shell=$SHELL
 set clipboard+=unnamedplus
 set encoding=utf-8
@@ -56,6 +55,7 @@ set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
 set noerrorbells
 set backspace=indent,eol,start
+set noshowmatch
 highlight clear SignColumn
 
 let mapleader =" "
@@ -89,8 +89,6 @@ function! FourSpacesStyle()
   set softtabstop=-1
   set shiftwidth=4
   set expandtab
-  " set backspace=indent,eol,start
-  " set indentexpr=-1
 endfunction
 
 function! TwoSpacesStyle()
@@ -118,16 +116,12 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
-au BufRead,BufNewFile *.nginx set ft=nginx
-au BufRead,BufNewFile */etc/nginx/* set ft=nginx
-au BufRead,BufNewFile */usr/local/nginx/conf/* set ft=nginx
-au BufRead,BufNewFile nginx.conf set ft=nginx
-
 au BufRead,BufNewFile *.md          set ft=mkd tw=80 syntax=markdown
 au BufRead,BufNewFile *.ppmd          set ft=mkd tw=80 syntax=markdown
 au BufRead,BufNewFile *.markdown    set ft=mkd tw=80 syntax=markdown
 
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd BufRead,BufNew *scss :setlocal filetype=css
 
 " Prevent selecting and pasting from overwriting what you originally copied.
@@ -154,17 +148,8 @@ vmap y ygv<Esc>
 " fzf with brew 
 set rtp+=/opt/homebrew/opt/fzf
 
-set nolist " do not display white characters
-set noeol " show if there's no eol char
-set showbreak=↪ " character to show when line is broken
-
-
 " more natural movement with wrap on
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-
-" Reselect visual block after indent/outdent
-vnoremap < <gv
-vnoremap > >gv
