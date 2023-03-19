@@ -8,6 +8,7 @@ source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $INCLUDES/z/z.sh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 source $HOME/.themes/zsh/.p10k.zsh
