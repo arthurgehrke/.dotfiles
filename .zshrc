@@ -8,15 +8,11 @@ source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $INCLUDES/z/z.sh
 
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
 source $HOME/.themes/zsh/.p10k.zsh
 
 autoload -U add-zsh-hook
-
-# add-zsh-hook chpwd load-nvmrc
-# load-nvmrc
 
 # Plugins configs
 source $HOME/zshrc/completions.zsh
@@ -26,7 +22,6 @@ source $HOME/.shell_aliases
 source $HOME/.shell_scripts
 
 source $HOME/.fzf.zsh
-source $HOME/.fzf-functions.zsh
 
 source $HOME/.zprofile
 
