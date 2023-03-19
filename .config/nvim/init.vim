@@ -1,4 +1,5 @@
-nnoremap <space>so :source $HOME/.config/nvim/init.vim<cr>
+" nnoremap <space>so :source $HOME/.config/nvim/init.vim<cr>
+nnoremap <silent> <space>so :source $MYVIMRC<bar>echo "reloaded vimrc"<cr>
 
 syntax on " turn on syntax highlighting
 filetype plugin indent on " allow plugins to use filetype indentation

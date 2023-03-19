@@ -15,6 +15,9 @@ let g:fzf_colors = {
   \ 'header': ['fg', 'Comment']
   \ }
 
+" Enable history
+let g:fzf_history_dir = '~/.cache/fzf/history'
+
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
 let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
@@ -28,8 +31,6 @@ endfunction
 
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(s:find_git_root(), fzf#vim#with_preview('right:50%'), <bang>0)
 
-command! -bang -nargs=* RG call fzf#vim#grep("rg --column --line-number --no-heading --hidden -g '!.git/' --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview({'dir': s:find_git_root()}, 'right:50%'), <bang>0)
-
 " Ripgrep advanced
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always -g "!{*.lock,*-lock.json}" --smart-case %s || true --glob "!.git/*"'
@@ -38,6 +39,7 @@ function! RipgrepFzf(query, fullscreen)
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command], 'dir': s:find_git_root()}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
+
 command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
 command! -bang -nargs=* RgSimple
@@ -65,23 +67,17 @@ function! FZFOpen(cmd)
     exe a:cmd
 endfunction
 
-command! -bang -nargs=* LinesWithPreview
-    \ call fzf#vim#grep(
-    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-    \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'down:40%', '?'),
-    \   1)
-
 let g:fzf_action = {
   \ 'ctrl-T': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-nnoremap <silent> <C-p> :call FZFOpen(":Files")<CR>
-nnoremap <silent> <space>; :call FZFOpen(":Rg")<CR>
-nnoremap <silent> <space>gs :call FZFOpen(':Rg ' . expand('<cword>'))<CR>
 
-" nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
-" nnoremap <space>fp :call fzf#vim#files('', {'options':'--query '.''.substitute(expand('<cfile>'), '^\.\/', '', '')})<CR>
+nnoremap <silent><space>ps :Rg<SPACE>
+nnoremap <silent> <C-g> :GFiles<CR>
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <space>; :Rg<CR>
+nnoremap <silent> <space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
 
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
@@ -97,13 +93,8 @@ endfunction
 
 command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
 
-function! RgFzf(...)
-    let input = input('Enter expression: ')
-    let git_root = system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-    let rg_command = printf("rg --column --line-number --no-heading --color=always --fixed-strings '%s' %s", input, git_root)
-    call fzf#vim#grep(rg_command, 1, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}))
-endfunction
-
-" command! -bang -nargs=* Rgz call RgFzf(shellescape(<q-args>), {}, <bang>0)
-
-" command! -nargs=* RGExplore call RgFzf(shellescape(<q-args>))
+command! FZFMru call fzf#run({
+\  'source':  v:oldfiles,
+\  'sink':    'e',
+\  'options': '-m -x +s',
+\  'down':    '40%'})

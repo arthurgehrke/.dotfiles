@@ -2,6 +2,15 @@
 " npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
 
 lua << EOF
+local lsp_servers = {
+  'cssls',
+  'html',
+  'jsonls',
+  'pyright',
+  'tailwindcss',
+  'tsserver',
+}
+
 require("mason").setup({
 ui = {
     icons = {
@@ -11,7 +20,10 @@ ui = {
         }
     }
 })
-require("mason-lspconfig").setup()
+require('mason-lspconfig').setup({
+  ensure_insatlled = lsp_servers,
+  automatic_installation = true,
+})
 
 local lsp_formatting = function(bufnr)
     vim.lsp.buf.format({
@@ -28,7 +40,7 @@ local protocol = require('vim.lsp.protocol')
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
-  local on_attach = function(client, bufnr)
+local on_attach = function(client, bufnr)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -52,10 +64,14 @@ local protocol = require('vim.lsp.protocol')
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<space>a', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  buf_set_keymap('n', '<space>aa', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 
   if client.name == "tsserver" then                                                                                                   
       client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
+      buf_set_keymap('n', '<space>zal', '<cmd>TypescriptAddMissingImports<CR>', opts)
+      buf_set_keymap('n', '<space>lak', '<cmd>TypescriptOrganizeImports<CR>', opts)
+      buf_set_keymap('n', '<F2>', '<cmd>TypescriptRenameFile<CR>', opts)
   end
 end
 
@@ -63,7 +79,7 @@ end
 
 local null_ls = require("null-ls")
 null_ls.setup({
-    on_attach = custom_attach,
+    on_attach = on_attach,
     should_attach = function(bufnr)
         local cur_ft = vim.bo[bufnr].filetype
         return vim.tbl_contains({ "vue", "typescript", "javascript", "python", "lua" }, cur_ft)
@@ -72,7 +88,8 @@ null_ls.setup({
         --#formatters
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.eslint_d
+        null_ls.builtins.formatting.eslint_d,
+        require("typescript.extensions.null-ls.code-actions")
     },
 })
 

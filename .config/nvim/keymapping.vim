@@ -9,12 +9,15 @@ nnoremap <space>sp :split <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 
 " Ctrl H and L will move to buffer
-nnoremap <C-l>   :bnext<CR>
-nnoremap <C-h>   :bprevious<CR>
+" nnoremap <C-l>   :bnext<CR>
+" nnoremap <C-h>   :bprevious<CR>
+nnoremap <silent><C-l> :BufferLineCycleNext<CR>
+nnoremap <silent><C-h> :BufferLineCyclePrev<CR>
 
 " Edit alternate file with <leader><leader>. See `:help CTRL-^`.
 " Note: `:bprevious` is different because it "wraps around".
-nnoremap tt <c-^><CR>
+" nnoremap tt <c-^><CR>
+nnoremap <silent> tt <c-^><cr>
 
 " Better tabbing
 vnoremap < <gv

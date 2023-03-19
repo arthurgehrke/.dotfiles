@@ -7,6 +7,7 @@
    set termguicolors
  endif
 
+nnoremap <silent> <leader>p :execute ':FZF '.trim(system('git rev-parse --show-toplevel 2> /dev/null'))<cr>
 " gruvbox
 syntax on
 " colorscheme gruvbox-baby

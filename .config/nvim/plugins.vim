@@ -40,6 +40,7 @@ call plug#end()
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
+source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/prettier.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
