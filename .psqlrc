@@ -1,1 +1,25 @@
-\x on
+\set QUIET
+\encoding unicode
+
+-- expanded: extended display
+-- Values: auto, on, off
+\x auto
+
+-- format: output format.
+-- Values: unaligned, aligned, wrapped, html, asciidoc, latex, latex-longtable, 
+--         troff-ms
+\pset format aligned
+
+\set poff '\\pset pager off'
+\set less '\\pset pager on\n\\setenv PAGER less'
+\set pspg '\\pset pager on\n\\setenv PAGER \'pspg -bX\''
+
+\pset pager off
+\pset null 'NULL'
+\pset format wrapped
+\pset linestyle unicode
+\pset border 1
+\set HISTFILE ~/.psql_history- :DBNAME
+-- linestyle: border drawing style.
+-- Values: ascii, old-ascii, unicode
+\pset linestyle ascii
