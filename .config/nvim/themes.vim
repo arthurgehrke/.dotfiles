@@ -7,7 +7,6 @@
    set termguicolors
  endif
 
-nnoremap <silent> <leader>p :execute ':FZF '.trim(system('git rev-parse --show-toplevel 2> /dev/null'))<cr>
 " gruvbox
 syntax on
 " colorscheme gruvbox-baby
@@ -17,7 +16,12 @@ require("gruvbox").setup({
   undercurl = true,
   underline = true,
   bold = true,
-  italic = false,
+  italic = {
+    strings = false,
+    comments = false,
+    operators = false,
+    folds = false,
+  },
   strikethrough = true,
   invert_selection = false,
   invert_signs = false,

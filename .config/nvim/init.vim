@@ -29,7 +29,8 @@ set noincsearch
 set ignorecase
 set smartcase 
 
-set nobuflisted " buffer unlisted but still visible on screen
+" set nobuflisted " buffer unlisted but still visible on screen
+set hidden " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber

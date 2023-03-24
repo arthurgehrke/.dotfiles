@@ -12,7 +12,7 @@
 [color]
   ui = true
 [diff]
-  tool = nvimdiff
+	tool = nvimdiff
 [difftool]
   prompt = false
 [difftool "nvim"]

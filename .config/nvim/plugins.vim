@@ -11,7 +11,7 @@ call plug#begin()
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
-  Plug 'windwp/nvim-autopairs'
+  " Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
   Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
@@ -35,12 +35,12 @@ call plug#begin()
   Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'jose-elias-alvarez/typescript.nvim'
   Plug 'mhartington/formatter.nvim'
+  Plug 'samoshkin/vim-mergetool'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/vimcommentary.vim
-source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/prettier.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
@@ -55,4 +55,4 @@ source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
 source $HOME/.config/nvim/plugconf/vim_import_js.vim
-source $HOME/.config/nvim/plugconf/nvim-autopairs.vim
+" source $HOME/.config/nvim/plugconf/nvim-autopairs.vim

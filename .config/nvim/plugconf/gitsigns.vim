@@ -27,6 +27,7 @@ require('gitsigns').setup{
     relative_time = false
   },
   sign_priority = 6,
+  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
   update_debounce = 100,
   status_formatter = nil, -- Use default
   max_file_length = 40000,
@@ -83,3 +84,5 @@ require('gitsigns').setup{
 }
 EOF
 map <Space>gt :Gitsigns toggle_signs<CR>
+" vimscript
+command! DiffviewFile execute("DiffviewOpen -- " . expand("%")) | DiffviewToggleFiles
