@@ -135,6 +135,13 @@ elif [[ -f /etc/DIR_COLORS ]] ; then
 fi
 
 setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
+
+# enable ctrl R to search history
+bindkey '^r' history-incremental-search-backward
+bindkey '^h' beginning-of-line
+bindkey '^l' end-of-line
+# Also fix annoying vi backspace
+bindkey '^?' backward-delete-char
 ##############################################################################
 # History
 ##############################################################################
@@ -195,6 +202,8 @@ zmodload zsh/complist
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^I' menu-complete
 bindkey '^I'   complete-word       # tab          | complete
+bindkey "[D" backward-word
+bindkey "[C" forward-word
 
 # zstyle ':completion:*' insert-tab true
 

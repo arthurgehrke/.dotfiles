@@ -219,8 +219,7 @@ EOF
 
 nnoremap <silent>vdo :DiffviewOpen<CR>
 nnoremap <silent>vdc :DiffviewClose<CR>
-nnoremap  <silent>vdf :DiffviewFileHistory<CR>
+nnoremap <silent>vdf :DiffviewFileHistory<CR>
 nnoremap <silent>vdt :DiffviewToggleFiles<CR>
 nnoremap <silent>vdh :DiffviewFileHistory %<CR>
-
 
