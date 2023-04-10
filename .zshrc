@@ -142,6 +142,8 @@ bindkey '^h' beginning-of-line
 bindkey '^l' end-of-line
 # Also fix annoying vi backspace
 bindkey '^?' backward-delete-char
+bindkey '^b' backward-word
+bindkey 'ˆe' forward-word
 ##############################################################################
 # History
 ##############################################################################
@@ -202,8 +204,6 @@ zmodload zsh/complist
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^I' menu-complete
 bindkey '^I'   complete-word       # tab          | complete
-bindkey "[D" backward-word
-bindkey "[C" forward-word
 
 # zstyle ':completion:*' insert-tab true
 
@@ -239,4 +239,3 @@ export BAT_THEME="gruvbox-dark"
 
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
-
