@@ -50,7 +50,8 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<C-w><C-]>', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -63,6 +64,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>aa', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   if client.name == "tsserver" then                                                                                                   
       client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
@@ -71,6 +73,64 @@ local on_attach = function(client, bufnr)
       buf_set_keymap('n', '<F2>', '<cmd>TypescriptRenameFile<CR>', opts)
   end
 end
+
+-- capabilities
+local cmp = require'cmp'
+cmp.setup({
+    preselect = cmp.PreselectMode.None,
+
+    window = {
+      completion = cmp.config.window.bordered({ winhighlight = 'Normal:Normal,FloatBorder:Comment,CursorLine:Visual,Search:None' }),
+      documentation = cmp.config.window.bordered({ winhighlight = 'Normal:Normal,FloatBorder:Comment,CursorLine:Visual,Search:None' }),
+    },
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+      end,
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-a>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'nvim_lsp_signature_help' },
+      { name = 'path' },
+      { name = 'vsnip' },
+    }, {
+      { name = 'buffer' },
+    }),
+  })
+
+function setAutoCmp(mode)
+  if mode then
+    cmp.setup({
+      completion = {
+        autocomplete = { require('cmp.types').cmp.TriggerEvent.TextChanged }
+      }
+    })
+  else
+    cmp.setup({
+      completion = {
+        autocomplete = false
+      }
+    })
+  end
+end
+setAutoCmp(false)
+
+-- enable automatic completion popup on typing
+vim.cmd('command! AutoCmpOn lua setAutoCmp(true)')
+-- disable automatic competion popup on typing
+vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Set up clients
 
@@ -113,6 +173,7 @@ null_ls.setup({
     server = { -- pass options to lspconfig's setup method
         on_attach = on_attach
     },
+    capabilities = capabilities
 })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -136,3 +197,9 @@ let g:completion_enable_auto_popup = 0
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap go <c-o>
+
+
+
+set completeopt=menu,preview,menuone,noselect
+" set completeopt=menuone,noinsert,noselect
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']

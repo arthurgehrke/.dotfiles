@@ -36,6 +36,16 @@ call plug#begin()
   Plug 'jose-elias-alvarez/typescript.nvim'
   Plug 'mhartington/formatter.nvim'
   Plug 'samoshkin/vim-mergetool'
+  Plug 'airblade/vim-gitgutter'
+
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
@@ -56,4 +66,5 @@ source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
 source $HOME/.config/nvim/plugconf/vim_import_js.vim
+source $HOME/.config/nvim/plugconf/gitgutter.vim
 " source $HOME/.config/nvim/plugconf/nvim-autopairs.vim
