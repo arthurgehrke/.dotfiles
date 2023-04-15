@@ -4,8 +4,9 @@ call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
-  Plug 'ellisonleao/gruvbox.nvim'
-  Plug 'mhinz/vim-startify'
+  " Plug 'ellisonleao/gruvbox.nvim'
+  Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+  Plug 'morhetz/gruvbox'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'lukas-reineke/indent-blankline.nvim'
@@ -67,4 +68,5 @@ source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/ale.vim
 source $HOME/.config/nvim/plugconf/vim_import_js.vim
 source $HOME/.config/nvim/plugconf/gitgutter.vim
+source $HOME/.config/nvim/plugconf/whichkey.vim
 " source $HOME/.config/nvim/plugconf/nvim-autopairs.vim

@@ -50,12 +50,9 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<C-w><C-]>', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gtd', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
@@ -64,13 +61,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>aa', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>od', ':lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', 'snd', ':lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', 'spd', ':lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', 'lua: vim.lsp.buf.signature_help<CR>', opts)
 
   if client.name == "tsserver" then                                                                                                   
       client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
       buf_set_keymap('n', '<space>zal', '<cmd>TypescriptAddMissingImports<CR>', opts)
       buf_set_keymap('n', '<space>lak', '<cmd>TypescriptOrganizeImports<CR>', opts)
       buf_set_keymap('n', '<F2>', '<cmd>TypescriptRenameFile<CR>', opts)
+      buf_set_keymap('n', 'sd', '<cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
+      buf_set_keymap('n', 'vsd', '<cmd>:vsplit<cr><cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
   end
 end
 
@@ -136,6 +138,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local null_ls = require("null-ls")
 null_ls.setup({
+    autostart = true,
     on_attach = on_attach,
     should_attach = function(bufnr)
         local cur_ft = vim.bo[bufnr].filetype
@@ -143,37 +146,61 @@ null_ls.setup({
     end,
     sources = {
         --#formatters
-        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.prettier.with({
+          prefer_local = "node_modules/.bin",
+        }),
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.eslint_d,
-        require("typescript.extensions.null-ls.code-actions")
+        -- require("typescript.extensions.null-ls.code-actions")
     },
 })
 
   nvim_lsp.tsserver.setup {
+    init_options = {
+      preferences = {
+        importModuleSpecifierPreference = "non-relative"
+      }
+    },
+     go_to_source_definition = {
+      fallback = true, -- fall back to standard LSP definition on failure
+    },
+    autostart = true,
     on_attach = on_attach,
-    filetypes = { "typescript" },
+    filetypes = { "typescript", "javascript" },
     cmd = { "typescript-language-server", "--stdio" },
   }
 
   nvim_lsp.lua_ls.setup {
+    autostart = true,
     on_attach = on_attach
   }
 
   nvim_lsp.vimls.setup {
+    autostart = true,
     on_attach = on_attach,
     filetypes = { 
         "vim"
       }
   }
   
-  require("typescript").setup({
-    disable_commands = false, -- prevent the plugin from creating Vim commands
-    debug = false, -- enable debug logging for commands
-    server = { -- pass options to lspconfig's setup method
-        on_attach = on_attach
-    },
-    capabilities = capabilities
+require("typescript").setup({
+  init_options = {
+    preferences = {
+      importModuleSpecifierPreference = "non-relative"
+    }
+  },
+  disable_commands = false, -- prevent the plugin from creating Vim commands
+  debug = false, -- enable debug logging for commands
+  server = { -- pass options to lspconfig's setup method
+      on_attach = on_attach
+  },
+  capabilities = capabilities,
+  vim.keymap.set(
+							'n',
+							'<leader>gD',
+							'<cmd>TypescriptGoToSourceDefinition<cr>',
+							{ buffer = buffer, desc = 'Go To Source Definition' }
+						)
 })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -192,14 +219,13 @@ vim.lsp.diagnostic.on_publish_diagnostics, {
 vim.o.updatetime = 250
 EOF
 
-let g:completion_enable_auto_popup = 0
-
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> vd <cmd>vim.diagnostic.open_float()<CR>
 nnoremap go <c-o>
 
-
-
+" compe
+let g:completion_enable_auto_popup = 0
 set completeopt=menu,preview,menuone,noselect
 " set completeopt=menuone,noinsert,noselect
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
