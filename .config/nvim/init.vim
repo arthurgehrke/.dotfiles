@@ -14,7 +14,10 @@ set autoread
 set hidden
 set scrolloff=2         " Keep at least 2 lines above/below
 set lazyredraw
-syntax sync minlines=256
+" syntax sync minlines=256
+set bufhidden=hide
+set nobuflisted
+
 " set redrawtime=10000
 " set timeoutlen=400
 " set ttimeoutlen=10
@@ -26,9 +29,9 @@ set undodir=~/.vim/undodir
 set undofile
 set noincsearch
 set ignorecase
-set smartcase 
+set smartcase
 
-" set nobuflisted " buffer unlisted but still visible on screen
+set nofixendofline "avoid empty line in the end
 set hidden " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
@@ -146,11 +149,24 @@ noremap <Del> "_x
 " Keep cursor at the bottom of the visual selection after you yank it.
 vmap y ygv<Esc>
 
-" fzf with brew 
+" fzf with brew
 set rtp+=/opt/homebrew/opt/fzf
 
-" more natural movement with wrap on
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+" let g:loaded_python3_provider = 0
+
+if has('nvim')
+  let s:pyenv = ''
+  if exists( '$PYENV_ROOT' )
+    let s:pyenv = $PYENV_ROOT
+  elseif isdirectory( expand( '$HOME/.pyenv'))
+    let s:pyenv = expand('$HOME/.pyenv')
+  endif
+  if !empty(s:pyenv)
+    if isdirectory(s:pyenv . '/versions/nvim2')
+      let g:python_host_prog=s:pyenv . 'versions/nvim2/bin/python'
+    endif
+    if isdirectory(s:pyenv . '/versions/nvim3')
+      let g:python3_host_prog=s:pyenv . '/versions/nvim3/bin/python'
+    endif
+  endif
+endif

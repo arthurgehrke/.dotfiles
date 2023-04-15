@@ -58,9 +58,13 @@ nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
 
-let g:loaded_python3_provider = 0
-
 " quit quick fix window
 nnoremap <expr> q
       \ &l:filetype ==# 'qf' ? '<Cmd>cclose<CR>' :
       \ '$'->winnr() != 1 ? '<Cmd>close<CR>' : ''
+
+" more natural movement with wrap on
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk

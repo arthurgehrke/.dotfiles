@@ -1,3 +1,6 @@
+autocmd! FileType fzf
+autocmd  FileType fzf set noshowmode noruler nonu
+
 let g:fzf_buffers_jump = 1
 let g:fzf_colors = {
   \ 'fg': ['fg', 'Normal'],
@@ -19,11 +22,8 @@ let g:fzf_colors = {
 let g:fzf_history_dir = '~/.cache/fzf/history'
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
-let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
+let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
-
-autocmd! FileType fzf
-autocmd  FileType fzf set noshowmode noruler nonu
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -42,20 +42,6 @@ endfunction
 
 command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
-command! -bang -nargs=* RgSimple
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case -g "!{*.lock,*-lock.json}" '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview({'dir': s:find_git_root()}, 'up:40%')
-  \           : fzf#vim#with_preview({'dir': s:find_git_root()}, 'right:50%:hidden', '?'),
-\ <bang>0)
-
-" Git grep
-command! -bang -nargs=* GGrep
-  \ call fzf#vim#grep(
-  \   'git grep --line-number '.shellescape(<q-args>), 0,
-  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)l
-
-
 " Prevent FZF commands from opening in none modifiable buffers
 function! FZFOpen(cmd)
     " If more than 1 window, and buffer is not modifiable or file type is
@@ -73,11 +59,11 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 
-nnoremap <silent><space>ps :Rg<SPACE>
-nnoremap <silent> <C-g> :GFiles<CR>
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <space>; :Rg<CR>
-nnoremap <silent> <space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
+nnoremap <silent><space>; :Rg<CR>
+nnoremap <silent><space>ps :Ag<CR>
+nnoremap <silent><C-g> :GFiles<CR>
+nnoremap <silent><C-p> :Files<CR>
+nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
 
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
@@ -93,8 +79,4 @@ endfunction
 
 command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
 
-command! FZFMru call fzf#run({
-\  'source':  v:oldfiles,
-\  'sink':    'e',
-\  'options': '-m -x +s',
-\  'down':    '40%'})
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
