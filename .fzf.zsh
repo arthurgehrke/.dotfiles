@@ -18,7 +18,4 @@ export FZF_DEFAULT_OPTS="
 --layout=reverse 
 "
 
-bat() {
-    BAT_PAGER='less-rs /dev/stdin' command bat --terminal-width="$(($COLUMNS - 4))" "$@"
-    return $?
-}
+export BAT_PAGER="less -RF"
