@@ -9,10 +9,12 @@
 [core]
 	editor = nvim
 	excludesfile = /Users/arthurrodrigues/.gitignore
+	autocrlf = off
 [color]
   ui = true
 [diff]
 	tool = nvimdiff
+  ignoreAllSpace = true
 [difftool]
   prompt = true
 [difftool "nvimdiff"]

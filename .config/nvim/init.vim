@@ -152,21 +152,19 @@ vmap y ygv<Esc>
 " fzf with brew
 set rtp+=/opt/homebrew/opt/fzf
 
-" let g:loaded_python3_provider = 0
-
-if has('nvim')
-  let s:pyenv = ''
-  if exists( '$PYENV_ROOT' )
-    let s:pyenv = $PYENV_ROOT
-  elseif isdirectory( expand( '$HOME/.pyenv'))
-    let s:pyenv = expand('$HOME/.pyenv')
-  endif
-  if !empty(s:pyenv)
-    if isdirectory(s:pyenv . '/versions/nvim2')
-      let g:python_host_prog=s:pyenv . 'versions/nvim2/bin/python'
-    endif
-    if isdirectory(s:pyenv . '/versions/nvim3')
-      let g:python3_host_prog=s:pyenv . '/versions/nvim3/bin/python'
-    endif
-  endif
+if has('mac')
+    " To setup Python for plugins that need it...
+    " $ brew install python
+    " $ brew install python3
+    " $ pip2 install neovim --upgrade
+    " $ pip3 install neovim --upgrade
+    let g:python_host_prog='/usr/local/bin/python'
+    let g:python3_host_prog='/usr/local/bin/python3'
 endif
+
+" Switch CWD to the directory of the open buffer
+map <space>cd :cd %:p:h<cr>:pwd<cr>
+
+lua <<EOF
+vim.g.editorconfig = false
+EOF
