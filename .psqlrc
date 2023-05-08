@@ -1,9 +1,28 @@
+\set AUTOCOMMIT OFF
 \set QUIET
 \encoding unicode
+
+-- Separate history file per-database
+\set HISTFILE ~/.psql_history :DBNAME
+\set HISTCONTROL ignorespace
+-- Ignore repeated commands in history
+\set HISTCONTROL ignoredups
+\set HISTSIZE 10000
+
+\timing
+\set PROMPT1 '(%n@%M:%>) [%/] > '
+\set PROMPT2 ''
+
+-- Autocomplete sel[tab] to SELECT
+\set COMP_KEYWORD_CASE upper
+\set ON_ERROR_STOP on
+\set ON_ERROR_ROLLBACK on
+\set VERBOSITY verbose
 
 -- expanded: extended display
 -- Values: auto, on, off
 \x auto
+\set VERBOSITY verbose
 
 -- format: output format.
 -- Values: unaligned, aligned, wrapped, html, asciidoc, latex, latex-longtable, 
@@ -15,11 +34,10 @@
 \set pspg '\\pset pager on\n\\setenv PAGER \'pspg -bX\''
 
 \pset pager off
-\pset null 'NULL'
+\pset null '<null>'
 \pset format wrapped
 \pset linestyle unicode
 \pset border 1
-\set HISTFILE ~/.psql_history- :DBNAME
 -- linestyle: border drawing style.
 -- Values: ascii, old-ascii, unicode
 \pset linestyle ascii
