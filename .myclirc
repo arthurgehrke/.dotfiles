@@ -70,8 +70,9 @@ wider_completion_menu = False
 # \A - DSN alias name (from the [alias_dsn] section)
 # \u - Username
 # \x1b[...m - insert ANSI escape sequence
-prompt = '\t \u@\h:\d> '
-prompt_continuation = '->'
+prompt = '\t \u@\h:\d\n→ '
+prompt_continuation = '→ '
+
 
 # Skip intro info on startup and outro info on exit
 less_chatty = False
@@ -81,13 +82,13 @@ login_path_as_host = False
 
 # Cause result sets to be displayed vertically if they are too wide for the current window,
 # and using normal tabular format otherwise. (This applies to statements terminated by ; or \G.)
-auto_vertical_output = False
+auto_vertical_output = true
 
 # keyword casing preference. Possible values "lower", "upper", "auto"
 keyword_casing = auto
 
 # disabled pager on startup
-enable_pager = True
+enable_pager = False
 
 # Choose a specific pager
 pager = 'less'

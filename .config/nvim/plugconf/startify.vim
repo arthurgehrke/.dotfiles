@@ -5,11 +5,12 @@ let g:startify_lists = [
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
       \ { 'type': 'sessions',  'header': ['   Sessions']       },
       \ { 'type': 'files',     'header': ['   Files']            },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
       \ ]
 
 let g:startify_change_to_vcs_root = 1
 let g:startify_change_to_dir = 1
-let g:startify_session_persistence = 0
+let g:startify_session_persistence = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_enable_special = 0
 
@@ -18,4 +19,12 @@ let g:startify_bookmarks = [
 \ {'t': '~/.tmux.conf'},
 \ {'r': '~/repositores/doare/'},
 \ {'p': '~/.config/nvim/init.vim'},
+\ {'s': '~/.config/nvim/plugconf'},
 \ ]
+
+let g:startify_commands = [
+\ { 'i': [ 'Install PLugins', ':PlugInstall' ] },
+\ { 'u': [ 'Update PLugins', ':PlugUpdate' ] },
+\ { 'u': [ 'Check Health', ':checkhealth' ] },
+\ ]
+

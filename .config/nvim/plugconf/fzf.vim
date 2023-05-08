@@ -61,7 +61,6 @@ let g:fzf_action = {
 
 nnoremap <silent><space>; :Rg<CR>
 nnoremap <silent><space>ps :Ag<CR>
-nnoremap <silent><C-g> :GFiles<CR>
 nnoremap <silent><C-p> :Files<CR>
 nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
 

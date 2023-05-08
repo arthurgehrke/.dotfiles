@@ -57,6 +57,7 @@ vnoremap <silent> # :<C-U>
 nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
+nnoremap <silent> sd :bd<CR>
 
 " quit quick fix window
 nnoremap <expr> q
@@ -68,3 +69,15 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
+" copy current file name (relative/absolute) to system clipboard
+if has("mac") || has("gui_macvim") || has("gui_mac")
+  " relative path  (src/foo.txt)
+  nnoremap <space>cf :let @*=expand("%")<CR>
+  " absolute path  (/something/src/foo.txt)
+  nnoremap <space>cF :let @*=expand("%:p")<CR>
+  " filename       (foo.txt)
+  nnoremap <space>ct :let @*=expand("%:t")<CR>
+  " directory name (/something/src)
+  nnoremap <space>ch :let @*=expand("%:p:h")<CR>
+endif

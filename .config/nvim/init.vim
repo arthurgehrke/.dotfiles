@@ -14,14 +14,8 @@ set autoread
 set hidden
 set scrolloff=2         " Keep at least 2 lines above/below
 set lazyredraw
-" syntax sync minlines=256
 set bufhidden=hide
 set nobuflisted
-
-" set redrawtime=10000
-" set timeoutlen=400
-" set ttimeoutlen=10
-" set updatetime=100
 
 set noswapfile
 set nobackup
@@ -29,7 +23,6 @@ set undodir=~/.vim/undodir
 set undofile
 set noincsearch
 set ignorecase
-set smartcase
 
 set nofixendofline "avoid empty line in the end
 set hidden " buffer unlisted but still visible on screen
@@ -162,9 +155,11 @@ if has('mac')
     let g:python3_host_prog='/usr/local/bin/python3'
 endif
 
-" Switch CWD to the directory of the open buffer
-map <space>cd :cd %:p:h<cr>:pwd<cr>
+let g:editorconfig_end_of_line = 'mac'
 
-lua <<EOF
-vim.g.editorconfig = false
-EOF
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+let g:easy_align_bypass_fold = 1

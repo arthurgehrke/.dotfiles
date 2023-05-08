@@ -16,5 +16,5 @@ map <Space>gt :GitGutterToggle<CR>
 command! Gqf GitGutterQuickFix | copen
 
 " disable folding to git files
-autocmd BufWritePost,BufEnter * set nofoldenable foldmethod=manual foldlevelstart=99
+" autocmd BufWritePost,BufEnter * set nofoldenable foldmethod=manual foldlevelstart=99
 

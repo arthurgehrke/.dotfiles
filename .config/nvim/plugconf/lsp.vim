@@ -2,40 +2,7 @@
 " npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
 
 lua << EOF
-local lsp_servers = {
-  'cssls',
-  'html',
-  'jsonls',
-  'pyright',
-  'tailwindcss',
-  'tsserver',
-}
-
-require("mason").setup({
-ui = {
-    icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗"
-        }
-    }
-})
-require('mason-lspconfig').setup({
-  ensure_insatlled = lsp_servers,
-  automatic_installation = true,
-})
-
-local lsp_formatting = function(bufnr)
-    vim.lsp.buf.format({
-        filter = function(client)
-            -- apply whatever logic you want (in this example, we'll only use null-ls)
-            return client.name == "null-ls"
-        end,
-        bufnr = bufnr,
-    })
-end
-
-local nvim_lsp = require('lspconfig')
+local lspconfig = require('lspconfig')
 local protocol = require('vim.lsp.protocol')
 
   -- Use an on_attach function to only map the following keys
@@ -48,7 +15,6 @@ local on_attach = function(client, bufnr)
   local opts = { silent = true, noremap = true }
 
   -- Mappings.
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gtd', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
@@ -56,25 +22,75 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<space>sld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>aa', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<space>od', ':lua vim.diagnostic.open_float()<CR>', opts)
-  buf_set_keymap('n', 'snd', ':lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', 'spd', ':lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', 'lua: vim.lsp.buf.signature_help<CR>', opts)
+  buf_set_keymap('n', '<space>od', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', 'sn', ':<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', 'sp', ':<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>af', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', opts)
 
-  if client.name == "tsserver" then                                                                                                   
-      client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
+  vim.keymap.set('n', '<space>al', function()
+    vim.lsp.buf.format { async = true }
+  end, opts)
+
+  vim.keymap.set({'n', 'x'}, 'gq', function()
+    vim.lsp.buf.format({
+    async = false, 
+    timeout_ms = 10000
+    -- filter = allow_format({'lua_ls', 'rust_analyzer'})
+    })
+  end)
+
+  vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format({async=true})' ]])
+
+  if client.name == "tsserver" 
+			or client.name == "html"
+			or client.name == "cssls"
+			or client.name == "jsonls"
+	then
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
       buf_set_keymap('n', '<space>zal', '<cmd>TypescriptAddMissingImports<CR>', opts)
       buf_set_keymap('n', '<space>lak', '<cmd>TypescriptOrganizeImports<CR>', opts)
       buf_set_keymap('n', '<F2>', '<cmd>TypescriptRenameFile<CR>', opts)
-      buf_set_keymap('n', 'sd', '<cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
-      buf_set_keymap('n', 'vsd', '<cmd>:vsplit<cr><cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
+      buf_set_keymap('n', 'gwd', '<cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
+      buf_set_keymap('n', 'gsd', '<cmd>:vsplit<cr><cmd>TypescriptGoToSourceDefinition<cr>', { buffer = buffer, desc = 'Go To Source Definition' })
   end
 end
+
+-- null-ls
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  debug = true,
+  auto_restart = true,
+  autostart = true,
+	on_attach = function(client, bufnr)
+		client.server_capabilities.documentFormattingProvider = true
+		client.server_capabilities.documentRangeFormattingProvider = true
+    vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+	end,
+  sources = { 
+    null_ls.builtins.formatting.prettier.with {
+      only_local = "node_modules/.bin",
+    },
+    null_ls.builtins.formatting.prettierd.with {
+        filetypes = { "json" },
+    },
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.completion.vsnip,
+    null_ls.builtins.diagnostics.vint,
+    require("typescript.extensions.null-ls.code-actions"),
+ }
+})
 
 -- capabilities
 local cmp = require'cmp'
@@ -134,55 +150,38 @@ vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- Set up clients
+lspconfig.tsserver.setup({
+  on_attach = on_attach,
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+})
 
-local null_ls = require("null-ls")
-null_ls.setup({
-    autostart = true,
-    on_attach = on_attach,
-    should_attach = function(bufnr)
-        local cur_ft = vim.bo[bufnr].filetype
-        return vim.tbl_contains({ "vue", "typescript", "javascript", "python", "lua" }, cur_ft)
+lspconfig.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.jsonls.setup{
+  on_attach = on_attach,
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+      end
+    }
+  }
+}
+
+lspconfig.eslint.setup({
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+      client.server_capabilities.document_formatting = true
     end,
-    sources = {
-        --#formatters
-        null_ls.builtins.formatting.prettier.with({
-          prefer_local = "node_modules/.bin",
-        }),
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.eslint_d,
-        -- require("typescript.extensions.null-ls.code-actions")
+    settings = {
+      format = { enable = true },
     },
 })
 
-  nvim_lsp.tsserver.setup {
-    init_options = {
-      preferences = {
-        importModuleSpecifierPreference = "non-relative"
-      }
-    },
-     go_to_source_definition = {
-      fallback = true, -- fall back to standard LSP definition on failure
-    },
-    autostart = true,
-    on_attach = on_attach,
-    filetypes = { "typescript", "javascript" },
-    cmd = { "typescript-language-server", "--stdio" },
-  }
-
-  nvim_lsp.lua_ls.setup {
-    autostart = true,
-    on_attach = on_attach
-  }
-
-  nvim_lsp.vimls.setup {
-    autostart = true,
-    on_attach = on_attach,
-    filetypes = { 
-        "vim"
-      }
-  }
-  
 require("typescript").setup({
   init_options = {
     preferences = {
@@ -194,38 +193,42 @@ require("typescript").setup({
   server = { -- pass options to lspconfig's setup method
       on_attach = on_attach
   },
-  capabilities = capabilities,
   vim.keymap.set(
-							'n',
-							'<leader>gD',
-							'<cmd>TypescriptGoToSourceDefinition<cr>',
-							{ buffer = buffer, desc = 'Go To Source Definition' }
-						)
+    'n',
+    '<space>gD',
+    '<cmd>TypescriptGoToSourceDefinition<cr>',
+    { buffer = buffer, desc = 'Go To Source Definition' }
+  )
 })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    update_in_insert = true,
-    virtual_text = false,
-    loclist = false,
-    signs = false,
-    -- virtual_text = { spacing = 4, prefix = "●" },
-    severity_sort = true,
-  }
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+      underline = true,
+      update_in_insert = true,
+      virtual_text = false,
+      loclist = false,
+      signs = false,
+      -- virtual_text = { spacing = 4, prefix = "●" },
+      severity_sort = true,
+    }
 )
 
 -- Show line diagnostics automatically in hover window
 vim.o.updatetime = 250
 EOF
-
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> vd <cmd>vim.diagnostic.open_float()<CR>
-nnoremap go <c-o>
+" nnoremap go <c-o>
 
 " compe
 let g:completion_enable_auto_popup = 0
 set completeopt=menu,preview,menuone,noselect
 " set completeopt=menuone,noinsert,noselect
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+
+" eslint
+" Autofix entire buffer with eslint_d:
+nnoremap <space>ef mF:%!eslint_d --stdin --fix-to-stdout<CR>`F
+" Autofix visual selection with eslint_d:
+vnoremap <space>ef :!eslint_d --stdin --fix-to-stdout<CR>gv
