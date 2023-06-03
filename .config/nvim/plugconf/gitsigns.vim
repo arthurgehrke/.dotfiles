@@ -21,7 +21,7 @@ require('gitsigns').setup{
     virt_text = true,
     virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
     delay = 1000,
-    ignore_whitespace = true,
+    ignore_whitespace = false,
   },
   current_line_blame_formatter_opts = {
     relative_time = false
@@ -71,7 +71,7 @@ require('gitsigns').setup{
     map('n', '<space>hR', gs.reset_buffer)
     map('n', '<space>hp', gs.preview_hunk)
     map('n', '<space>hb', function() gs.blame_line{full=true} end)
-    map('n', '<space>tb', gs.toggle_current_line_blame)
+    map('n', '<space>hcb', gs.toggle_current_line_blame)
     map('n', '<space>hd', gs.diffthis)
     map('n', '<space>hD', function() gs.diffthis('~') end)
     map('n', '<space>td', gs.toggle_deleted)

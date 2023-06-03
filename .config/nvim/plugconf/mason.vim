@@ -35,7 +35,6 @@ local lsp_servers = {
 
 local null_ls_servers = {
 	"tsserver",
-	'vint',
 	"html",
 	"cssls",
 	"lua_ls",
@@ -54,12 +53,12 @@ local null_ls_servers = {
 	"rustfmt",
 	"eslint_d",
 	'jsonlint',
-	'sqlfluff',
 	'pg_format',
 	'ymlfix',
 	'lua_format',
 	'fixjson',
-	'sql_formatter'
+	'sql_formatter',
+	'sqlfluff'
 }
 
 -- enable mason
@@ -76,6 +75,11 @@ mason_null_ls.setup({
 	-- list of formatters & linters for mason to install
 	ensure_installed = null_ls_servers,
   automatic_setup = false,
+  automatic_instalation = true
+})
+
+require("mason-nvim-dap").setup({
+  automatic_setup = true,
   automatic_instalation = true
 })
 EOF

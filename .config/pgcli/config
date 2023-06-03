@@ -107,7 +107,7 @@ table_format = fancy_grid
 # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
 # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
 # colorful, murphy, bw, pastie, paraiso-light, trac, default, fruity
-syntax_style = default
+syntax_style = psql
 
 # Keybindings:
 # When Vi mode is enabled you can use modal editing features offered by Vi in the REPL.
@@ -119,7 +119,7 @@ vi = true
 # When one of multiple SQL statements causes an error, choose to either
 # continue executing the remaining statements, or stopping
 # Possible values "STOP" or "RESUME"
-on_error = STOP
+on_error = RESUME
 
 # Set threshold for row limit. Use 0 to disable limiting.
 row_limit = 10000

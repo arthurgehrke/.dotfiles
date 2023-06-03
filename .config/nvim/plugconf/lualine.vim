@@ -22,8 +22,13 @@ require'lualine'.setup {
       },
       'diagnostics',
     },
-		lualine_c = {'filename', {'diff', symbols = {added = '烙', modified = ' ', removed = ' '}}},
-    lualine_x = {'encoding', {'fileformat', icons_enabled = false}, 'filetype'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', {'fileformat', symbols = {
+        unix = '', -- e712
+        dos = '',  -- e70f
+        mac = '',  -- e711
+    }}, 'filetype'},
+    -- lualine_x = {'encoding', {'fileformat', icons_enabled = false}, 'filetype'},
     lualine_y = {'progress'},
 		lualine_z = {'location'}
   },

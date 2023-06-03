@@ -10,7 +10,6 @@ call plug#begin()
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'tpope/vim-surround'
   Plug 'numToStr/Comment.nvim'
-  Plug 'mhinz/vim-startify'
   " Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
   Plug 'akinsho/bufferline.nvim'
@@ -38,23 +37,33 @@ call plug#begin()
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-cmdline'
-  Plug 'hrsh7th/nvim-cmp'
   Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'amarakon/nvim-cmp-buffer-lines'
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
   Plug 'nmac427/guess-indent.nvim'
-  Plug 'junegunn/vim-easy-align'
   Plug 'kdheepak/lazygit.nvim'
+  Plug 'akinsho/git-conflict.nvim'
+  Plug 'mfussenegger/nvim-dap'
+  Plug 'mxsdev/nvim-dap-vscode-js'
+  Plug 'rcarriga/nvim-dap-ui'
+  Plug 'Pocco81/DAPInstall.nvim'
+  Plug 'theHamsta/nvim-dap-virtual-text'
+  Plug 'jay-babu/mason-nvim-dap.nvim'
+  Plug 'mhinz/vim-startify'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/comment.vim
 source $HOME/.config/nvim/plugconf/startify.vim
+" source $HOME/.config/nvim/plugconf/dashboard.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
+source $HOME/.config/nvim/plugconf/git-conflict.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
@@ -65,3 +74,4 @@ source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/gitgutter.vim
 source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
+source $HOME/.config/nvim/plugconf/dap.vim

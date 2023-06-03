@@ -19,8 +19,6 @@ set nobuflisted
 
 set noswapfile
 set nobackup
-set undodir=~/.vim/undodir
-set undofile
 set noincsearch
 set ignorecase
 
@@ -54,6 +52,13 @@ set noerrorbells
 set backspace=indent,eol,start
 set noshowmatch
 highlight clear SignColumn
+
+" Set up persistent undo across all files.
+set undofile
+if !isdirectory(expand("$HOME/.vim/undodir"))
+  call mkdir(expand("$HOME/.vim/undodir"), "p")
+endif
+set undodir=$HOME/.vim/undodir
 
 let mapleader =" "
 
@@ -156,10 +161,3 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-let g:easy_align_bypass_fold = 1

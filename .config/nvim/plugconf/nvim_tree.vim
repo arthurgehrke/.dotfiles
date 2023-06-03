@@ -1,34 +1,12 @@
-autocmd BufEnter NvimTree* if winnr("$") == 1 | execute "q" | endif
-autocmd BufLeave NvimTree* wincmd l
+" autocmd BufEnter NvimTree* if winnr("$") == 1 | execute "q" | endif
+" autocmd BufLeave NvimTree* wincmd l
 
 lua << EOF
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-local modifiedBufs = function(bufs)
-    local t = 0
-    for k,v in pairs(bufs) do
-        if v.name:match("NvimTree_") == nil then
-            t = t + 1
-        end
-    end
-    return t
-end
-
 vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
-
-vim.api.nvim_create_autocmd("BufEnter", {
-    nested = true,
-    callback = function()
-        if #vim.api.nvim_list_wins() == 1 and
-        vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil and
-        modifiedBufs(vim.fn.getbufinfo({bufmodified = 1})) == 0 then
-            vim.cmd "quit"
-        end
-    end
-})
-
 
 local function on_attach(bufnr)
   local api = require('nvim-tree.api')
@@ -37,9 +15,6 @@ local function on_attach(bufnr)
     return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
   end
 
-  -- Default mappings. Feel free to modify or remove as you wish.
-  --
-  -- BEGIN_DEFAULT_ON_ATTACH
   vim.keymap.set('n', '<C-]>', api.tree.change_root_to_node,          opts('CD'))
   vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer,     opts('Open: In Place'))
   vim.keymap.set('n', '<C-k>', api.node.show_info_popup,              opts('Info'))
@@ -92,7 +67,6 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'Y',     api.fs.copy.relative_path,             opts('Copy Relative Path'))
   vim.keymap.set('n', '<2-LeftMouse>',  api.node.open.edit,           opts('Open'))
   vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
-  -- END_DEFAULT_ON_ATTACH
 
   -- You will need to insert "your code goes here" for any mappings with a custom action_cb
   vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))

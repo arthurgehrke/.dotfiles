@@ -79,3 +79,11 @@ endfunction
 command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
 
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
+command! -bang -nargs=* AgPreview
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+nnoremap <silent> <space>ag       :AgPreview <C-R><C-W><CR>
+xnoremap <silent> <space>ag       y:AgPreview <C-R>"<CR> 
