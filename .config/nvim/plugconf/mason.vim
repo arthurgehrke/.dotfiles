@@ -17,6 +17,15 @@ if not mason_null_ls_status then
 	return
 end
 
+-- import mason-nvim-dap plugin safely
+local mason_dap_status, mason_dap = pcall(require, "mason-nvim-dap")
+if not mason_dap_status then
+	return
+end
+
+local ok, mason_tool = pcall(require, "mason-tool-installer")
+if not ok then return end
+
 local lsp_servers = {
 	"tsserver",
 	"html",
@@ -24,13 +33,14 @@ local lsp_servers = {
 	"lua_ls",
 	"angularls",
 	"bashls",
-	"cssmodules_ls",
 	"dockerls",
 	"jsonls",
 	"tsserver",
 	'vimls',
-	'marksman',
-	'csharp_ls'
+	'yamlls',
+	'dockerls',
+	'csharp_ls',
+	'sqlls'
 }
 
 local null_ls_servers = {
@@ -40,7 +50,6 @@ local null_ls_servers = {
 	"lua_ls",
 	"angularls",
 	"bashls",
-	"cssmodules_ls",
 	"dockerls",
 	"jsonls",
 	"tsserver",
@@ -58,7 +67,26 @@ local null_ls_servers = {
 	'lua_format',
 	'fixjson',
 	'sql_formatter',
-	'sqlfluff'
+	'sqlls'
+}
+
+local custom_servers = {
+  'bash-language-server',
+  'vim-language-server',
+  'shellcheck',
+  'luacheck',
+  'shellcheck',
+  'shfmt',
+  'vint',
+}
+
+local dap_servers = {
+	"js-debug-adapter", 
+	"vscode-node-debug2", 
+	"node-debug2-adapter", 
+	"js", 
+	"node2", 
+	"chrome",
 }
 
 -- enable mason
@@ -69,17 +97,27 @@ mason_lspconfig.setup({
 	ensure_installed = lsp_servers,
 	-- auto-install configured servers (with lspconfig)
 	automatic_installation = true, -- not the same as ensure_installed
+  auto_update = true,
 })
 
 mason_null_ls.setup({
 	-- list of formatters & linters for mason to install
 	ensure_installed = null_ls_servers,
   automatic_setup = false,
-  automatic_instalation = true
+  automatic_instalation = true,
+  auto_update = true,
 })
 
-require("mason-nvim-dap").setup({
+mason_dap.setup({
+  ensure_installed = dap_servers,
+  automatic_installation = true,
   automatic_setup = true,
-  automatic_instalation = true
+  auto_update = true,
+})
+
+mason_tool.setup({
+  ensure_installed = custom_servers,
+	automatic_installation = true,
+  auto_update = true,
 })
 EOF

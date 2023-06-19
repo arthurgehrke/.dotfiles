@@ -13,22 +13,31 @@
 [color]
   ui = true
 [diff]
+  algorithm = patience
+	compactionHeuristic = true
 	tool = nvimdiff
   ignoreAllSpace = true
-[difftool]
-  prompt = true
 [difftool "nvimdiff"]
-  cmd = "nvim -R -d -c \"wincmd l\" -d \"$LOCAL\" \"$REMOTE\""
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd L\"
+; [difftool "nvimdiff"]
+;   cmd = "nvim -R -d -c \"wincmd l\" -d \"$LOCAL\" \"$REMOTE\""
 [merge]
-  ; tool = nvim
-  tool = nvimdiff
-  conflictstyle = diff3
-[mergetool]
-  prompt = true
+  ; tool = nvimdiff
+	tool = nvimdiff4
+	prompt = false
+[mergetool "nvimdiff4"]
+  prompt = false
   keepBackup = false
-[mergetool "nvim"]
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
-  cmd = nvim -d -u ~/.config/nvim/init.vim $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
+  ; cmd = nvim -d -u ~/.config/nvim/init.vim $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
+[mergetool]
+	keepBackup = false
+[push]
+	autoSetupRemote = true
+[init]
+	defaultBranch = main
+
 [url "git@gitlab.com:"]
   insteadOf = https://gitlab.com/
 [url "git@gitlab.com:doare/api-v2.git"]

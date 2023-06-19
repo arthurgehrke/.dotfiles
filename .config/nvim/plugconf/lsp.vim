@@ -18,8 +18,7 @@ local on_attach = function(client, bufnr)
   local opts = { silent = true, noremap = true }
 
   -- Mappings.
-  -- buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua require(\'fzf-lua\').lsp_definitions({jump_to_single_result = true })<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gtd', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
@@ -62,8 +61,17 @@ end
 local null_ls = require("null-ls")
 
 null_ls.setup({
+ should_attach = function(bufnr)
+    local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+    -- if ft == "dbui" or ft == "dbout" or ft:match("sql") then
+    if ft == "dbui" or ft == "dbout" then
+      return false
+    end
+    return true
+  end,
   debug = true,
   auto_restart = true,
+  run_on_start = true,
   autostart = true,
 	on_attach = function(client, bufnr)
 		client.server_capabilities.documentFormattingProvider = true
@@ -74,51 +82,37 @@ null_ls.setup({
     null_ls.builtins.formatting.prettier.with {
       only_local = "node_modules/.bin",
     },
-    null_ls.builtins.formatting.prettierd.with {
-        filetypes = { "json" },
-    },
+    null_ls.builtins.formatting.prettierd,
 		null_ls.builtins.diagnostics.jsonlint,
+    null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.pg_format.with {
+        filetypes = { "sql", "pgsql" },
+    },
+    null_ls.builtins.formatting.sql_formatter.with({
+    filetypes = {
+      "sql",
+      "mysql",
+      },
+    }),
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.code_actions.refactoring,
     null_ls.builtins.diagnostics.eslint_d,
-    -- null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.completion.spell,
-    null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.completion.vsnip,
-    null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.formatting.jq,
-    null_ls.builtins.diagnostics.sqlfluff.with({
-      extra_args = { "--dialect", "postgres" }, -- change to your dialect
-    }),
+    null_ls.builtins.formatting.lua_format,
+    null_ls.builtins.formatting.sql_formatter,
     require('typescript.extensions.null-ls.code-actions'),
     null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.cspell.with({
-      diagnostic_config = {
-        underline = true,
-        virtual_text = false,
-        signs = false,
-        update_in_insert = false,
-        severity_sort = true,
-      },
-      diagnostics_postprocess = function(diagnostic)
-        diagnostic.severity = vim.diagnostic.severity.INFO
-      end,
-      filetypes = { 'markdown', 'latex', 'text' },
-    }),
 		null_ls.builtins.formatting.trim_newlines,
-    null_ls.builtins.formatting.trim_whitespace.with({
-			-- I don't want this for all filetypes since it
-			-- also removes whitespace inside string literals.
-			filetypes = { "markdown", "yaml", "gitcommit" },
-		}),
+    null_ls.builtins.formatting.trim_whitespace,
 		null_ls.builtins.formatting.xmllint,
  }
 })
 
 -- capabilities
 local cmp = require'cmp'
+
 cmp.setup({
     preselect = cmp.PreselectMode.None,
     window = {
@@ -179,6 +173,14 @@ vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    "documentation",
+    "detail",
+    "additionalTextEdits",
+  },
+}
 
 -- Code actions
 capabilities.textDocument.codeAction = {
@@ -186,14 +188,14 @@ capabilities.textDocument.codeAction = {
       codeActionLiteralSupport = {
           codeActionKind = {
               valueSet = {
-                 "",
-                 "quickfix",
-                 "refactor",
-                 "refactor.extract",
-                 "refactor.inline",
-                 "refactor.rewrite",
-                 "source",
-                 "source.organizeImports",
+                "",
+                "quickfix",
+                "refactor",
+                "refactor.extract",
+                "refactor.inline",
+                "refactor.rewrite",
+                "source",
+                "source.organizeImports",
               };
           };
       };
@@ -201,25 +203,33 @@ capabilities.textDocument.codeAction = {
 
 lspconfig.tsserver.setup({
   on_attach = on_attach,
+  auto_restart = true,
+  run_on_start = true,
+  autostart = true,
   cmd = { "typescript-language-server", "--stdio" },
   filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
   capabilities = capabilities
 })
 
+lspconfig.sqlls.setup {}
+
 lspconfig.lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  filetypes = { "lua" },
 }
 
-lspconfig.jsonls.setup{
-  on_attach = on_attach,
-  commands = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-      end
-    }
-  }
+lspconfig.jsonls.setup {
+  settings = {
+    format = { enable = true },
+    json = {
+      validate = { enable = true },
+    },
+  },
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    client.server_capabilities.document_formatting = true
+  end,
 }
 
 lspconfig.eslint.setup({
@@ -230,37 +240,21 @@ lspconfig.eslint.setup({
   settings = {
     format = { enable = true },
   },
+  filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
 })
 
-lspconfig.bashls.setup({
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-    client.server_capabilities.document_formatting = true
-  end,
-	capabilities = capabilities,
-  filetypes = { "sql"},
-})
+lspconfig.bashls.setup({})
 
 lspconfig.vimls.setup({
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-    client.server_capabilities.document_formatting = true
-  end,
+  on_attach = on_attach,
 	capabilities = capabilities,
-  filetypes = { "vim"},
+  filetypes = { "vim" },
 })
 
 lspconfig.yamlls.setup({
-  settings = {
-    yaml = {
-      schemas = {
-        ["https://bitbucket.org/atlassianlabs/atlascode/raw/main/resources/schemas/pipelines-schema.json"] = "./bitbucket-pipelines.yml",
-        ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.yaml"] = "./schema.yml"
-      }
-    }
-  },
   capabilities = capabilities,
   on_attach = on_attach,
+  filetypes = { "yaml" },
 })
 
 require("typescript").setup({
@@ -280,22 +274,21 @@ require("typescript").setup({
   }
 })
 
-
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-      underline = true,
-      update_in_insert = true,
-      virtual_text = false,
-      loclist = false,
-      signs = false,
-      -- virtual_text = { spacing = 4, prefix = "●" },
-      severity_sort = true,
-    }
+    underline = true,
+    update_in_insert = true,
+    virtual_text = false,
+    loclist = false,
+    signs = false,
+    -- virtual_text = { spacing = 4, prefix = "●" },
+    severity_sort = true,
+  }
 )
 
--- Show line diagnostics automatically in hover window
 vim.o.updatetime = 250
 EOF
+
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
 " nnoremap go <c-o>
@@ -303,7 +296,6 @@ nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
 " compe
 let g:completion_enable_auto_popup = 0
 set completeopt=menu,preview,menuone,noselect
-" set completeopt=menuone,noinsert,noselect
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
 nnoremap <space>ew :e <C-R>=expand("%:.:h") . "/"<CR>

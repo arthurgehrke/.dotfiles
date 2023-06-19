@@ -13,29 +13,22 @@ require'lualine'.setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {
-      'branch', 
-      {
-          'diff',
-          -- color = { bg = 'grey', }
-          colored = false, 
-      },
-      'diagnostics',
-    },
-    lualine_c = {'filename'},
+    lualine_b = { { 'filename', path = 3 } },
+    lualine_c = { 'diagnostics' },
     lualine_x = {'encoding', {'fileformat', symbols = {
         unix = '', -- e712
         dos = '',  -- e70f
         mac = '',  -- e711
     }}, 'filetype'},
     -- lualine_x = {'encoding', {'fileformat', icons_enabled = false}, 'filetype'},
-    lualine_y = {'progress'},
-		lualine_z = {'location'}
+    lualine_y = { '' },
+    lualine_z = { 'filetype' }
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-		lualine_c = {'filename'},
+		-- lualine_c = {'filename'},
+		lualine_c = {},
 		lualine_x = {'location'},
     lualine_y = {},
     lualine_z = {}

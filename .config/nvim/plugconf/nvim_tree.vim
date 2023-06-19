@@ -79,8 +79,8 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'gy', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
   vim.keymap.set('n', '[c', api.node.navigate.git.prev, opts('Prev Git'))
   vim.keymap.set('n', ']c', api.node.navigate.git.next, opts('Next Git'))
-  vim.keymap.set('n', 'f', api.live_filter.start, opts('Filter'))
-  vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
+  -- vim.keymap.set('n', 'f', api.live_filter.start, opts('Filter'))
+  -- vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
   vim.keymap.set('n', 'x', api.fs.cut, opts('Cut'))
   vim.keymap.set('n', 'c', api.fs.copy.node, opts('Copy'))
   vim.keymap.set('n', 'p', api.fs.paste, opts('Paste'))
@@ -172,7 +172,7 @@ require'nvim-tree'.setup {
   },
   filters = {
     dotfiles = false,
-    custom = { ".git$", "node_modules", '.cache', 'dist', '.dist', '.next' }
+    custom = { ".git$", "node_modules", 'dist', '.dist', '.next' }
   },
   log = {
     enable = false,
@@ -188,7 +188,7 @@ require'nvim-tree'.setup {
     },
   live_filter = {
     prefix = "[FILTER]: ",
-    always_show_folders = false,
+    always_show_folders = true
   },
   actions = {
     expand_all = {

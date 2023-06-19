@@ -11,8 +11,8 @@ nnoremap <space>vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 " Ctrl H and L will move to buffer
 " nnoremap <C-l>   :bnext<CR>
 " nnoremap <C-h>   :bprevious<CR>
-nnoremap <silent><C-l> :BufferLineCycleNext<CR>
-nnoremap <silent><C-h> :BufferLineCyclePrev<CR>
+nnoremap  <silent>   <c-l>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+nnoremap  <silent> <C-h>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
 
 " Edit alternate file with <leader><leader>. See `:help CTRL-^`.
 " Note: `:bprevious` is different because it "wraps around".
@@ -35,23 +35,37 @@ noremap <space>ss :call StripWhitespace()<CR>
 nnoremap <silent><C-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><C-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
+nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
+nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+
+
 " Toggle relative line numbers and regular line numbers.
 nnoremap <space>tr :set relativenumber!<CR>
 
 " close all buffers but the current one
 command! BufOnly execute '%bdelete|edit #|normal `"'
 
-" Search for visually-selected text, forwards or backwards.
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+function! s:VSetSearch()
+  let temp = @@
+  norm! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  call histadd('/', substitute(@/, '[?/]', '\="\\%d".char2nr(submatch(0))', 'g'))
+  let @@ = temp
+endfunction
+
+vnoremap * :<C-u>call <SID>VSetSearch()<CR>/<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>?<CR>
+
+function SetSearchVisualSelection()
+    let clipboard_original_content=@"
+    normal gvy " this overwrites clipboard
+    let raw_search=@"
+    let @/=substitute(escape(raw_search, '\/.*$^~[]'), "\n", '\\n', "g")
+    let @"=clipboard_original_content
+endfunction
+vnoremap ml :call SetSearchVisualSelection()<CR>:set hlsearch<CR> 
+
+nnoremap <silent> ml :<c-u>let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR>wb
 
 " Easy window split; C-w v -> vv, C-w - s -> ss
 nnoremap <silent> vv <C-w>v
@@ -59,10 +73,10 @@ nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
 nnoremap <silent> sd :bd<CR>
 
-" quit quick fix window
-nnoremap <expr> q
-      \ &l:filetype ==# 'qf' ? '<Cmd>cclose<CR>' :
-      \ '$'->winnr() != 1 ? '<Cmd>close<CR>' : ''
+" " quit quick fix window
+" nnoremap <expr> q
+"       \ &l:filetype ==# 'qf' ? '<Cmd>cclose<CR>' :
+      " \ '$'->winnr() != 1 ? '<Cmd>close<CR>' : ''
 
 " more natural movement with wrap on
 nnoremap j gj
@@ -81,3 +95,25 @@ if has("mac") || has("gui_macvim") || has("gui_mac")
   " directory name (/something/src)
   nnoremap <space>ch :let @*=expand("%:p:h")<CR>
 endif
+
+
+" Convert rows of numbers or text (as if pasted from excel column) to a tuple
+function! ToTupleFunction() range
+  silent execute a:firstline . "," . a:lastline . "s/^/'/"
+  silent execute a:firstline . "," . a:lastline . "s/$/',/"
+  silent execute a:firstline . "," . a:lastline . "join"
+  silent execute "normal I("
+  silent execute "normal $xa)"
+  silent execute "normal ggVGYY"
+endfunction
+command! -range ToTuple <line1>,<line2> call ToTupleFunction()
+
+" Convert rows of numbers or text (as if pasted from excel column) to an array
+function! ToArrayFunction() range
+  silent execute a:firstline . "," . a:lastline . "s/^/'/"
+  silent execute a:firstline . "," . a:lastline . "s/$/',/"
+  silent execute a:firstline . "," . a:lastline . "join"
+  silent execute "normal I["
+  silent execute "normal $xa]"
+endfunction
+command! -range ToArray <line1>,<line2> call ToArrayFunction()

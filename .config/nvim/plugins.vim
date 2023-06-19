@@ -28,6 +28,8 @@ call plug#begin()
   Plug 'williamboman/mason.nvim'
   Plug 'williamboman/mason-lspconfig.nvim'
   Plug 'jay-babu/mason-null-ls.nvim'
+  Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
+  Plug 'jay-babu/mason-nvim-dap.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'jose-elias-alvarez/typescript.nvim'
@@ -43,15 +45,18 @@ call plug#begin()
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
   Plug 'nmac427/guess-indent.nvim'
-  Plug 'kdheepak/lazygit.nvim'
-  Plug 'akinsho/git-conflict.nvim'
   Plug 'mfussenegger/nvim-dap'
   Plug 'mxsdev/nvim-dap-vscode-js'
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'Pocco81/DAPInstall.nvim'
   Plug 'theHamsta/nvim-dap-virtual-text'
-  Plug 'jay-babu/mason-nvim-dap.nvim'
   Plug 'mhinz/vim-startify'
+  Plug 'mxsdev/nvim-dap-vscode-js'
+  Plug 'rhysd/git-messenger.vim'
+  Plug 'tpope/vim-dadbod'
+  Plug 'kristijanhusak/vim-dadbod-ui'
+  Plug 'kristijanhusak/vim-dadbod-completion'
+  Plug 'andrewferrier/debugprint.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
@@ -63,7 +68,6 @@ source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
-source $HOME/.config/nvim/plugconf/git-conflict.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
@@ -75,3 +79,4 @@ source $HOME/.config/nvim/plugconf/gitgutter.vim
 source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
+source $HOME/.config/nvim/plugconf/dadbod.vim

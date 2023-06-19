@@ -21,7 +21,7 @@ let g:fzf_colors = {
 " Enable history
 let g:fzf_history_dir = '~/.cache/fzf/history'
 
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
 let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
 
@@ -63,6 +63,11 @@ nnoremap <silent><space>; :Rg<CR>
 nnoremap <silent><space>ps :Ag<CR>
 nnoremap <silent><C-p> :Files<CR>
 nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
+nnoremap <silent> <space>m :History<CR>
+nnoremap <silent> <space>ob :Buffers<CR>
+
+command! -bang -nargs=? Buffers
+            \ call fzf#vim#buffers(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline','--tiebreak=end']}), <bang>0)
 
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
@@ -85,5 +90,6 @@ command! -bang -nargs=* AgPreview
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
+
 nnoremap <silent> <space>ag       :AgPreview <C-R><C-W><CR>
 xnoremap <silent> <space>ag       y:AgPreview <C-R>"<CR> 

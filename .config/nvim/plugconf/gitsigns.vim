@@ -71,7 +71,7 @@ require('gitsigns').setup{
     map('n', '<space>hR', gs.reset_buffer)
     map('n', '<space>hp', gs.preview_hunk)
     map('n', '<space>hb', function() gs.blame_line{full=true} end)
-    map('n', '<space>hcb', gs.toggle_current_line_blame)
+    map('n', '<space>hb', gs.toggle_current_line_blame)
     map('n', '<space>hd', gs.diffthis)
     map('n', '<space>hD', function() gs.diffthis('~') end)
     map('n', '<space>td', gs.toggle_deleted)
