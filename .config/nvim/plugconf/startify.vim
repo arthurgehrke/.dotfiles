@@ -2,6 +2,7 @@ function! s:gitModified()
     let files = systemlist('git ls-files -m 2>/dev/null')
     return map(files, "{'line': v:val, 'path': v:val}")
 endfunction
+
 " same as above, but show untracked files, honouring .gitignore
 function! s:gitUntracked()
     let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
@@ -10,11 +11,11 @@ endfunction
 
 let g:startify_lists = [
   \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
+  \ { 'type': 'commands',  'header': ['   Commands']       },
   \  { 'type': function('s:gitModified'),  'header': ['   git modified']},
   \  { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
   \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
   \ { 'type': 'files',     'header': ['   Files']            },
-  \ { 'type': 'commands',  'header': ['   Commands']       },
 \ ]
 
 
@@ -35,12 +36,13 @@ let g:startify_bookmarks = [
 \ {'r': '~/repositores/doare/'},
 \ {'p': '~/.config/nvim/init.vim'},
 \ {'s': '~/.config/nvim/plugconf'},
-\ { 'z': '~/.zshrc' },
-\ { 'g': '~/.gitconfig' },
+\ {'z': '~/.zshrc' },
+\ {'g': '~/.gitconfig' },
 \ ]
 
 let g:startify_commands = [
 \ { 'i': [ 'Install PLugins', ':PlugInstall' ] },
 \ { 'u': [ 'Update PLugins', ':PlugUpdate' ] },
-\ { 'u': [ 'Check Health', ':checkhealth' ] },
+\ { 'c': [ 'Clean PLugins', ':PlugClean' ] },
+\ { 'h': [ 'Check Health', ':checkhealth' ] },
 \ ]

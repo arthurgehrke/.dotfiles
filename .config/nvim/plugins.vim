@@ -7,6 +7,7 @@ call plug#begin()
   Plug 'ellisonleao/gruvbox.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
+  Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'tpope/vim-surround'
   Plug 'numToStr/Comment.nvim'
@@ -50,24 +51,26 @@ call plug#begin()
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'Pocco81/DAPInstall.nvim'
   Plug 'theHamsta/nvim-dap-virtual-text'
-  Plug 'mhinz/vim-startify'
+  " Plug 'mhinz/vim-startify'
   Plug 'mxsdev/nvim-dap-vscode-js'
   Plug 'rhysd/git-messenger.vim'
   Plug 'tpope/vim-dadbod'
   Plug 'kristijanhusak/vim-dadbod-ui'
   Plug 'kristijanhusak/vim-dadbod-completion'
-  Plug 'andrewferrier/debugprint.nvim'
+  Plug 'tpope/vim-dotenv'
+  Plug 'goolord/alpha-nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/comment.vim
-source $HOME/.config/nvim/plugconf/startify.vim
-" source $HOME/.config/nvim/plugconf/dashboard.vim
+" source $HOME/.config/nvim/plugconf/startify.vim
+source $HOME/.config/nvim/plugconf/alpha.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
+source $HOME/.config/nvim/plugconf/git-messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
@@ -80,3 +83,4 @@ source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
 source $HOME/.config/nvim/plugconf/dadbod.vim
+" source $HOME/.config/nvim/plugconf/dotenv.vim

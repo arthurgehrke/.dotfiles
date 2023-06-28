@@ -6,6 +6,7 @@ filetype plugin indent on " allow plugins to use filetype indentation
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
+source $HOME/.config/nvim/snippets.vim
 
 set laststatus=2
 
@@ -171,31 +172,3 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
-
-
-function! s:setup_git_messenger_popup() abort
-    " Your favorite configuration here
-
-    " For example, set go back/forward history to <C-o>/<C-i>
-    nmap <buffer><C-o> o
-    nmap <buffer><C-i> O
-endfunction
-autocmd FileType gitmessengerpopup call <SID>setup_git_messenger_popup()
-
-nmap <space>gm <Plug>(git-messenger)
-
-let g:git_messenger_include_diff= "all"
-let g:git_messenger_floating_win_opts = { 'border': 'single' }
-let g:git_messenger_popup_content_margins = v:false
-let g:git_messenger_close_on_cursor_moved = v:false
-let g:git_messenger_into_popup_after_show = v:true
-let g:git_messenger_always_into_popup = v:true
-
-inoremap <C-s> yo console.log()<Esc>p
-
-inoremap <buffer> ,if if ()<cr>{<cr>}<esc>2k3==f)i
-inoremap <buffer> ,fo for ()<cr>{<cr>}<esc>2k3==f)i
-inoremap <buffer> ,cl console.log();<esc>F)i
-
-nnoremap <buffer> <space>xl yiwoconsole.log();<esc>F(p
-vnoremap <buffer> <space>xl yoconsole.log();<esc>F(p
