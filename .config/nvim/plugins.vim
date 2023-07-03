@@ -4,7 +4,8 @@ call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
-  Plug 'ellisonleao/gruvbox.nvim'
+  " Plug 'ellisonleao/gruvbox.nvim'
+  Plug 'EdenEast/nightfox.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
@@ -18,7 +19,6 @@ call plug#begin()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'sindrets/diffview.nvim'
   Plug 'nvim-lua/popup.nvim'
-  Plug 'vim-scripts/lastpos.vim'
   Plug 'dstein64/vim-startuptime'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
@@ -59,6 +59,7 @@ call plug#begin()
   Plug 'kristijanhusak/vim-dadbod-completion'
   Plug 'tpope/vim-dotenv'
   Plug 'goolord/alpha-nvim'
+  Plug 'junegunn/gv.vim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim

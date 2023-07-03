@@ -9,7 +9,7 @@ source $HOME/.config/nvim/themes.vim
 source $HOME/.config/nvim/snippets.vim
 
 set laststatus=2
-
+set nofoldenable
 set shell=$SHELL
 set clipboard+=unnamedplus
 set encoding=utf-8

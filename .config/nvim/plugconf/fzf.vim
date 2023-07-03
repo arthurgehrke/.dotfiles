@@ -18,12 +18,9 @@ let g:fzf_colors = {
   \ 'header': ['fg', 'Comment']
   \ }
 
-" Enable history
-let g:fzf_history_dir = '~/.cache/fzf/history'
-
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
-let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
-let g:fzf_layout = { 'down': '~40%' }
+" let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
+" let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
+" let g:fzf_layout = { 'down': '~40%' }
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -58,13 +55,11 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-
 nnoremap <silent><space>; :Rg<CR>
 nnoremap <silent><space>ps :Ag<CR>
 nnoremap <silent><C-p> :Files<CR>
 nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
 nnoremap <silent> <space>m :History<CR>
-nnoremap <silent> <space>ob :Buffers<CR>
 
 command! -bang -nargs=? Buffers
             \ call fzf#vim#buffers(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline','--tiebreak=end']}), <bang>0)
@@ -89,8 +84,7 @@ lua << EOF
 require('fzf-lua').setup{}
 EOF
 
-nnoremap <space>fb :FzfLua buffers<cr>
-nnoremap <space>fs :FzfLua live_grep_native<cr>
-nnoremap <space>ff :FzfLua files<cr>
-nnoremap <space>s :FzfLua files<cr>
+nnoremap fb :FzfLua buffers<cr>
+nnoremap fs :FzfLua live_grep_native<cr>
+nnoremap ff :FzfLua files<cr>
 

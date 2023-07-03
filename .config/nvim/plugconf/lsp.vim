@@ -25,10 +25,10 @@ local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
       buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
       buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
       buf_set_keymap('n', '<space>sld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-      -- buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 
-      vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, opts)
-      vim.keymap.set('x', '<space>ac', function() return vim.lsp.buf.code_action() end, opts)
+      -- vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, opts)
+      -- vim.keymap.set('x', '<space>ac', function() return vim.lsp.buf.code_action() end, opts)
       vim.keymap.set('n', '<space>lf', function() vim.lsp.buf.format({ timeout_ms = 5000 }) end, opts)
       vim.keymap.set('v', '<space>lf', function() return vim.lsp.buf.format() end, opts)
 
@@ -100,7 +100,6 @@ local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
          null_ls.builtins.formatting.lua_format,
          null_ls.builtins.formatting.sql_formatter,
          require('typescript.extensions.null-ls.code-actions'),
-         null_ls.builtins.code_actions.shellcheck,
          null_ls.builtins.formatting.trim_newlines,
          null_ls.builtins.formatting.trim_whitespace,
          null_ls.builtins.formatting.xmllint,
