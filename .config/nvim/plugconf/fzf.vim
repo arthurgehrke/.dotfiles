@@ -18,9 +18,9 @@ let g:fzf_colors = {
   \ 'header': ['fg', 'Comment']
   \ }
 
-" let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
 " let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
-" let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'down': '~40%' }
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]

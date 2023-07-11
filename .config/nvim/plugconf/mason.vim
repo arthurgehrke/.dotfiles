@@ -29,55 +29,17 @@ if not ok then return end
 local lsp_servers = {
 	"tsserver",
 	"html",
-	"cssls",
 	"lua_ls",
-	"angularls",
 	"bashls",
 	"dockerls",
 	"jsonls",
-	"tsserver",
 	'vimls',
 	'yamlls',
 	'dockerls',
-	'csharp_ls',
-	'sqlls'
-}
-
-local null_ls_servers = {
-	"tsserver",
-	"html",
-	"cssls",
-	"lua_ls",
-	"angularls",
-	"bashls",
-	"dockerls",
-	"jsonls",
-	"tsserver",
-	"sumneko_lua",
-  'bashls',
-  'yamlls',
-  'eslint',
-  'stylua',
-  'prettierd',
-	"rustfmt",
-	"eslint_d",
-	'jsonlint',
-	'pg_format',
-	'ymlfix',
-	'lua_format',
-	'fixjson',
-	'sql_formatter',
-	'sqlls'
 }
 
 local custom_servers = {
-  'bash-language-server',
   'vim-language-server',
-  'shellcheck',
-  'luacheck',
-  'shellcheck',
-  'shfmt',
-  'vint',
 }
 
 local dap_servers = {
@@ -102,8 +64,8 @@ mason_lspconfig.setup({
 
 mason_null_ls.setup({
 	-- list of formatters & linters for mason to install
-	ensure_installed = null_ls_servers,
-  automatic_setup = false,
+	ensure_installed = lsp_servers,
+  automatic_setup = true,
   automatic_instalation = true,
   auto_update = true,
 })

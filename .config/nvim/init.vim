@@ -8,6 +8,8 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 source $HOME/.config/nvim/snippets.vim
 
+set switchbuf=useopen
+set buflisted
 set laststatus=2
 set nofoldenable
 set shell=$SHELL
@@ -25,7 +27,7 @@ set noincsearch
 set ignorecase
 
 set nofixendofline "avoid empty line in the end
-set hidden " buffer unlisted but still visible on screen
+" set hidden " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber
@@ -172,3 +174,12 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
+
+"Delete all Git conflict markers
+"Creates the command :GremoveConflictMarkers
+function! RemoveConflictMarkers() range
+  echom a:firstline.'-'.a:lastline
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+endfunction
+"-range=% default is whole file
+command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()

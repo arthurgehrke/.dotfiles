@@ -11,7 +11,7 @@ if not status_ok then
 end
 
 treesitter_config.setup {
-  sync_install = false,
+  auto_install = true,
   highlight = {
     enable = true,
     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
@@ -20,9 +20,12 @@ treesitter_config.setup {
     -- list of language that will be disabled
     disable = {},
     -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    
+    additional_vim_regex_highlighting = false,
   },
   indent = {
     enable = true,
+    disable = {},
     -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
   },
   -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -31,32 +34,36 @@ treesitter_config.setup {
   -- Instead of true it can also be a list of languages
   -- ignore_install = { "javascript" },
   ignore_install = {},
-  auto_install = true,
   ensure_installed = {
     "markdown",
-    "tsx",
+    'markdown_inline',
     "json",
-    "yaml",
     "css",
     "html",
     "lua",
+    "luadoc",
     "typescript",
     "javascript",
+    "tsx",
     "vim",
     "vimdoc",
+    "python",
     "sql",
     "yaml",
-    "vim",
     "gitcommit",
     "dockerfile",
     "bash",
     'comment',
-    'diff',
     'make',
-    'markdown',
-    'markdown_inline',
     'git_rebase'
   },
+  autotag = {
+    enable = true,
+  },
 }
+
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
+
 EOF
 

@@ -23,7 +23,6 @@ source $HOME/.shell_aliases
 source $HOME/.shell_scripts
 
 source $HOME/.fzf.zsh
-source $HOME/.fzf.conf
 
 source $HOME/.zprofile
 
@@ -203,27 +202,32 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 # Completion
 ##############################################################################
 zmodload zsh/complist
-bindkey '^[[Z' reverse-menu-complete
-bindkey '^I' menu-complete
-bindkey '^I'   complete-word       # tab          | complete
-
-# zstyle ':completion:*' insert-tab true
+# bindkey '^[[Z' reverse-menu-complete
+# bindkey '^I' menu-complete
+# bindkey '^I'   complete-word       # tab          | complete
 
 ##############################################################################
 # KeyMappings
 ##############################################################################
 ## zsh-autosuggestions
 # use ctrl+T to toggle autosuggestions
-bindkey '^T' autosuggest-toggle
+bindkey '^e' autosuggest-toggle
 
 # accept the suggested words
 # bindkey '^I' autosuggest-accept # with tab
 bindkey '^o' autosuggest-accept
+bindkey '^i' expand-or-complete
 
 ## history-substring-search
 # Control-P/N keys
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
+
+bindkey '^k' up-history
+bindkey '^j' down-history
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+bindkey '^b' history-incremental-search-backward
 
 ##############################################################################
 # Bindings
@@ -250,15 +254,12 @@ export BAT_THEME="gruvbox-dark"
 export FZF_CTRL_T_COMMAND='find *~Library~Applications~qmk_firmware~Creative\ Cloud\ Files~Pictures notes/  2>/dev/null'
 
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
-
 export BAT_THEME="gruvbox-dark"
-
 
 ##############################################################################
 # Brew
 ##############################################################################
 source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 ##############################################################################
 # Various

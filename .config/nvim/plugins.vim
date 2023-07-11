@@ -4,8 +4,8 @@ call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
-  " Plug 'ellisonleao/gruvbox.nvim'
-  Plug 'EdenEast/nightfox.nvim'
+  Plug 'ellisonleao/gruvbox.nvim'
+  " Plug 'EdenEast/nightfox.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
@@ -14,7 +14,7 @@ call plug#begin()
   Plug 'numToStr/Comment.nvim'
   " Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
-  Plug 'akinsho/bufferline.nvim'
+  " Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'sindrets/diffview.nvim'
@@ -26,8 +26,11 @@ call plug#begin()
   Plug 'haya14busa/incsearch.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'shumphrey/fugitive-gitlab.vim'
-  Plug 'williamboman/mason.nvim'
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
   Plug 'williamboman/mason-lspconfig.nvim'
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+  " Plug 'glepnir/lspsaga.nvim'
+  Plug 'kkharji/lspsaga.nvim'
   Plug 'jay-babu/mason-null-ls.nvim'
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
   Plug 'jay-babu/mason-nvim-dap.nvim'
@@ -42,9 +45,7 @@ call plug#begin()
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-vsnip'
   Plug 'hrsh7th/nvim-cmp'
-  Plug 'amarakon/nvim-cmp-buffer-lines'
   Plug 'hrsh7th/vim-vsnip'
-  Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
   Plug 'nmac427/guess-indent.nvim'
   Plug 'mfussenegger/nvim-dap'
   Plug 'mxsdev/nvim-dap-vscode-js'
@@ -60,13 +61,15 @@ call plug#begin()
   Plug 'tpope/vim-dotenv'
   Plug 'goolord/alpha-nvim'
   Plug 'junegunn/gv.vim'
+  Plug 'ckolkey/ts-node-action'
+  Plug 'kdheepak/tabline.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/comment.vim
 " source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/alpha.vim
-source $HOME/.config/nvim/plugconf/bufferline.vim
+" source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
 source $HOME/.config/nvim/plugconf/nvim_treesitter.vim

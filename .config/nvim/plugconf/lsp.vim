@@ -2,11 +2,54 @@
 " npm install -g typescript typescript-language-server diagnostic-languageserver eslint_d
 
 lua << EOF
+local status, saga = pcall(require, "lspsaga")
+if (not status) then return end
+
+local keymap = vim.keymap
+keymap.set('n', '<Space>', '<C-w>w')
+keymap.set('', 'sh', '<C-w>h')
+keymap.set('', 'sk', '<C-w>k')
+keymap.set('', 'sj', '<C-w>j')
+keymap.set('', 'sl', '<C-w>l')
+
 local lspconfig = require('lspconfig')
 local protocol = require('vim.lsp.protocol')
+local lsp = require('lsp-zero').preset({})
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+  local opts = {buffer = bufnr}
+
+  vim.keymap.set({'n', 'x'}, 'gq', function()
+    vim.lsp.buf.format({async = false, timeout_ms = 10000})
+  end, opts)
+end)
+
+lsp.configure('lua_ls', {
+ settings = {
+     Lua = {
+         diagnostics = {
+              globals = { 'vim' }
+         }
+     }
+ }
+})
+
+-- Code actions
+
+saga.init_lsp_saga {
+  use_saga_diagnostic_sign = false,
+  code_action_prompt = {
+    enable = false,
+    sign = false,
+    virtual_text = true,
+  },
+  server_filetype_map = {
+    typescript = 'typescript'
+  }
+}
+
+lsp.setup()
 
 local keymap = vim.keymap -- for conciseness
 
@@ -20,31 +63,27 @@ local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
       -- Mappings.
       vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
       vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+      -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
       buf_set_keymap('n', 'gtd', '<cmd>split<CR><cmd>lua vim.lsp.buf.definition()<CR>', opts)
       buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-      buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+      -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
       buf_set_keymap('n', '<space>sld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-      buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      -- buf_set_keymap('n', '<space>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+      -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 
-      -- vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, opts)
+      
+      vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+      vim.keymap.set('n', '<space>ad', vim.lsp.buf.code_action, opts)
+
+      vim.keymap.set('n', '<space>ac', vim.lsp.buf.code_action, opts)
       -- vim.keymap.set('x', '<space>ac', function() return vim.lsp.buf.code_action() end, opts)
-      vim.keymap.set('n', '<space>lf', function() vim.lsp.buf.format({ timeout_ms = 5000 }) end, opts)
-      vim.keymap.set('v', '<space>lf', function() return vim.lsp.buf.format() end, opts)
+      vim.keymap.set('n', '<space>lf', function() vim.lsp.buf.format { async = true } end, bufopts)
 
       buf_set_keymap('n', '<space>od', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
       buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
       buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
       buf_set_keymap('n', '<space>lc', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-      buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
       buf_set_keymap('n', '<space>af', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', opts)
-      keymap.set('n', '<space>za', function() vim.lsp.buf.format { async = true } end, bufopts)
-
-      vim.keymap.set('n', '<space>al', function()
-      vim.lsp.buf.format { async = true }
-      end, opts)
-
-      vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format({async=true})' ]])
 
       if client.name == "tsserver" then
          client.server_capabilities.documentFormattingProvider = false
@@ -54,54 +93,37 @@ local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
          keymap.set("n", "<space>ra", ":TypescriptAddMissingImports<CR>") -- remove unused variables (not in youtube nvim video)
       end
 
-   end
+end
 
    -- null-ls
    local null_ls = require("null-ls")
 
    null_ls.setup({
-      should_attach = function(bufnr)
-      local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-      -- if ft == "dbui" or ft == "dbout" or ft:match("sql") then
-      if ft == "dbui" or ft == "dbout" then
-         return false
-      end
-      return true
-      end,
       auto_restart = true,
       run_on_start = true,
       autostart = true,
+      debug = false,
       on_attach = function(client, bufnr)
-      client.server_capabilities.documentFormattingProvider = true
-      client.server_capabilities.documentRangeFormattingProvider = true
-      vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+         client.server_capabilities.documentFormattingProvider = true
+         client.server_capabilities.documentRangeFormattingProvider = true
       end,
       sources = {
          null_ls.builtins.formatting.prettier.with {
             only_local = "node_modules/.bin",
          },
-         -- null_ls.builtins.formatting.prettierd,
+         null_ls.builtins.formatting.prettierd,
+         null_ls.builtins.diagnostics.eslint_d,
          null_ls.builtins.diagnostics.jsonlint,
          null_ls.builtins.formatting.fixjson,
          null_ls.builtins.formatting.pg_format.with {
             filetypes = { "sql", "pgsql" },
          },
-         null_ls.builtins.formatting.sql_formatter.with({
-            filetypes = {
-               "sql",
-               "mysql",
-            },
-         }),
          null_ls.builtins.formatting.stylua,
          null_ls.builtins.code_actions.eslint_d,
-         null_ls.builtins.code_actions.refactoring,
+         -- null_ls.builtins.code_actions.ts_node_action,
          null_ls.builtins.diagnostics.eslint_d,
-         null_ls.builtins.formatting.stylua,
          null_ls.builtins.formatting.lua_format,
-         null_ls.builtins.formatting.sql_formatter,
-         require('typescript.extensions.null-ls.code-actions'),
-         null_ls.builtins.formatting.trim_newlines,
-         null_ls.builtins.formatting.trim_whitespace,
+         -- require('typescript.extensions.null-ls.code-actions'),
          null_ls.builtins.formatting.xmllint,
       }
    })
@@ -133,9 +155,7 @@ local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
       }),
       sources = cmp.config.sources({
-         { name = "buffer-lines" },
          { name = 'nvim_lsp' },
-         { name = 'nvim_lsp_signature_help' },
          { name = 'path' },
          { name = 'vsnip' },
       }, {
@@ -197,6 +217,10 @@ capabilities.textDocument.codeAction = {
    };
 }
 
+local lsp_flags = {
+  debounce_text_changes = 150,
+}
+
 lspconfig.tsserver.setup({
    on_attach = on_attach,
    auto_restart = true,
@@ -206,8 +230,6 @@ lspconfig.tsserver.setup({
    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
    capabilities = capabilities
 })
-
-lspconfig.sqlls.setup {}
 
 lspconfig.lua_ls.setup {
    on_attach = on_attach,
@@ -227,23 +249,16 @@ lspconfig.jsonls.setup {
 }
 
 lspconfig.eslint.setup({
-   on_attach = function(client, bufnr)
-   on_attach(client, bufnr)
-   client.server_capabilities.document_formatting = true
-   end,
-   settings = {
-      format = { enable = true },
-   },
-   filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+  filestypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue', 'svelte' },
+  settings = {
+    workingDirectory = { mode = 'auto' },
+    lint = { enable = true },
+  },
 })
 
 lspconfig.bashls.setup({})
 
-lspconfig.vimls.setup({
-   on_attach = on_attach,
-   capabilities = capabilities,
-   filetypes = { "vim" },
-})
+lspconfig.vimls.setup({})
 
 lspconfig.yamlls.setup({
    capabilities = capabilities,
@@ -251,22 +266,22 @@ lspconfig.yamlls.setup({
    filetypes = { "yaml" },
 })
 
-require("typescript").setup({
-   capabilities = capabilities,
-   server = {
-      on_attach = on_attach,
-   },
-   init_options = {
-      preferences = {
-         importModuleSpecifierPreference = "non-relative"
-      }
-   },
-   disable_commands = false, -- prevent the plugin from creating Vim commands
-   debug = false, -- enable debug logging for commands
-   server = { -- pass options to lspconfig's setup method
-      on_attach = on_attach
-   }
-})
+-- require("typescript").setup({
+--    capabilities = capabilities,
+--    server = {
+--       on_attach = on_attach,
+--    },
+--    init_options = {
+--       preferences = {
+--          importModuleSpecifierPreference = "non-relative"
+--       }
+--    },
+--    disable_commands = false, -- prevent the plugin from creating Vim commands
+--    debug = false, -- enable debug logging for commands
+--    server = { -- pass options to lspconfig's setup method
+--       on_attach = on_attach
+--    }
+-- })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
    vim.lsp.diagnostic.on_publish_diagnostics, {
