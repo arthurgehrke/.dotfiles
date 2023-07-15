@@ -67,13 +67,13 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 # brew packages
 export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH" 
 export PATH="/usr/local/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # python
 # python2 deprecated so ...
@@ -260,11 +260,14 @@ export BAT_THEME="gruvbox-dark"
 # Brew
 ##############################################################################
 source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+# java sdk
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
 ##############################################################################
 # Various
 ##############################################################################
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"

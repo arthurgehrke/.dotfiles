@@ -38,6 +38,8 @@ treesitter_config.setup {
     "markdown",
     'markdown_inline',
     "json",
+    "json5",
+    "jsonc",
     "css",
     "html",
     "lua",

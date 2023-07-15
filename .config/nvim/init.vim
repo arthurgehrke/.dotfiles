@@ -8,34 +8,29 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 source $HOME/.config/nvim/snippets.vim
 
-set switchbuf=useopen
-set buflisted
-set laststatus=2
+" set switchbuf=useopen
+" set buflisted
 set nofoldenable
 set shell=$SHELL
 set clipboard+=unnamedplus
 set encoding=utf-8
 set autoread
 set scrolloff=2         " Keep at least 2 lines above/below
-set hidden
-set bufhidden=hide
-set nobuflisted
-
 set noswapfile
 set nobackup
+set hidden
 set noincsearch
 set ignorecase
-
 set nofixendofline "avoid empty line in the end
-" set hidden " buffer unlisted but still visible on screen
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber
 set cursorline
 set hlsearch
+set noshowcmd
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
 set cmdheight=1
-set noshowcmd
+
 set noshowmode
 set shortmess+=c
 set previewheight=5
@@ -170,7 +165,8 @@ if has('mac')
     " $ pip2 install neovim --upgrade
     " $ pip3 install neovim --upgrade
     let g:python_host_prog='/usr/local/bin/python'
-    let g:python3_host_prog='/usr/local/bin/python3'
+    " let g:python3_host_prog='/usr/local/bin/python3'
+    let g:python3_host_prog = "python"
 endif
 
 let g:editorconfig_end_of_line = 'mac'

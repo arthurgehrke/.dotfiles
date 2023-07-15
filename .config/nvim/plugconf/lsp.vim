@@ -266,22 +266,9 @@ lspconfig.yamlls.setup({
    filetypes = { "yaml" },
 })
 
--- require("typescript").setup({
---    capabilities = capabilities,
---    server = {
---       on_attach = on_attach,
---    },
---    init_options = {
---       preferences = {
---          importModuleSpecifierPreference = "non-relative"
---       }
---    },
---    disable_commands = false, -- prevent the plugin from creating Vim commands
---    debug = false, -- enable debug logging for commands
---    server = { -- pass options to lspconfig's setup method
---       on_attach = on_attach
---    }
--- })
+vim.diagnostic.config({
+  virtual_text = false,
+})
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
    vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -296,6 +283,14 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 vim.o.updatetime = 250
+
+local opt = vim.opt
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevelstart = 99
+opt.foldnestmax = 10 -- deepest fold is 10 levels
+opt.foldenable = false -- don't fold by default
+opt.foldlevel = 1
 EOF
 
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>

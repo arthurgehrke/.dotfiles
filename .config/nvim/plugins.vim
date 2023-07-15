@@ -14,22 +14,20 @@ call plug#begin()
   Plug 'numToStr/Comment.nvim'
   " Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
-  " Plug 'akinsho/bufferline.nvim'
+  Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'sindrets/diffview.nvim'
   Plug 'nvim-lua/popup.nvim'
   Plug 'dstein64/vim-startuptime'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
   Plug 'haya14busa/is.vim'
   Plug 'haya14busa/incsearch.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'shumphrey/fugitive-gitlab.vim'
-  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} 
   Plug 'williamboman/mason-lspconfig.nvim'
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
-  " Plug 'glepnir/lspsaga.nvim'
   Plug 'kkharji/lspsaga.nvim'
   Plug 'jay-babu/mason-null-ls.nvim'
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
@@ -37,15 +35,11 @@ call plug#begin()
   Plug 'neovim/nvim-lspconfig'
   Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'jose-elias-alvarez/typescript.nvim'
-  Plug 'samoshkin/vim-mergetool'
   Plug 'airblade/vim-gitgutter'
-  Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'hrsh7th/cmp-buffer'
-  Plug 'hrsh7th/cmp-path'
-  Plug 'hrsh7th/cmp-cmdline'
-  Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/nvim-cmp'         " Required
+  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+  Plug 'L3MON4D3/LuaSnip'         " Required
+  Plug 'L3MON4D3/LuaSnip'
   Plug 'nmac427/guess-indent.nvim'
   Plug 'mfussenegger/nvim-dap'
   Plug 'mxsdev/nvim-dap-vscode-js'
@@ -61,18 +55,15 @@ call plug#begin()
   Plug 'tpope/vim-dotenv'
   Plug 'goolord/alpha-nvim'
   Plug 'junegunn/gv.vim'
-  Plug 'ckolkey/ts-node-action'
-  Plug 'kdheepak/tabline.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/comment.vim
 " source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/alpha.vim
-" source $HOME/.config/nvim/plugconf/bufferline.vim
+source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
-source $HOME/.config/nvim/plugconf/toggle_lsp_diagnostics.vim
-source $HOME/.config/nvim/plugconf/nvim_treesitter.vim
+source $HOME/.config/nvim/plugconf/treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/git-messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
@@ -87,4 +78,3 @@ source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
 source $HOME/.config/nvim/plugconf/dadbod.vim
-" source $HOME/.config/nvim/plugconf/dotenv.vim

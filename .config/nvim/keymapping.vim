@@ -33,9 +33,6 @@ noremap <space>ss :call StripWhitespace()<CR>
 nnoremap <silent><C-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><C-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
-nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
-nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
-
 
 " Toggle relative line numbers and regular line numbers.
 nnoremap <space>tr :set relativenumber!<CR>
