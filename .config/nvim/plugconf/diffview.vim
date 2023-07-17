@@ -109,11 +109,9 @@ require("diffview").setup({
     },
   },
 })
-EOF
 
-nnoremap <silent>vdo :DiffviewOpen<CR>
-nnoremap <silent>vdc :DiffviewClose<CR>
-nnoremap <silent>vdf :DiffviewFileHistory<CR>
-nnoremap <silent>vdt :DiffviewToggleFiles<CR>
-nnoremap <silent>vdh :DiffviewFileHistory %<CR>
+vim.keymap.set('n', "<space>gm", '<cmd>DiffviewOpen<CR>', { desc = "Open Diff View", silent = true })
+vim.keymap.set('n', "<space>gx", '<cmd>DiffviewClose<CR>', { desc = "Open Diff View", silent = true })
+vim.keymap.set('n', "<space>gh", '<cmd>DiffviewFileHistory<CR>', { desc = "Open Diff View", silent = true })
+EOF
 

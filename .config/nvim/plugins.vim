@@ -12,7 +12,6 @@ call plug#begin()
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'tpope/vim-surround'
   Plug 'numToStr/Comment.nvim'
-  " Plug 'windwp/nvim-autopairs'
   Plug 'jdhao/better-escape.vim'
   Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
@@ -30,15 +29,12 @@ call plug#begin()
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
   Plug 'kkharji/lspsaga.nvim'
   Plug 'jay-babu/mason-null-ls.nvim'
-  Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
   Plug 'jay-babu/mason-nvim-dap.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'jose-elias-alvarez/typescript.nvim'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'hrsh7th/nvim-cmp'         " Required
-  Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-  Plug 'L3MON4D3/LuaSnip'         " Required
+  Plug 'hrsh7th/nvim-cmp'         
+  Plug 'hrsh7th/cmp-nvim-lsp'     
   Plug 'L3MON4D3/LuaSnip'
   Plug 'nmac427/guess-indent.nvim'
   Plug 'mfussenegger/nvim-dap'
@@ -48,13 +44,14 @@ call plug#begin()
   Plug 'theHamsta/nvim-dap-virtual-text'
   " Plug 'mhinz/vim-startify'
   Plug 'mxsdev/nvim-dap-vscode-js'
-  Plug 'rhysd/git-messenger.vim'
   Plug 'tpope/vim-dadbod'
   Plug 'kristijanhusak/vim-dadbod-ui'
   Plug 'kristijanhusak/vim-dadbod-completion'
   Plug 'tpope/vim-dotenv'
   Plug 'goolord/alpha-nvim'
   Plug 'junegunn/gv.vim'
+  Plug 'zaldih/themery.nvim'
+  Plug 'b0o/schemastore.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
@@ -65,7 +62,6 @@ source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
-source $HOME/.config/nvim/plugconf/git-messenger.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
@@ -73,7 +69,6 @@ source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
-source $HOME/.config/nvim/plugconf/gitgutter.vim
 source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim

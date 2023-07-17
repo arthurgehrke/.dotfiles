@@ -29,22 +29,16 @@ if not ok then return end
 local lsp_servers = {
 	"tsserver",
 	"html",
-	"lua_ls",
+	-- "lua_ls",
 	"bashls",
 	"dockerls",
 	"jsonls",
-	'vimls',
 	'yamlls',
 	'dockerls',
 }
 
-local custom_servers = {
-  'vim-language-server',
-}
-
 local dap_servers = {
 	"js-debug-adapter", 
-	"vscode-node-debug2", 
 	"node-debug2-adapter", 
 	"js", 
 	"node2", 
@@ -52,23 +46,24 @@ local dap_servers = {
 }
 
 -- enable mason
-mason.setup()
+mason.setup({
+ pip = {
+    upgrade_pip = true,
+  }
+})
+
+mason_null_ls.setup({
+	ensure_installed = {'eslint_d'},
+	automatic_installation = true,
+	handlers = {},
+})
 
 mason_lspconfig.setup({
-	-- list of servers for mason to install
 	ensure_installed = lsp_servers,
-	-- auto-install configured servers (with lspconfig)
 	automatic_installation = true, -- not the same as ensure_installed
   auto_update = true,
 })
 
-mason_null_ls.setup({
-	-- list of formatters & linters for mason to install
-	ensure_installed = lsp_servers,
-  automatic_setup = true,
-  automatic_instalation = true,
-  auto_update = true,
-})
 
 mason_dap.setup({
   ensure_installed = dap_servers,
@@ -77,9 +72,12 @@ mason_dap.setup({
   auto_update = true,
 })
 
-mason_tool.setup({
-  ensure_installed = custom_servers,
-	automatic_installation = true,
-  auto_update = true,
-})
+local lspconfig = require('lspconfig')
+local get_servers = require('mason-lspconfig').get_installed_servers
+
+for _, server_name in ipairs(get_servers()) do
+  lspconfig[server_name].setup({
+    capabilities = lsp_capabilities,
+  })
+end
 EOF

@@ -1,15 +1,12 @@
 nnoremap <silent> <space>so :source $MYVIMRC<bar>echo "reloaded vimrc"<cr>
 
-syntax on " turn on syntax highlighting
-filetype plugin indent on " allow plugins to use filetype indentation
+syntax on 
+filetype plugin indent on 
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
-source $HOME/.config/nvim/snippets.vim
 
-" set switchbuf=useopen
-" set buflisted
 set nofoldenable
 set shell=$SHELL
 set clipboard+=unnamedplus
@@ -30,7 +27,6 @@ set hlsearch
 set noshowcmd
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
 set cmdheight=1
-
 set noshowmode
 set shortmess+=c
 set previewheight=5

@@ -271,3 +271,6 @@ eval "$(jenv init -)"
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 
 eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+
+export PATH="/Users/arthurrodrigues/.local/bin:$PATH"
+

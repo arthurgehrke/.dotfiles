@@ -1,6 +1,8 @@
 lua << EOF
   vim.g.nvim_tree_disable_netrw = 0
   vim.cmd([[ command! -nargs=1 Browse silent exec '!open "<args>"' ]])
+
+vim.keymap.set("n", "<space>zs", vim.cmd.Git, { desc = "Git Status" })
 EOF
 
 command! DiffviewFile execute("DiffviewOpen -- " . expand("%")) | DiffviewToggleFiles
@@ -15,7 +17,3 @@ command! -nargs=? PreviousVersion diffthis |
       \ let &filetype=getbufvar('#', '&filetype') |
       \ execute 'autocmd BufWipeout <buffer> diffoff!' |
       \ diffthis
-
-nnoremap <space>dd :Gdiff<CR>
-nnoremap <space>di :Gvdiff<CR>
-nnoremap <space>dl :Git log<CR>
