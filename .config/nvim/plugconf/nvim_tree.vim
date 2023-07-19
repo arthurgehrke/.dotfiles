@@ -62,8 +62,6 @@ local function on_attach(bufnr)
    vim.keymap.set('n', 'x',     api.fs.cut,                            opts('Cut'))
    vim.keymap.set('n', 'y',     api.fs.copy.filename,                  opts('Copy Name'))
    vim.keymap.set('n', 'Y',     api.fs.copy.relative_path,             opts('Copy Relative Path'))
-   vim.keymap.set('n', '<2-LeftMouse>',  api.node.open.edit,           opts('Open'))
-   vim.keymap.set('n', '<2-RightMouse>', api.tree.change_root_to_node, opts('CD'))
 
    -- You will need to insert "your code goes here" for any mappings with a custom action_cb
    vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
@@ -76,8 +74,6 @@ local function on_attach(bufnr)
    vim.keymap.set('n', 'gy', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
    vim.keymap.set('n', '[c', api.node.navigate.git.prev, opts('Prev Git'))
    vim.keymap.set('n', ']c', api.node.navigate.git.next, opts('Next Git'))
-   -- vim.keymap.set('n', 'f', api.live_filter.start, opts('Filter'))
-   -- vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
    vim.keymap.set('n', 'x', api.fs.cut, opts('Cut'))
    vim.keymap.set('n', 'c', api.fs.copy.node, opts('Copy'))
    vim.keymap.set('n', 'p', api.fs.paste, opts('Paste'))
@@ -85,21 +81,14 @@ end
 
 require'nvim-tree'.setup {
    sync_root_with_cwd = true,
-   hijack_cursor = true, -- hijack the cursor in the tree to put it at the start of the filename
-   disable_netrw = true, -- disables netrw completely
    auto_reload_on_write = true,
    reload_on_bufenter = true,
    hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
-   prefer_startup_root = true,
-   hijack_unnamed_buffer_when_opening = false, -- will disable startify
-   hijack_directories = {
-      enable = true,
-      auto_open = true,
-   },
+   prefer_startup_root = false,
    open_on_tab = false,
-   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
    update_cwd = true, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
    on_attach = on_attach,
+   reload_on_bufenter = true,
    diagnostics = {
       enable = false,
       show_on_dirs = false,
@@ -108,15 +97,17 @@ require'nvim-tree'.setup {
    },
    update_focused_file = {  -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
       enable = true,
-      -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
-      -- only relevant when `update_focused_file.enable` is true
       update_cwd = true,
       update_root = false,
+      ignore_list = {},
    },
    git = {
       enable = true,
       ignore = false,
       timeout = 500,
+   },
+   filesystem_watchers = {
+      enable = true,
    },
    renderer = {
       indent_markers = {
@@ -130,7 +121,7 @@ require'nvim-tree'.setup {
       icons = {
          webdev_colors = true,
          show = {
-            file = false,
+            file = true,
             folder = true,
             folder_arrow = true,
             git = true,
@@ -215,8 +206,13 @@ require'nvim-tree'.setup {
       },
    }
 }
+
+require'nvim-web-devicons'.setup({
+   default = true
+})
 EOF
 
 nnoremap <Space>r :NvimTreeRefresh<CR>
 nnoremap <Space>c :NvimTreeCollapse<CR>
-nnoremap <Space>f :NvimTreeToggle<CR>
+" nnoremap <Space>f :NvimTreeToggle<CR>
+nnoremap <Space>f :NvimTreeFindFileToggle<CR>

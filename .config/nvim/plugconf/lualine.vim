@@ -8,11 +8,11 @@ lualine.setup {
     theme = "gruvbox-material",
     component_separators = { left = '|', right = '|'},
     section_separators = { left = '', right = ''},
-    disabled_filetypes = {}
+    disabled_filetypes = {'Neotree'}
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'branch' },
+    lualine_b = { 'location', 'branch' },
     lualine_c = { {
       'filename',
       file_status = true, -- displays file status (readonly status, modified status)

@@ -42,6 +42,18 @@ lsp.ensure_installed({
    'sqlls'
 })
 
+lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
+  servers = {
+    ['lua_ls'] = {'lua'},
+    ['rust_analyzer'] = {'rust'},
+    ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
+  }
+})
+
 lsp.set_sign_icons(
 {
    error = "",
@@ -66,7 +78,11 @@ lsp.configure('tsserver', {
       completions = {
          completeFunctionCalls = true
       }
-   }
+   },
+  servers = {
+     ['lua_ls'] = { 'lua' },
+     ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
+  }
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -195,6 +211,7 @@ null_ls.setup({
          return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
          end,
       },
+      require("typescript.extensions.null-ls.code-actions"),
       null_ls.builtins.diagnostics.eslint_d.with {
          condition = function(utils)
          return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
@@ -202,56 +219,56 @@ null_ls.setup({
       },
       null_ls.builtins.diagnostics.jsonlint,
       null_ls.builtins.formatting.fixjson,
+      null_ls.builtins.formatting.stylua.with({
+        extra_args = { "--indent-type=Spaces", "--indent-width=2", "--column-width=100" },
+      }),
       null_ls.builtins.formatting.pg_format.with {
          filetypes = { "sql", "pgsql" },
       },
-      null_ls.builtins.formatting.stylua.with {
-         extra_args = { '--config-path', vim.fn.expand '~/.stylua.toml' },
-      },
-      null_ls.builtins.formatting.stylua.with {
-         extra_args = { '--config-path', vim.fn.expand '~/.stylua.toml' },
-      },
+      -- null_ls.builtins.formatting.stylua.with {
+      --    extra_args = { '--config-path', vim.fn.expand '~/.stylua.toml' },
+      -- },
       null_ls.builtins.formatting.lua_format,
       null_ls.builtins.formatting.xmllint,
-   }
+   },
+   root_dir = require("null-ls.utils").root_pattern(
+     ".null-ls-root",
+     ".neoconf.json",
+     "Makefile",
+     ".git"
+   ),
 })
 
+require('lsp-zero').extend_cmp()
 local cmp = require'cmp'
-local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-   preselect = cmp.PreselectMode.None,
-   mapping = {
-      ['<CR>'] = cmp.mapping.confirm({ select = false }),
-      ['<C-j>'] = cmp.mapping.select_next_item(),
-      ['<C-k>'] = cmp.mapping.select_prev_item(),
-      ['<C-a>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      ['<C-e>'] = cmp.mapping({
-         i = cmp.mapping.abort(),
-         c = cmp.mapping.close(),
-      }),
-      ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-   },
-   sources = {
-      { name = 'buffer',                 keyword_length = 3 },
-      { name = 'nvim_lsp' },
-      { name = 'luasnip',                keyword_length = 2 },
-      { name = 'path' },
-      { name = 'nvim_lua' },
-      { name = 'nvim_lsp_signature_help' },
-      { name = 'luasnip',  keyword_length = 0 },
-   },
-   completion = {
-      completeopt = 'menu,menuone,noinsert'
+    preselect = cmp.PreselectMode.None,
+    window = {
+       completion = cmp.config.window.bordered(),
+       documentation = cmp.config.window.bordered(),
     },
-   window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered()
-   },
-   formatting = {
-      fields = { 'abbr', 'kind', 'menu' }
-   }
-})
+    confirm_opts = {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false,
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      -- ['<CR>'] = cmp.mapping.confirm({select = false}),
+      ['<CR>'] = cmp.mapping.confirm({select = true}),
+      ['<C-k>'] = cmp.mapping.select_prev_item(),
+      ['<C-j>'] = cmp.mapping.select_next_item(),
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'nvim_lsp_signature_help' },
+      { name = 'path' },
+      { name = 'vsnip' },
+    }, {
+      { name = 'buffer' },
+    }),
+  })
 
 function setAutoCmp(mode)
    if mode then
@@ -275,37 +292,8 @@ vim.cmd('command! AutoCmpOn lua setAutoCmp(true)')
 -- disable automatic competion popup on typing
 vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
 
--- local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-   properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-   },
-}
-
--- Code actions
-capabilities.textDocument.codeAction = {
-   dynamicRegistration = false;
-   codeActionLiteralSupport = {
-      codeActionKind = {
-         valueSet = {
-            "",
-            "quickfix",
-            "refactor",
-            "refactor.extract",
-            "refactor.inline",
-            "refactor.rewrite",
-            "source",
-            "source.organizeImports",
-         };
-      };
-   };
-}
 
 require('lspconfig').tsserver.setup({
    on_init = function(client)
@@ -333,9 +321,7 @@ require('lspconfig').jsonls.setup({
    settings = {
       format = { enable = true },
       json = {
-         validate = { enable = true },
-         schemas = schemas.json.schemas(),
-         validate = { enable = true },
+         schemas = schemas.json.schemas().jsonls,
       },
    },
    filetypes = { "json" }
@@ -344,7 +330,15 @@ require('lspconfig').jsonls.setup({
 require('lspconfig').yamlls.setup({
    settins = {
       yamlls = {
-         schemas = schemas.yaml.schemas(),
+        format = { enable = true, singleQuote = true },
+        validate = true,
+        hover = true,
+        completion = true,
+        schemaStore = {
+          enable = true,
+          url = "https://www.schemastore.org/api/json/catalog.json",
+        },
+        schemas = schemas.json.schemas().yamls,
       },
    },
 })
@@ -361,7 +355,6 @@ vim.diagnostic.config({
    severity_sort = true,
    float = true,
 })
-
 EOF
 
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>

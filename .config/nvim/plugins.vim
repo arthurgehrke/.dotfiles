@@ -3,6 +3,8 @@ syntax on
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
+  " Plug 'nvim-neo-tree/neo-tree.nvim'
+  " Plug 'MunifTanjim/nui.nvim'
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'ellisonleao/gruvbox.nvim'
   " Plug 'EdenEast/nightfox.nvim'
@@ -52,6 +54,8 @@ call plug#begin()
   Plug 'junegunn/gv.vim'
   Plug 'zaldih/themery.nvim'
   Plug 'b0o/schemastore.nvim'
+  Plug 'mbbill/undotree'
+  Plug 'NTBBloodbath/rest.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
@@ -66,6 +70,7 @@ source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
+" source $HOME/.config/nvim/plugconf/neotree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
@@ -73,3 +78,5 @@ source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
 source $HOME/.config/nvim/plugconf/dadbod.vim
+source $HOME/.config/nvim/plugconf/rest.vim
+source $HOME/.config/nvim/plugconf/undotree.vim

@@ -4,8 +4,22 @@ if not status_ok then
 	return
 end
 
-alpha.setup(require'alpha.themes.startify'.config)
+local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
+
+-- Set header
+dashboard.section.header.val = {
+    "                                                     ",
+    "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+    "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+    "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+    "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+    "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+    "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+    "                                                     ",
+}
+
+alpha.setup(require'alpha.themes.startify'.config)
 dashboard.section.buttons.val = {
 	dashboard.button("n", " New file", ":ene <BAR> startinsert <CR>"),
 	dashboard.button("s", " Settings", ":e ~/.config/nvim<CR>"),

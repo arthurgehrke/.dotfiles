@@ -35,6 +35,7 @@ treesitter_config.setup {
   -- ignore_install = { "javascript" },
   ignore_install = {},
   ensure_installed = {
+    'http',
     "markdown",
     'markdown_inline',
     "json",

@@ -7,7 +7,9 @@ source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
+set autochdir
 set nofoldenable
+set laststatus=1
 set shell=$SHELL
 set clipboard+=unnamedplus
 set encoding=utf-8
@@ -31,9 +33,9 @@ set noshowmode
 set shortmess+=c
 set previewheight=5
 set pumheight=10
-set autoindent
+" set autoindent
 set copyindent
-set smartindent
+" set smartindent
 set nojoinspaces
 set smarttab
 set expandtab
@@ -48,21 +50,13 @@ set backspace=indent,eol,start
 set noshowmatch
 highlight clear SignColumn
 
-" Set up persistent undo across all files.
-set undolevels=2000
+set backup
 set undofile
-set backupdir=$HOME/.config/nvim/tmp/backup
-set dir=$HOME/.config/nvim/tmp/swap
-set viewdir=$HOME/.config/nvim/tmp/view
-if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
-if !isdirectory(&dir)       | call mkdir(&dir, 'p', 0700)       | endif
-if !isdirectory(&viewdir)   | call mkdir(&viewdir, 'p', 0700)   | endif
-
-" Persist undo history between Vim sessions.
-if has('persistent_undo')
-  set undodir=$HOME/.config/nvim/tmp/undo
-    if !isdirectory(&undodir) | call mkdir(&undodir, 'p', 0700) | endif
-endif
+set backupdir=~/.local/share/nvim/backup// "Tilda file
+set directory=~/.local/share/nvim/swap// "Swap file
+set undodir=~/.local/share/nvim/undo// "Undo file
+set undolevels=200
+set undoreload=2000
 
 let mapleader="\<Space>"
 
