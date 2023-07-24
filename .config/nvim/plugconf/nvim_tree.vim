@@ -80,13 +80,13 @@ local function on_attach(bufnr)
 end
 
 require'nvim-tree'.setup {
-   sync_root_with_cwd = true,
+   sync_root_with_cwd = false,
    auto_reload_on_write = true,
    reload_on_bufenter = true,
    hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
-   prefer_startup_root = false,
+   prefer_startup_root = true,
    open_on_tab = false,
-   update_cwd = true, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
+   update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
    on_attach = on_attach,
    reload_on_bufenter = true,
    diagnostics = {
@@ -97,7 +97,7 @@ require'nvim-tree'.setup {
    },
    update_focused_file = {  -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
       enable = true,
-      update_cwd = true,
+      update_cwd = false,
       update_root = false,
       ignore_list = {},
    },
@@ -160,7 +160,7 @@ require'nvim-tree'.setup {
    },
    filters = {
       dotfiles = false,
-      custom = { ".git$", "node_modules", 'dist', '.dist', '.next' }
+      custom = { "node_modules", 'dist', '.dist', '.next' } -- ".git$"
    },
    log = {
       enable = false,

@@ -30,11 +30,14 @@ local lsp_servers = {
 	"tsserver",
 	"html",
 	-- "lua_ls",
+	"vimls",
 	"bashls",
+	"vtsls",
 	"dockerls",
 	"jsonls",
-	'yamlls',
-	'dockerls',
+	"yamlls",
+	"angularls",
+	"dockerls",
 }
 
 local dap_servers = {
@@ -53,7 +56,7 @@ mason.setup({
 })
 
 mason_null_ls.setup({
-	ensure_installed = {'eslint_d'},
+	ensure_installed = {'eslint_d', 'jsonlint'},
 	automatic_installation = true,
 	handlers = {},
 })

@@ -7,7 +7,6 @@ source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
-set autochdir
 set nofoldenable
 set laststatus=1
 set shell=$SHELL

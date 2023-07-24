@@ -12,6 +12,10 @@ local keymap = vim.keymap
 local lspconfig = require('lspconfig')
 local protocol = require('vim.lsp.protocol')
 local schemas = require('schemastore')
+local cmp = require'cmp'
+require('lsp-zero').extend_cmp()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 vim.o.updatetime = 250
 opt.foldmethod = "expr"
@@ -39,7 +43,9 @@ lsp.ensure_installed({
    'html',
    'cssls',
    'bashls',
-   'sqlls'
+   'sqlls',
+   'angularls',
+   'jsonlint'
 })
 
 lsp.format_mapping('gq', {
@@ -48,6 +54,7 @@ lsp.format_mapping('gq', {
     timeout_ms = 10000,
   },
   servers = {
+    ['lua_ls'] = {'lua'},
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
     ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
@@ -65,12 +72,18 @@ lsp.set_sign_icons(
 
 lsp.setup_servers({
    "eslint",
-   -- "angularls",
+   "angularls",
    -- "vuels",
    opts = {
       single_file_support = false,
       on_attach = on_attach,
    },
+})
+
+local util = require('lspconfig.util')
+
+lsp.configure('angularls', {
+    root_dir = util.root_pattern('angular.json', 'project.json', 'package.json')
 })
 
 lsp.configure('tsserver', {
@@ -107,6 +120,7 @@ vim.lsp.buf.format({async = false, timeout_ms = 10000})
 end, opts)
 
 vim.keymap.set({'n', 'x'}, '<space>al', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+vim.keymap.set({'n', 'x'}, "<space>ra", ":TypescriptAddMissingImports<CR>") 
 
 vim.keymap.set({ 'n' }, '<space>k', function()
 vim.lsp.buf.signature_help()
@@ -162,6 +176,7 @@ local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
    -- Mappings.
    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+   vim.keymap.set({'n', 'x'}, '<space>af', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
 
    if client.name == "tsserver" then
       client.server_capabilities.documentFormattingProvider = false
@@ -235,40 +250,47 @@ null_ls.setup({
      ".null-ls-root",
      ".neoconf.json",
      "Makefile",
-     ".git"
+     ".git",
+     "package.lock-json"
    ),
 })
 
-require('lsp-zero').extend_cmp()
-local cmp = require'cmp'
-
 cmp.setup({
-    preselect = cmp.PreselectMode.None,
-    window = {
-       completion = cmp.config.window.bordered(),
-       documentation = cmp.config.window.bordered(),
-    },
-    confirm_opts = {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      -- ['<CR>'] = cmp.mapping.confirm({select = false}),
-      ['<CR>'] = cmp.mapping.confirm({select = true}),
-      ['<C-k>'] = cmp.mapping.select_prev_item(),
-      ['<C-j>'] = cmp.mapping.select_next_item(),
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'nvim_lsp_signature_help' },
-      { name = 'path' },
-      { name = 'vsnip' },
-    }, {
-      { name = 'buffer' },
-    }),
-  })
+ preselect = cmp.PreselectMode.None,
+ window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+ },
+ snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+    -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+    -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+    -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+    end,
+ },
+ confirm_opts = {
+   behavior = cmp.ConfirmBehavior.Replace,
+   select = false,
+ },
+ mapping = cmp.mapping.preset.insert({
+   ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+   ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+   ['<CR>'] = cmp.mapping.confirm({select = true}),
+   ['<C-p>'] = cmp.mapping.select_prev_item(),
+   ['<C-n>'] = cmp.mapping.select_next_item(),
+   ['q'] = cmp.mapping.abort(),
+ }),
+ sources = cmp.config.sources({
+   { name = 'nvim_lsp' },
+   { name = 'nvim_lsp_signature_help' },
+   { name = 'path' },
+   { name = 'vsnip' },
+ }, {
+   { name = 'buffer' },
+ }),
+})
 
 function setAutoCmp(mode)
    if mode then
@@ -291,9 +313,6 @@ setAutoCmp(false)
 vim.cmd('command! AutoCmpOn lua setAutoCmp(true)')
 -- disable automatic competion popup on typing
 vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 require('lspconfig').tsserver.setup({
    on_init = function(client)
@@ -345,6 +364,18 @@ require('lspconfig').yamlls.setup({
 
 require('lspconfig').eslint.setup({})
 
+require('lspconfig').angularls.setup({
+  root_dir = util.root_pattern('angular.json', 'project.json', 'package.json'),
+   on_init = function(client)
+   client.server_capabilities.documentFormattingProvider = false
+   client.server_capabilities.documentFormattingRangeProvider = false
+   end,
+   capabilities = capabilities,
+   on_attach = function(client)
+   client.resolved_capabilities.document_formatting = false
+   end,
+})
+
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 vim.diagnostic.config({
@@ -355,6 +386,15 @@ vim.diagnostic.config({
    severity_sort = true,
    float = true,
 })
+
+vim.env.NEOVIM_NODE_VERSION = 'v18.12.1'
+
+if vim.fn.has('unix') and vim.env.NEOVIM_NODE_VERSION then
+    local node_dir = vim.env.HOME .. '/.nvm/versions/node/' .. vim.env.NEOVIM_NODE_VERSION .. '/bin/'
+    if (vim.fn.isdirectory(node_dir)) then
+        vim.env.PATH = node_dir .. ':' .. vim.env.PATH
+    end
+end
 EOF
 
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
