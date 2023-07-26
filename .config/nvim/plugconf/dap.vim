@@ -212,7 +212,7 @@ vim.keymap.set('n', '<space>d?', function() local widgets = require "dap.ui.widg
 vim.keymap.set('n', '<space>dk', ':lua require"dap".up()<CR>zz')
 vim.keymap.set('n', '<space>dj', ':lua require"dap".down()<CR>zz')
 vim.keymap.set('n', '<space>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
-vim.keymap.set('n', '<space>du', ':lua require"dapui".toggle()<CR>')
+vim.keymap.set('n', '<space>dpt', ':lua require"dapui".toggle()<CR>')
 vim.api.nvim_set_keymap('n', '<space>do', ':lua require("dap").repl.open()<CR>', { silent = true })
 vim.keymap.set('n', '<space>dC', function() require("dapui").close() end)
 vim.keymap.set('n', '<F5>', require 'dap'.continue)

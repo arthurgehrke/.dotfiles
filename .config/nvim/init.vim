@@ -49,13 +49,8 @@ set backspace=indent,eol,start
 set noshowmatch
 highlight clear SignColumn
 
-set backup
 set undofile
-set backupdir=~/.local/share/nvim/backup// "Tilda file
-set directory=~/.local/share/nvim/swap// "Swap file
-set undodir=~/.local/share/nvim/undo// "Undo file
-set undolevels=200
-set undoreload=2000
+lua vim.opt.undodir=os.getenv("HOME") .. "/.vim/undodir"
 
 let mapleader="\<Space>"
 
@@ -63,7 +58,7 @@ let mapleader="\<Space>"
 let g:loaded_matchparen=1
 
 " highlight from start of file
-autocmd BufEnter * :syntax sync fromstart
+" autocmd BufEnter * :syntax sync fromstart
 
 " disable automatic comment insertion
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o

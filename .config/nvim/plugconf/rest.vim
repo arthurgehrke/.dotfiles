@@ -19,10 +19,7 @@ require("rest-nvim").setup({
         timeout = 150,
       },
       result = {
-        -- toggle showing URL, HTTP info, headers at top the of result window
         show_url = true,
-        -- show the generated curl command in case you want to launch
-        -- the same request via the terminal (can be verbose)
         show_curl_command = false,
         show_http_info = true,
         show_headers = true,
@@ -41,10 +38,6 @@ require("rest-nvim").setup({
       custom_dynamic_variables = {},
       yank_dry_run = true,
     })
-
-vim.keymap.set("n", "<space>or", "<Plug>RestNvim<CR>", { silent = true, desc = "Rest" })
-vim.keymap.set("n", "<space>op", "<Plug>RestNvimPreview<CR>", { silent = true, desc = "Rest preview" })
-vim.keymap.set("n", "<space>ol", "<Plug>RestNvimLast<CR>", { silent = true, desc = "Rest last" })
 EOF
 
 nnoremap <space>rr <Plug>RestNvim<CR>
