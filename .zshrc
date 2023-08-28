@@ -153,7 +153,7 @@ export HISTSIZE=5000
 export SAVEHIST=5000
 export HISTFILESIZE=5000
 export DIRSTACKSIZE=8
-export HISTTIMEFORMAT="%c "
+export HISTTIMEFORMAT="%d/%m/%y %T "
 
 setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
 setopt SHARE_HISTORY             # Share history between all sessions.

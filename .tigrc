@@ -27,13 +27,17 @@ bind generic c :toggle show-changes
 bind generic O :toggle commit-order
 bind generic T :toggle commit-title-overflow
 
-set blame-view  = date:default author:full file-name:auto id:yes,color line-number:no,interval=1 text
-set grep-view = file-name:no line-number:yes,interval=1 text
-set main-view = line-number:no,interval=1 id:no date:default author:full commit-title:yes,graph,refs,overflow=no
-set refs-view = line-number:no id:no date:default author:full ref commit-title
-set stash-view  = line-number:no,interval=1 id:no date:default author:full commit-title
-set status-view = line-number:no,interval=1 status:short file-name
-set tree-view = line-number:no,interval=1 mode author:full file-size date:default id:no file-name
+# set blame-view  = date:default author:full file-name:auto id:yes,color line-number:no,interval=1 text
+# set grep-view = file-name:no line-number:yes,interval=1 text
+# set main-view = line-number:no,interval=1 id:no date:default author:full commit-title:yes,graph,refs,overflow=no
+# set refs-view = line-number:no id:no date:default author:full ref commit-title
+# set stash-view  = line-number:no,interval=1 id:no date:default author:full commit-title
+# set status-view = line-number:no,interval=1 status:short file-name
+# set tree-view = line-number:no,interval=1 mode author:full file-size date:default id:no file-name
+
+set main-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
+set stash-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
+set tree-view = mode author:display=full date:display=relative id file-size file-name
 
 # Searching
 bind generic	/	search
@@ -94,6 +98,6 @@ bind generic  i :toggle sort-field  # Toggle field to sort by
 bind generic  <Hash>  :toggle line-number # Toggle line numbers
 bind generic  D :toggle date    # Toggle date display
 bind generic  A :toggle author    # Toggle author display
-# bind generic  ??? :toggle commit-title-display
-            # Toggle commit title display
 
+bind generic r refresh
+bind generic Y <?bash -c "echo -n '%(commit)' | pbcopy"
