@@ -3,6 +3,8 @@ lua << EOF
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.lua_tree_indent_markers = 1
+vim.g.lua_tree_auto_close = 1
 
 vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
 
@@ -110,14 +112,17 @@ require'nvim-tree'.setup {
       enable = true,
    },
    renderer = {
-      indent_markers = {
-         enable = false,
-         icons = {
-            corner = "└ ",
-            edge = "│ ",
-            none = "  ",
-         },
-      },
+     indent_markers = {
+       enable = false,
+       inline_arrows = true,
+       icons = {
+         corner = " ",
+         edge = " ",
+         item = "┊",
+         bottom = "",
+         none = " ",
+       },
+     },
       icons = {
          webdev_colors = true,
          show = {
@@ -156,10 +161,14 @@ require'nvim-tree'.setup {
       preserve_window_proportions = true,
       relativenumber = false,
       number = false,
-      signcolumn = "no",
+      signcolumn = "auto",
+      width = 25,
    },
    filters = {
+      git_ignored = false,
       dotfiles = false,
+      git_clean = false,
+      no_buffer = false,
       custom = { "node_modules", 'dist', '.dist', '.next' } -- ".git$"
    },
    log = {
@@ -192,14 +201,6 @@ require'nvim-tree'.setup {
       open_file = {
          quit_on_open = true,
          resize_window = true,
-         window_picker = {
-            enable = true,
-            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
-            exclude = {
-               filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame", },
-               buftype  = { "nofile", "terminal", "help", },
-            }
-         }
       },
       remove_file = {
          close_window = false,

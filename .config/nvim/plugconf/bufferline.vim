@@ -16,6 +16,11 @@ options = {
   show_buffer_close_icons = false,
   show_close_icon = false,
   color_icons = true,
+  offsets = {
+    -- {filetype = "NvimTree", text = "File Explorer" , text_align = "center"},
+    -- {filetype = "dbui", text = "Db Explorer" , text_align = "center"},
+    -- {filetype = "Outline", text = "Outline" , text_align = "center"},
+  },
   highlights = {
       separator = {
         fg = '#073642',

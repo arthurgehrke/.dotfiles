@@ -27,7 +27,7 @@ set cursorline
 set hlsearch
 set noshowcmd
 set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
-set cmdheight=1
+" set cmdheight=1
 set noshowmode
 set shortmess+=c
 set previewheight=5
@@ -58,7 +58,7 @@ let mapleader="\<Space>"
 let g:loaded_matchparen=1
 
 " highlight from start of file
-" autocmd BufEnter * :syntax sync fromstart
+autocmd BufEnter * :syntax sync fromstart
 
 " disable automatic comment insertion
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -154,12 +154,4 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
-
-"Delete all Git conflict markers
-"Creates the command :GremoveConflictMarkers
-function! RemoveConflictMarkers() range
-  echom a:firstline.'-'.a:lastline
-  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
-endfunction
-"-range=% default is whole file
-command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+let g:loaded_ruby_provider = 0

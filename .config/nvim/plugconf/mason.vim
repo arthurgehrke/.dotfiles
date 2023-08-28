@@ -56,7 +56,7 @@ mason.setup({
 })
 
 mason_null_ls.setup({
-	ensure_installed = {'eslint_d', 'jsonlint'},
+	ensure_installed = {'eslint_d', 'jsonlint', 'vtls'},
 	automatic_installation = true,
 	handlers = {},
 })

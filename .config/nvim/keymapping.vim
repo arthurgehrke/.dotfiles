@@ -112,3 +112,20 @@ function! ToArrayFunction() range
   silent execute "normal $xa]"
 endfunction
 command! -range ToArray <line1>,<line2> call ToArrayFunction()
+
+"Delete all Git conflict markers
+"Creates the command :GremoveConflictMarkers
+function! RemoveConflictMarkers() range
+  echom a:firstline.'-'.a:lastline
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+endfunction
+"-range=% default is whole file
+command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+
+func! DeleteBuffers()
+    let l:buffers = filter(getbufinfo(), {_, v -> v.hidden})
+    if !empty(l:buffers)
+        execute 'bwipeout' join(map(l:buffers, {_, v -> v.bufnr}))
+    endif
+endfunc
+command! -bar -bang DeleteBuffers call DeleteBuffers()

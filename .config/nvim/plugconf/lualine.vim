@@ -1,45 +1,54 @@
 lua << END
 local status, lualine = pcall(require, "lualine")
 if (not status) then return end
+-- https://github.com/kuntau/dotfiles/blob/develop/config/nvim/lua/config/plugins/statusline.lua
+-- StatusLine, bufferline & tabline configs
+-- could be any of powerline, windline, lualine, airline or lightline
 
-lualine.setup {
+require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = "gruvbox-material",
-    component_separators = { left = '|', right = '|'},
-    section_separators = { left = '', right = ''},
-    disabled_filetypes = {'Neotree'}
+    theme = 'gruvbox',
+    section_separators = '', 
+    component_separators = '',
+    disabled_filetypes = {
+      statusline = { 'NvimTree' },
+      winbar = { 'NvimTree' },
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'location', 'branch' },
-    lualine_c = { {
-      'filename',
-      file_status = true, -- displays file status (readonly status, modified status)
-      path = 0 -- 0 = just filename, 1 = relative path, 2 = absolute path
-    } },
-    lualine_x = {
-      { 'diagnostics', sources = { "nvim_diagnostic" }, symbols = { error = ' ', warn = ' ', info = ' ',
-        hint = ' ' } },
-      'encoding',
-      'filetype'
-    },
-    lualine_y = { 'progress' },
-    lualine_z = { 'location' }
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
+    lualine_x = { 'filetype' },
+    lualine_y = {},
+    lualine_z = {}
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = { {
-      'filename',
-      file_status = true, -- displays file status (readonly status, modified status)
-      path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
-    } },
+    lualine_c = { 'filename' },
     lualine_x = { 'location' },
     lualine_y = {},
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'fugitive' }
+  winbar = {},
+  inactive_winbar = {
+  },
+  extensions = {}
 }
+
+require('lualine').hide({
+  place = {'statusline', 'tabline', 'winbar', 'NvimTree'}, -- The segment this change applies to.
+  unhide = false,  -- whether to re-enable lualine again/
+})
 END

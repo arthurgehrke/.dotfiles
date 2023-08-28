@@ -253,3 +253,4 @@ nnoremap <silent> <space>dc <Cmd>lua require'dap'.continue()<CR>
 nnoremap <silent> <space>dx <Cmd>lua require'dap'.step_over()<CR>
 nnoremap <silent> <space>di <Cmd>lua require'dap'.step_into()<CR>
 nnoremap <silent> <space>do <Cmd>lua require'dap'.step_out()<CR>
+autocmd FileType dap-float nnoremap <buffer><silent> q <cmd>close!<CR>

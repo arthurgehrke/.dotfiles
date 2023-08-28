@@ -5,13 +5,9 @@ local status, rest = pcall(require, "rest.nvim")
 if (not status) then return end
 
 require("rest-nvim").setup({
-      -- Open request results in a horizontal split
       result_split_horizontal = false,
-      -- Keep the http file buffer above|left when split horizontal|vertical
-      result_split_in_place = false,
-      -- Skip SSL verification, useful for unknown certificates
-      skip_ssl_verification = false,
-      -- Encode URL before making request
+      result_split_in_place = true,
+      skip_ssl_verification = true,
       encode_url = true,
       -- Highlight request on run
       highlight = {
@@ -23,13 +19,25 @@ require("rest-nvim").setup({
         show_curl_command = false,
         show_http_info = true,
         show_headers = true,
-        -- executables or functions for formatting response body [optional]
-        -- set them to false if you want to disable them
         formatters = {
           json = "jq",
           html = function(body)
             return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
           end
+        },
+        result = {
+          -- toggle showing URL, HTTP info, headers at top the of result window
+          show_url = true,
+          show_http_info = true,
+          show_headers = true,
+          -- executables or functions for formatting response body [optional]
+          -- set them to nil if you want to disable them
+          formatters = {
+            json = "jq",
+            html = function(body)
+            return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
+            end
+          },
         },
       },
       -- Jump to request line on run

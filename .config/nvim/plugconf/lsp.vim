@@ -71,8 +71,8 @@ lsp.set_sign_icons(
 )
 
 lsp.setup_servers({
-   "eslint",
-   "angularls",
+   -- "eslint",
+   -- "angularls",
    -- "vuels",
    opts = {
       single_file_support = false,
@@ -94,7 +94,7 @@ lsp.configure('tsserver', {
    },
   servers = {
      ['lua_ls'] = { 'lua' },
-     ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
+     ['null-ls'] = { 'typescript', 'typescriptreact', 'javascript', 'json' },
   }
 })
 
@@ -142,6 +142,8 @@ vim.lsp.buf.code_action()
 end,
 { silent = true, desc = 'toggle signature' })
 end)
+
+vim.keymap.set('n', 'gf', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true, buffer = bufnr, desc = desc })
 
 saga.init_lsp_saga {
    use_saga_diagnostic_sign = false,
@@ -197,8 +199,12 @@ null_ls.setup({
    autostart = true,
    debug = false,
    on_attach = function(client, bufnr)
-   client.server_capabilities.documentFormattingProvider = true
-   client.server_capabilities.documentRangeFormattingProvider = true
+     if client.name == "eslint" or client.name == "angularls" or client.name == "null-ls" then
+       return
+     end
+
+     client.server_capabilities.documentFormattingProvider = true
+     client.server_capabilities.documentRangeFormattingProvider = true
    end,
    sources = {
       null_ls.builtins.formatting.prettier.with({
@@ -227,11 +233,12 @@ null_ls.setup({
          end,
       },
       require("typescript.extensions.null-ls.code-actions"),
-      null_ls.builtins.diagnostics.eslint_d.with {
-         condition = function(utils)
-         return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
-         end,
-      },
+      null_ls.builtins.diagnostics.eslint_d,
+      -- null_ls.builtins.diagnostics.eslint_d.with {
+      --    condition = function(utils)
+      --    return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
+      --    end,
+      -- },
       null_ls.builtins.diagnostics.jsonlint,
       null_ls.builtins.formatting.fixjson,
       null_ls.builtins.formatting.stylua.with({
@@ -240,9 +247,7 @@ null_ls.setup({
       null_ls.builtins.formatting.pg_format.with {
          filetypes = { "sql", "pgsql" },
       },
-      -- null_ls.builtins.formatting.stylua.with {
-      --    extra_args = { '--config-path', vim.fn.expand '~/.stylua.toml' },
-      -- },
+      null_ls.builtins.code_actions.gitsigns,
       null_ls.builtins.formatting.lua_format,
       null_ls.builtins.formatting.xmllint,
    },
@@ -287,6 +292,7 @@ cmp.setup({
    { name = 'nvim_lsp_signature_help' },
    { name = 'path' },
    { name = 'vsnip' },
+   { name = 'luasnip' },
  }, {
    { name = 'buffer' },
  }),
@@ -366,17 +372,29 @@ require('lspconfig').eslint.setup({})
 
 require('lspconfig').angularls.setup({
   root_dir = util.root_pattern('angular.json', 'project.json', 'package.json'),
-   on_init = function(client)
-   client.server_capabilities.documentFormattingProvider = false
-   client.server_capabilities.documentFormattingRangeProvider = false
-   end,
+   -- on_init = function(client)
+   -- client.server_capabilities.documentFormattingProvider = false
+   -- client.server_capabilities.documentFormattingRangeProvider = false
+   -- end,
    capabilities = capabilities,
    on_attach = function(client)
-   client.resolved_capabilities.document_formatting = false
+   client.server_capabilities.documentFormattingProvider = false
+   client.server_capabilities.documentFormattingRangeProvider = false
+   -- client.resolved_capabilities.document_formatting = false
    end,
+   settings = {
+      format = { enable = true },
+   },
 })
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').bashls.setup({})
+require('lspconfig').html.setup({
+  on_attach = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end,
+})
 
 vim.diagnostic.config({
    virtual_text = false,

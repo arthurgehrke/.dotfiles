@@ -18,9 +18,10 @@ let g:fzf_colors = {
   \ 'header': ['fg', 'Comment']
   \ }
 
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!.git/*" --glob "!**/package-lock.json"'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!**/package-lock.json"'
 " let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
+let $FZF_DEFAULT_OPTS = '--reverse'
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -30,7 +31,7 @@ command! -bang -nargs=? -complete=dir Files call fzf#vim#files(s:find_git_root()
 
 " Ripgrep advanced
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always -g "!{*.lock,*-lock.json}" --smart-case %s || true --glob "!.git/*"'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always -g "!{*.lock,*-lock.json}" --smart-case %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command], 'dir': s:find_git_root()}
