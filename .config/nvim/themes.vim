@@ -1,12 +1,9 @@
-if has('termguicolors')
-  set termguicolors
-endif
-
 " For dark version.
 set background=dark
 
 syntax on
 lua << EOF
+vim.opt.termguicolors = true
 -- require('nightfox').setup({
 --   options = {
 --     -- Compiled file's destination location

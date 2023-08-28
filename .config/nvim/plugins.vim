@@ -5,6 +5,7 @@ call plug#begin()
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'ellisonleao/gruvbox.nvim'
+  Plug 'tpope/vim-surround'
   " Plug 'EdenEast/nightfox.nvim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
@@ -49,9 +50,12 @@ call plug#begin()
   Plug 'tpope/vim-dotenv'
   Plug 'goolord/alpha-nvim'
   Plug 'junegunn/gv.vim'
-  Plug 'zaldih/themery.nvim'
   Plug 'b0o/schemastore.nvim'
   Plug 'NTBBloodbath/rest.nvim'
+  Plug 'jrop/mongo.nvim'
+  Plug 'bgrohman/vim-bg-tables'
+  Plug 'vim-scripts/SQLUtilities'
+  Plug 'chrisbra/csv.vim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
