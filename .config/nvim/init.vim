@@ -12,7 +12,6 @@ set laststatus=1
 set shell=$SHELL
 set clipboard+=unnamedplus
 set encoding=utf-8
-set autoread
 set scrolloff=2         " Keep at least 2 lines above/below
 set noswapfile
 set nobackup
@@ -45,12 +44,18 @@ set nowrap
 set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
 set noerrorbells
-set backspace=indent,eol,start
+set backspace=indent,start,eol  
 set noshowmatch
 highlight clear SignColumn
 
+
+set undolevels=1000
+set autoread
+set undodir=~/.local/share/nvim/undo
 set undofile
-lua vim.opt.undodir=os.getenv("HOME") .. "/.vim/undodir"
+set nobackup		" do not keep a backup file, use versions instead
+" set backupcopy=yes                      " overwrite files to update, instead of renaming + rewriting
+" lua vim.opt.undodir=os.getenv("HOME") .. "/.vim/undodir"
 
 let mapleader="\<Space>"
 

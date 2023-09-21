@@ -274,3 +274,6 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 export PATH="/Users/arthurrodrigues/.local/bin:$PATH"
 
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
