@@ -35,6 +35,11 @@ call plug#begin()
   Plug 'jose-elias-alvarez/typescript.nvim'
   Plug 'hrsh7th/nvim-cmp'         
   Plug 'hrsh7th/cmp-nvim-lsp'     
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'kento-ogata/cmp-tsnip'
+  Plug 'yuki-yano/tsnip.nvim'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lsp-document-symbol',
   Plug 'L3MON4D3/LuaSnip'
   Plug 'nmac427/guess-indent.nvim'
   Plug 'mfussenegger/nvim-dap'
@@ -42,7 +47,7 @@ call plug#begin()
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'Pocco81/DAPInstall.nvim'
   Plug 'theHamsta/nvim-dap-virtual-text'
-  " Plug 'mhinz/vim-startify'
+  Plug 'mhinz/vim-startify'
   Plug 'mxsdev/nvim-dap-vscode-js'
   Plug 'tpope/vim-dadbod'
   Plug 'kristijanhusak/vim-dadbod-ui'
@@ -60,8 +65,8 @@ call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
 source $HOME/.config/nvim/plugconf/comment.vim
-" source $HOME/.config/nvim/plugconf/startify.vim
-source $HOME/.config/nvim/plugconf/alpha.vim
+source $HOME/.config/nvim/plugconf/startify.vim
+" source $HOME/.config/nvim/plugconf/alpha.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/treesitter.vim

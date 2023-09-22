@@ -45,7 +45,8 @@ lsp.ensure_installed({
    'bashls',
    'sqlls',
    'angularls',
-   'jsonlint'
+   'jsonlint',
+   'textlint'
 })
 
 lsp.format_mapping('gq', {
@@ -55,9 +56,8 @@ lsp.format_mapping('gq', {
   },
   servers = {
     ['lua_ls'] = {'lua'},
-    ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
-    ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
+    ['null-ls'] = { 'typescript', 'typescriptreact', 'json', 'markdown' },
   }
 })
 
@@ -225,6 +225,12 @@ null_ls.setup({
          end,
          only_local = "node_modules/.bin",
       }),
+      null_ls.builtins.diagnostics.textlint.with {
+         filetypes = { 'markdown' },
+      },
+      null_ls.builtins.formatting.textlint.with {
+         filetypes = { 'markdown' },
+      },
       -- Eslint
       null_ls.builtins.code_actions.eslint_d,
       null_ls.builtins.formatting.eslint_d.with {
@@ -289,10 +295,15 @@ cmp.setup({
  }),
  sources = cmp.config.sources({
    { name = 'nvim_lsp' },
+   { name = 'treesitter' },
+   { name = 'luasnip' },
+   { name = 'nvim_lsp_document_symbol' },
    { name = 'nvim_lsp_signature_help' },
    { name = 'path' },
-   { name = 'vsnip' },
-   { name = 'luasnip' },
+   { name = 'path' },
+   -- { name = 'vsnip' },
+   { name = 'rg' },
+   { name = 'nvim_lua' },
  }, {
    { name = 'buffer' },
  }),

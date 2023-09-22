@@ -19,7 +19,6 @@ let g:fzf_colors = {
   \ }
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!**/package-lock.json"'
-" let $FZF_DEFAULT_OPTS="--reverse --ansi --preview-window 'right:60%' --preview 'bat --color=always --theme='gruvbox-dark' --style=header,grid --line-range :300 {}' --bind ctrl-n:down,ctrl-p:up"
 let g:fzf_layout = { 'down': '~40%' }
 let $FZF_DEFAULT_OPTS = '--reverse'
 
@@ -78,8 +77,18 @@ function! FzfExplore(...)
 endfunction
 
 command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
-
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
+nnoremap <silent><space>re :Files <C-r>=expand('%:p:h')<CR><CR>
+noremap sas :Rg .<CR>
+" noremap <silent> <C-h> :FzfLua oldfiles cwd=~<CR>
+" nnoremap <silent> <C-o> <cmd>lua require('fzf-lua').oldfiles()<CR>
+nnoremap <silent> <space>fo <cmd>lua require('fzf-lua').find_files()<CR>
+nnoremap ,fg :lua require('fzf-lua').grep_cword()<CR>
+vnoremap ,fg :lua require('fzf-lua').grep_visual()<CR>
+nnoremap ,fG :lua require('fzf-lua').live_grep_native()<CR>
+noremap ,fq :lua require('fzf-lua').quickfix()<CR>
+nnoremap <silent> <space>sai <cmd>lua require('fzf-lua').grep_project()<CR>
 
 lua << EOF
 require('fzf-lua').setup{}
