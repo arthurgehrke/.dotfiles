@@ -4,6 +4,8 @@
 export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -91,13 +93,6 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-# # Pyenv Python version management
-# if type pyenv 1>/dev/null 2>&1; then
-#     eval "$(pyenv init --path)"
-#     eval "$(pyenv init -)"
-#     pyenv virtualenvwrapper
-# fi
-
 ##############################################################################
 # MacOs
 ##############################################################################
@@ -116,13 +111,13 @@ export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # prefer US English & utf-8
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US"
+export LANG=en_US.UTF-8
+export HISTCONTROL=ignoreboth:erasedups
 
 ##############################################################################
 # Configs
 ##############################################################################
-EDITOR=nvim
+export EDITOR='nvim'
 
 autoload -U colors
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -264,16 +259,46 @@ source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 
+export PATH="/Users/arthurrodrigues/.local/bin:$PATH"
+
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+
 ##############################################################################
 # Various
 ##############################################################################
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 
-eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+# zsh vim extension
+export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+export ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+# export ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
+export ZVM_CURSOR_STYLE_ENABLED=true
+export ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+export ZVM_TERM=xterm-256color
+# Change to Zsh's default readkey engine
+export ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE
 
-export PATH="/Users/arthurrodrigues/.local/bin:$PATH"
-
-
+##############################################################################
+# Iterm2
+##############################################################################
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+if [[ -z "$ITERM2_INTEGRATION_DETECTED" ]]; then
+  ITERM2_INTEGRATION_DETECTED=false
+fi
+
+##############################################################################
+# Ls and Less
+##############################################################################
+
+(( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
+
+export LS_COLORS="$(vivid generate gruvbox-dark)"
+export LESSOPEN="|$(brew --prefix)/bin/lesspipe.sh %s"
+export LESSCOLORIZER="bat --color=always"
+export LESS="-R"
+
+# disable zsh underline
+ZSH_HIGHLIGHT_STYLES[path]=none
+ZSH_HIGHLIGHT_STYLES[path_prefix]=none

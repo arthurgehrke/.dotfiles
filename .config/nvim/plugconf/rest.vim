@@ -16,7 +16,6 @@ require("rest-nvim").setup({
       },
       result = {
         show_url = true,
-        show_curl_command = false,
         show_http_info = true,
         show_headers = true,
         formatters = {
@@ -25,20 +24,6 @@ require("rest-nvim").setup({
             return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
           end
         },
-        result = {
-          -- toggle showing URL, HTTP info, headers at top the of result window
-          show_url = true,
-          show_http_info = true,
-          show_headers = true,
-          -- executables or functions for formatting response body [optional]
-          -- set them to nil if you want to disable them
-          formatters = {
-            json = "jq",
-            html = function(body)
-            return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
-            end
-          },
-        },
       },
       -- Jump to request line on run
       jump_to_request = false,
@@ -46,8 +31,13 @@ require("rest-nvim").setup({
       custom_dynamic_variables = {},
       yank_dry_run = true,
     })
-EOF
 
-nnoremap <space>rr <Plug>RestNvim<CR>
-nnoremap <space>rc <Plug>RestNvimPreview<CR>
-nnoremap <space>rl <Plug>RestNvimLast<CR>
+EOF
+" rest.nvim
+autocmd FileType http nnoremap <buffer> <space>rr <Plug>RestNvim
+autocmd FileType http nnoremap <buffer> <space>rc <Plug>RestNvimPreview
+noremap <leader>re <plug>RestNvim
+nnoremap <leader>rp <plug>RestNvimPreview
+nnoremap <leader>rr <plug>RestNvimLast
+  command! Http lua require('rest-nvim').run()
+    nmap <leader>hh <Plug>RestNvim
