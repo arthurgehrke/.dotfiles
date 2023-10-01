@@ -10,9 +10,10 @@ call plug#begin()
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
-  Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'numToStr/Comment.nvim'
   Plug 'jdhao/better-escape.vim'
+  " Plug 'lukas-reineke/indent-blankline.nvim'
+  Plug 'echasnovski/mini.nvim'
   Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'nvim-lua/plenary.nvim'
@@ -41,7 +42,6 @@ call plug#begin()
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp-document-symbol',
   Plug 'L3MON4D3/LuaSnip'
-  Plug 'nmac427/guess-indent.nvim'
   Plug 'mfussenegger/nvim-dap'
   Plug 'mxsdev/nvim-dap-vscode-js'
   Plug 'rcarriga/nvim-dap-ui'
@@ -56,11 +56,14 @@ call plug#begin()
   Plug 'goolord/alpha-nvim'
   Plug 'junegunn/gv.vim'
   Plug 'b0o/schemastore.nvim'
-  Plug 'NTBBloodbath/rest.nvim'
+  Plug 'rest-nvim/rest.nvim'
   Plug 'jrop/mongo.nvim'
   Plug 'bgrohman/vim-bg-tables'
   Plug 'vim-scripts/SQLUtilities'
   Plug 'chrisbra/csv.vim'
+  Plug 'mogelbrod/vim-jsonpath'
+  Plug 'edluffy/hologram.nvim'
+  Plug 'samodostal/image.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim
@@ -68,18 +71,20 @@ source $HOME/.config/nvim/plugconf/comment.vim
 source $HOME/.config/nvim/plugconf/startify.vim
 " source $HOME/.config/nvim/plugconf/alpha.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim
+source $HOME/.config/nvim/plugconf/mini.vim
 source $HOME/.config/nvim/plugconf/diffview.vim
 source $HOME/.config/nvim/plugconf/treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
-source $HOME/.config/nvim/plugconf/indent_blankline.vim
+" source $HOME/.config/nvim/plugconf/indent_blankline.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
 source $HOME/.config/nvim/plugconf/incsearch.vim
-source $HOME/.config/nvim/plugconf/guess-indent.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
 source $HOME/.config/nvim/plugconf/dadbod.vim
 source $HOME/.config/nvim/plugconf/rest.vim
+source $HOME/.config/nvim/plugconf/hologram.vim
+source $HOME/.config/nvim/plugconf/json-path.vim

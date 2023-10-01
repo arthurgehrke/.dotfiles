@@ -8,6 +8,7 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
 set nofoldenable
+set foldmethod=indent " Simple and fast
 set laststatus=1
 set shell=$SHELL
 set clipboard+=unnamedplus
@@ -18,6 +19,7 @@ set nobackup
 set hidden
 set noincsearch
 set ignorecase
+set smartcase
 set nofixendofline "avoid empty line in the end
 set signcolumn=auto
 set numberwidth=4
@@ -31,9 +33,9 @@ set noshowmode
 set shortmess+=c
 set previewheight=5
 set pumheight=10
-" set autoindent
+set autoindent
 set copyindent
-" set smartindent
+set smartindent
 set nojoinspaces
 set smarttab
 set expandtab

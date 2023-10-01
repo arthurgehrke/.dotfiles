@@ -81,4 +81,5 @@ require('gitsigns').setup{
   end
 }
 EOF
+
 map <Space>gt :Gitsigns toggle_signs<CR>

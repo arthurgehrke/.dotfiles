@@ -20,7 +20,7 @@ let g:fzf_colors = {
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow -g "!{.git,node_modules,*.lock,*-lock.json,tmp}/*" 2>/dev/null --glob "!**/package-lock.json"'
 let g:fzf_layout = { 'down': '~40%' }
-let $FZF_DEFAULT_OPTS = '--reverse'
+let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -58,11 +58,28 @@ let g:fzf_action = {
 nnoremap <silent><space>; :Rg<CR>
 nnoremap <silent><space>ps :Ag<CR>
 nnoremap <silent><C-p> :Files<CR>
-nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
+" nnoremap <silent><space>gs :Rg <C-R>=expand("<cword>")<CR><CR>
 nnoremap <silent> <space>m :History<CR>
 
 command! -bang -nargs=? Buffers
             \ call fzf#vim#buffers(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline','--tiebreak=end']}), <bang>0)
+
+command! -bang -nargs=? -complete=dir History
+    \ call fzf#vim#history(fzf#vim#with_preview('right:70%'), <bang>0)
+
+" ripgrep
+if executable('rg')
+  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+endif
+
+command! -bang -nargs=* Agc call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+command! -bang -nargs=* Rgc
+  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right', 'ctrl-/'), <bang>0)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview('right', 'ctrl-/'), <bang>0)
+
+nnoremap <silent><space>gs :exe 'Rg '.expand('<cword>')<CR>
+nnoremap <silent> <space>gcs :exe 'Rgc '.expand('<cword>')<CR>
 
 function! FzfExplore(...)
     let inpath = substitute(a:1, "'", '', 'g')
@@ -78,23 +95,23 @@ endfunction
 
 command! -nargs=* FZFExplore call FzfExplore(shellescape(<q-args>))
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
-
-nnoremap <silent><space>re :Files <C-r>=expand('%:p:h')<CR><CR>
-noremap sas :Rg .<CR>
-" noremap <silent> <C-h> :FzfLua oldfiles cwd=~<CR>
-" nnoremap <silent> <C-o> <cmd>lua require('fzf-lua').oldfiles()<CR>
-nnoremap <silent> <space>fo <cmd>lua require('fzf-lua').find_files()<CR>
-nnoremap ,fg :lua require('fzf-lua').grep_cword()<CR>
-vnoremap ,fg :lua require('fzf-lua').grep_visual()<CR>
-nnoremap ,fG :lua require('fzf-lua').live_grep_native()<CR>
-noremap ,fq :lua require('fzf-lua').quickfix()<CR>
-nnoremap <silent> <space>sai <cmd>lua require('fzf-lua').grep_project()<CR>
-
 lua << EOF
-require('fzf-lua').setup{}
+require('fzf-lua').setup{
+  fzf_opts = { ['--layout'] = "default" },
+  grep = {
+    prompt = "   Word ",
+    rg_opts = " --hidden --line-number --no-heading --color=never --smart-case " .. "-g '!{.git,node_modules}/*'",
+    no_header_i = true, -- hide interactive header?
+  },
+}
 EOF
 
 nnoremap fb :FzfLua buffers<cr>
-nnoremap fs :FzfLua live_grep_native<cr>
 nnoremap ff :FzfLua files<cr>
+nnoremap fa :Files <C-r>=expand('%:p:h')<CR><CR>
+nnoremap <silent> <space>aa <cmd>lua require('fzf-lua').grep_curbuf()<CR>
 
+let g:rg_grep_all = '--column --line-number --no-heading --fixed-strings --no-ignore --ignore-case --hidden --follow --glob "!.git/*" -g "!node_modules" --color "always"' 
+nnoremap <space>fG :lua require("fzf-lua").live_grep({ rg_opts = vim.g.rg_grep_all })<CR>
+nnoremap <space>fJ :lua require("fzf-lua").grep_cword({ rg_opts = vim.g.rg_grep_all })<CR>
+nnoremap <space>fS :lua require("fzf-lua").grep({ rg_opts = vim.g.rg_grep_all })<CR>

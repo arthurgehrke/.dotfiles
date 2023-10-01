@@ -29,7 +29,6 @@ if not ok then return end
 local lsp_servers = {
 	"tsserver",
 	"html",
-	-- "lua_ls",
 	"vimls",
 	"bashls",
 	"vtsls",

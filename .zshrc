@@ -4,52 +4,27 @@
 export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
-source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
 source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $INCLUDES/z/z.sh
-
 source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
+source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
+
 source $HOME/.themes/zsh/.p10k.zsh
-
-autoload -U add-zsh-hook
-
-# Plugins configs
-source $HOME/zshrc/completions.zsh
-source $HOME/zshrc/autosuggestions.zsh
-
 source $HOME/.shell_aliases
 source $HOME/.shell_scripts
-
 source $HOME/.fzf.zsh
-
 source $HOME/.zprofile
 
-# Setup for nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _complete
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
+autoload -U compinit && compinit -d $HOME/.zsh/compdump
+zmodload -i zsh/complist
+zmodload -i zsh/zle
 
 ##############################################################################
 # Homebrew
@@ -66,24 +41,14 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 # mysql client
 # export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-
+export PATH="/opt/homebrew/bin:$PATH"
 # brew packages
 export PATH="$PYENV_ROOT/bin:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH" 
 export PATH="/usr/local/bin:$PATH"
-# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
-# python
-# python2 deprecated so ...
-# export PIP_REQUIRE_VIRTUALENV=false
-
-# Setting PATH for Python 3
-# The original version is saved in .bash_profile.pysave
-# eval "$(pyenv init -)"
 
 # Setup for pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -112,43 +77,18 @@ export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
-export HISTCONTROL=ignoreboth:erasedups
 
 ##############################################################################
 # Configs
 ##############################################################################
 export EDITOR='nvim'
 
-autoload -U colors
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# brew install coreutils
-# colors for ls
-if [[ -f ~/.dircolors ]] ; then
-  eval $(gdircolors -b ~/.dircolors)
-elif [[ -f /etc/DIR_COLORS ]] ; then
-  eval $(gdircolors -b /etc/DIR_COLORS)
-fi
-
-setopt no_nomatch                # Don't error when there's nothing to glob, leave it unchanged
-
-# enable ctrl R to search history
-bindkey '^r' history-incremental-search-backward
-bindkey '^h' beginning-of-line
-bindkey '^l' end-of-line
-# Also fix annoying vi backspace
-bindkey '^?' backward-delete-char
-bindkey '^b' backward-word
-bindkey 'ˆe' forward-word
 ##############################################################################
 # History
 ##############################################################################
 export HISTFILE=$HOME/.zsh_history
-export HISTSIZE=5000
-export SAVEHIST=5000
-export HISTFILESIZE=5000
-export DIRSTACKSIZE=8
-export HISTTIMEFORMAT="%d/%m/%y %T "
+export HISTSIZE=10000
+export SAVEHIST=10000
 
 setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
 setopt SHARE_HISTORY             # Share history between all sessions.
@@ -160,7 +100,6 @@ setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
 setopt APPENDHISTORY     #Append history to the history file (no overwriting)
-setopt SHAREHISTORY      #Share history across terminals
 setopt INCAPPENDHISTORY  #Immediately append to the history file, not just when a term is killed
 
 ##############################################################################
@@ -183,46 +122,26 @@ if hash keychain 2>/dev/null; then
 fi
 
 ##############################################################################
-# setopt AUTO_CD              # Go to folder path without using cd.
-
-setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
-setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
-setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
-
-setopt CORRECT              # Spelling correction
-setopt CDABLE_VARS          # Change directory to a path stored in a variable.
-setopt EXTENDED_GLOB        # Use extended globbing syntax.
-
-##############################################################################
-# Completion
-##############################################################################
-zmodload zsh/complist
-# bindkey '^[[Z' reverse-menu-complete
-# bindkey '^I' menu-complete
-# bindkey '^I'   complete-word       # tab          | complete
-
-##############################################################################
 # KeyMappings
 ##############################################################################
 ## zsh-autosuggestions
-# use ctrl+T to toggle autosuggestions
-bindkey '^e' autosuggest-toggle
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=true
 
-# accept the suggested words
-# bindkey '^I' autosuggest-accept # with tab
+bindkey '^r' history-incremental-search-backward
 bindkey '^o' autosuggest-accept
+bindkey '^b' backward-word
+bindkey '^f' forward-word
+bindkey '^h' beginning-of-line
+bindkey '^l' end-of-line
 bindkey '^i' expand-or-complete
 
 ## history-substring-search
 # Control-P/N keys
-bindkey -M emacs '^P' history-substring-search-up
-bindkey -M emacs '^N' history-substring-search-down
-
-bindkey '^k' up-history
-bindkey '^j' down-history
-bindkey '^h' backward-delete-char
-bindkey '^w' backward-kill-word
-bindkey '^b' history-incremental-search-backward
+bindkey '^p' history-substring-search-up
+bindkey '^n' history-substring-search-down
+bindkey '^r' history-incremental-search-backward 
 
 ##############################################################################
 # Bindings
@@ -254,7 +173,6 @@ export BAT_THEME="gruvbox-dark"
 ##############################################################################
 # Brew
 ##############################################################################
-source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 # java sdk
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
@@ -269,36 +187,52 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 
-# zsh vim extension
-export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
-export ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-# export ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
-export ZVM_CURSOR_STYLE_ENABLED=true
-export ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-export ZVM_TERM=xterm-256color
-# Change to Zsh's default readkey engine
-export ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE
-
 ##############################################################################
 # Iterm2
 ##############################################################################
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 if [[ -z "$ITERM2_INTEGRATION_DETECTED" ]]; then
-  ITERM2_INTEGRATION_DETECTED=false
+  export ITERM2_INTEGRATION_DETECTED=true
+  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 fi
 
 ##############################################################################
 # Ls and Less
 ##############################################################################
-
 (( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
 
-export LS_COLORS="$(vivid generate gruvbox-dark)"
-export LESSOPEN="|$(brew --prefix)/bin/lesspipe.sh %s"
-export LESSCOLORIZER="bat --color=always"
-export LESS="-R"
-
 # disable zsh underline
-ZSH_HIGHLIGHT_STYLES[path]=none
-ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+ZSH_HIGHLIGHT_STYLES[default]='none'
+ZSH_HIGHLIGHT_STYLES[path]='none'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+ZSH_HIGHLIGHT_STYLES[precommand]='none'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
+ZSH_HIGHLIGHT_STYLES[assign]='none'
+
+##############################################################################
+# Nvm
+##############################################################################
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+

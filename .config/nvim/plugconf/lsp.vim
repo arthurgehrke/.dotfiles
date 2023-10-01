@@ -231,7 +231,6 @@ null_ls.setup({
       null_ls.builtins.formatting.textlint.with {
          filetypes = { 'markdown' },
       },
-      -- Eslint
       null_ls.builtins.code_actions.eslint_d,
       null_ls.builtins.formatting.eslint_d.with {
          condition = function(utils)
@@ -239,12 +238,11 @@ null_ls.setup({
          end,
       },
       require("typescript.extensions.null-ls.code-actions"),
-      null_ls.builtins.diagnostics.eslint_d,
-      -- null_ls.builtins.diagnostics.eslint_d.with {
-      --    condition = function(utils)
-      --    return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
-      --    end,
-      -- },
+      null_ls.builtins.diagnostics.eslint_d.with {
+         condition = function(utils)
+         return utils.root_has_file { '.eslintrc.js', '.eslintrc.json' }
+         end,
+      },
       null_ls.builtins.diagnostics.jsonlint,
       null_ls.builtins.formatting.fixjson,
       null_ls.builtins.formatting.stylua.with({
@@ -254,7 +252,6 @@ null_ls.setup({
          filetypes = { "sql", "pgsql" },
       },
       null_ls.builtins.code_actions.gitsigns,
-      null_ls.builtins.formatting.lua_format,
       null_ls.builtins.formatting.xmllint,
    },
    root_dir = require("null-ls.utils").root_pattern(
@@ -268,23 +265,35 @@ null_ls.setup({
 
 cmp.setup({
  preselect = cmp.PreselectMode.None,
- window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
- },
- snippet = {
-    -- REQUIRED - you must specify a snippet engine
+  window = {
+    documentation = {
+      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+    },
+  },
+  snippet = {
     expand = function(args)
-    -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-    -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-    -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      luasnip.lsp_expand(args.body) -- For `luasnip` users.
     end,
- },
+  },
  confirm_opts = {
    behavior = cmp.ConfirmBehavior.Replace,
    select = false,
  },
+ formatting = {
+    fields = { "kind", "abbr", "menu" },
+    format = function(entry, vim_item)
+      -- Kind icons
+      vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+      -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+      vim_item.menu = ({
+        nvim_lsp = "[LSP]",
+        luasnip = "[Snippet]",
+        buffer = "[Buffer]",
+        path = "[Path]",
+      })[entry.source.name]
+      return vim_item
+    end,
+  },
  mapping = cmp.mapping.preset.insert({
    ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
    ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
@@ -294,18 +303,10 @@ cmp.setup({
    ['q'] = cmp.mapping.abort(),
  }),
  sources = cmp.config.sources({
-   { name = 'nvim_lsp' },
-   { name = 'treesitter' },
-   { name = 'luasnip' },
-   { name = 'nvim_lsp_document_symbol' },
-   { name = 'nvim_lsp_signature_help' },
-   { name = 'path' },
-   { name = 'path' },
-   -- { name = 'vsnip' },
-   { name = 'rg' },
-   { name = 'nvim_lua' },
- }, {
-   { name = 'buffer' },
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "buffer" },
+    { name = "path" },
  }),
 })
 
