@@ -5,12 +5,10 @@ export DOTFILES=$HOME/dotfiles
 export INCLUDES=$HOME/.local/share/dotfiles
 
 source $INCLUDES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $INCLUDES/zsh-completions/zsh-completions.plugin.zsh
-source $INCLUDES/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $INCLUDES/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $INCLUDES/z/z.sh
-source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
-source $INCLUDES/powerlevel10k/powerlevel10k.zsh-theme
+source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/etc/profile.d/z.sh
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 source $HOME/.themes/zsh/.p10k.zsh
 source $HOME/.shell_aliases
@@ -18,13 +16,17 @@ source $HOME/.shell_scripts
 source $HOME/.fzf.zsh
 source $HOME/.zprofile
 
-zstyle ':completion:*' menu select
-zstyle ':completion:*' completer _complete
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
-
-autoload -U compinit && compinit -d $HOME/.zsh/compdump
 zmodload -i zsh/complist
 zmodload -i zsh/zle
+
+# zsh-completions plugin
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
 
 ##############################################################################
 # Homebrew
@@ -86,32 +88,41 @@ export EDITOR='nvim'
 ##############################################################################
 # History
 ##############################################################################
-export HISTFILE=$HOME/.zsh_history
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTFILE=~/.zsh_history
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+export HISTTIMEFORMAT="[%F %T] "
 
-setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
-setopt SHARE_HISTORY             # Share history between all sessions.
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
+export DISABLE_MAGIC_FUNCTIONS=true
+
+setopt EXTENDED_HISTORY          
+setopt SHARE_HISTORY             
+setopt BANG_HIST
+setopt HIST_EXPIRE_DUPS_FIRST    
 setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
 setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
-setopt APPENDHISTORY     #Append history to the history file (no overwriting)
-setopt INCAPPENDHISTORY  #Immediately append to the history file, not just when a term is killed
-
-##############################################################################
-# Navigation
-##############################################################################
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_SPACE
+setopt INC_APPEND_HISTORY_TIME
+setopt HIST_REDUCE_BLANKS
+setopt IGNORE_EOF 
+setopt HIST_VERIFY  
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
-
-setopt CORRECT              # Spelling correction
-setopt CDABLE_VARS          # Change directory to a path stored in a variable.
+setopt ALWAYS_TO_END
+setopt AUTO_LIST
+setopt AUTO_REMOVE_SLASH
+setopt LIST_AMBIGUOUS
 setopt EXTENDED_GLOB        # Use extended globbing syntax.
+setopt CASE_MATCH
+setopt CASE_PATHS
+setopt CSH_NULL_GLOB
+setopt PROMPT_SP
 
 ##############################################################################
 # SSH
@@ -124,24 +135,25 @@ fi
 ##############################################################################
 # KeyMappings
 ##############################################################################
-## zsh-autosuggestions
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_USE_ASYNC=true
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^x" edit-command-line
 
 bindkey '^r' history-incremental-search-backward
 bindkey '^o' autosuggest-accept
 bindkey '^b' backward-word
-bindkey '^f' forward-word
+bindkey '^e' forward-word
 bindkey '^h' beginning-of-line
 bindkey '^l' end-of-line
 bindkey '^i' expand-or-complete
+bindkey '^F' autosuggest-accept-suggested-small-word
 
 ## history-substring-search
 # Control-P/N keys
 bindkey '^p' history-substring-search-up
 bindkey '^n' history-substring-search-down
 bindkey '^r' history-incremental-search-backward 
+
 
 ##############################################################################
 # Bindings
@@ -173,13 +185,9 @@ export BAT_THEME="gruvbox-dark"
 ##############################################################################
 # Brew
 ##############################################################################
-# java sdk
+# java sdk - jenv
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
-
-export PATH="/Users/arthurrodrigues/.local/bin:$PATH"
-
-eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 ##############################################################################
 # Various
@@ -190,7 +198,7 @@ export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 ##############################################################################
 # Iterm2
 ##############################################################################
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+source "${HOME}/.iterm2_shell_integration.zsh"
 
 if [[ -z "$ITERM2_INTEGRATION_DETECTED" ]]; then
   export ITERM2_INTEGRATION_DETECTED=true
@@ -210,6 +218,9 @@ ZSH_HIGHLIGHT_STYLES[precommand]='none'
 ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
 ZSH_HIGHLIGHT_STYLES[assign]='none'
+# ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
+# ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
 
 ##############################################################################
 # Nvm
