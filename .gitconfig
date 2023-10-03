@@ -10,6 +10,7 @@
 	editor = nvim
 	excludesfile = /Users/arthurrodrigues/.gitignore
 	autocrlf = off
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
   ui = true
 [diff]
@@ -42,3 +43,5 @@
   insteadOf = https://gitlab.com/
 [url "git@gitlab.com:doare/api-v2.git"]
   insteadOf = https://gitlab.com/
+[interactive]
+	diffFilter = diff-so-fancy --patch
