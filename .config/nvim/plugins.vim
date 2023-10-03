@@ -13,7 +13,8 @@ call plug#begin()
   Plug 'numToStr/Comment.nvim'
   Plug 'jdhao/better-escape.vim'
   " Plug 'lukas-reineke/indent-blankline.nvim'
-  Plug 'echasnovski/mini.nvim'
+  Plug 'echasnovski/mini.nvim', { 'branch': 'stable' }
+  Plug 'echasnovski/mini.align', { 'branch': 'stable' }
   Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'nvim-lua/plenary.nvim'
@@ -22,7 +23,7 @@ call plug#begin()
   Plug 'dstein64/vim-startuptime'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'haya14busa/is.vim'
-  Plug 'haya14busa/incsearch.vim'
+  " Plug 'haya14busa/incsearch.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'shumphrey/fugitive-gitlab.vim'
   Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} 
@@ -81,7 +82,7 @@ source $HOME/.config/nvim/plugconf/lualine.vim
 source $HOME/.config/nvim/plugconf/nvim_tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/fzf.vim
-source $HOME/.config/nvim/plugconf/incsearch.vim
+" source $HOME/.config/nvim/plugconf/incsearch.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
 source $HOME/.config/nvim/plugconf/dadbod.vim
