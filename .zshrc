@@ -23,7 +23,7 @@ zmodload -i zsh/zle
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
-  autoload -Uz compinit
+  autoload -U compinit
   compinit
 fi
 
@@ -94,6 +94,7 @@ export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
 
 export DISABLE_MAGIC_FUNCTIONS=true
+export CASE_SENSITIVE=true
 
 setopt EXTENDED_HISTORY          
 setopt SHARE_HISTORY             
@@ -225,6 +226,7 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 # Nvm
 ##############################################################################
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
@@ -247,3 +249,6 @@ load-nvmrc() {
   fi
 }
 
+##############################################################################
+# Completion
+##############################################################################
