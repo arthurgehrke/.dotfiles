@@ -83,7 +83,6 @@ export LANG=en_US.UTF-8
 ##############################################################################
 # Configs
 ##############################################################################
-export EDITOR='nvim'
 
 ##############################################################################
 # History
@@ -119,11 +118,15 @@ setopt ALWAYS_TO_END
 setopt AUTO_LIST
 setopt AUTO_REMOVE_SLASH
 setopt LIST_AMBIGUOUS
-setopt EXTENDED_GLOB        # Use extended globbing syntax.
+setopt EXTENDED_GLOB  NO_BEEP      # Use extended globbing syntax.
 setopt CASE_MATCH
 setopt CASE_PATHS
 setopt CSH_NULL_GLOB
 setopt PROMPT_SP
+setopt NO_LIST_BEEP
+setopt NO_BEEP
+setopt MENU_COMPLETE
+setopt AUTO_MENU
 
 ##############################################################################
 # SSH
