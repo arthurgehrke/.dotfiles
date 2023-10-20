@@ -40,38 +40,11 @@ nnoremap <space>tr :set relativenumber!<CR>
 " close all buffers but the current one
 command! BufOnly execute '%bdelete|edit #|normal `"'
 
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  call histadd('/', substitute(@/, '[?/]', '\="\\%d".char2nr(submatch(0))', 'g'))
-  let @@ = temp
-endfunction
-
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>/<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>?<CR>
-
-function SetSearchVisualSelection()
-    let clipboard_original_content=@"
-    normal gvy " this overwrites clipboard
-    let raw_search=@"
-    let @/=substitute(escape(raw_search, '\/.*$^~[]'), "\n", '\\n', "g")
-    let @"=clipboard_original_content
-endfunction
-vnoremap ml :call SetSearchVisualSelection()<CR>:set hlsearch<CR> 
-
-nnoremap <silent> ml :<c-u>let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR>wb
-
 " Easy window split; C-w v -> vv, C-w - s -> ss
 nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> sx :close<CR>
 nnoremap <silent> sd :bd<CR>
-
-" " quit quick fix window
-" nnoremap <expr> q
-"       \ &l:filetype ==# 'qf' ? '<Cmd>cclose<CR>' :
-      " \ '$'->winnr() != 1 ? '<Cmd>close<CR>' : ''
 
 " more natural movement with wrap on
 nnoremap j gj

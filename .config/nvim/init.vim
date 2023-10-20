@@ -1,14 +1,17 @@
 nnoremap <silent> <space>so :source $MYVIMRC<bar>echo "reloaded vimrc"<cr>
 
 syntax on 
-filetype plugin indent on 
+filetype indent off 
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
+set magic
 set nofoldenable
 set foldmethod=indent " Simple and fast
+set cursorline
+set cursorlineopt=screenline
 set laststatus=1
 set shell=$SHELL
 set clipboard+=unnamedplus
@@ -24,40 +27,36 @@ set nofixendofline "avoid empty line in the end
 set signcolumn=auto
 set numberwidth=4
 set number relativenumber
-set cursorline
 set hlsearch
 set noshowcmd
-set virtualedit=block   " Allow selecting beyond ends of lines in visual block mode
+set virtualedit=onemore   " Allow selecting beyond ends of lines in visual block mode
 " set cmdheight=1
 set noshowmode
 set shortmess+=c
 set previewheight=5
 set pumheight=10
-set autoindent
-set copyindent
 set smartindent
 set nojoinspaces
-set smarttab
 set expandtab
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
-set nowrap
 set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
 set noerrorbells
-set backspace=indent,start,eol  
+" set backspace=indent,eol,start  
+set backspace=indent,eol,nostop
+
 set noshowmatch
 highlight clear SignColumn
 
+set nowrap sidescroll=1 listchars=extends:>,precedes:< "keeps vertical cursor on the same position
 
 set undolevels=1000
 set autoread
 set undodir=~/.local/share/nvim/undo
 set undofile
 set nobackup		" do not keep a backup file, use versions instead
-" set backupcopy=yes                      " overwrite files to update, instead of renaming + rewriting
-" lua vim.opt.undodir=os.getenv("HOME") .. "/.vim/undodir"
 
 let mapleader="\<Space>"
 
@@ -85,30 +84,15 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-function! FourSpacesStyle()
-  set tabstop=4
-  set softtabstop=-1
-  set shiftwidth=4
-  set expandtab
-endfunction
-
 function! TwoSpacesStyle()
   set tabstop=2
   set softtabstop=2
   set shiftwidth=2
-  set smartindent
   set expandtab
 endfunction
 
-function! TabStyle()
-  set noexpandtab
-  set tabstop=4
-  set softtabstop=4
-  set shiftwidth=4
-endfunction
-
-au BufNewFile,BufRead *.cs call FourSpacesStyle()
 au BufNewFile,BufRead *.css call TwoSpacesStyle()
+au BufNewFile,BufRead *.vim call TwoSpacesStyle()
 au BufNewFile,BufRead *.html call TwoSpacesStyle()
 au BufNewFile,BufRead *.js call TwoSpacesStyle()
 au BufNewFile,BufRead *.ts call TwoSpacesStyle()
@@ -127,16 +111,6 @@ autocmd BufRead,BufNew *scss :setlocal filetype=css
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy
-
-" clear highlighting if edit text
-inoremap <expr> <Plug>(StopHL) execute('nohlsearch')[-1]
-fu! StopHL()
-  if !v:hlsearch || mode() isnot 'n'
-    return
-  endif
-  sil call feedkeys("\<Plug>(StopHL)", 'm')
-endfu
-au InsertEnter * call StopHL()
 
 " Prevent x and the delete key from overriding what's in the clipboard.
 noremap x "_x
@@ -161,4 +135,5 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
-let g:loaded_ruby_provider = 0
+
+
