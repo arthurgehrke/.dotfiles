@@ -28,6 +28,7 @@ function! StripWhitespace()
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
+
 noremap <space>ss :call StripWhitespace()<CR>
 
 nnoremap <silent><C-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
@@ -102,3 +103,9 @@ func! DeleteBuffers()
     endif
 endfunc
 command! -bar -bang DeleteBuffers call DeleteBuffers()
+
+nnoremap ss :<C-u>sp<CR>
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
+nnoremap sh <C-w>h

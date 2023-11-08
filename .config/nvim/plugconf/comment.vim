@@ -5,7 +5,8 @@ require('Comment').setup {
     ---Whether the cursor should stay at its position
     sticky = true,
     ---Lines to be ignored while (un)comment
-    ignore = nil,
+-- ignores empty lines
+    ignore = '^$',
     ---LHS of toggle mappings in NORMAL mode
     toggler = {
         ---Line-comment toggle keymap
@@ -38,8 +39,9 @@ require('Comment').setup {
         extra = true,
     },
     ---Function to call before (un)comment
-    pre_hook = nil,
+    pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
     ---Function to call after (un)comment
     post_hook = nil,
 }
+
 EOF

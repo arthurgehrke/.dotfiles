@@ -6,7 +6,7 @@ bufferline.setup({
 options = {
   mode = "buffers",
   themable = false,
-  theme = 'tokyonight',
+  theme = 'gruvbox',
   style_preset = bufferline.style_preset.default, -- or bufferline.style_preset.minimal,
   mode = "buffers",
   indicator = {
@@ -37,7 +37,7 @@ options = {
       delay = 200,
       reveal = {'close'}
     },
-  persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+  persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
   highlights = {
       separator = {
         fg = '#073642',

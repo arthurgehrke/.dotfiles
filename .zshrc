@@ -91,22 +91,20 @@ export HISTFILE=~/.zsh_history
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
+export EDITOR=nvim
 
 export DISABLE_MAGIC_FUNCTIONS=true
-export CASE_SENSITIVE=true
 
 setopt EXTENDED_HISTORY          
 setopt SHARE_HISTORY             
 setopt BANG_HIST
 setopt HIST_EXPIRE_DUPS_FIRST    
-setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
 setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_SPACE
 setopt INC_APPEND_HISTORY_TIME
 setopt HIST_REDUCE_BLANKS
 setopt IGNORE_EOF 
@@ -114,7 +112,6 @@ setopt HIST_VERIFY
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
-setopt ALWAYS_TO_END
 setopt AUTO_LIST
 setopt AUTO_REMOVE_SLASH
 setopt LIST_AMBIGUOUS
@@ -127,6 +124,11 @@ setopt NO_LIST_BEEP
 setopt NO_BEEP
 setopt MENU_COMPLETE
 setopt AUTO_MENU
+setopt COMPLETE_IN_WORD
+setopt PROMPT_SUBST
+setopt NO_HUP
+setopt LOCAL_OPTIONS # allow functions to have local options
+setopt LOCAL_TRAPS # allow functions to have local traps
 
 ##############################################################################
 # SSH
@@ -141,23 +143,32 @@ fi
 ##############################################################################
 autoload -z edit-command-line
 zle -N edit-command-line
-bindkey "^x" edit-command-line
 
-bindkey '^r' history-incremental-search-backward
-bindkey '^o' autosuggest-accept
-bindkey '^b' backward-word
-bindkey '^e' forward-word
-bindkey '^h' beginning-of-line
-bindkey '^l' end-of-line
-bindkey '^i' expand-or-complete
-bindkey '^F' autosuggest-accept-suggested-small-word
+bindkey -e "^x" edit-command-line
+bindkey -e '^o' autosuggest-accept
+bindkey -e '^b' backward-word
+bindkey -e '^e' forward-word
+bindkey -e '^h' backward-char
+bindkey -e '^l' forward-char
+bindkey -e '^i' expand-or-complete
+bindkey -e '^F' autosuggest-accept-suggested-small-word
+bindkey -e '^d' delete-char
+# Movement
+bindkey -e '^a' beginning-of-line
+bindkey -e '^e' end-of-line
 
 ## history-substring-search
 # Control-P/N keys
-bindkey '^p' history-substring-search-up
-bindkey '^n' history-substring-search-down
-bindkey '^r' history-incremental-search-backward 
+# History
+bindkey -e '^p' up-history
+bindkey -e '^n' down-history
+# Search using patterns as documented here:
+# http://zsh.sourceforge.net/Doc/Release/Expansion.html#Filename-Generation
+bindkey -e '^r' history-incremental-pattern-search-backward
+bindkey -e '^f' history-incremental-pattern-search-forward
 
+bindkey -e '^j' history-substring-search-up
+bindkey -e '^k' history-substring-search-down
 
 ##############################################################################
 # Bindings
@@ -252,6 +263,38 @@ load-nvmrc() {
   fi
 }
 
+# _nvmrc_hook() {
+#   if [[ $PWD == $PREV_PWD ]]; then
+#     return
+#   fi
+#   
+#   PREV_PWD=$PWD
+#   [[ -f ".nvmrc" ]] && nvm use
+# }
+
+# if ! [[ "${PROMPT_COMMAND:-}" =~ _nvmrc_hook ]]; then
+#   PROMPT_COMMAND="_nvmrc_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+# fi
+
 ##############################################################################
 # Completion
 ##############################################################################
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+##############################################################################
+# Python
+##############################################################################
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+##############################################################################
+# Ruby
+##############################################################################
+# if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+#   export PATH=/opt/homebrew/opt/ruby/bin:$PATH
+#   export PATH=`gem environment gemdir`/bin:$PATH
+# fi
+
+# eval "$(rbenv init - zsh)"
+

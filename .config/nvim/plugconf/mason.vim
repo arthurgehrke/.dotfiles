@@ -31,12 +31,13 @@ local lsp_servers = {
 	"html",
 	"vimls",
 	"bashls",
-	"vtsls",
 	"dockerls",
 	"jsonls",
 	"yamlls",
-	"angularls",
 	"dockerls",
+  "pyright",
+  "lua_ls",
+  "marksman"
 }
 
 local dap_servers = {
@@ -48,24 +49,36 @@ local dap_servers = {
 }
 
 -- enable mason
-mason.setup({
- pip = {
-    upgrade_pip = true,
+require("mason").setup()
+require("mason-lspconfig").setup({
+  -- automatically install language servers setup below for lspconfig
+  automatic_installation = true
+})
+
+require('mason-tool-installer').setup({
+ensure_installed = {
+  'bash-language-server',
+  'lua-language-server',
+  'vim-language-server',
+  'stylua',
+  'shellcheck',
+  'sqlfmt',
+  'json-to-struct',
+  'jq',
+  'vint',
+  'yamllint',
+  'yamlfmt',
+  'yamlls',
+  'dockerls',
+  'sqlls',
   }
 })
 
 mason_null_ls.setup({
-	ensure_installed = {'eslint_d', 'jsonlint', 'vtls', 'text-lint'},
+	ensure_installed = {'eslint_d', 'jsonlint', 'bashls', 'cssls', 'html', 'jsonls', 'lua_ls'},
 	automatic_installation = true,
 	handlers = {},
 })
-
-mason_lspconfig.setup({
-	ensure_installed = lsp_servers,
-	automatic_installation = true, -- not the same as ensure_installed
-  auto_update = true,
-})
-
 
 mason_dap.setup({
   ensure_installed = dap_servers,
@@ -73,13 +86,4 @@ mason_dap.setup({
   automatic_setup = true,
   auto_update = true,
 })
-
-local lspconfig = require('lspconfig')
-local get_servers = require('mason-lspconfig').get_installed_servers
-
-for _, server_name in ipairs(get_servers()) do
-  lspconfig[server_name].setup({
-    capabilities = lsp_capabilities,
-  })
-end
 EOF

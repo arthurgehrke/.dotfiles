@@ -26,11 +26,11 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename' },
-    lualine_x = { 'filetype' },
-    lualine_y = {},
-    lualine_z = {}
+    lualine_b = { { 'filename', path = 4 } },
+    lualine_c = { 'diagnostics' },
+    lualine_x = {},
+    lualine_y = { '' },
+    lualine_z = { 'filetype' }
   },
   inactive_sections = {
     lualine_a = {},
@@ -42,8 +42,7 @@ require('lualine').setup {
   },
   tabline = {},
   winbar = {},
-  inactive_winbar = {
-  },
+  inactive_winbar = {},
   extensions = {}
 }
 

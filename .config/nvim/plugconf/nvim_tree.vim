@@ -1,27 +1,23 @@
 lua << EOF
 
-local api = require "nvim-tree.api"
-
 -- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
--- set termguicolors to enable highlight groups
-vim.opt.termguicolors = true
+vim.g.loaded_netrw = 0
 
 vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
 
 local function on_attach(bufnr)
-   local api = require('nvim-tree.api')
+  local api = require('nvim-tree.api')
 
-   local function opts(desc)
-      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-   end
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
    vim.keymap.set('n', '<C-d>', api.tree.change_root_to_node,          opts('CD'))
    vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer,     opts('Open: In Place'))
    vim.keymap.set('n', '<C-k>', api.node.show_info_popup,              opts('Info'))
    vim.keymap.set('n', '<C-r>', api.fs.rename_sub,                     opts('Rename: Omit Filename'))
    vim.keymap.set('n', '<C-v>', api.node.open.vertical,                opts('Open: Vertical Split'))
-   vim.keymap.set('n', '<C-x>', api.node.open.horizontal,              opts('Open: Horizontal Split'))
+   vim.keymap.set('n', '<C-s>', api.node.open.horizontal,              opts('Open: Horizontal Split'))
    vim.keymap.set('n', '<BS>',  api.node.navigate.parent_close,        opts('Close Directory'))
    vim.keymap.set('n', '<CR>',  api.node.open.edit,                    opts('Open'))
    vim.keymap.set('n', '.',     api.node.run.cmd,                      opts('Run Command'))
@@ -52,19 +48,17 @@ local function on_attach(bufnr)
    vim.keymap.set('n', 'q',     api.tree.close,                        opts('Close'))
    vim.keymap.set('n', 'r',     api.fs.rename,                         opts('Rename'))
    vim.keymap.set('n', 'R',     api.tree.reload,                       opts('Refresh'))
-   vim.keymap.set('n', 's',     api.node.run.system,                   opts('Run System'))
-   vim.keymap.set('n', 'S',     api.tree.search_node,                  opts('Search'))
+   -- vim.keymap.set('n', 's',     api.node.run.system,                   opts('Run System')) -- open external fcking program
+   vim.keymap.set('n', 'f',     api.tree.search_node,                  opts('Search'))
    vim.keymap.set('n', 'U',     api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
    vim.keymap.set('n', 'W',     api.tree.collapse_all,                 opts('Collapse'))
    vim.keymap.set('n', 'x',     api.fs.cut,                            opts('Cut'))
    vim.keymap.set('n', 'y',     api.fs.copy.filename,                  opts('Copy Name'))
    vim.keymap.set('n', 'Y',     api.fs.copy.relative_path,             opts('Copy Relative Path'))
-   vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
-   vim.keymap.set('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split'))
 end
 
 require'nvim-tree'.setup {
-  on_attach = "default",
+   on_attach = on_attach,
    sync_root_with_cwd = false,
    auto_reload_on_write = true,
    reload_on_bufenter = false,
@@ -92,7 +86,7 @@ require'nvim-tree'.setup {
       timeout = 500,
    },
    filesystem_watchers = {
-      enable = true,
+     enable = false,
    },
    git = {
      enable = true,
@@ -166,11 +160,24 @@ require'nvim-tree'.setup {
    },
    view = {
       adaptive_size = true,
-      preserve_window_proportions = true,
+      preserve_window_proportions = false,
       relativenumber = false,
       number = false,
+      signcolumn = "yes",
       signcolumn = "auto",
       width = 25,
+      float = {
+        enable = false,
+        quit_on_focus_loss = true,
+        open_win_config = {
+          relative = "editor",
+          border = "rounded",
+          width = 30,
+          height = 30,
+          row = 1,
+          col = 1,
+        },
+      },
    },
    filters = {
       git_ignored = false,

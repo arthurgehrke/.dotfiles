@@ -13,15 +13,13 @@ end
 treesitter_config.setup {
   auto_install = true,
   highlight = {
-    enable = true,
+      enable = not vim.g.vscode, -- false will disable the whole extension
     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
     -- the name of the parser)
     -- list of language that will be disabled
-    disable = {},
+      disable = {"latex", "markdown"},
     -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    
-    additional_vim_regex_highlighting = false,
   },
   indent = {
     enable = true,
@@ -37,17 +35,6 @@ treesitter_config.setup {
   ensure_installed = {
     "xml",
     "http",
-    "markdown",
-    'markdown_inline',
-    "jq",
-    "json",
-    "json5",
-    "jsonc",
-    "css",
-    "html",
-    "graphql",
-    "lua",
-    "luadoc",
     "typescript",
     "javascript",
     "tsx",
@@ -56,10 +43,9 @@ treesitter_config.setup {
     "python",
     "sql",
     "scss",
+    "toml",
     "regex",
-    "luap",
     "latex",
-    "luau",
     "yaml",
     "gitcommit",
     "gitignore",
@@ -70,10 +56,14 @@ treesitter_config.setup {
     "bash",
     "comment",
     'make',
-    'git_rebase'
+    'git_rebase',
+    'r',
   },
   autotag = {
     enable = true,
+    filetypes = {
+      'html', 'javascript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'xml'
+    },
   },
   incremental_selection = {
     enable = true,
@@ -86,8 +76,9 @@ treesitter_config.setup {
   },
 }
 
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
+require('ts_context_commentstring').setup {}
+-- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+-- parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
 
 EOF
 

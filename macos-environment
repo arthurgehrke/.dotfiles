@@ -6,10 +6,43 @@ defaults write -g AppleActionOnDoubleClick 'Maximize'
 # Keep folders on top when sorting by name:
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
+# disable delay when you hide the Dock
+defaults write com.apple.Dock autohide-delay -float 0
+
+
 # Show Finder path bar:
 defaults write com.apple.finder ShowPathbar -bool true
 
 # Show hidden files in Finder:
-defaults write com.apple.finder AppleShowAllFiles YES
+defaults write com.apple.Finder AppleShowAllFiles true
+
+# show hidden apps
+defaults write com.apple.Dock showhidden -bool yes
+
+# hide hidden files
+defaults write com.apple.Finder AppleShowAllFiles true
+
+#show hidden files
+defaults write com.apple.Finder AppleShowAllFiles YES
+
+# disable auto hide
+defaults write com.apple.Dock autohide -bool false
+#set speed for Mission Control (fast)
+
+defaults write com.apple.Dock expose-animation-duration -float 0.1
+
+# turn of empty trash sound
+defaults write com.apple.Finder FinderSounds -bool false
 
 # === Safari ===
+
+# Stuff
+
+# disable .DS_Store
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+
+# disable crash reporter
+defaults write com.apple.CrashReporter DialogType none
+
+# reset to factory settings
+$ defaults delete com.apple.Dock

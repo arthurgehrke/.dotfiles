@@ -1,7 +1,4 @@
 lua << EOF
-local status, saga = pcall(require, "lspsaga")
-if (not status) then return end
-
 local ok, lsp = pcall(require, "lsp-zero")
 if not ok then
    return
@@ -13,41 +10,8 @@ local lspconfig = require('lspconfig')
 local protocol = require('vim.lsp.protocol')
 local schemas = require('schemastore')
 local cmp = require'cmp'
-require('lsp-zero').extend_cmp()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-vim.o.updatetime = 250
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldlevelstart = 99
-opt.foldnestmax = 10 -- deepest fold is 10 levels
-opt.foldenable = false -- don't fold by default
-opt.foldlevel = 1
-
-keymap.set('n', '<Space>', '<C-w>w')
-keymap.set('', 'sh', '<C-w>h')
-keymap.set('', 'sk', '<C-w>k')
-keymap.set('', 'sj', '<C-w>j')
-keymap.set('', 'sl', '<C-w>l')
-
-
-lsp.ensure_installed({
-   'tsserver',
-   'eslint',
-   'lua_ls',
-   'vimls',
-   'jsonls',
-   'yamlls',
-   'dockerls',
-   'html',
-   'cssls',
-   'bashls',
-   'sqlls',
-   'angularls',
-   'jsonlint',
-   'textlint'
-})
 
 lsp.format_mapping('gq', {
   format_opts = {
@@ -57,7 +21,7 @@ lsp.format_mapping('gq', {
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
-    ['null-ls'] = { 'typescript', 'typescriptreact', 'json', 'markdown' },
+    ['null-ls'] = { 'typescript', 'typescriptreact', 'json' },
   }
 })
 
@@ -70,48 +34,22 @@ lsp.set_sign_icons(
 }
 )
 
-lsp.setup_servers({
-   -- "eslint",
-   -- "angularls",
-   -- "vuels",
-   opts = {
-      single_file_support = false,
-      on_attach = on_attach,
-   },
-})
-
 local util = require('lspconfig.util')
-
-lsp.configure('angularls', {
-    root_dir = util.root_pattern('angular.json', 'project.json', 'package.json')
-})
-
-lsp.configure('tsserver', {
-   settings = {
-      completions = {
-         completeFunctionCalls = true
-      }
-   },
-  servers = {
-     ['lua_ls'] = { 'lua' },
-     ['null-ls'] = { 'typescript', 'typescriptreact', 'javascript', 'json' },
-  }
-})
 
 lsp.on_attach(function(client, bufnr)
 lsp.default_keymaps({buffer = bufnr})
 local opts = {buffer = bufnr, remap = false}
-vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
-vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
-vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
-vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-vim.keymap.set('n', 'ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-vim.keymap.set("n", "<space>vrr", function() vim.lsp.buf.references() end, opts)
-vim.keymap.set("n", "<space>vrn", function() vim.lsp.buf.rename() end, opts)
-vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-vim.keymap.set({ 'n', 'v' }, '<space>af', function()
-vim.lsp.buf.format({async = true})
+  vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
+  vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
+  vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
+  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+  vim.keymap.set('n', 'ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  vim.keymap.set("n", "<space>vrr", function() vim.lsp.buf.references() end, opts)
+  vim.keymap.set("n", "<space>vrn", function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+  vim.keymap.set({ 'n', 'v' }, '<space>af', function()
+  vim.lsp.buf.format({async = true})
 end,
 { silent = true, desc = 'format' })
 
@@ -144,18 +82,6 @@ end,
 end)
 
 vim.keymap.set('n', 'gf', "<cmd>Lspsaga lsp_finder<CR>", { noremap = true, silent = true, buffer = bufnr, desc = desc })
-
-saga.init_lsp_saga {
-   use_saga_diagnostic_sign = false,
-   code_action_prompt = {
-      enable = false,
-      sign = false,
-      virtual_text = true,
-   },
-   server_filetype_map = {
-      typescript = 'typescript'
-   }
-}
 
 require('lspconfig').lua_ls.setup({
    on_attach = function(client, bufnr)
@@ -199,7 +125,7 @@ null_ls.setup({
    autostart = true,
    debug = false,
    on_attach = function(client, bufnr)
-     if client.name == "eslint" or client.name == "angularls" or client.name == "null-ls" then
+     if --[[ client.name == "eslint" or client.name == "angularls" or  ]] client.name == "null-ls" then
        return
      end
 
@@ -210,7 +136,6 @@ null_ls.setup({
       null_ls.builtins.formatting.prettier.with({
          condition = function(utils)
          return utils.root_has_file({
-            -- https://prettier.io/docs/en/configuration.html
             '.prettierrc',
             '.prettierrc.json',
             '.prettierrc.yml',
@@ -225,12 +150,6 @@ null_ls.setup({
          end,
          only_local = "node_modules/.bin",
       }),
-      null_ls.builtins.diagnostics.textlint.with {
-         filetypes = { 'markdown' },
-      },
-      null_ls.builtins.formatting.textlint.with {
-         filetypes = { 'markdown' },
-      },
       null_ls.builtins.code_actions.eslint_d,
       null_ls.builtins.formatting.eslint_d.with {
          condition = function(utils)
@@ -334,24 +253,25 @@ vim.cmd('command! AutoCmpOff lua setAutoCmp(false)')
 
 require('lspconfig').tsserver.setup({
    on_init = function(client)
-   client.server_capabilities.documentFormattingProvider = false
-   client.server_capabilities.documentFormattingRangeProvider = false
+     client.server_capabilities.documentFormattingProvider = false
+     client.server_capabilities.documentFormattingRangeProvider = false
    end,
    capabilities = capabilities,
+   filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+   cmd = { "typescript-language-server", "--stdio" },
    on_attach = function(client)
-   client.resolved_capabilities.document_formatting = false
+     client.resolved_capabilities.document_formatting = false
    end,
 })
 
 require('lspconfig').yamlls.setup({
-   on_init = function(client)
-   client.server_capabilities.documentFormattingProvider = false
-   client.server_capabilities.documentFormattingRangeProvider = false
-   end,
-   capabilities = capabilities,
-   on_attach = function(client)
-   client.resolved_capabilities.document_formatting = false
-   end,
+   settings = {
+      format = { enable = true },
+      json = {
+         schemas = schemas.json.schemas().yamlls,
+      },
+   },
+   filetypes = { "yaml" }
 })
 
 require('lspconfig').jsonls.setup({
@@ -362,6 +282,16 @@ require('lspconfig').jsonls.setup({
       },
    },
    filetypes = { "json" }
+})
+
+require('lspconfig').html.setup({
+   settings = {
+      format = { enable = true },
+      json = {
+         schemas = schemas.json.schemas().html,
+      },
+   },
+   filetypes = { "html" }
 })
 
 require('lspconfig').yamlls.setup({
@@ -378,34 +308,65 @@ require('lspconfig').yamlls.setup({
         schemas = schemas.json.schemas().yamls,
       },
    },
-})
-
-require('lspconfig').eslint.setup({})
-
-require('lspconfig').angularls.setup({
-  root_dir = util.root_pattern('angular.json', 'project.json', 'package.json'),
-   -- on_init = function(client)
-   -- client.server_capabilities.documentFormattingProvider = false
-   -- client.server_capabilities.documentFormattingRangeProvider = false
-   -- end,
-   capabilities = capabilities,
-   on_attach = function(client)
-   client.server_capabilities.documentFormattingProvider = false
-   client.server_capabilities.documentFormattingRangeProvider = false
-   -- client.resolved_capabilities.document_formatting = false
-   end,
-   settings = {
-      format = { enable = true },
-   },
+   filetypes = { "yaml" }
 })
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-require('lspconfig').bashls.setup({})
-require('lspconfig').html.setup({
-  on_attach = function(client)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentFormattingRangeProvider = false
-  end,
+
+require 'lspconfig'.bashls.setup ({
+  cmd = {
+    "bash-language-server",
+    "start"
+  },
+  filetypes = { "sh", "zsh" },
+  capabilities = CAPABILITIES,
+})
+
+require('lspconfig').ruff_lsp.setup({})
+
+ require('lspconfig').pyright.setup ({
+   capabilities = capabilities,
+   on_attach = on_attach,
+   settings = {
+     python = {
+       analysis = {
+         autoImportCompletions = false,
+         useLibraryCodeForTypes = false
+       }
+       }
+     },
+     before_init = function(_, config)
+     config.settings.python.pythonPath = require('lspconfig').util.path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+     end
+ })
+
+require('lspconfig').marksman.setup({
+  capabilities = capabilities,
+  filetypes = {
+    "markdown", "md", "latex", "tex", "org", "plaintext", "txt"
+  },
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    client.server_capabilities.completionProvider = false
+  end
+})
+
+require('lspconfig').cssls.setup({
+  cmd          = { "css-languageserver", "--stdio" },
+  filetypes    = { "css", "scss", "less" },
+  -- root_dir  = root_pattern("package.json", ".git") or bufdir,
+  settings = {
+    css = {
+      validate = true
+    },
+    less = {
+      validate = true
+    },
+    scss = {
+      validate = true
+    }
+  },
+  single_file_support = true,
 })
 
 vim.diagnostic.config({
@@ -414,9 +375,25 @@ vim.diagnostic.config({
    update_in_insert = true,
    underline = true,
    severity_sort = true,
-   float = true,
+   -- float = true,
+   float = {
+        severity_sort = true,
+        source = "if_many",
+        border = "rounded",
+        prefix = function(diagnostic)
+            local diag_to_format = {
+                [vim.diagnostic.severity.ERROR] = { "Error", "LspDiagnosticsDefaultError" },
+                [vim.diagnostic.severity.WARN] = { "Warning", "LspDiagnosticsDefaultWarning" },
+                [vim.diagnostic.severity.INFO] = { "Info", "LspDiagnosticsDefaultInfo" },
+                [vim.diagnostic.severity.HINT] = { "Hint", "LspDiagnosticsDefaultHint" },
+            }
+            local res = diag_to_format[diagnostic.severity]
+            return string.format("(%s) ", res[1]), res[2]
+        end,
+    },
 })
 
+vim.opt.updatetime = 100
 vim.env.NEOVIM_NODE_VERSION = 'v18.12.1'
 
 if vim.fn.has('unix') and vim.env.NEOVIM_NODE_VERSION then
@@ -430,11 +407,5 @@ EOF
 nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>
 
-" compe
-" let g:completion_enable_auto_popup = 0
-" set completeopt=menu,preview,menuone,noselect
-" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-
 nnoremap <space>ew :e <C-R>=expand("%:.:h") . "/"<CR>
-nnoremap <space>lcd :lcd %:h<CR>
 nnoremap <space>tcd :tcd %:h<CR>
