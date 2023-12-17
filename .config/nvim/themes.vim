@@ -1,3 +1,4 @@
+syntax enable
 set background=dark
 set termguicolors
 
