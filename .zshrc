@@ -39,26 +39,17 @@ else
   HOMEBREW_PREFIX="/usr/local"
 fi
 
-eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+# eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 # mysql client
 # export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 # brew packages
-export PATH="$PYENV_ROOT/bin:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 
-# Setup for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-fi
 
 ##############################################################################
 # MacOs
@@ -72,10 +63,6 @@ if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
 fi
 
-# npm global
-export NPM_PACKAGES="/usr/local/npm_packages"
-export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
@@ -83,6 +70,20 @@ export LANG=en_US.UTF-8
 ##############################################################################
 # Configs
 ##############################################################################
+export EDITOR=nvim
+
+export KEYTIMEOUT=1
+export PROMPT_EOL_MARK=''
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # make prompt faster
+export DISABLE_MAGIC_FUNCTIONS=true     # make pasting into terminal faster
+
+##############################################################################
+# Node & Npm
+##############################################################################
+# npm global
+export NPM_PACKAGES="/usr/local/npm_packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
 
 ##############################################################################
 # History
@@ -91,9 +92,6 @@ export HISTFILE=~/.zsh_history
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
-export EDITOR=nvim
-
-export DISABLE_MAGIC_FUNCTIONS=true
 
 setopt EXTENDED_HISTORY          
 setopt SHARE_HISTORY             
@@ -150,12 +148,17 @@ bindkey -e '^b' backward-word
 bindkey -e '^e' forward-word
 bindkey -e '^h' backward-char
 bindkey -e '^l' forward-char
-bindkey -e '^i' expand-or-complete
+bindkey -e '^i' .accept-line
 bindkey -e '^F' autosuggest-accept-suggested-small-word
-bindkey -e '^d' delete-char
+bindkey -e '^U' backward-kill-line
+bindkey -e '^?' backward-delete-char
 # Movement
+
+# shift + tab to reverse history 
+bindkey -e '^[[Z' reverse-menu-complete
+
 bindkey -e '^a' beginning-of-line
-bindkey -e '^e' end-of-line
+bindkey -e '^f' end-of-line
 
 ## history-substring-search
 # Control-P/N keys
@@ -201,8 +204,9 @@ export BAT_THEME="gruvbox-dark"
 # Brew
 ##############################################################################
 # java sdk - jenv
+export PATH=$PATH:$JAVA_HOME/bin
 export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+# eval "$(jenv init -)"
 
 ##############################################################################
 # Various
@@ -223,58 +227,7 @@ fi
 ##############################################################################
 # Ls and Less
 ##############################################################################
-(( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
-
-# disable zsh underline
-ZSH_HIGHLIGHT_STYLES[default]='none'
-ZSH_HIGHLIGHT_STYLES[path]='none'
-ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
-ZSH_HIGHLIGHT_STYLES[precommand]='none'
-ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
-ZSH_HIGHLIGHT_STYLES[assign]='none'
-# ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
-ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
-# ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
-
-##############################################################################
-# Nvm
-##############################################################################
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-
-# _nvmrc_hook() {
-#   if [[ $PWD == $PREV_PWD ]]; then
-#     return
-#   fi
-#   
-#   PREV_PWD=$PWD
-#   [[ -f ".nvmrc" ]] && nvm use
-# }
-
-# if ! [[ "${PROMPT_COMMAND:-}" =~ _nvmrc_hook ]]; then
-#   PROMPT_COMMAND="_nvmrc_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
-# fi
+zstyle ':completion:*' list-colors
 
 ##############################################################################
 # Completion
@@ -285,8 +238,12 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 # Python
 ##############################################################################
 export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# eval "$(pyenv init --path)"
+# eval "$(pyenv init -)"
 
 ##############################################################################
 # Ruby
@@ -298,3 +255,7 @@ eval "$(pyenv init -)"
 
 # eval "$(rbenv init - zsh)"
 
+# export PATH="/opt/homebrew/opt/bzip2/bin:$PATH"
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
