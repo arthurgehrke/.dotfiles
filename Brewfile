@@ -27,8 +27,11 @@ brew "python@3.11"
 brew "awscli"
 brew "bat"
 brew "cairo"
+brew "openjdk"
+brew "carrot2"
 brew "coreutils"
 brew "curl"
+brew "diff-so-fancy"
 brew "docker-completion"
 brew "dos2unix"
 brew "fd"
@@ -63,7 +66,6 @@ brew "mysql-client"
 brew "tree-sitter", args: ["HEAD"]
 brew "neovim"
 brew "nvm"
-brew "openjdk"
 brew "pgcli"
 brew "pgformatter"
 brew "virtualenv"
@@ -75,9 +77,11 @@ brew "pyenv-virtualenvwrapper"
 brew "quicktype"
 brew "tcl-tk"
 brew "r"
+brew "rbenv"
 brew "ripgrep"
 brew "s-search"
 brew "stylua"
+brew "surfraw"
 brew "the_silver_searcher"
 brew "tig"
 brew "tmux"
@@ -95,6 +99,7 @@ brew "d99kris/nchat/nchat"
 brew "fsouza/prettierd/prettierd"
 brew "rbenv/tap/openssl@1.0"
 brew "ringohub/redis-cli/redis-cli"
+cask "chromedriver"
 cask "font-hack-nerd-font"
 cask "ngrok"
 cask "qview"
@@ -103,17 +108,3 @@ cask "rstudio"
 cask "temurin"
 cask "temurin11"
 cask "temurin8"
-mas "AdGuard for Safari", id: 1440147259
-mas "BetterSnapTool", id: 417375580
-mas "Highlights", id: 1498912833
-mas "HP Smart", id: 1474276998
-mas "Microsoft Excel", id: 462058435
-mas "Microsoft Word", id: 462054704
-mas "Noir", id: 1592917505
-mas "Numbers", id: 409203825
-mas "Octotree", id: 1457450145
-mas "OneDrive", id: 823766827
-mas "Postman Interceptor", id: 6460587883
-mas "Surfshark", id: 1437809329
-mas "TickTick", id: 966085870
-mas "Webcam Recorder", id: 1508067444
