@@ -18,8 +18,8 @@ nnoremap <silent><C-h>   :bprevious<CR>
 nnoremap <silent> tt <c-^><cr>
 
 " Better tabbing
-vnoremap < <gv
-vnoremap > >gv
+" vnoremap < <gv
+" vnoremap > >gv
 
 function! StripWhitespace()
   let save_cursor = getpos(".")
