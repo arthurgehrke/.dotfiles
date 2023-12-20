@@ -8,7 +8,7 @@ source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 
 set foldcolumn=0 " Remove sidebar column
-set magic
+set nomagic
 set nofoldenable
 set foldmethod=indent " Simple and fast
 set cursorline
@@ -45,8 +45,9 @@ set softtabstop=2
 set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
 set noerrorbells
-set noshowmatch
-
+let b:match_ignorecase=1 
+set matchpairs+=<:>
+set matchpairs+=":"
 
 set backspace=indent,eol,start
 set novisualbell
@@ -115,10 +116,6 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
-au BufRead,BufNewFile *.md          set ft=mkd tw=80 syntax=markdown
-au BufRead,BufNewFile *.ppmd          set ft=mkd tw=80 syntax=markdown
-au BufRead,BufNewFile *.markdown    set ft=mkd tw=80 syntax=markdown
-
 " autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 " autocmd BufRead,BufNew *scss :setlocal filetype=css
@@ -151,7 +148,3 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
-
-nnoremap <space>/ "fyiw :/<c-r>f<cr>
-
-
