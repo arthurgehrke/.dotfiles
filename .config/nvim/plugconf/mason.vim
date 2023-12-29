@@ -11,12 +11,6 @@ if not mason_lspconfig_status then
 	return
 end
 
--- import mason-null-ls plugin safely
-local mason_null_ls_status, mason_null_ls = pcall(require, "mason-null-ls")
-if not mason_null_ls_status then
-	return
-end
-
 -- import mason-nvim-dap plugin safely
 local mason_dap_status, mason_dap = pcall(require, "mason-nvim-dap")
 if not mason_dap_status then
@@ -37,7 +31,6 @@ local lsp_servers = {
 	"dockerls",
   "pyright",
   "lua_ls",
-  "marksman"
 }
 
 local dap_servers = {
@@ -50,34 +43,29 @@ local dap_servers = {
 
 -- enable mason
 require("mason").setup()
+
 require("mason-lspconfig").setup({
   -- automatically install language servers setup below for lspconfig
   automatic_installation = true
 })
 
 require('mason-tool-installer').setup({
-ensure_installed = {
-  'bash-language-server',
-  'lua-language-server',
-  'vim-language-server',
-  'stylua',
-  'shellcheck',
-  'sqlfmt',
-  'json-to-struct',
-  'jq',
-  'vint',
-  'yamllint',
-  'yamlfmt',
-  'yamlls',
-  'dockerls',
-  'sqlls',
-  }
-})
-
-mason_null_ls.setup({
-	ensure_installed = {'eslint_d', 'jsonlint', 'bashls', 'cssls', 'html', 'jsonls', 'lua_ls'},
-	automatic_installation = true,
-	handlers = {},
+  ensure_installed = {
+    'bash-language-server',
+    'lua-language-server',
+    'vim-language-server',
+    'stylua',
+    'shellcheck',
+    'sqlfmt',
+    'json-to-struct',
+    'jq',
+    'vimls',
+    'yamllint',
+    'yamlfmt',
+    'yamlls',
+    'dockerls',
+    'sqlls',
+    }
 })
 
 mason_dap.setup({

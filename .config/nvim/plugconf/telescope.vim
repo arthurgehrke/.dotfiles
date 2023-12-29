@@ -1,4 +1,5 @@
 nnoremap ff <cmd>Telescope find_files hidden=true<cr>
+nnoremap <c-p> <cmd>Telescope find_files hidden=true<cr>
 nnoremap fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap ft <cmd>lua require('telescope.builtin').help_tags()<cr>
 nnoremap <expr> fF ':Telescope find_files<cr>' . expand('<cword>')
@@ -58,9 +59,6 @@ require('telescope').setup{
         return {"--hidden"}
         end
       },
-      spell_suggest = {
-        theme = "cursor",
-      }
     },
     commands = {
       theme = "dropdown",
@@ -90,27 +88,8 @@ require('telescope').setup{
     }
   }
 }
-vim.keymap.set("n", "<space>sx", require("telescope.builtin").resume, {
-  noremap = true,
-  silent = true,
-  desc = "Resume",
-})
 
-     vim.api.nvim_create_autocmd("WinLeave", {
-        callback = function()
-          if vim.bo.ft == "TelescopePrompt" and vim.fn.mode() == "i" then
-            if vim.fn.mode() == "i" then
-              vim.schedule(function()
-                vim.cmd("stopinsert")
-              end)
-            end
-          end
-        end,
-      })
-require'telescope'.load_extension('project')
 require('telescope').load_extension('fzf')
-require('telescope').load_extension('ui-select')
 require('telescope').load_extension('live_grep_args')
 require('telescope').load_extension('file_browser')
-require('telescope').load_extension('git_diffs')
 EOF

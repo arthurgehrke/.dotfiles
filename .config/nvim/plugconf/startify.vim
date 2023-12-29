@@ -13,24 +13,12 @@ let g:startify_lists = [
   \ { 'type': 'commands',  'header': ['   Commands']       },
   \  { 'type': function('s:gitModified'),  'header': ['   git modified']},
   \  { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
-  \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
   \ { 'type': 'files',     'header': ['   Files']            },
 \ ]
-"
-"
+
 let g:startify_skiplist = [
 \ 'COMMIT_EDITMSG',
 \ 'dbui',
-\ ]
-"
-let g:startify_bookmarks = [
-\ {'z': '~/.zshrc'},
-\ {'t': '~/.tmux.conf'},
-\ {'r': '~/repositores/doare/'},
-\ {'p': '~/.config/nvim/init.vim'},
-\ {'s': '~/.config/nvim/plugconf'},
-\ {'z': '~/.zshrc' },
-\ {'g': '~/.gitconfig' },
 \ ]
 
 let g:startify_commands = [
@@ -40,6 +28,6 @@ let g:startify_commands = [
 \ { 'h': [ 'Check Health', ':checkhealth' ] },
 \ ]
 
-let g:startify_change_to_dir = 0
-let g:startify_change_to_vcs_root = 1     
+let g:startify_change_to_dir = 1
+let g:startify_change_to_vcs_root = 1
 

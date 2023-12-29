@@ -1,4 +1,4 @@
-" TsBufEnable 
+" TsBufEnable
 lua << EOF
 local status_ok, treesitter = pcall(require, "nvim-treesitter")
 if not status_ok then
@@ -13,13 +13,10 @@ end
 treesitter_config.setup {
   auto_install = true,
   highlight = {
-      enable = not vim.g.vscode, -- false will disable the whole extension
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-      disable = {"latex", "markdown"},
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    enable = not vim.g.vscode, -- false will disable the whole extension
+    disable = {
+      'help', 
+    }
   },
   indent = {
     enable = true,
@@ -33,13 +30,13 @@ treesitter_config.setup {
   -- ignore_install = { "javascript" },
   ignore_install = {},
   ensure_installed = {
+    "lua",
     "xml",
     "http",
     "typescript",
     "javascript",
     "tsx",
     "vim",
-    "vimdoc",
     "python",
     "sql",
     "scss",
@@ -81,4 +78,3 @@ require('ts_context_commentstring').setup {}
 -- parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }
 
 EOF
-
