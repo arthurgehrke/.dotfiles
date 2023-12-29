@@ -69,7 +69,7 @@ require'nvim-tree'.setup {
    on_attach = on_attach,
    reload_on_bufenter = true,
    diagnostics = {
-      enable = true,
+      enable = false,
       show_on_dirs = false,
       show_on_open_dirs = false,
       debounce_delay = 50,
@@ -128,7 +128,7 @@ require'nvim-tree'.setup {
           folder_arrow = true,
           git = true,
           modified = true,
-          diagnostics = true,
+          diagnostics = false,
           bookmarks = false,
         },
          glyphs = {
@@ -164,7 +164,6 @@ require'nvim-tree'.setup {
       relativenumber = false,
       number = false,
       signcolumn = "yes",
-      signcolumn = "auto",
       width = 25,
       float = {
         enable = false,
@@ -215,16 +214,16 @@ require'nvim-tree'.setup {
          restrict_above_cwd = false,
       },
       open_file = {
-         quit_on_open = false,
+         quit_on_open = true,
          eject = true,
-         resize_window = true,
+         resize_window = false,
          window_picker = {
            enable = true,
            picker = "default",
            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
            exclude = {
              filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
-             buftype = { "nofile", "terminal", "help" },
+             buftype = { "nofile", "terminal", "help", "diff" },
            },
          },
       },
