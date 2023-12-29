@@ -77,6 +77,7 @@ export PROMPT_EOL_MARK=''
 export ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # make prompt faster
 export DISABLE_MAGIC_FUNCTIONS=true     # make pasting into terminal faster
 
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 ##############################################################################
 # Node & Npm
 ##############################################################################
@@ -92,6 +93,15 @@ export HISTFILE=~/.zsh_history
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
+
+# hide EOL sign ('%')
+export PROMPT_EOL_MARK=""
+
+setopt MAGICEQUALSUBST     # enable filename expansion for arguments of the form ‘anything=expression’
+setopt NONOMATCH           # hide error message if there is no match for the pattern
+setopt NOTIFY              # report the status of background jobs immediately
+setopt NUMERICGLOBSORT     # sort filenames numerically when it makes sense
+setopt PROMPTSUBST         # enable command substitution in prompt
 
 setopt EXTENDED_HISTORY          
 setopt SHARE_HISTORY             
@@ -227,7 +237,12 @@ fi
 ##############################################################################
 # Ls and Less
 ##############################################################################
-zstyle ':completion:*' list-colors
+# zstyle ':completion:*' list-colors
+# enable completion features
+autoload -Uz compinit
+compinit -d ~/.cache/zcompdump
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
 
 ##############################################################################
 # Completion
@@ -259,3 +274,5 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+export PATH="$PATH:$HOME/.local/bin"
