@@ -85,7 +85,7 @@
   "Right Option Key Sends" : 2,
   "Blinking Cursor" : false,
   "Cursor Boost" : 0,
-  "Open Password Manager Automatically" : true,
+  "Open Password Manager Automatically" : false,
   "Mouse Reporting allow clicks and drags" : true,
   "Use Underline Color" : false,
   "Space" : 0,
@@ -289,8 +289,8 @@
   "Unicode Version" : 9,
   "Semantic History" : {
     "editor" : "com.github.atom",
-    "text" : "nvim",
-    "action" : "best editor"
+    "action" : "best editor",
+    "text" : "nvim"
   },
   "Custom Directory" : "No",
   "Working Directory" : "\/Users\/arthurrodrigues",
