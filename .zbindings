@@ -1,0 +1,53 @@
+#!/usr/bin/zsh 
+
+zstyle '*:compinit' arguments -D -i -u -C -w
+# Initialize completion
+# autoload -Uz compinit && compinit
+
+bindkey '^ ' autosuggest-accept
+
+bindkey '^n' expand-or-complete
+
+# Initialize editing command line
+autoload -U edit-command-line && zle -N edit-command-line
+
+# Set automatic cd (typing directory name with no 'cd')
+setopt autocd
+# Enable interactive comments (# on the command line)
+setopt interactivecomments
+
+bindkey -e "^x" edit-command-line
+bindkey -e '^o' autosuggest-accept
+bindkey -e '^b' backward-word
+bindkey -e '^e' forward-word
+bindkey -e '^h' backward-char
+bindkey -e '^l' forward-char
+bindkey -e '^i' .accept-line
+bindkey -e '^F' autosuggest-accept-suggested-small-word
+bindkey -e '^U' backward-kill-line
+bindkey -e '^?' backward-delete-char
+
+# shift + tab to reverse history 
+# bindkey -e '^[[Z' reverse-menu-complete
+
+# Movement
+bindkey -e '^a' beginning-of-line
+bindkey -e '^f' end-of-line
+
+## history-substring-search
+# Control-P/N keys
+# History
+bindkey -e '^p' up-history
+bindkey -e '^n' down-history
+# Search using patterns as documented here:
+# http://zsh.sourceforge.net/Doc/Release/Expansion.html#Filename-Generation
+bindkey -e '^r' history-incremental-pattern-search-backward
+bindkey -e '^f' history-incremental-pattern-search-forward
+
+bindkey -e '^j' history-substring-search-up
+bindkey -e '^k' history-substring-search-down
+
+
+# change Ctrl+C to Ctrl+Q
+stty intr '^d'
+stty erase '^?'

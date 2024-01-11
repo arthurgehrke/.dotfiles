@@ -2,18 +2,18 @@
 # Source's
 ##############################################################################
 export DOTFILES=$HOME/dotfiles
+export OPTBREWPATH=/opt/homebrew/share
 export INCLUDES=$HOME/.local/share/dotfiles
 
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/etc/profile.d/z.sh
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+source $OPTBREWPATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $OPTBREWPATH/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $OPTBREWPATH/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $OPTBREWPATH/powerlevel10k/powerlevel10k.zsh-theme
 
 source $HOME/.themes/zsh/.p10k.zsh
-source $HOME/.shell_aliases
-source $HOME/.shell_scripts
-source $HOME/.fzf.zsh
+source $HOME/.zaliases
+source $HOME/.zscripts
+# source $HOME/.zbindings
 source $HOME/.zprofile
 
 zmodload -i zsh/complist
@@ -27,7 +27,6 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-
 ##############################################################################
 # Homebrew
 ##############################################################################
@@ -39,17 +38,26 @@ else
   HOMEBREW_PREFIX="/usr/local"
 fi
 
-# eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 # mysql client
 # export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 # brew packages
+export PATH="$PYENV_ROOT/bin:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 
+# Setup for pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
 
 ##############################################################################
 # MacOs
@@ -63,45 +71,24 @@ if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
 fi
 
-
-# prefer US English & utf-8
-export LANG=en_US.UTF-8
-
-##############################################################################
-# Configs
-##############################################################################
-export EDITOR=nvim
-
-export KEYTIMEOUT=1
-export PROMPT_EOL_MARK=''
-export ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # make prompt faster
-export DISABLE_MAGIC_FUNCTIONS=true     # make pasting into terminal faster
-
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
-##############################################################################
-# Node & Npm
-##############################################################################
 # npm global
 export NPM_PACKAGES="/usr/local/npm_packages"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 
+# prefer US English & utf-8
+export LANG=en_US.UTF-8
+
 ##############################################################################
 # History
 ##############################################################################
-export HISTFILE=~/.zsh_history
+export HISTFILE=~/.zhistory
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
+export EDITOR=nvim
 
-# hide EOL sign ('%')
-export PROMPT_EOL_MARK=""
-
-setopt MAGICEQUALSUBST     # enable filename expansion for arguments of the form ‘anything=expression’
-setopt NONOMATCH           # hide error message if there is no match for the pattern
-setopt NOTIFY              # report the status of background jobs immediately
-setopt NUMERICGLOBSORT     # sort filenames numerically when it makes sense
-setopt PROMPTSUBST         # enable command substitution in prompt
+export DISABLE_MAGIC_FUNCTIONS=true
 
 setopt EXTENDED_HISTORY          
 setopt SHARE_HISTORY             
@@ -158,17 +145,12 @@ bindkey -e '^b' backward-word
 bindkey -e '^e' forward-word
 bindkey -e '^h' backward-char
 bindkey -e '^l' forward-char
-bindkey -e '^i' .accept-line
+bindkey -e '^i' expand-or-complete
 bindkey -e '^F' autosuggest-accept-suggested-small-word
-bindkey -e '^U' backward-kill-line
-bindkey -e '^?' backward-delete-char
+bindkey -e '^d' delete-char
 # Movement
-
-# shift + tab to reverse history 
-bindkey -e '^[[Z' reverse-menu-complete
-
 bindkey -e '^a' beginning-of-line
-bindkey -e '^f' end-of-line
+bindkey -e '^e' end-of-line
 
 ## history-substring-search
 # Control-P/N keys
@@ -214,9 +196,8 @@ export BAT_THEME="gruvbox-dark"
 # Brew
 ##############################################################################
 # java sdk - jenv
-export PATH=$PATH:$JAVA_HOME/bin
 export PATH="$HOME/.jenv/bin:$PATH"
-# eval "$(jenv init -)"
+eval "$(jenv init -)"
 
 ##############################################################################
 # Various
@@ -224,6 +205,8 @@ export PATH="$HOME/.jenv/bin:$PATH"
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 
+# zoxide 
+eval "$(zoxide init zsh)"
 ##############################################################################
 # Iterm2
 ##############################################################################
@@ -237,12 +220,58 @@ fi
 ##############################################################################
 # Ls and Less
 ##############################################################################
-# zstyle ':completion:*' list-colors
-# enable completion features
-autoload -Uz compinit
-compinit -d ~/.cache/zcompdump
-zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
+(( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
+
+# disable zsh underline
+ZSH_HIGHLIGHT_STYLES[default]='none'
+ZSH_HIGHLIGHT_STYLES[path]='none'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+ZSH_HIGHLIGHT_STYLES[precommand]='none'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
+ZSH_HIGHLIGHT_STYLES[assign]='none'
+# ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
+# ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
+
+##############################################################################
+# Nvm
+##############################################################################
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+
+# _nvmrc_hook() {
+#   if [[ $PWD == $PREV_PWD ]]; then
+#     return
+#   fi
+#   
+#   PREV_PWD=$PWD
+#   [[ -f ".nvmrc" ]] && nvm use
+# }
+
+# if ! [[ "${PROMPT_COMMAND:-}" =~ _nvmrc_hook ]]; then
+#   PROMPT_COMMAND="_nvmrc_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+# fi
 
 ##############################################################################
 # Completion
@@ -253,12 +282,8 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 # Python
 ##############################################################################
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-
-# eval "$(pyenv init --path)"
-# eval "$(pyenv init -)"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 ##############################################################################
 # Ruby
@@ -269,10 +294,3 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # fi
 
 # eval "$(rbenv init - zsh)"
-
-# export PATH="/opt/homebrew/opt/bzip2/bin:$PATH"
-
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-export PATH="$PATH:$HOME/.local/bin"

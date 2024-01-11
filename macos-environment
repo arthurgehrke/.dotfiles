@@ -19,7 +19,7 @@ defaults write com.apple.Finder AppleShowAllFiles true
 # show hidden apps
 defaults write com.apple.Dock showhidden -bool yes
 
-# hide hidden files
+# show hidden files
 defaults write com.apple.Finder AppleShowAllFiles true
 
 #show hidden files
@@ -39,10 +39,27 @@ defaults write com.apple.Finder FinderSounds -bool false
 # Stuff
 
 # disable .DS_Store
-defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+defaults write com.apple.desktopservices DSDontWriteNetworkStores false
 
 # disable crash reporter
 defaults write com.apple.CrashReporter DialogType none
 
 # reset to factory settings
 $ defaults delete com.apple.Dock
+
+# Always open everything in Finder's list view. This is important.
+defaults write com.apple.Finder FXPreferredViewStyle Nlsv
+
+# Show the ~/Library folder.
+chflags nohidden ~/Library
+
+# Set a really fast key repeat.
+defaults write NSGlobalDomain KeyRepeat -int 1
+
+# Set up Safari for development.
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
