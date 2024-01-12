@@ -152,6 +152,7 @@ bindkey -e '^d' delete-char
 bindkey -e '^a' beginning-of-line
 bindkey -e '^e' end-of-line
 
+bindkey '^[[Z' reverse-menu-complete
 ## history-substring-search
 # Control-P/N keys
 # History
