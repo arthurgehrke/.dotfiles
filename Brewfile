@@ -20,7 +20,6 @@ tap "stripe/stripe-cli"
 tap "tako8ki/tap"
 tap "thezoraiz/ascii-image-converter"
 tap "xo/xo"
-
 brew "xz"
 brew "openssl@3"
 brew "bat"
@@ -47,6 +46,7 @@ brew "fzf"
 brew "gallery-dl"
 brew "gawk"
 brew "gdrive"
+brew "gh"
 brew "git"
 brew "gnu-sed"
 brew "gnu-tar"
@@ -119,6 +119,9 @@ cask "brave-browser"
 cask "chromedriver"
 cask "discord"
 cask "docker"
+cask "font-hack-nerd-font"
+cask "font-meslo-lg-nerd-font"
+cask "git-credential-manager"
 cask "google-drive"
 cask "iterm2"
 cask "ngrok"
@@ -131,3 +134,21 @@ cask "rstudio"
 cask "temurin"
 cask "temurin11"
 cask "temurin8"
+mas "AdGuard for Safari", id: 1440147259
+mas "BetterSnapTool", id: 417375580
+mas "com.getfireshot.fireshot", id: 1541862561
+mas "Find Any File", id: 402569179
+mas "Highlights", id: 1498912833
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft Word", id: 462054704
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "Postman Interceptor", id: 6460587883
+mas "Regex for Safari", id: 1597580456
+mas "Smart Keyword Search", id: 1541221580
+mas "Surfshark", id: 1437809329
+mas "TickTick", id: 966085870
+mas "Web(Cache)Browser", id: 432802024
+mas "Webcam Recorder", id: 1508067444
+mas "xEngine", id: 1663123715

@@ -45,3 +45,8 @@
   insteadOf = https://gitlab.com/
 [interactive]
 	diffFilter = diff-so-fancy --patch
+[credential]
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true
