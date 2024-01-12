@@ -2,6 +2,7 @@ filetype off
 call plug#begin()
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'ryanoasis/vim-devicons'
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'ellisonleao/gruvbox.nvim'
   " Plug 'folke/tokyonight.nvim'

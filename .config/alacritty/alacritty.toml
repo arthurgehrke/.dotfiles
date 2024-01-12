@@ -18,26 +18,26 @@ shape = "Block"
 TERM = "xterm-256color"
 
 [font]
-  size = 12
+size = 12
 
 [font.bold]
-family = "MesloLGS NF"
+family = "Hack Nerd Font Mono"
 style = "Bold"
 
 [font.bold_italic]
-family = "MesloLGS NF"
+family = "Hack Nerd Font Mono"
 style = "Bold Italic"
 
 [font.italic]
-family = "MesloLGS NF"
+family = "Hack Nerd Font Mono"
 style = "Italic"
 
 [font.normal]
-family = "MesloLGS NF"
+family = "Hack Nerd Font Mono"
 style = "Regular"
 
 [font.offset]
-x = 0  # compacter letter spacing
+x = 1  # compacter letter spacing
 y = 5  # compacter line spacing
 
 [keyboard]

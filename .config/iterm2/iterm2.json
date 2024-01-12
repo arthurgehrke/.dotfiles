@@ -258,7 +258,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.82989895343780518
   },
-  "Use Non-ASCII Font" : true,
+  "Use Non-ASCII Font" : false,
   "Character Encoding" : 4,
   "Custom Tab Title" : "itwe\\",
   "Ansi 7 Color" : {
@@ -281,8 +281,8 @@
   "Title Components" : 3,
   "Semantic History" : {
     "editor" : "com.github.atom",
-    "text" : "nvim",
-    "action" : "best editor"
+    "action" : "best editor",
+    "text" : "nvim"
   },
   "Working Directory" : "\/Users\/arthurrodrigues",
   "Enable Triggers in Interactive Apps" : true,
@@ -305,7 +305,7 @@
     "Green Component" : 0.53061914443969727
   },
   "Background Image Mode" : 0,
-  "Normal Font" : "MesloLGMForPowerline-Regular 13",
+  "Normal Font" : "HackNFM-Regular 13",
   "Unlimited Scrollback" : true,
   "AWDS Window Directory" : "",
   "Ansi 15 Color" : {
