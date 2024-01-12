@@ -129,7 +129,7 @@ setopt LOCAL_TRAPS # allow functions to have local traps
 # SSH
 # brew install keychain
 if hash keychain 2>/dev/null; then
-  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab id_rsa`'
+  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab github`'
   alias ssh-agent-stop='keychain --stop all'
 fi
 
@@ -199,6 +199,7 @@ export BAT_THEME="gruvbox-dark"
 # java sdk - jenv
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 ##############################################################################
 # Various
@@ -240,44 +241,12 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-
-# _nvmrc_hook() {
-#   if [[ $PWD == $PREV_PWD ]]; then
-#     return
-#   fi
-#   
-#   PREV_PWD=$PWD
-#   [[ -f ".nvmrc" ]] && nvm use
-# }
-
-# if ! [[ "${PROMPT_COMMAND:-}" =~ _nvmrc_hook ]]; then
-#   PROMPT_COMMAND="_nvmrc_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
-# fi
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 ##############################################################################
 # Completion
 ##############################################################################
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 ##############################################################################
 # Python
