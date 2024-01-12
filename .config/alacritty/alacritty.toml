@@ -1,0 +1,72 @@
+import = ["~/.config/alacritty/base16-gruvbox-dark-hard.toml"]
+
+[bell]
+animation = "EaseOutExpo"
+color = "#FFFFFF"
+duration = 0
+
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[cursor.style]
+blinking = "Off"
+shape = "Block"
+
+[env]
+# TERM = "xterm-256color"
+# TERM = "alacritty"
+TERM = "xterm-256color"
+
+[font]
+  size = 12
+
+[font.bold]
+family = "MesloLGS NF"
+style = "Bold"
+
+[font.bold_italic]
+family = "MesloLGS NF"
+style = "Bold Italic"
+
+[font.italic]
+family = "MesloLGS NF"
+style = "Italic"
+
+[font.normal]
+family = "MesloLGS NF"
+style = "Regular"
+
+[font.offset]
+x = 0  # compacter letter spacing
+y = 5  # compacter line spacing
+
+[keyboard]
+bindings = [
+	{ chars = "\u001F", key = "Slash", mods = "Control" },
+	{ chars = "\u001F", key = "Slash", mods = "Control|Shift" },
+	{ chars = "\u0000", key = "Space", mods = "Control" },
+	{ action = "None", key = "W", mods = "Command" },
+	{ action = "ToggleFullscreen", key = "Return", mods = "Command" },
+	{ action = "SpawnNewInstance", key = "N", mods = "Command" }
+]
+
+[scrolling]
+history = 100000
+
+[window]
+decorations = "buttonless"
+decorations_theme_variant = "None"
+startup_mode = "Maximized"
+option_as_alt = "Both"
+dynamic_title = false
+padding = { x = 2, y = 2 }
+dynamic_padding = false
+
+[window.dimensions]
+columns = 150
+lines = 50
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
