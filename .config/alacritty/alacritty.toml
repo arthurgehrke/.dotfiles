@@ -1,7 +1,6 @@
 import = ["~/.config/alacritty/base16-gruvbox-dark-hard.toml"]
 
 [bell]
-animation = "EaseOutExpo"
 color = "#FFFFFF"
 duration = 0
 
@@ -17,49 +16,87 @@ shape = "Block"
 # TERM = "alacritty"
 TERM = "xterm-256color"
 
+# [font]
+# size = 12
+
+# [font.bold]
+# family = "Hack Nerd Font Mono"
+# style = "Bold"
+
+# [font.bold_italic]
+# family = "Hack Nerd Font Mono"
+# style = "Bold Italic"
+
+# [font.italic]
+# family = "Hack Nerd Font Mono"
+# style = "Italic"
+
+# [font.normal]
+# family = "Hack Nerd Font Mono"
+# style = "Regular"
+
+# [font.offset]
+# x = 2  # compacter letter spacing
+# y = 5  # compacter line spacing
+
 [font]
-size = 12
-
-[font.bold]
-family = "Hack Nerd Font Mono"
-style = "Bold"
-
-[font.bold_italic]
-family = "Hack Nerd Font Mono"
-style = "Bold Italic"
-
-[font.italic]
-family = "Hack Nerd Font Mono"
-style = "Italic"
+size = 14
 
 [font.normal]
-family = "Hack Nerd Font Mono"
+family = "JetBrainsMono Nerd Font"
 style = "Regular"
 
-[font.offset]
-x = 1  # compacter letter spacing
-y = 5  # compacter line spacing
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
 
-[keyboard]
-bindings = [
-	{ chars = "\u001F", key = "Slash", mods = "Control" },
-	{ chars = "\u001F", key = "Slash", mods = "Control|Shift" },
-	{ chars = "\u0000", key = "Space", mods = "Control" },
-	{ action = "None", key = "W", mods = "Command" },
-	{ action = "ToggleFullscreen", key = "Return", mods = "Command" },
-	{ action = "SpawnNewInstance", key = "N", mods = "Command" }
-]
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+
+# Command-Up -> PageUp - 替代 <fn - up>
+[[keyboard.bindings]]
+chars = "\u001B[5~"
+key = "Up"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Down -> PageDown - 替代 <fn - down>
+[[keyboard.bindings]]
+chars = "\u001B[6~"
+key = "Down"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Left -> Home - 替代 <fn - left>
+[[keyboard.bindings]]
+chars = "\u001BOH"
+key = "Left"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Right -> End - 替代 <fn - right>
+[[keyboard.bindings]]
+chars = "\u001BOF"
+key = "Right"
+mode = "~Vi|~Search"
+mods = "Command"
 
 [scrolling]
 history = 100000
 
 [window]
 decorations = "buttonless"
-decorations_theme_variant = "None"
+# decorations_theme_variant = "None"
 startup_mode = "Maximized"
 option_as_alt = "Both"
 dynamic_title = false
-padding = { x = 2, y = 2 }
+# padding = { x = 2, y = 2 }
 dynamic_padding = false
 
 [window.dimensions]
