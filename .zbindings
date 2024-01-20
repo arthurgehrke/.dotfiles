@@ -47,7 +47,6 @@ bindkey -e '^f' history-incremental-pattern-search-forward
 bindkey -e '^j' history-substring-search-up
 bindkey -e '^k' history-substring-search-down
 
-
 # change Ctrl+C to Ctrl+Q
 stty intr '^d'
 stty erase '^?'

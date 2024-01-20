@@ -1,7 +1,9 @@
 nnoremap <silent> <space>so :source $MYVIMRC<bar>echo "reloaded vimrc"<cr>
 
 syntax on 
-filetype indent off
+" filetype indent off
+filetype off                  " required
+filetype plugin indent on    " required
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/plugins.vim
@@ -49,6 +51,7 @@ let b:match_ignorecase=1
 set matchpairs+=<:>
 set matchpairs+=":"
 
+set autoindent
 set backspace=indent,eol,start
 set novisualbell
 set shortmess-=S
@@ -116,11 +119,21 @@ au BufNewFile,BufRead *.scss call TwoSpacesStyle()
 au BufNewFile,BufRead *.yaml call TwoSpacesStyle()
 au BufNewFile,BufRead *.yml call TwoSpacesStyle()
 
-" autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-" autocmd BufRead,BufNew *scss :setlocal filetype=css
+autocmd BufRead,BufNew *scss :setlocal filetype=css
 autocmd bufnewfile,bufread *.tsx set filetype=typescript.tsx
 autocmd bufnewfile,bufread *.jsx set filetype=javascript.jsx
+
+" lua settings
+autocmd BufNewFile,BufRead *.lua setlocal noet ts=4 sw=4 sts=4
+" python indent
+autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 smarttab expandtab
+" Markdown Settings
+autocmd BufNewFile,BufReadPost *.md setl ts=4 sw=4 sts=4 expandtab
+" spell check for git commits
+autocmd FileType gitcommit setlocal spell
+
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy

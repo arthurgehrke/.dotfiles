@@ -42,18 +42,6 @@ eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
 # mysql client
 # export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
-# brew packages
-export PATH="$PYENV_ROOT/bin:$PATH"
-# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-
-# Setup for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
@@ -74,7 +62,6 @@ fi
 # npm global
 export NPM_PACKAGES="/usr/local/npm_packages"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
@@ -152,6 +139,9 @@ bindkey -e '^d' delete-char
 bindkey -e '^a' beginning-of-line
 bindkey -e '^e' end-of-line
 
+bindkey "^y" yank
+bindkey '^w' backward-kill-word
+
 bindkey '^[[Z' reverse-menu-complete
 ## history-substring-search
 # Control-P/N keys
@@ -178,28 +168,32 @@ bindkey -e '^k' history-substring-search-down
 ##############################################################################
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --extended -i -m'
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude 'Library' --exclude 'Music' --exclude 'Pictures'"
-export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
+# export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --extended -i -m'
+# export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude 'Library' --exclude 'Music' --exclude 'Pictures'"
 
-# Preview file content using bat (https://github.com/sharkdp/bat)
-export FZF_CTRL_T_OPTS="
-  --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+# # Preview file content using bat (https://github.com/sharkdp/bat)
+# export FZF_CTRL_T_OPTS="
+#   --preview 'bat -n --color=always {}'
+#   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
+# export FZF_CTRL_T_COMMAND='find *~Library~Applications~qmk_firmware~Creative\ Cloud\ Files~Pictures notes/  2>/dev/null'
 export BAT_THEME="gruvbox-dark"
-export FZF_CTRL_T_COMMAND='find *~Library~Applications~qmk_firmware~Creative\ Cloud\ Files~Pictures notes/  2>/dev/null'
+export FZF_DEFAULT_OPTS='--color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672'
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
+# export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+export FZF_ALT_C_COMMAND="rg --files --hidden --null . 2>/dev/null | xargs -0 dirname | sort -u"
 
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
-export BAT_THEME="gruvbox-dark"
+# Disable preview, useless for History completion
+export FZF_CTRL_R_OPTS="--no-preview"
+export FZF_ALT_C_OPTS="--no-preview"
 
 ##############################################################################
 # Brew
 ##############################################################################
 # java sdk - jenv
-export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 ##############################################################################
 # Various
@@ -243,8 +237,9 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+source $(brew --prefix nvm)/nvm.sh
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 ##############################################################################
 # Completion
@@ -260,10 +255,26 @@ eval "$(pyenv init -)"
 ##############################################################################
 # Ruby
 ##############################################################################
+export GEM_HOME="$HOME/.gem"
 # if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
 #   export PATH=/opt/homebrew/opt/ruby/bin:$PATH
 #   export PATH=`gem environment gemdir`/bin:$PATH
 # fi
 
-# eval "$(rbenv init - zsh)"
+eval "$(rbenv init - zsh)"
+
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+# Setup for pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
