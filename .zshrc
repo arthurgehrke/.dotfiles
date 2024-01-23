@@ -208,11 +208,10 @@ export ACKRC=".ackrc"
 ##############################################################################
 # Iterm2
 ##############################################################################
-source "${HOME}/.iterm2_shell_integration.zsh"
-
-if [[ -z "$ITERM2_INTEGRATION_DETECTED" ]]; then
-  export ITERM2_INTEGRATION_DETECTED=true
-  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
+# iTerm integration (for OS X iTerm2)
+# @see https://iterm2.com/shell_integration.html
+if [[ "`uname`" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
+  source ${HOME}/.iterm2_shell_integration.zsh
 fi
 
 ##############################################################################
