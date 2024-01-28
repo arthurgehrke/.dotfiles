@@ -19,7 +19,7 @@ call plug#begin()
   Plug 'akinsho/bufferline.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'nvim-lua/plenary.nvim'
-  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   Plug 'sindrets/diffview.nvim'
   Plug 'nvim-lua/popup.nvim'
   Plug 'dstein64/vim-startuptime'
@@ -33,7 +33,6 @@ call plug#begin()
   Plug 'jay-babu/mason-nvim-dap.nvim'
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
   Plug 'neovim/nvim-lspconfig'
-  Plug 'jose-elias-alvarez/typescript.nvim'
   Plug 'hrsh7th/nvim-cmp'         
   Plug 'hrsh7th/cmp-nvim-lsp'     
   Plug 'hrsh7th/cmp-buffer'
@@ -64,8 +63,10 @@ call plug#begin()
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'jalvesaq/Nvim-R'
   Plug 'jay-babu/mason-null-ls.nvim'
+  Plug 'pmizio/typescript-tools.nvim'
   Plug 'MunifTanjim/prettier.nvim'
   Plug 'jose-elias-alvarez/null-ls.nvim'
+  Plug 'axkirillov/easypick.nvim'
 call plug#end()
 
 source $HOME/.config/nvim/plugconf/lsp.vim

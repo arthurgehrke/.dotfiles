@@ -16,12 +16,9 @@ nnoremap <space>fhl <cmd>Telescope highlights<cr>
 
 nnoremap <space>fg <cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<cr>
 nnoremap <space>fq <cmd>Telescope quickfix<cr>
-" Open/close the quickfix list
-nnoremap <space>fib <cmd>Telescope current_buffer_fuzzy_find<cr>
-nnoremap <space>qo :copen<CR>
-nnoremap <space>qc :cclose<CR>
 
 lua << EOF
+local easypick = require("easypick")
 local actions = require("telescope.actions")
 
 require('telescope').setup{ 
@@ -59,6 +56,15 @@ require('telescope').setup{
         return {"--hidden"}
         end
       },
+      lsp_references = {
+        theme = "dropdown",
+        layout_config = {
+          width = 0.6,
+        },
+      },
+      lsp_document_symbols = {
+        theme = "dropdown",
+      },
     },
     commands = {
       theme = "dropdown",
@@ -89,7 +95,30 @@ require('telescope').setup{
   }
 }
 
--- require('telescope').load_extension('fzf')
+require('telescope').load_extension('fzf')
 require('telescope').load_extension('live_grep_args')
 require('telescope').load_extension('file_browser')
+
+local base_branch = "production"
+easypick.setup({
+	pickers = {
+		{
+			name = "ls",
+			command = "ls",
+			previewer = easypick.previewers.default()
+		},
+		{
+			name = "changed_files",
+			command = "git diff --name-only $(git merge-base HEAD " .. base_branch .. " )",
+			previewer = easypick.previewers.branch_diff({base_branch = base_branch})
+		},
+		{
+			name = "conflicts",
+			command = "git diff --name-only --diff-filter=U --relative",
+			previewer = easypick.previewers.file_diff()
+		},
+	}
+})
+
+vim.api.nvim_set_keymap('n', '<space>kk', ':Easypick<cr>', {noremap = true, silent = true})
 EOF

@@ -8,13 +8,15 @@ if (not status) then return end
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'gruvbox',
+    theme = 'auto',
     section_separators = '', 
-    component_separators = '',
-    disabled_filetypes = {
-      statusline = { 'NvimTree' },
-      winbar = { 'NvimTree' },
-    },
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
+    -- disabled_filetypes = {
+    --   statusline = { 'NvimTree' },
+    --   winbar = { 'NvimTree' },
+    -- },
+    disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
     ignore_focus = {},
     always_divide_middle = true,
     globalstatus = false,

@@ -1,9 +1,39 @@
 lua << EOF
 
--- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 0
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
 
-vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
+local signcolumn_width = 7 -- AKA gutter width
+local min_buffer_width = 110 + signcolumn_width
+local total_dual_panel_cols = min_buffer_width * 2 + 1
+local min_sidebar_width = 10
+local max_sidebar_width = 32
+
+-- vim.cmd[[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
+local get_sidebar_cols = function()
+    local neovim_cols = vim.o.columns
+    local sidebar_cols = neovim_cols - min_buffer_width - 1
+    if total_dual_panel_cols < (neovim_cols - min_sidebar_width) then
+        sidebar_cols = neovim_cols - total_dual_panel_cols - 1
+    end
+    if sidebar_cols < min_sidebar_width then
+        sidebar_cols = min_sidebar_width
+    end
+    if sidebar_cols > max_sidebar_width then
+        sidebar_cols = max_sidebar_width
+    end
+    return sidebar_cols
+end
+
+local find_buffer = function(buffer_name)
+    for _, buf in pairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_get_name(buf):find(buffer_name, 1, true) then
+            return buf
+        end
+    end
+    return nil
+end
 
 local function on_attach(bufnr)
   local api = require('nvim-tree.api')
@@ -49,7 +79,7 @@ local function on_attach(bufnr)
    vim.keymap.set('n', 'r',     api.fs.rename,                         opts('Rename'))
    vim.keymap.set('n', 'R',     api.tree.reload,                       opts('Refresh'))
    -- vim.keymap.set('n', 's',     api.node.run.system,                   opts('Run System')) -- open external fcking program
-   vim.keymap.set('n', 'f',     api.tree.search_node,                  opts('Search'))
+   vim.keymap.set('n', 'S',     api.tree.search_node,                  opts('Search'))
    vim.keymap.set('n', 'U',     api.tree.toggle_custom_filter,         opts('Toggle Hidden'))
    vim.keymap.set('n', 'W',     api.tree.collapse_all,                 opts('Collapse'))
    vim.keymap.set('n', 'x',     api.fs.cut,                            opts('Cut'))
@@ -62,7 +92,9 @@ require'nvim-tree'.setup {
    sync_root_with_cwd = false,
    auto_reload_on_write = true,
    reload_on_bufenter = false,
-   hijack_netrw = true, -- Hijack netrw window on startup. prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
+   disable_netrw = false,
+   hijack_cursor = true,
+   hijack_netrw = true,
    prefer_startup_root = true,
    open_on_tab = false,
    update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
@@ -86,7 +118,11 @@ require'nvim-tree'.setup {
       timeout = 500,
    },
    filesystem_watchers = {
-     enable = false,
+     enable = true,
+     debounce_delay = 50,
+     ignore_dirs = {
+       "node_modules"
+     },
    },
    git = {
      enable = true,
@@ -159,23 +195,15 @@ require'nvim-tree'.setup {
       },
    },
    view = {
-      adaptive_size = true,
       preserve_window_proportions = false,
+      debounce_delay = 15,
       relativenumber = false,
+      adaptive_size = true,
       number = false,
-      signcolumn = "yes",
-      width = 25,
+      signcolumn = "auto",
+      width = get_sidebar_cols(),
       float = {
-        enable = false,
-        quit_on_focus_loss = true,
-        open_win_config = {
-          relative = "editor",
-          border = "rounded",
-          width = 30,
-          height = 30,
-          row = 1,
-          col = 1,
-        },
+        enable = false
       },
    },
    filters = {
@@ -241,6 +269,20 @@ require'nvim-web-devicons'.setup({
    default = true
 })
 
+local nvim_tree_api = require('nvim-tree.api')
+
+-- local function open_nvim_tree()
+--   require("nvim-tree.api").tree.toggle({ focus = false })
+-- end
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+      vim.cmd "quit"
+    end
+  end
+})
 EOF
 
 nnoremap <Space>r :NvimTreeRefresh<CR>
