@@ -1,5 +1,13 @@
 {
+  "Right Option Key Changeable" : false,
   "Use Cursor Guide" : false,
+  "Bold Color" : {
+    "Red Component" : 1,
+    "Color Space" : "Calibrated",
+    "Blue Component" : 1,
+    "Alpha Component" : 1,
+    "Green Component" : 1
+  },
   "Smart Selection Rules" : [
     {
       "notes" : "Word bounded by whitespace",
@@ -57,15 +65,8 @@
       "precision" : "very_high"
     }
   ],
-  "Bold Color" : {
-    "Red Component" : 1,
-    "Color Space" : "Calibrated",
-    "Blue Component" : 1,
-    "Alpha Component" : 1,
-    "Green Component" : 1
-  },
-  "Mouse Reporting allow mouse wheel" : true,
   "Use Bright Bold" : true,
+  "Mouse Reporting allow mouse wheel" : true,
   "Columns" : 80,
   "Background Color" : {
     "Red Component" : 0.11759927868843079,
@@ -190,7 +191,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.71257460117340088
   },
-  "Use Italic Font" : true,
+  "Use Italic Font" : false,
   "Minimum Contrast" : 0,
   "Ansi 12 Color" : {
     "Red Component" : 0.44289660453796387,
@@ -258,7 +259,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.82989895343780518
   },
-  "Use Non-ASCII Font" : false,
+  "Use Non-ASCII Font" : true,
   "Character Encoding" : 4,
   "Custom Tab Title" : "itwe\\",
   "Ansi 7 Color" : {
@@ -268,7 +269,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.5310559868812561
   },
-  "Non Ascii Font" : "Menlo-Regular 11",
+  "Non Ascii Font" : "HackNFM-Regular 14",
   "Cursor Guide Color" : {
     "Red Component" : 0.17867125570774078,
     "Color Space" : "Calibrated",
@@ -280,9 +281,9 @@
   "Unicode Version" : 9,
   "Title Components" : 3,
   "Semantic History" : {
-    "editor" : "com.github.atom",
+    "text" : "nvim",
     "action" : "best editor",
-    "text" : "nvim"
+    "editor" : "com.github.atom"
   },
   "Working Directory" : "\/Users\/arthurrodrigues",
   "Enable Triggers in Interactive Apps" : true,
@@ -305,7 +306,7 @@
     "Green Component" : 0.53061914443969727
   },
   "Background Image Mode" : 0,
-  "Normal Font" : "HackNFM-Regular 13",
+  "Normal Font" : "HackNFM-Regular 14",
   "Unlimited Scrollback" : true,
   "AWDS Window Directory" : "",
   "Ansi 15 Color" : {
