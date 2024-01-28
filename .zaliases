@@ -8,6 +8,7 @@ alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all lis
 # speciality views
 alias lS='eza -1'			                                                  # one column, just names
 alias lt='eza --tree --level=2'                                         # tree
+alias lsd='ls -1 -d */'
 
 # easier to read disk human-readable sizes
 alias df='df -h'
@@ -63,3 +64,4 @@ alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}'"
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
+alias openhistory="nvim ~/.zhistory"

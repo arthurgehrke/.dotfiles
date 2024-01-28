@@ -1,3 +1,4 @@
+
 ##############################################################################
 # Source's
 ##############################################################################
@@ -9,8 +10,16 @@ source $OPTBREWPATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $OPTBREWPATH/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $OPTBREWPATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $OPTBREWPATH/powerlevel10k/powerlevel10k.zsh-theme
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 source $HOME/.themes/zsh/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ~/.themes/zsh/circular/.p10k.zsh.
+[[ ! -f ~/.themes/zsh/circular/.p10k.zsh ]] || source ~/.themes/zsh/circular/.p10k.zsh
 source $HOME/.zaliases
 source $HOME/.zscripts
 # source $HOME/.zbindings
@@ -211,6 +220,7 @@ export ACKRC=".ackrc"
 # iTerm integration (for OS X iTerm2)
 # @see https://iterm2.com/shell_integration.html
 if [[ "`uname`" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
+  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
   source ${HOME}/.iterm2_shell_integration.zsh
 fi
 

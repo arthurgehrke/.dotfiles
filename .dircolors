@@ -1,42 +1,36 @@
-#!/usr/bin/env dircolors
-# ======================================================================
 # Configuration file for dircolors, a utility to help you set the
 # LS_COLORS environment variable used by GNU ls with the --color option.
-#
+# Copyright (C) 1996-2017 Free Software Foundation, Inc.
+# Copying and distribution of this file, with or without modification,
+# are permitted provided the copyright notice and this notice are preserved.
 # The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
 # slackware version of dircolors) are recognized but ignored.
-#
-# Below, there should be one TERM entry for each termtype that is colorizable
-#
-# ----------------------------------------------------------------------
-# AUTHOR: Nathaniel Hellabyte
-# https://github.com/hellabyte/myconfig
-# ======================================================================
-
+# Below are TERM entries, which can be a glob patterns, to match
+# against the TERM environment variable to determine if it is colorizable.
+TERM Eterm
+TERM ansi
+TERM *color*
+TERM con[0-9]*x[0-9]*
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM gnome
+TERM hurd
+TERM jfbterm
+TERM konsole
+TERM kterm
 TERM linux
 TERM linux-c
-TERM mach-color
-TERM console
-TERM con132x25
-TERM con132x30
-TERM con132x43
-TERM con132x60
-TERM con80x25
-TERM con80x28
-TERM con80x30
-TERM con80x43
-TERM con80x50
-TERM con80x60
-TERM xterm
-TERM xterm-color
-TERM xterm-debian
-TERM xterm-256color
-TERM rxvt
-TERM screen
-TERM screen-w
-TERM screen-256color
+TERM mlterm
+TERM putty
+TERM rxvt*
+TERM screen*
+TERM st
+TERM terminator
+TERM tmux*
 TERM vt100
-
+TERM xterm*
 # Below are the color init strings for the basic file types. A color init
 # string consists of one or more of the following numeric codes:
 # Attribute codes:
@@ -45,26 +39,29 @@ TERM vt100
 # 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
 # Background color codes:
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+#NORMAL 00 # no color code at all
+#FILE 00 # regular file: use no color at all
 RESET 0 # reset to "normal" color
 DIR 01;34 # directory
 LINK 01;36 # symbolic link. (If you set this to 'target' instead of a
  # numerical value, the color is as for the file pointed to.)
 MULTIHARDLINK 00 # regular file with more than one link
-FIFO 00;00 # pipe
-SOCK 00;00 # socket
-DOOR 00;00 # door
-# BLK 40;33;01 # block device driver
-# CHR 40;33;01 # character device driver
-ORPHAN 00;31;01 # symlink to nonexistent file, or non-stat'able file ...
+FIFO 40;33 # pipe
+SOCK 01;35 # socket
+DOOR 01;35 # door
+BLK 40;33;01 # block device driver
+CHR 40;33;01 # character device driver
+ORPHAN 40;31;01 # symlink to nonexistent file, or non-stat'able file ...
 MISSING 00 # ... and the files they point to
-SETUID 00;00 # file that is setuid (u+s)
-SETGID 00;00 # file that is setgid (g+s)
-CAPABILITY 00;00 # file with capability
-STICKY_OTHER_WRITABLE 00;00 # dir that is sticky and other-writable (+t,o+w)
-OTHER_WRITABLE 00;00 # dir that is other-writable (o+w) and not sticky
+SETUID 37;41 # file that is setuid (u+s)
+SETGID 30;43 # file that is setgid (g+s)
+CAPABILITY 30;41 # file with capability
+STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
+#OTHER_WRITABLE 30;42 # dir that is other-writable (o+w) and not sticky
+OTHER_WRITABLE 01;34 # dir that is other-writable (o+w) and not sticky
 STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
 # This is for files with execute permission:
-EXEC 00;00
+EXEC 01;32
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
 # (and any comments you want to add after a '#')
@@ -79,12 +76,12 @@ EXEC 00;00
 #.sh 01;32
 #.csh 01;32
  # archives or compressed (bright red)
-.tar 00;00
-.tgz 00;31
-.arc 00;31
-.arj 00;31
-.taz 00;31
-.lha 00;31
+.tar 01;31
+.tgz 01;31
+.arc 01;31
+.arj 01;31
+.taz 01;31
+.lha 01;31
 .lz4 01;31
 .lzh 01;31
 .lzma 01;31
@@ -92,8 +89,9 @@ EXEC 00;00
 .txz 01;31
 .tzo 01;31
 .t7z 01;31
-.zip 00;00
+.zip 01;31
 .z 01;31
+.Z 01;31
 .dz 01;31
 .gz 01;31
 .lrz 01;31
@@ -107,7 +105,7 @@ EXEC 00;00
 .tbz 01;31
 .tbz2 01;31
 .tz 01;31
-.deb 00;00
+.deb 01;31
 .rpm 01;31
 .jar 01;31
 .war 01;31
@@ -194,7 +192,3 @@ EXEC 00;00
 .opus 00;36
 .spx 00;36
 .xspf 00;36
-
-
-.ts 00;00
-.js 00;00
