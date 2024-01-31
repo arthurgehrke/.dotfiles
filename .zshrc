@@ -19,7 +19,7 @@ fi
 
 source $HOME/.themes/zsh/.p10k.zsh
 # To customize prompt, run `p10k configure` or edit ~/.themes/zsh/circular/.p10k.zsh.
-[[ ! -f ~/.themes/zsh/circular/.p10k.zsh ]] || source ~/.themes/zsh/circular/.p10k.zsh
+[[ ! -f ~/.themes/zsh/circular/.p10k.zsh ]] || source ~/.themes/zsh/.p10k.zsh
 source $HOME/.zaliases
 source $HOME/.zscripts
 # source $HOME/.zbindings
