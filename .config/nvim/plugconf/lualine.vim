@@ -8,7 +8,8 @@ if (not status) then return end
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    -- theme = 'auto',
+    theme = 'gruvbox',
     section_separators = '', 
     component_separators = { left = "", right = "" },
     section_separators = { left = "", right = "" },
@@ -16,6 +17,7 @@ require('lualine').setup {
     --   statusline = { 'NvimTree' },
     --   winbar = { 'NvimTree' },
     -- },
+
     disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
     ignore_focus = {},
     always_divide_middle = true,
@@ -28,7 +30,7 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { { 'filename', path = 4 } },
+    lualine_b = { { 'filename', path = 3 } },
     lualine_c = { 'diagnostics' },
     lualine_x = {},
     lualine_y = { '' },
@@ -38,7 +40,8 @@ require('lualine').setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = { 'filename' },
-    lualine_x = { 'location' },
+    -- lualine_x = { 'location' },
+    lualine_x = {},
     lualine_y = {},
     lualine_z = {}
   },

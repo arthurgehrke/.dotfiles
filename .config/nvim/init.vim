@@ -1,13 +1,8 @@
 nnoremap <silent> <space>so :source $MYVIMRC<bar>echo "reloaded vimrc"<cr>
 
 syntax on 
-" filetype indent off
 filetype off                  " required
 filetype plugin indent on    " required
-
-" if has('nvim')
-"   runtime! ftplugin/markdown.lua
-" endif
 
 source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/ftplugin/text.vim

@@ -72,6 +72,12 @@ fi
 export NPM_PACKAGES="/usr/local/npm_packages"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
+# pnpm
+if (( $+commands[pnpm] )); then
+    export PNPM_HOME="${HOME}/.local/share/pnpm"
+    path=($PNPM_HOME $path)
+fi
+
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
 

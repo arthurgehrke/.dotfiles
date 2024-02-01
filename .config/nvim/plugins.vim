@@ -78,7 +78,7 @@ source $HOME/.config/nvim/plugconf/treesitter.vim
 source $HOME/.config/nvim/plugconf/gitsigns.vim
 source $HOME/.config/nvim/plugconf/fugitive.vim
 source $HOME/.config/nvim/plugconf/lualine.vim
-source $HOME/.config/nvim/plugconf/nvim_tree.vim
+source $HOME/.config/nvim/plugconf/nvim-tree.vim
 source $HOME/.config/nvim/plugconf/better_scape.vim
 source $HOME/.config/nvim/plugconf/mason.vim
 source $HOME/.config/nvim/plugconf/dap.vim
