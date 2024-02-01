@@ -31,6 +31,7 @@ local lsp_servers = {
 	"dockerls",
   "pyright",
   "lua_ls",
+  "pylsp",
 }
 
 local dap_servers = {
@@ -60,9 +61,16 @@ require('mason-tool-installer').setup({
     'json-to-struct',
     'jq',
     'prettierd',
+    'luacheck',
     'eslint_d',
+    'eslint',
     'fixjson', 
+    'taplo',
     'yamlfix',
+    'shellcheck',
+    'markdownlint',
+    'black',
+    'isort',
     'sql-formatter',
     'vimls',
     'yamllint',

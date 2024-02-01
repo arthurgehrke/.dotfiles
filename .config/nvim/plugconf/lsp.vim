@@ -13,6 +13,7 @@ local cmp = require "cmp"
 local util = require("lspconfig.util")
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+lsp.preset("recommended")
 
 lsp.format_mapping(
     "gq",
@@ -24,7 +25,7 @@ lsp.format_mapping(
         servers = {
             ["lua_ls"] = {"lua"},
             ["rust_analyzer"] = {"rust"},
-            ["null-ls"] = {"typescript", "typescriptreact", "json", "javascript"}
+            ["null-ls"] = {"typescript", "typescriptreact", "json", "javascript", 'lua', 'python', 'html', 'css', 'vim'}
         }
     }
 )
@@ -96,18 +97,6 @@ lsp.on_attach(
         )
 
         vim.keymap.set(
-            {"n", "x"},
-            "gq",
-            function()
-                vim.lsp.buf.format({async = false, timeout_ms = 10000})
-            end,
-            opts
-        )
-
-        vim.keymap.set({"n", "x"}, "<space>al", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
-        vim.keymap.set({"n", "x"}, "<space>ra", ":TypescriptAddMissingImports<CR>")
-
-        vim.keymap.set(
             {"n"},
             "<space>k",
             function()
@@ -144,18 +133,6 @@ lsp.on_attach(
         )
     end
 )
-
-require("lspconfig").lua_ls.setup(
-    {
-        on_attach = function(client, bufnr)
-            local opts = {noremap = true, silent = true}
-            local keymap = vim.api.nvim_buf_set_keymap
-            keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-            keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-        end
-    }
-)
-
 lsp.setup()
 
 local opts = {noremap = true, silent = true}
@@ -166,8 +143,14 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- Use LSP as the handler for omnifunc.
+    --    See `:help omnifunc` and `:help ins-completion` for more information.
+    vim.api.nvim_buf_set_option(buffer_number, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Use LSP as the handler for formatexpr.
+    --    See `:help formatexpr` for more information.
+    vim.api.nvim_buf_set_option(buffer_number, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+
 
     client.server_capabilities.document_formatting = false
     vim.keymap.set("n", "<space>=", "<cmd>lua vim.lsp.buf.formatting()<CR>", {})
@@ -230,8 +213,72 @@ null_ls.setup(
     {
         debug = false,
         sources = {
-            null_ls.builtins.formatting.prettier,
-            null_ls.builtins.formatting.latexindent
+          null_ls.builtins.formatting.prettier.with({
+              filetypes = {
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+                "vue",
+                "css",
+                "scss",
+                "less",
+                "html",
+                "json",
+                "jsonc",
+                "yaml",
+                "markdown",
+                "graphql",
+                "handlebars",
+              },
+            }),
+           null_ls.builtins.diagnostics.luacheck.with({
+                extra_args = { "--globals", "vim" },
+            }),
+           null_ls.builtins.formatting.stylua.with({
+              extra_args = {
+                '--indent-type',
+                'Spaces',
+                '--indent-width',
+                '2',
+                '--column-width',
+                '80',
+                '--quote-style',
+                'AutoPreferSingle',
+              },
+            }),
+            null_ls.builtins.formatting.eslint_d.with({
+                condition = function(utils)
+                  return utils.root_has_file(eslint_root_files)
+                end,
+            }),
+            null_ls.builtins.code_actions.eslint_d,
+            null_ls.builtins.diagnostics.eslint_d.with({
+                  condition = function(utils)
+                    return utils.root_has_file(eslint_root_files)
+                  end,
+            }),
+          -- xml
+          null_ls.builtins.formatting.xmllint,
+          -- toml
+          null_ls.builtins.formatting.taplo,
+          -- sh
+          null_ls.builtins.code_actions.shellcheck,
+          null_ls.builtins.diagnostics.shellcheck,
+          null_ls.builtins.formatting.shellharden,
+          null_ls.builtins.diagnostics.markdownlint.with({
+            method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+          }),
+          -- sql
+          null_ls.builtins.formatting.sql_formatter,
+          null_ls.builtins.formatting.jq,
+
+          -- python
+          null_ls.builtins.formatting.black.with({
+          extra_args = { "--line-length=120" }
+          }),
+          
+          null_ls.builtins.formatting.isort,
         },
         on_attach = function(client, bufnr)
             if client.server_capabilities.documentFormattingProvider then
@@ -246,6 +293,13 @@ null_ls.setup(
         end
     }
 )
+
+-- typescript-tools.nvim configuration
+require("typescript-tools").setup {
+  settings = {
+    expose_as_code_action = { "add_missing_imports", "remove_unused_imports", "organize_imports" }
+  }
+}
 
 prettier.setup(
     {
@@ -384,7 +438,8 @@ require("lspconfig").jsonls.setup(
                 schemas = schemas.json.schemas().jsonls
             }
         },
-        filetypes = {"json"}
+        filetypes = {"json"},
+        on_attach = on_attach,
     }
 )
 
@@ -396,7 +451,8 @@ require("lspconfig").html.setup(
                 schemas = schemas.json.schemas().html
             }
         },
-        filetypes = {"html"}
+        filetypes = {"html"},
+        on_attach = on_attach,
     }
 )
 
@@ -415,21 +471,21 @@ require("lspconfig").yamlls.setup(
                 schemas = schemas.json.schemas().yamls
             }
         },
-        filetypes = {"yaml"}
+        filetypes = {"yaml"},
+        on_attach = on_attach,
     }
 )
 
 require("lspconfig").lua_ls.setup(lsp.nvim_lua_ls())
 
-require("lspconfig").bashls.setup(
-    {
+require("lspconfig").bashls.setup({
         cmd = {
             "bash-language-server",
             "start"
         },
-        filetypes = {"zsh"}
-    }
-)
+        filetypes = {"zsh"},
+        on_attach = on_attach,
+  })
 
 require("lspconfig").pyright.setup(
     {
@@ -469,8 +525,7 @@ require("lspconfig").marksman.setup(
     }
 )
 
-require("lspconfig").cssls.setup(
-    {
+require("lspconfig").cssls.setup({
         cmd = {"css-languageserver", "--stdio"},
         filetypes = {"css", "scss", "less"},
         settings = {
@@ -484,9 +539,24 @@ require("lspconfig").cssls.setup(
                 validate = true
             }
         },
-        single_file_support = true
-    }
-)
+        single_file_support = true,
+        on_attach = on_attach,
+})
+
+require('lspconfig').eslint.setup{
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
+
+require('lspconfig').taplo.setup({
+    on_attach = on_attach,
+    flags = lsp_flags,
+})
+
+require("lspconfig").lua_ls.setup({
+    on_attach = on_attach,
+    flags = lsp_flags,
+})
 
 vim.diagnostic.config(
     {

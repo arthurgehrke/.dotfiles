@@ -5,7 +5,12 @@ syntax on
 filetype off                  " required
 filetype plugin indent on    " required
 
+" if has('nvim')
+"   runtime! ftplugin/markdown.lua
+" endif
+
 source $HOME/.config/nvim/keymapping.vim
+source $HOME/.config/nvim/ftplugin/text.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
 

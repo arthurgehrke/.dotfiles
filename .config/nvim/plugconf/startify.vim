@@ -25,7 +25,7 @@ let g:startify_commands = [
 \ { 'i': [ 'Install PLugins', ':PlugInstall' ] },
 \ { 'u': [ 'Update PLugins', ':PlugUpdate' ] },
 \ { 'c': [ 'Clean PLugins', ':PlugClean' ] },
-\ { 'h': [ 'Check Health', ':checkhealth' ] },
+\ { 'H': [ 'Check Health', ':checkhealth' ] },
 \ ]
 
 let g:startify_change_to_dir = 1
