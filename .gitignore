@@ -60,7 +60,6 @@
 /.rvm
 /.sh_history
 /.sqlite_history
-/.ssh
 /.ssl
 /.tailwindcss
 /.thelongpoll

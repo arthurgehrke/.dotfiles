@@ -1,7 +1,8 @@
 import = ["~/.config/alacritty/base16-gruvbox-dark-hard.toml"]
 
+live_config_reload = true
+
 [bell]
-color = "#FFFFFF"
 duration = 0
 
 [colors]
@@ -12,12 +13,7 @@ blinking = "Off"
 shape = "Block"
 
 [env]
-# TERM = "xterm-256color"
-# TERM = "alacritty"
 TERM = "xterm-256color"
-
-# [font]
-# size = 12
 
 # [font.bold]
 # family = "Hack Nerd Font Mono"
@@ -42,24 +38,26 @@ TERM = "xterm-256color"
 [font]
 size = 14
 
+[font.offset]
+x = 0
+y = 0
+
 [font.normal]
-family = "JetBrainsMono Nerd Font"
-style = "Regular"
+# family = "JetBrainsMono Nerd Font"
+family = "Hack Nerd Font Mono"
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
-style = "Bold"
+# family = "JetBrainsMono Nerd Font"
+family = "Hack Nerd Font Mono"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
-style = "Italic"
+# family = "JetBrainsMono Nerd Font"
+family = "Hack Nerd Font Mono"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
-style = "Bold Italic"
+# family = "JetBrainsMono Nerd Font"
+family = "Hack Nerd Font Mono"
 
-
-# Command-Up -> PageUp - 替代 <fn - up>
 [[keyboard.bindings]]
 chars = "\u001B[5~"
 key = "Up"
@@ -80,6 +78,11 @@ key = "Left"
 mode = "~Vi|~Search"
 mods = "Command"
 
+# [[keyboard.bindings]]
+# chars = "h"
+# key = 0
+# mods = "Option"
+
 # Command-Right -> End - 替代 <fn - right>
 [[keyboard.bindings]]
 chars = "\u001BOF"
@@ -87,17 +90,51 @@ key = "Right"
 mode = "~Vi|~Search"
 mods = "Command"
 
+[[keyboard.bindings]]
+action = "Paste"
+key = "Paste"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "Copy"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "PasteSelection"
+key = "Insert"
+mods = "Shift"
+
 [scrolling]
 history = 100000
 
 [window]
-decorations = "buttonless"
+# decorations = "buttonless"
+decorations = "full"
 # decorations_theme_variant = "None"
 startup_mode = "Maximized"
-option_as_alt = "Both"
+# option_as_alt = "Both"
+option_as_alt = "OnlyLeft"
 dynamic_title = false
 # padding = { x = 2, y = 2 }
 dynamic_padding = false
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[window.padding]
+x = 2
+y = 2
 
 [window.dimensions]
 columns = 150
@@ -107,3 +144,9 @@ lines = 50
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
