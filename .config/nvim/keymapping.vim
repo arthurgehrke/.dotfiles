@@ -113,13 +113,6 @@ nnoremap sh <C-w>h
 nnoremap <space>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 nnoremap <space>tcd :tcd %:h<CR>
 
-function LspReload()
-    lua vim.lsp.stop_client(vim.lsp.get_active_clients())
-    edit
-endfunction
-
-command LspReload :call LspReload()
-
 function! DeleteInactiveBufs()
   "From tabpagebuflist() help, get a list of all buffers in all tabs
   let tablist = []
@@ -141,3 +134,7 @@ function! DeleteInactiveBufs()
 endfunction
 
 command! Ball :call DeleteInactiveBufs()
+
+" lsp
+nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>

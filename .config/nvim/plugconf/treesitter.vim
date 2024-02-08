@@ -38,6 +38,11 @@ treesitter_config.setup {
     "tsx",
     "vim",
     "python",
+    "markdown_inline",
+    "jsdoc",
+    "json",
+    "json5",
+    "jsonc",
     "sql",
     "scss",
     "toml",
@@ -58,10 +63,13 @@ treesitter_config.setup {
   },
   autotag = {
     enable = true,
-    filetypes = {
-      'html', 'javascript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'xml'
-    },
+    -- filetypes = {
+    --   'html', 'javascript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'xml', 'typescript', 'tsx'
+    -- },
   },
+  build = function()
+    require("nvim-treesitter.install").update({ with_sync = true })
+  end,
   incremental_selection = {
     enable = true,
     keymaps = {

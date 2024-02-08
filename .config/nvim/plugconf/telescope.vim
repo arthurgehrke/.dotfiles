@@ -27,6 +27,8 @@ require('telescope').setup{
       "tmp",
       "node_modules",
       ".git/",
+      "package%-lock.json",
+      "yarn%-lock.json",
     },
     mappings = {
       i = {

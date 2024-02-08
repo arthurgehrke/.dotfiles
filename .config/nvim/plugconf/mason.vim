@@ -1,52 +1,11 @@
 lua << EOF
--- import mason plugin safely
-local mason_status, mason = pcall(require, "mason")
-if not mason_status then
-	return
-end
-
--- import mason-lspconfig plugin safely
-local mason_lspconfig_status, mason_lspconfig = pcall(require, "mason-lspconfig")
-if not mason_lspconfig_status then
-	return
-end
-
--- import mason-nvim-dap plugin safely
-local mason_dap_status, mason_dap = pcall(require, "mason-nvim-dap")
-if not mason_dap_status then
-	return
-end
-
-local ok, mason_tool = pcall(require, "mason-tool-installer")
-if not ok then return end
-
-local lsp_servers = {
-	"tsserver",
-	"html",
-	"vimls",
-	"bashls",
-	"dockerls",
-	"jsonls",
-	"yamlls",
-	"dockerls",
-  "pyright",
-  "lua_ls",
-  "pylsp",
-}
-
-local dap_servers = {
-	"js-debug-adapter", 
-	"node-debug2-adapter", 
-	"js", 
-	"node2", 
-	"chrome",
-}
-
 -- enable mason
 require("mason").setup()
 
 require("mason-lspconfig").setup({
-  -- automatically install language servers setup below for lspconfig
+  ensure_installed = {
+    "tsserver",
+  },
   automatic_installation = true
 })
 
@@ -54,12 +13,14 @@ require('mason-tool-installer').setup({
   ensure_installed = {
     'bash-language-server',
     'lua-language-server',
+    'yaml-language-server',
     'vim-language-server',
     'stylua',
     'shellcheck',
     'sqlfmt',
     'json-to-struct',
     'jq',
+    'prettier',
     'prettierd',
     'luacheck',
     'eslint_d',
@@ -72,16 +33,27 @@ require('mason-tool-installer').setup({
     'black',
     'isort',
     'sql-formatter',
+    'pylsp',
+    'black', --python
     'vimls',
     'yamllint',
     'yamlfmt',
     'yamlls',
     'dockerls',
     'sqlls',
-    }
+  },
+  auto_update = true,
 })
 
-mason_dap.setup({
+local dap_servers = {
+	"js-debug-adapter", 
+	"node-debug2-adapter", 
+	"js", 
+	"node2", 
+	"chrome",
+}
+
+require("mason-nvim-dap").setup({
   ensure_installed = dap_servers,
   automatic_installation = true,
   automatic_setup = true,

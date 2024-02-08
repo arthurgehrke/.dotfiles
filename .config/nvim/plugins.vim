@@ -27,22 +27,21 @@ call plug#begin()
   Plug 'haya14busa/is.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'shumphrey/fugitive-gitlab.vim'
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
   Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} 
   Plug 'williamboman/mason-lspconfig.nvim'
+  Plug 'neovim/nvim-lspconfig'
   Plug 'jay-babu/mason-nvim-dap.nvim'
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
-  Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/nvim-cmp'         
   Plug 'hrsh7th/cmp-nvim-lsp'     
   Plug 'hrsh7th/cmp-buffer'
-  Plug 'kento-ogata/cmp-tsnip'
-  Plug 'yuki-yano/tsnip.nvim'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp-document-symbol',
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/vim-vsnip'
   Plug 'L3MON4D3/LuaSnip'
+  Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'mfussenegger/nvim-dap'
-  Plug 'mxsdev/nvim-dap-vscode-js'
   Plug 'rcarriga/nvim-dap-ui'
   Plug 'folke/neodev.nvim'
   Plug 'Pocco81/DAPInstall.nvim'
@@ -62,14 +61,19 @@ call plug#begin()
   Plug 'mogelbrod/vim-jsonpath'
   Plug 'lukas-reineke/indent-blankline.nvim'
   Plug 'jalvesaq/Nvim-R'
-  Plug 'jay-babu/mason-null-ls.nvim'
+  " Plug 'jay-babu/mason-null-ls.nvim'
   Plug 'pmizio/typescript-tools.nvim'
-  Plug 'MunifTanjim/prettier.nvim'
-  Plug 'jose-elias-alvarez/null-ls.nvim'
+  " Plug 'MunifTanjim/prettier.nvim'
+  " Plug 'jose-elias-alvarez/null-ls.nvim'
   Plug 'axkirillov/easypick.nvim'
+  Plug 'mfussenegger/nvim-lint'
+  Plug 'mhartington/formatter.nvim'
 call plug#end()
 
+" source $HOME/.config/nvim/plugconf/null-ls.vim
 source $HOME/.config/nvim/plugconf/lsp.vim
+source $HOME/.config/nvim/plugconf/lint.vim
+source $HOME/.config/nvim/plugconf/formatter.vim
 source $HOME/.config/nvim/plugconf/comment.vim
 source $HOME/.config/nvim/plugconf/startify.vim
 source $HOME/.config/nvim/plugconf/bufferline.vim

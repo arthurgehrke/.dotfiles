@@ -1,583 +1,347 @@
 lua << EOF
-local ok, lsp = pcall(require, "lsp-zero")
-if not ok then
-    return
-end
-
-local opt = vim.opt
-local keymap = vim.keymap
-local lspconfig = require("lspconfig")
-local protocol = require("vim.lsp.protocol")
 local schemas = require("schemastore")
-local cmp = require "cmp"
 local util = require("lspconfig.util")
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-lsp.preset("recommended")
+-- local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local rawCapabilitiesWithoutFormatting = vim.lsp.protocol.make_client_capabilities()
+rawCapabilitiesWithoutFormatting.textDocument.formatting = false
+rawCapabilitiesWithoutFormatting.textDocument.rangeFormatting = false
+local capabilitiesWithoutFormatting = require("cmp_nvim_lsp").default_capabilities(rawCapabilitiesWithoutFormatting)
 
-lsp.format_mapping(
-    "gq",
-    {
-        format_opts = {
-            async = false,
-            timeout_ms = 10000
-        },
-        servers = {
-            ["lua_ls"] = {"lua"},
-            ["rust_analyzer"] = {"rust"},
-            ["null-ls"] = {"typescript", "typescriptreact", "json", "javascript", 'lua', 'python', 'html', 'css', 'vim'}
-        }
-    }
-)
+local border = {
+  { '╭', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '╮', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+  { '╯', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '╰', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+}
 
-lsp.set_sign_icons(
-    {
-        error = "",
-        warn = "",
-        hint = "",
-        info = ""
-    }
-)
+local handlers = {
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+}
+-- Lsp Hover & SignatureHelp {{{
 
-lsp.on_attach(
-    function(client, bufnr)
-        lsp.default_keymaps({buffer = bufnr})
-        local opts = {buffer = bufnr, remap = false}
-        vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-        vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts)
-        vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts)
-        vim.keymap.set(
-            "n",
-            "gd",
-            function()
-                vim.lsp.buf.definition()
-            end,
-            opts
-        )
-        vim.keymap.set(
-            "n",
-            "K",
-            function()
-                vim.lsp.buf.hover()
-            end,
-            opts
-        )
-        vim.keymap.set("n", "ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-        vim.keymap.set(
-            "n",
-            "<space>vrr",
-            function()
-                vim.lsp.buf.references()
-            end,
-            opts
-        )
-        vim.keymap.set(
-            "n",
-            "<space>vrn",
-            function()
-                vim.lsp.buf.rename()
-            end,
-            opts
-        )
-        vim.keymap.set( "i",
-            "<C-h>",
-            function()
-                vim.lsp.buf.signature_help()
-            end,
-            opts
-        )
-        vim.keymap.set(
-            {"n", "v"},
-            "<space>af",
-            function()
-                vim.lsp.buf.format({async = true})
-            end,
-            {silent = true, desc = "format"}
-        )
+-- Single border for hover floating window.
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = 'single',
+})
 
-        vim.keymap.set(
-            {"n"},
-            "<space>k",
-            function()
-                vim.lsp.buf.signature_help()
-            end,
-            {silent = true, desc = "toggle signature"}
-        )
+-- Single border for signature help window.
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  border = 'single',
+})
 
-        vim.keymap.set(
-            {"n"},
-            "<space>od",
-            function()
-                vim.diagnostic.open_float()
-            end,
-            {silent = true, desc = "open diags"}
-        )
+-- Single border for :LspInfo window.
+require('lspconfig.ui.windows').default_options = {
+  border = 'single',
+}
 
-        vim.keymap.set(
-            {"n"},
-            "<space>oc",
-            function()
-                vim.diagnostic.show_line_diagnostics()
-            end,
-            {silent = true, desc = "open diags"}
-        )
+local servers = {
+    "bashls",
+    "yamlls",
+    "cssls",
+    "eslint",
+    "jsonls",
+    "html",
+    "jsonls",
+    "cssls",
+    "sqlls",
+    -- "lua_ls",
+    -- "tsserver",
+    -- "pyright",
+    "vimls",
+    "marksman",
+}
 
-        vim.keymap.set(
-            {"n", "v"},
-            "<space>ca",
-            function()
-                vim.lsp.buf.code_action()
-            end,
-            {silent = true, desc = "toggle signature"}
-        )
-    end
-)
-lsp.setup()
+-- Mappings.
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap("n", "<space>od", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+-- vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+-- vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+vim.api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+vim.keymap.set("n", "[d", function()
+  vim.diagnostic.goto_prev(get_diagnostic_opts(client, bufnr))
+end, opts)
+vim.keymap.set("n", "]d", function()
+  vim.diagnostic.goto_next(get_diagnostic_opts(client, bufnr))
+end, opts)
 
-local opts = {noremap = true, silent = true}
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    -- Use LSP as the handler for omnifunc.
-    --    See `:help omnifunc` and `:help ins-completion` for more information.
-    vim.api.nvim_buf_set_option(buffer_number, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-    -- Use LSP as the handler for formatexpr.
-    --    See `:help formatexpr` for more information.
-    vim.api.nvim_buf_set_option(buffer_number, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
 
-
-    client.server_capabilities.document_formatting = false
-    vim.keymap.set("n", "<space>=", "<cmd>lua vim.lsp.buf.formatting()<CR>", {})
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local bufopts = {noremap = true, silent = true, buffer = bufnr}
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
-    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-    vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-    vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-    vim.keymap.set(
-        "n",
-        "<space>wl",
-        function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end,
-        bufopts
-    )
-    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
-    vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
-    vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
-    vim.keymap.set(
-        "n",
-        "<space>af",
-        function()
-            vim.lsp.buf.format {async = true}
-        end,
-        bufopts
-    )
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, bufopts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set("n", "<space>ca", function()
+        vim.lsp.buf.code_action({
+          --- Filter unwanted code actions
+          filter = function(action)
+            return action.title ~= "Move to a new file"
+              and action.title ~= "Generate 'get' and 'set' accessors"
+          end,
+    })
+		end, opts)
+    vim.keymap.set("n", "ca", vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>as', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
+    vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+
+    if client.name == "tsserver" then
+			vim.keymap.set("n", "<space>i", "<cmd>TypescriptAddMissingImports<cr>", bufopts)
+			vim.keymap.set("n", "<space>0", "<cmd>TypescriptRemoveUnused<cr>", bufopts)
+			vim.keymap.set("n", "<space>rf", "<cmd>TypescriptRenameFile<cr>", bufopts)
+		end
+
+    if client.name == 'typescript-tools' or client.name == 'tsserver' then
+			--- Organize imports for TypeScript files. Unfortunate to have to do two
+			--- separate actions, but unfortunately it's the way the language server is
+			--- setup.
+			vim.keymap.set("n", "<space>ai", "<cmd>TSToolsAddMissingImports<cr>", bufopts)
+			vim.keymap.set("n", "<space>ao", "<cmd>TSToolsRemoveUnusedImports<cr>", bufopts)
+			--- Rename file keymap similar to rename variable
+			vim.keymap.set("n", "<space>rf", "<cmd>TSToolsRenameFile<cr>", bufopts)
+		end
 end
 
-local lsp_flags = {
-    debounce_text_changes = 150
-}
-
-local nvim_lsp = require "lspconfig"
-local servers = {"tsserver", "pyright"}
-
--- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
-for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup {
-        on_attach = on_attach,
-        flags = lsp_flags,
-        capabilities = capabilities
-    }
-end
-
--- prettier
-local prettier = require("prettier")
-local null_ls = require("null-ls")
-
-null_ls.setup(
-    {
-        debug = false,
-        sources = {
-          null_ls.builtins.formatting.prettier.with({
-              filetypes = {
-                "javascript",
-                "javascriptreact",
-                "typescript",
-                "typescriptreact",
-                "vue",
-                "css",
-                "scss",
-                "less",
-                "html",
-                "json",
-                "jsonc",
-                "yaml",
-                "markdown",
-                "graphql",
-                "handlebars",
-              },
-            }),
-           null_ls.builtins.diagnostics.luacheck.with({
-                extra_args = { "--globals", "vim" },
-            }),
-           null_ls.builtins.formatting.stylua.with({
-              extra_args = {
-                '--indent-type',
-                'Spaces',
-                '--indent-width',
-                '2',
-                '--column-width',
-                '80',
-                '--quote-style',
-                'AutoPreferSingle',
-              },
-            }),
-            null_ls.builtins.formatting.eslint_d.with({
-                condition = function(utils)
-                  return utils.root_has_file(eslint_root_files)
-                end,
-            }),
-            null_ls.builtins.code_actions.eslint_d,
-            null_ls.builtins.diagnostics.eslint_d.with({
-                  condition = function(utils)
-                    return utils.root_has_file(eslint_root_files)
-                  end,
-            }),
-          -- xml
-          null_ls.builtins.formatting.xmllint,
-          -- toml
-          null_ls.builtins.formatting.taplo,
-          -- sh
-          null_ls.builtins.code_actions.shellcheck,
-          null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.formatting.shellharden,
-          null_ls.builtins.diagnostics.markdownlint.with({
-            method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-          }),
-          -- sql
-          null_ls.builtins.formatting.sql_formatter,
-          null_ls.builtins.formatting.jq,
-
-          -- python
-          null_ls.builtins.formatting.black.with({
-          extra_args = { "--line-length=120" }
-          }),
-          
-          null_ls.builtins.formatting.isort,
-        },
-        on_attach = function(client, bufnr)
-            if client.server_capabilities.documentFormattingProvider then
-                vim.cmd("nnoremap <silent><buffer> <Leader>[ :lua vim.lsp.buf.formatting()<CR>")
-            -- format on save
-            --vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format({ async = true})")
-            end
-
-            if client.server_capabilities.documentRangeFormattingProvider then
-                vim.cmd("xnoremap <silent><buffer> <Leader>[ :lua vim.lsp.buf.range_formatting({})<CR>")
-            end
-        end
-    }
-)
-
--- typescript-tools.nvim configuration
-require("typescript-tools").setup {
-  settings = {
-    expose_as_code_action = { "add_missing_imports", "remove_unused_imports", "organize_imports" }
-  }
-}
-
-prettier.setup(
-    {
-        bin = "prettier", -- or `'prettierd'` (v0.22+)
-        filetypes = {
-            "css",
-            "graphql",
-            "html",
-            "javascript",
-            "javascriptreact",
-            "json",
-            "less",
-            "markdown",
-            "scss",
-            "typescript",
-            "typescriptreact",
-            "yaml"
-        },
-        cli_options = {
-            -- https://prettier.io/docs/en/cli.html#--config-precedence
-            config_precedence = "prefer-file" -- or "cli-override" or "file-override"
-        }
-    }
-)
-
-cmp.setup(
-    {
-        preselect = cmp.PreselectMode.None,
-        window = {
-            documentation = {
-                border = {"╭", "─", "╮", "│", "╯", "─", "╰", "│"}
-            }
-        },
-        snippet = {
-            expand = function(args)
-                luasnip.lsp_expand(args.body) -- For `luasnip` users.
-            end
-        },
-        confirm_opts = {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = false
-        },
-        formatting = {
-            fields = {"kind", "abbr", "menu"},
-            format = function(entry, vim_item)
-                -- Kind icons
-                vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-                -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-                vim_item.menu =
-                    ({
-                    nvim_lsp = "[LSP]",
-                    luasnip = "[Snippet]",
-                    buffer = "[Buffer]",
-                    path = "[Path]"
-                })[entry.source.name]
-                return vim_item
-            end
-        },
-        mapping = cmp.mapping.preset.insert(
-            {
-                ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), {"i", "c"}),
-                ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(4), {"i", "c"}),
-                ["<CR>"] = cmp.mapping.confirm({select = true}),
-                ["<C-p>"] = cmp.mapping.select_prev_item(),
-                ["<C-n>"] = cmp.mapping.select_next_item(),
-                ["q"] = cmp.mapping.abort()
-            }
-        ),
-        sources = cmp.config.sources(
-            {
-                {name = "nvim_lsp"},
-                {name = "luasnip"},
-                {name = "buffer"},
-                {name = "path"}
-            }
-        )
-    }
-)
-
-function setAutoCmp(mode)
-    if mode then
-        cmp.setup(
-            {
-                completion = {
-                    autocomplete = {require("cmp.types").cmp.TriggerEvent.TextChanged}
-                }
-            }
-        )
-    else
-        cmp.setup(
-            {
-                completion = {
-                    autocomplete = false
-                }
-            }
-        )
-    end
-end
-setAutoCmp(false)
-
--- enable automatic completion popup on typing
-vim.cmd("command! AutoCmpOn lua setAutoCmp(true)")
--- disable automatic competion popup on typing
-vim.cmd("command! AutoCmpOff lua setAutoCmp(false)")
-
-require('lspconfig').tsserver.setup({
-   -- on_init = function(client)
-   --   client.server_capabilities.documentFormattingProvider = false
-   --   client.server_capabilities.documentFormattingRangeProvider = false
-   -- end,
-   capabilities = capabilities,
-   filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript" },
-   -- cmd = { "typescript-language-server", "--stdio" },
-   on_attach = function(client)
-     client.server_capabilities.document_formatting = false
-   end,
-})
-
-require("lspconfig").yamlls.setup(
-    {
-        settings = {
-            format = {enable = true},
-            json = {
-                schemas = schemas.json.schemas().yamlls
-            }
-        },
-        filetypes = {"yaml"}
-    }
-)
-
-require("lspconfig").jsonls.setup(
-    {
-        settings = {
-            format = {enable = true},
-            json = {
-                schemas = schemas.json.schemas().jsonls
-            }
-        },
-        filetypes = {"json"},
-        on_attach = on_attach,
-    }
-)
-
-require("lspconfig").html.setup(
-    {
-        settings = {
-            format = {enable = true},
-            json = {
-                schemas = schemas.json.schemas().html
-            }
-        },
-        filetypes = {"html"},
-        on_attach = on_attach,
-    }
-)
-
-require("lspconfig").yamlls.setup(
-    {
-        settins = {
-            yamlls = {
-                format = {enable = true, singleQuote = true},
-                validate = true,
-                hover = true,
-                completion = true,
-                schemaStore = {
-                    enable = true,
-                    url = "https://www.schemastore.org/api/json/catalog.json"
-                },
-                schemas = schemas.json.schemas().yamls
-            }
-        },
-        filetypes = {"yaml"},
-        on_attach = on_attach,
-    }
-)
-
-require("lspconfig").lua_ls.setup(lsp.nvim_lua_ls())
-
-require("lspconfig").bashls.setup({
-        cmd = {
-            "bash-language-server",
-            "start"
-        },
-        filetypes = {"zsh"},
-        on_attach = on_attach,
+for _, lsp in pairs(servers) do
+  require("lspconfig")[lsp].setup({
+      on_attach = on_attach,
+      flags = {
+          debounce_text_changes = 300,
+      },
+      capabilities = lsp_capabilities,
   })
-
-require("lspconfig").pyright.setup(
-    {
-        capabilities = capabilities,
-        on_attach = on_attach,
-        settings = {
-            python = {
-                analysis = {
-                    autoImportCompletions = false,
-                    useLibraryCodeForTypes = false
-                }
-            }
-        },
-        before_init = function(_, config)
-            config.settings.python.pythonPath =
-                require("lspconfig").util.path.join(vim.env.VIRTUAL_ENV, "bin", "python")
-        end
-    }
-)
-
-require("lspconfig").marksman.setup(
-    {
-        capabilities = capabilities,
-        filetypes = {
-            "markdown",
-            "md",
-            "latex",
-            "tex",
-            "org",
-            "plaintext",
-            "txt"
-        },
-        on_attach = function(client, bufnr)
-            on_attach(client, bufnr)
-            client.server_capabilities.completionProvider = false
-        end
-    }
-)
+end
 
 require("lspconfig").cssls.setup({
-        cmd = {"css-languageserver", "--stdio"},
-        filetypes = {"css", "scss", "less"},
-        settings = {
-            css = {
-                validate = true
-            },
-            less = {
-                validate = true
-            },
-            scss = {
-                validate = true
-            }
+    cmd = {"css-languageserver", "--stdio"},
+    filetypes = {"css", "scss", "less"},
+    settings = {
+        css = {
+            validate = true
         },
-        single_file_support = true,
-        on_attach = on_attach,
+        less = {
+            validate = true
+        },
+        scss = {
+            validate = true
+        }
+    },
+    single_file_support = true,
+    on_attach = on_attach,
 })
 
 require('lspconfig').eslint.setup{
-    capabilities = capabilities,
     on_attach = on_attach,
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
 }
 
-require('lspconfig').taplo.setup({
+require('lspconfig').sqlls.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+require('lspconfig').vimls.setup({
     on_attach = on_attach,
-    flags = lsp_flags,
+    handlers = handlers,
+    init_options = {
+        diagnostics = {
+            enable = true,
+        },
+    },
+})
+
+require("lspconfig").marksman.setup({
+  cmd = { "marksman", "server" },
+  filetypes = {
+    "markdown",
+    "md",
+    "latex",
+    "tex",
+    "org",
+    "plaintext",
+    "txt"
+  },
+  single_file_support = true,
+  on_attach = on_attach,
 })
 
 require("lspconfig").lua_ls.setup({
-    on_attach = on_attach,
-    flags = lsp_flags,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = "LuaJIT",
+        -- Setup your lua path
+        path = vim.split(package.path, ";"),
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { "vim", "it", "describe", "before_each", "use" },
+      },
+      workspace = {
+        library = {
+          vim.api.nvim_get_runtime_file("", true), -- Make the server aware of Neovim runtime files
+          -- vim.fn.expand("~/.luarocks"),
+        },
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+      completion = {
+        enable = true,
+        showParams = true,
+      },
+    },
+  },
+  on_attach = on_attach,
+  capabilities = lsp_capabilities,
 })
 
-vim.diagnostic.config(
-    {
-        virtual_text = false,
-        signs = false,
-        update_in_insert = true,
-        underline = true,
-        severity_sort = true,
-        float = true
+require("lspconfig").bashls.setup({
+  cmd = { "bash-language-server", "start" },
+  filetypes = { "sh", "zsh" },
+  settings = {
+    bashIde = {
+      globPattern = "*@(.sh|.inc|.bash|.command)",
+    },
+  },
+  single_file_support = true,
+  on_attach = on_attach,
+})
+
+-- require("lspconfig").pyright.setup({
+--         on_attach = on_attach,
+--         capabilities = lsp_capabilities,
+--         settings = {
+--             python = {
+--                 analysis = {
+--                     autoImportCompletions = false,
+--                     useLibraryCodeForTypes = false
+--                 }
+--             }
+--         },
+--         before_init = function(_, config)
+--             config.settings.python.pythonPath =
+--                 require("lspconfig").util.path.join(vim.env.VIRTUAL_ENV, "bin", "python")
+--         end
+-- })
+
+require("lspconfig").pylsp.setup({
+  filetypes = { "python" },
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = {'W391'},
+          maxLineLength = 100
+        }
+      }
     }
-)
+  }
+})
 
-vim.opt.updatetime = 100
-vim.env.NEOVIM_NODE_VERSION = "v18.12.1"
+require("lspconfig").html.setup({
+  settings = {
+      format = {enable = true},
+      json = {
+          schemas = schemas.json.schemas().html
+      }
+  },
+  filetypes = {"html"},
+  on_attach = on_attach,
+})
 
-if vim.fn.has("unix") and vim.env.NEOVIM_NODE_VERSION then
-    local node_dir = vim.env.HOME .. "/.nvm/versions/node/" .. vim.env.NEOVIM_NODE_VERSION .. "/bin/"
-    if (vim.fn.isdirectory(node_dir)) then
-        vim.env.PATH = node_dir .. ":" .. vim.env.PATH
-    end
-end
+require("lspconfig").jsonls.setup({
+  settings = {
+      format = {enable = true},
+      json = {
+          schemas = schemas.json.schemas().jsonls
+      }
+  },
+  filetypes = {"json"},
+  on_attach = on_attach,
+})
+
+-- require('lspconfig').tsserver.setup({
+--    -- on_init = function(client)
+--    --   client.server_capabilities.documentFormattingProvider = false
+--    --   client.server_capabilities.documentFormattingRangeProvider = false
+--    -- end,
+--    capabilities = lsp_capabilities,
+--    filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript" },
+--    handlers = handlers,
+--    root_dir = util.root_pattern('tsconfig.json', 'package.json', 'jsconfig.json', '.git'),
+--    single_file_support = true,
+--    on_attach = on_attach,
+--    name = 'tsserver',
+--    cmd = {'typescript-language-server', '--stdio'},
+--    -- on_attach = function(client)
+--    --   client.server_capabilities.document_formatting = false
+--    -- end,
+-- })
+
+-- require("lspconfig").tsserver.setup({
+--   cmd = { "typescript-language-server", "--stdio" },
+--   filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+--   init_options = {
+--     hostInfo = "neovim",
+--   },
+--   root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+--   capabilities = lsp_capabilities,
+--   on_attach = on_attach,
+-- })
+
+require("lspconfig").tsserver.setup({
+  on_attach = on_attach,
+  flags = {
+      debounce_text_changes = 300,
+  },
+  capabilities = capabilitiesWithoutFormatting,
+  settings = {
+      documentFormatting = false,
+  },
+  root_dir = require("lspconfig.util").find_git_ancestor,
+  filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact" },
+  cmd = { "typescript-language-server", "--stdio" }
+})
+
+require("lspconfig").yamlls.setup({
+  settings = {
+      format = {enable = true},
+      json = {
+          schemas = schemas.json.schemas().yamlls
+      }
+  },
+  filetypes = {"yaml"},
+  on_attach = on_attach,
+})
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  underline = true,
+  virtual_text = false,
+  signs = true,
+  update_in_insert = true,
+})
 EOF
-
-nnoremap <silent> gvd <cmd>:vsplit<cr><cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gsd <cmd>:split<cr><cmd>lua vim.lsp.buf.definition()<CR>

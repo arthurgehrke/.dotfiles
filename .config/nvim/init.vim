@@ -8,6 +8,7 @@ source $HOME/.config/nvim/keymapping.vim
 source $HOME/.config/nvim/ftplugin/text.vim
 source $HOME/.config/nvim/plugins.vim
 source $HOME/.config/nvim/themes.vim
+source $HOME/.config/nvim/opts.vim
 
 set foldcolumn=0 " Remove sidebar column
 set nomagic
