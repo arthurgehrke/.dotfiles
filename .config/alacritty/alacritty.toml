@@ -43,19 +43,20 @@ x = 0
 y = 0
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "MesloLGS NF"
+# family = "JetBrainsMono Nerd Font"
 # family = "Hack Nerd Font Mono"
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
+family = "MesloLGS NF"
 # family = "Hack Nerd Font Mono"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
+family = "MesloLGS NF"
 # family = "Hack Nerd Font Mono"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "MesloLGS NF"
 # family = "Hack Nerd Font Mono"
 
 [[keyboard.bindings]]

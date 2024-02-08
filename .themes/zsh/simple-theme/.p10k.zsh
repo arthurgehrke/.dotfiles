@@ -32,6 +32,13 @@
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     user
+    nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
+    nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
+    virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
+    direnv                  # direnv status (https://direnv.net/)
+    command_execution_time  # duration of the last command
+    background_jobs         # presence of background jobs
+    status                  # exit code of the last command
     dir                     # current directory
     vcs                     # git status
   )
@@ -61,8 +68,8 @@
 
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     command_execution_time  # duration of the last command
-    nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
-    dotnet_version        # .NET version (https://dotnet.microsoft.com)
+    node_version                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
+    # dotnet_version        # .NET version (https://dotnet.microsoft.com)
     vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     timewarrior             # timewarrior tracking status (https://timewarrior.net/)
     taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
