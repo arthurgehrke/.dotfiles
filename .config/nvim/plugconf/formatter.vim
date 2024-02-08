@@ -43,8 +43,7 @@ require("formatter").setup {
     lua = stylua,
 
     javascriptreact = { require 'formatter.defaults.prettier' },
-    javascript = { require 'formatter.defaults.prettierd' },
-
+    javascript = { require 'formatter.defaults.prettier' },
 
     xml = { require("formatter.filetypes.xml").tidy },
 
@@ -97,7 +96,9 @@ require("formatter").setup {
 
     toml = { require("formatter.filetypes.toml").taplo },
 
-    typescriptreact = { require 'formatter.defaults.prettierd' },
+    vim = { require("formatter.filetypes.toml").vint },
+
+    -- typescriptreact = { require 'formatter.defaults.prettierd' },
     typescript = { require 'formatter.defaults.prettierd' },
 
     javascriptreact = { require("formatter.defaults.prettier") },
@@ -113,13 +114,6 @@ require("formatter").setup {
 
     css = require("formatter.filetypes.css").prettier,
     scss = require("formatter.filetypes.html").prettier,
-
-    -- ["*"] = {
-    --   -- "formatter.filetypes.any" defines default configurations for any
-    --   -- filetype
-    --   require("formatter.filetypes.any").remove_trailing_whitespace
-    -- },
-
     bash = {
       require("formatter.filetypes.sh").shfmt,
     },
@@ -128,39 +122,30 @@ require("formatter").setup {
       require("formatter.filetypes.sh").shfmt,
     },
 
-     ["*"] = {
-      function ()
-        local defined_types = require("formatter.config").values.filetype
+    ["*"] = {
+      -- "formatter.filetypes.any" defines default configurations for any
+      -- filetype
+      require("formatter.filetypes.any").remove_trailing_whitespace
+    },
 
-        if defined_types[vim.bo.filetype] ~= nil then
-          return nil
-        else 
-        return any_formatter
-      end
+     -- ["*"] = {
+     --  function ()
+     --    local defined_types = require("formatter.config").values.filetype
 
-        vim.lsp.buf.format({ async = true })
-      end,
-      },
+     --    if defined_types[vim.bo.filetype] ~= nil then
+     --      return nil
+     --    else 
+     --    return any_formatter
+     --  end
 
-
-    -- any filetype
-    -- ["*"] = {
-    --   function ()
-    --     local defined_types = require("formatter.config").values.filetype
-    --     require("formatter.filetypes.any").remove_trailing_whitespace
-    --     if defined_types[vim.bo.filetype] ~= nil then
-    --       return nil
-    --     end
-
-    --     vim.lsp.buf.format({ async = true })
-    --   end,
-    -- }
+     --    vim.lsp.buf.format({ async = true })
+     --  end,
+     --  },
   }
 }
 
-vim.keymap.set("n", "<space>fo", ":Format<CR>")
-    vim.keymap.set("n", "<space>at", "<Cmd>Format<CR>", { silent = true })
+vim.keymap.set("n", "gq", "<Cmd>Format<CR>", { silent = true })
 EOF
 
-nnoremap <silent> <space>bt :Format<CR>
-nnoremap <silent> <space>as :FormatWrite<CR>
+nnoremap <silent> <space>gq :Format<CR>
+nnoremap <silent> <space>gt :FormatWrite<CR>

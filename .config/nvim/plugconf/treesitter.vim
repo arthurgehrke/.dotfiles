@@ -14,10 +14,14 @@ treesitter_config.setup {
   auto_install = true,
   highlight = {
     enable = not vim.g.vscode, -- false will disable the whole extension
-    disable = {
-      'help', 
-    }
-  },
+     disable = function(lang, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+                return true
+            end
+        end,
+      },
   indent = {
     enable = true,
     disable = {},
@@ -37,6 +41,7 @@ treesitter_config.setup {
     "javascript",
     "tsx",
     "vim",
+    "vimdoc",
     "python",
     "markdown_inline",
     "jsdoc",
@@ -45,11 +50,19 @@ treesitter_config.setup {
     "jsonc",
     "sql",
     "scss",
+    "css",
+    "comment",
+    "cmake",
+    "c",
+    "angular",
     "toml",
     "regex",
     "latex",
     "yaml",
+    "toml",
     "gitcommit",
+    "gitattributes",
+    "csv",
     "gitignore",
     "gitattributes",
     "dot",
@@ -70,15 +83,7 @@ treesitter_config.setup {
   build = function()
     require("nvim-treesitter.install").update({ with_sync = true })
   end,
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
+  additional_vim_regex_highlighting = false,
 }
 
 require('ts_context_commentstring').setup {}

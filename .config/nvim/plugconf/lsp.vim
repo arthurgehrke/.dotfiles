@@ -101,8 +101,8 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "ca", vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<space>as', function() vim.lsp.buf.format { async = true } end, bufopts)
-    vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
-    vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
+    -- vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
+    -- vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
 
@@ -342,6 +342,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   underline = true,
   virtual_text = false,
   signs = true,
-  update_in_insert = true,
+  update_in_insert = false,
 })
 EOF

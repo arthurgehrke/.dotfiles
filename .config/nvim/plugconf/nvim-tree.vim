@@ -4,6 +4,11 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
+vim.api.nvim_set_hl(0, "NormalFloat", {
+  fg = "none",
+  bg = "none",
+})
+
 local signcolumn_width = 7 -- AKA gutter width
 local min_buffer_width = 110 + signcolumn_width
 local total_dual_panel_cols = min_buffer_width * 2 + 1
