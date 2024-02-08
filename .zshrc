@@ -248,14 +248,16 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 # ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
 
 ##############################################################################
-# Nvm
+# Nvm or n and Node
 ##############################################################################
 
-export NVM_DIR="$HOME/.nvm"
-source $(brew --prefix nvm)/nvm.sh
+# export NVM_DIR="$HOME/.nvm"
+# source $(brew --prefix nvm)/nvm.sh
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Give nodejs (a lot) more memory.
+export NODE_OPTIONS="--max-old-space-size=65536"
 ##############################################################################
 # Completion
 ##############################################################################
