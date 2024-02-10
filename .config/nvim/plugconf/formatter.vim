@@ -47,11 +47,7 @@ require("formatter").setup {
 
     xml = { require("formatter.filetypes.xml").tidy },
 
-    -- json = { require("formatter.filetypes.json").prettierd },
-
-    json = {
-      require("formatter.filetypes.json").jq,
-    },
+    json = { require("formatter.filetypes.json").prettierd },
 
     jsonc = { require("formatter.filetypes.json").prettierd },
 
@@ -98,20 +94,17 @@ require("formatter").setup {
 
     vim = { require("formatter.filetypes.toml").vint },
 
-    -- typescriptreact = { require 'formatter.defaults.prettierd' },
-    typescript = { require 'formatter.defaults.prettierd' },
+    typescriptreact = { require 'formatter.defaults.prettierd' },
 
     javascriptreact = { require("formatter.defaults.prettier") },
-    -- typescript = { require("formatter.filetypes.typescript").prettier },
-    typescriptreact = { require("formatter.filetypes.typescriptreact").prettier },
-    -- vue = { require("formatter.filetypes.vue").prettier },
+    -- typescript = { require 'formatter.defaults.prettierd' },
+    typescript = { require("formatter.filetypes.typescript").prettier },
+
     -- yaml = { require("formatter.filetypes.yaml").prettier },
 
     yaml = { require("formatter.filetypes.yaml").prettierd },
 
     html = require("formatter.filetypes.html").prettier,
-    -- html = { require("formatter.filetypes.html").prettierd },
-
     css = require("formatter.filetypes.css").prettier,
     scss = require("formatter.filetypes.html").prettier,
     bash = {
@@ -120,32 +113,12 @@ require("formatter").setup {
 
     sh = {
       require("formatter.filetypes.sh").shfmt,
-    },
-
-    ["*"] = {
-      -- "formatter.filetypes.any" defines default configurations for any
-      -- filetype
-      require("formatter.filetypes.any").remove_trailing_whitespace
-    },
-
-     -- ["*"] = {
-     --  function ()
-     --    local defined_types = require("formatter.config").values.filetype
-
-     --    if defined_types[vim.bo.filetype] ~= nil then
-     --      return nil
-     --    else 
-     --    return any_formatter
-     --  end
-
-     --    vim.lsp.buf.format({ async = true })
-     --  end,
-     --  },
+    }
   }
 }
 
 vim.keymap.set("n", "gq", "<Cmd>Format<CR>", { silent = true })
 EOF
 
-nnoremap <silent> <space>gq :Format<CR>
+" nnoremap <silent> <space>gq :Format<CR>
 nnoremap <silent> <space>gt :FormatWrite<CR>

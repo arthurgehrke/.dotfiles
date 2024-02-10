@@ -3,6 +3,14 @@ local schemas = require("schemastore")
 local util = require("lspconfig.util")
 -- local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
+lsp_capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    "documentation",
+    "detail",
+    "additionalTextEdits",
+  },
+}
 local rawCapabilitiesWithoutFormatting = vim.lsp.protocol.make_client_capabilities()
 rawCapabilitiesWithoutFormatting.textDocument.formatting = false
 rawCapabilitiesWithoutFormatting.textDocument.rangeFormatting = false
@@ -51,7 +59,7 @@ local servers = {
     "cssls",
     "sqlls",
     -- "lua_ls",
-    -- "tsserver",
+    "tsserver",
     -- "pyright",
     "vimls",
     "marksman",
@@ -60,16 +68,7 @@ local servers = {
 -- Mappings.
 local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap("n", "<space>od", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
--- vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
--- vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
 vim.api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev(get_diagnostic_opts(client, bufnr))
-end, opts)
-vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next(get_diagnostic_opts(client, bufnr))
-end, opts)
-
 
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -80,6 +79,8 @@ local on_attach = function(client, bufnr)
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", bufopts)
+    vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", bufopts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -101,7 +102,7 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "ca", vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<space>as', function() vim.lsp.buf.format { async = true } end, bufopts)
-    -- vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
+    vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
     -- vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -315,6 +316,32 @@ require("lspconfig").jsonls.setup({
 
 require("lspconfig").tsserver.setup({
   on_attach = on_attach,
+  settings = {
+    typescript = {
+      inlayHints = {
+        includeInlayParameterNameHints = 'all',
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      }
+      },
+    javascript = {
+      inlayHints = {
+        includeInlayParameterNameHints = 'all',
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      }
+    }
+  },
   flags = {
       debounce_text_changes = 300,
   },
@@ -339,9 +366,9 @@ require("lspconfig").yamlls.setup({
 })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
   virtual_text = false,
-  signs = true,
+  underline = true,
+  signs = {severity_limit = vim.diagnostic.severity.INFO},
   update_in_insert = false,
 })
 EOF

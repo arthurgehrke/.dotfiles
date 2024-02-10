@@ -2,8 +2,9 @@ lua << EOF
 require('lint').linters_by_ft = {
   markdown = {'markdownlint'},
   -- typescript = {'eslint', 'eslint_d'},
-	typescriptreact = { "eslint_d" },
-	typescript = { "eslint_d" },
+  bash = { 'shellcheck' },
+	typescriptreact = { "eslint" },
+  typescript = { "eslint" },
   json = {'jsonlint'},
   lua = { 'luacheck' },
   python = { 'ruff' },
