@@ -4,20 +4,21 @@ local function gitsigns_keymap_attach(bufnr)
       return { desc = 'git: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
     end
 
-    --vim.keymap.set('n', 'a', api.fs.create, opts('Create'))
-    --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
+    vim.keymap.set('n', '[c', '<cmd>Gitsigns prev_hunk<CR>', opts('Stage Hunk'))
+    vim.keymap.set('n', ']c', '<cmd>Gitsigns next_hunk<CR>', opts('Stage Hunk'))
+    
+    vim.keymap.set('n', '<space>hr', '<cmd>Gitsigns reset_hunk<CR>', opts('Reset Hunk'))
+    vim.keymap.set('n', '<space>hR', '<cmd>Gitsigns reset_buffer<CR>', opts('Reset Buffer'))
+    vim.keymap.set('n', '<space>hp', '<cmd>Gitsigns preview_hunk<CR>', opts('Preview Hunk'))
+    vim.keymap.set('n', '<space>hb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>', opts('Blame Line'))
+    vim.keymap.set('n', '<space>hs', '<cmd>Gitsigns stage_hunk<CR>', opts('Stage Hunk'))
+    vim.keymap.set('n', '<space>hS', '<cmd>Gitsigns stage_buffer<CR>', opts('Stage Buffer'))
+    vim.keymap.set('n', '<space>hU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
+    vim.keymap.set('n', '<space>hu', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
 
-    vim.keymap.set('n', '<space>ss', '<cmd>Gitsigns stage_hunk<CR>', opts('Stage Hunk'))
-    vim.keymap.set('n', '<space>su', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
-    vim.keymap.set('n', '<space>sr', '<cmd>Gitsigns reset_hunk<CR>', opts('Reset Hunk'))
-    vim.keymap.set('n', '<space>sR', '<cmd>Gitsigns reset_buffer<CR>', opts('Reset Buffer'))
-    vim.keymap.set('n', '<space>sp', '<cmd>Gitsigns preview_hunk<CR>', opts('Preview Hunk'))
-    vim.keymap.set('n', '<space>sb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>', opts('Blame Line'))
-    vim.keymap.set('n', '<space>sS', '<cmd>Gitsigns stage_buffer<CR>', opts('Stage Buffer'))
-    vim.keymap.set('n', '<space>sU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
-
-    vim.keymap.set('v', '<space>sr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
-    vim.keymap.set('v', '<space>ss', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
+    vim.keymap.set('v', '<space>hsr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
+    vim.keymap.set('v', '<space>hss', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
+    vim.keymap.set({ "n" }, "<space>gd", function() require("gitsigns").diffthis() end, { desc = "View Git diff" })
 end
 
 require('gitsigns').setup{
@@ -32,6 +33,10 @@ require('gitsigns').setup{
   numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
   linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
   word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  attach_to_untracked = true,
+  -- sign_priority = 6,
+  sign_priority=100,
+  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
   watch_gitdir = {
     interval = 1000,
     follow_files = true
@@ -47,12 +52,10 @@ require('gitsigns').setup{
   current_line_blame_formatter_opts = {
     relative_time = false
   },
-  sign_priority = 6,
   update_debounce = 100,
   status_formatter = nil, -- Use default
   max_file_length = 40000,
   preview_config = {
-    -- Options passed to nvim_open_win
     border = 'single',
     style = 'minimal',
     relative = 'cursor',
@@ -63,36 +66,5 @@ require('gitsigns').setup{
     enable = false
   },
   on_attach = gitsigns_keymap_attach,
-
-    -- -- Navigation
-    -- map('n', ']c', function()
-    --   if vim.wo.diff then return ']c' end
-    --   vim.schedule(function() gs.next_hunk() end)
-    --   return '<Ignore>'
-    -- end, {expr=true})
-
-    -- map('n', '[c', function()
-    --   if vim.wo.diff then return '[c' end
-    --   vim.schedule(function() gs.prev_hunk() end)
-    --   return '<Ignore>'
-    -- end, {expr=true})
-
-    -- -- Actions
-    -- map({'n', 'v'}, '<space>hs', ':Gitsigns stage_hunk<CR>')
-    -- map({'n', 'v'}, '<space>hr', ':Gitsigns reset_hunk<CR>')
-    -- map('n', '<space>hS', gs.stage_buffer)
-    -- map('n', '<space>hu', gs.undo_stage_hunk)
-    -- map('n', '<space>hR', gs.reset_buffer)
-    -- map('n', '<space>hp', gs.preview_hunk)
-    -- map('n', '<space>hb', function() gs.blame_line{full=true} end)
-    -- map('n', '<space>hb', gs.toggle_current_line_blame)
-    -- map('n', '<space>hd', gs.diffthis)
-    -- map('n', '<space>hD', function() gs.diffthis('~') end)
-    -- map('n', '<space>td', gs.toggle_deleted)
-
-    -- -- Text object
-    -- map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 }
 EOF
-
-map <Space>gt :Gitsigns toggle_signs<CR>

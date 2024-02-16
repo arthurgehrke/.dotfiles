@@ -28,7 +28,11 @@ set noincsearch
 set ignorecase
 set smartcase
 set nofixendofline "avoid empty line in the end
-set signcolumn=auto
+" set signcolumn=yes:1
+" neovim specific configuration
+if has('nvim')
+  set signcolumn=auto:4
+endif
 set numberwidth=4
 set number relativenumber
 set hlsearch
@@ -48,7 +52,6 @@ set softtabstop=2
 set splitbelow " when splitting horizontally, move coursor to lower pane
 set splitright " when splitting vertically, mnove coursor to right pane
 set noerrorbells
-let b:match_ignorecase=1 
 set matchpairs+=<:>
 set matchpairs+=":"
 
@@ -65,7 +68,17 @@ set ttyfast                 " faster redrawing
 set diffopt+=vertical
 set wildmenu                " enhanced command line completion
 
+let b:match_ignorecase=1 
+
 highlight clear SignColumn
+sign define DiagnosticSignError text= texthl=DiagnosticSignError linehl= numhl=DiagnosticSignError
+sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=DiagnosticSignWarn
+sign define DiagnosticSignInformation text= texthl=DiagnosticSignInformation linehl= numhl=DiagnosticSignInformation
+sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=DiagnosticSignHint
+highlight DiagnosticSignError guifg=#e73c50 guibg=#2D2E27 ctermfg=1 ctermbg=237
+highlight DiagnosticSignWarn guifg=#e7c547 guibg=#2D2E27 ctermfg=1 ctermbg=237
+highlight DiagnosticSignInformation guifg=#e6db74 guibg=#2D2E27 ctermfg=1 ctermbg=237
+highlight DiagnosticSignHint guifg=#66d9ef guibg=#2D2E27 ctermfg=1 ctermbg=237
 
 set nowrap 
 
@@ -135,6 +148,9 @@ autocmd BufNewFile,BufReadPost *.md setl ts=4 sw=4 sts=4 expandtab
 " spell check for git commits
 autocmd FileType gitcommit setlocal spell
 
+au BufNewFile,BufRead *.tsx setf typescriptreact
+
+au BufNewFile,BufRead *.md set filetype=markdown
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy
@@ -162,3 +178,4 @@ if has('mac')
 endif
 
 let g:editorconfig_end_of_line = 'mac'
+

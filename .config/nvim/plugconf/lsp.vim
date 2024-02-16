@@ -2,6 +2,8 @@ lua << EOF
 local schemas = require("schemastore")
 local util = require("lspconfig.util")
 -- local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 lsp_capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -57,28 +59,61 @@ local servers = {
     "html",
     "jsonls",
     "cssls",
-    "sqlls",
+    -- "sqlls",
     -- "lua_ls",
     "tsserver",
     -- "pyright",
     "vimls",
     "marksman",
+    "pylsp",
+    -- "r_language_server"
 }
-
--- Mappings.
-local opts = { noremap = true, silent = true }
-vim.api.nvim_set_keymap("n", "<space>od", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-vim.api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+    vim.opt.updatetime = 50
+    vim.opt.isfname:append("@-@")
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+        -- delay update diagnostics
+        virtual_text = false,
+        underline = true,
+        signs = false,
+        severity_sort = false,
+        update_in_insert = false,
+      }
+    )
+
+    -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    --   virtual_text = false,
+    --   underline = true,
+    --   signs = true,
+    --   severity_sort = false,
+    --   update_in_insert = false,
+    -- })
+
+    vim.diagnostic.config({
+      update_in_insert = false,
+      underline = true,
+      -- underline = {
+      --   severity = { max = vim.diagnostic.severity.INFO }
+      -- },
+      signs = false,
+      severity_sort = false,
+      virtual_text = false,
+      -- virtual_text = {
+      --   severity = { min = vim.diagnostic.severity.WARN }
+      -- }
+    })
 
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.keymap.set("n", "<space>od", "<cmd>lua vim.diagnostic.open_float()<CR>", bufopts)
+    vim.keymap.set("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", bufopts)
     vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", bufopts)
     vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", bufopts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
@@ -90,22 +125,13 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
     vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, bufopts)
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-    vim.keymap.set("n", "<space>ca", function()
-        vim.lsp.buf.code_action({
-          --- Filter unwanted code actions
-          filter = function(action)
-            return action.title ~= "Move to a new file"
-              and action.title ~= "Generate 'get' and 'set' accessors"
-          end,
-    })
-		end, opts)
-    vim.keymap.set("n", "ca", vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set("n", "ca", vim.lsp.buf.code_action, {silent = true, noremap = true})
+    vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<space>as', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('n', '<space>ad', function() vim.lsp.buf.format { async = false } end, bufopts)
     vim.keymap.set('n', '<space>gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
-    -- vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', bufopts)
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = false })<CR>', { noremap = true, silent = true })
 
     if client.name == "tsserver" then
 			vim.keymap.set("n", "<space>i", "<cmd>TypescriptAddMissingImports<cr>", bufopts)
@@ -122,15 +148,29 @@ local on_attach = function(client, bufnr)
 			--- Rename file keymap similar to rename variable
 			vim.keymap.set("n", "<space>rf", "<cmd>TSToolsRenameFile<cr>", bufopts)
 		end
+
+    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+
+     local signs = {
+        { name = "DiagnosticSignError", text = "" },
+        { name = "DiagnosticSignWarn", text = "" },
+        { name = "DiagnosticSignHint", text = "" },
+        { name = "DiagnosticSignInfo", text = "" },
+      }
+
+     for _, sign in ipairs(signs) do
+        vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+      end
 end
 
 for _, lsp in pairs(servers) do
   require("lspconfig")[lsp].setup({
       on_attach = on_attach,
       flags = {
-          debounce_text_changes = 300,
+          debounce_text_changes = 150, -- 300
       },
-      capabilities = lsp_capabilities,
+      capabilities = capabilities, -- lsp_capabilities,
+      root_dir = function() return vim.loop.cwd() end
   })
 end
 
@@ -154,6 +194,10 @@ require("lspconfig").cssls.setup({
 
 require('lspconfig').eslint.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      format = false,
+    },
     filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
 }
 
@@ -285,37 +329,9 @@ require("lspconfig").jsonls.setup({
   on_attach = on_attach,
 })
 
--- require('lspconfig').tsserver.setup({
---    -- on_init = function(client)
---    --   client.server_capabilities.documentFormattingProvider = false
---    --   client.server_capabilities.documentFormattingRangeProvider = false
---    -- end,
---    capabilities = lsp_capabilities,
---    filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript" },
---    handlers = handlers,
---    root_dir = util.root_pattern('tsconfig.json', 'package.json', 'jsconfig.json', '.git'),
---    single_file_support = true,
---    on_attach = on_attach,
---    name = 'tsserver',
---    cmd = {'typescript-language-server', '--stdio'},
---    -- on_attach = function(client)
---    --   client.server_capabilities.document_formatting = false
---    -- end,
--- })
-
--- require("lspconfig").tsserver.setup({
---   cmd = { "typescript-language-server", "--stdio" },
---   filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
---   init_options = {
---     hostInfo = "neovim",
---   },
---   root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
---   capabilities = lsp_capabilities,
---   on_attach = on_attach,
--- })
-
 require("lspconfig").tsserver.setup({
   on_attach = on_attach,
+  cmd = { "typescript-language-server", "--stdio" },
   settings = {
     typescript = {
       inlayHints = {
@@ -342,16 +358,17 @@ require("lspconfig").tsserver.setup({
       }
     }
   },
-  flags = {
-      debounce_text_changes = 300,
-  },
+  -- flags = {
+  --     debounce_text_changes = 300,
+  -- },
   capabilities = capabilitiesWithoutFormatting,
-  settings = {
-      documentFormatting = false,
-  },
-  root_dir = require("lspconfig.util").find_git_ancestor,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact" },
-  cmd = { "typescript-language-server", "--stdio" }
+  -- settings = {
+  --     documentFormatting = false,
+  -- },
+  -- root_dir = util.root_pattern("package.json");
+  -- root_dir = util.root_pattern("package.json", ".git"),
+  root_dir = util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git", vim.fn.getcwd()),
+  filetypes = {"javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "html", "css"};
 })
 
 require("lspconfig").yamlls.setup({
@@ -365,10 +382,6 @@ require("lspconfig").yamlls.setup({
   on_attach = on_attach,
 })
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = false,
-  underline = true,
-  signs = {severity_limit = vim.diagnostic.severity.INFO},
-  update_in_insert = false,
-})
+
+
 EOF

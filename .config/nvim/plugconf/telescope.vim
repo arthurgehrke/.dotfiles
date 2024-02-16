@@ -23,10 +23,13 @@ local actions = require("telescope.actions")
 
 require('telescope').setup{ 
   defaults = { 
+    theme = "dropdown",
+    prompt_prefix = " ❯ ",
+    color_devicons = true,
     file_ignore_patterns = { 
       "tmp",
       "node_modules",
-      ".git/",
+      ".git/**",
       "package%-lock.json",
       "yarn%-lock.json",
     },
@@ -47,6 +50,9 @@ require('telescope').setup{
       '--hidden',
       '--multiline'
     },
+    preview = {
+      treesitter = false
+    },
     pickers = {
       find_files = {
         find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
@@ -57,15 +63,6 @@ require('telescope').setup{
         additional_args = function(opts)
         return {"--hidden"}
         end
-      },
-      lsp_references = {
-        theme = "dropdown",
-        layout_config = {
-          width = 0.6,
-        },
-      },
-      lsp_document_symbols = {
-        theme = "dropdown",
       },
     },
     commands = {

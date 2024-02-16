@@ -1,6 +1,5 @@
 lua << EOF
 local cmp = require "cmp"
-local luasnip = require('luasnip')
 
 require("cmp").setup({
     {
@@ -43,14 +42,11 @@ require("cmp").setup({
                 ["q"] = cmp.mapping.abort()
             }
         ),
-        sources = cmp.config.sources(
-            {
+        sources = cmp.config.sources({
                 {name = 'path'},
                 {name = 'nvim_lsp', keyword_length = 1},
-                {name = 'buffer', keyword_length = 3},
-                {name = 'luasnip', keyword_length = 2},
-            }
-        )
+                {name = 'buffer', keyword_length = 3}
+        })
 })
 
 function setAutoCmp(mode)

@@ -1,13 +1,6 @@
 lua << EOF
-
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-vim.opt.termguicolors = true
-
-vim.api.nvim_set_hl(0, "NormalFloat", {
-  fg = "none",
-  bg = "none",
-})
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 local signcolumn_width = 7 -- AKA gutter width
 local min_buffer_width = 110 + signcolumn_width
@@ -29,15 +22,6 @@ local get_sidebar_cols = function()
         sidebar_cols = max_sidebar_width
     end
     return sidebar_cols
-end
-
-local find_buffer = function(buffer_name)
-    for _, buf in pairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_get_name(buf):find(buffer_name, 1, true) then
-            return buf
-        end
-    end
-    return nil
 end
 
 local function on_attach(bufnr)
@@ -97,8 +81,8 @@ require'nvim-tree'.setup {
    sync_root_with_cwd = false,
    auto_reload_on_write = true,
    reload_on_bufenter = false,
-   disable_netrw = false,
-   hijack_cursor = true,
+   disable_netrw = true,
+   hijack_cursor = false,
    hijack_netrw = true,
    prefer_startup_root = true,
    open_on_tab = false,
@@ -119,8 +103,9 @@ require'nvim-tree'.setup {
    },
    git = {
       enable = true,
+      show_on_open_dirs = true,
       ignore = false,
-      timeout = 500,
+      timeout = 400,
    },
    filesystem_watchers = {
      enable = true,
@@ -128,13 +113,6 @@ require'nvim-tree'.setup {
      ignore_dirs = {
        "node_modules"
      },
-   },
-   git = {
-     enable = true,
-     show_on_dirs = true,
-     show_on_open_dirs = true,
-     disable_for_dirs = {},
-     timeout = 400,
    },
    renderer = {
      symlink_destination = false,

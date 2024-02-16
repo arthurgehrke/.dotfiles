@@ -1,55 +1,49 @@
 lua <<EOF
-local status, bufferline = pcall(require, "bufferline")
-if (not status) then return end
-
-bufferline.setup({
+require("bufferline").setup({
 options = {
   mode = "buffers",
+  indicator_icon = "|",
+  buffer_close_icon = "",
+  modified_icon = "●",
+  close_icon = '',
   themable = false,
+  left_trunc_marker = "",
+  right_trunc_marker = "",
   theme = 'gruvbox',
+  tab_size = 21,
+  diagnostics = false, -- | "nvim_lsp" | "coc",
+  diagnostics_update_in_insert = false,
+  max_name_length = 30,
+  max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
   -- style_preset = bufferline.style_preset.default, -- or bufferline.style_preset.minimal,
   mode = "buffers",
   indicator = {
     icon = '|', -- this should be omitted if indicator style is not 'icon'
     style = 'none',
   },
+  numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
   separator_style = 'thin',
   always_show_bufferline = true,
-  show_buffer_icons = false,
+  enforce_regular_tabs = true,
+  show_buffer_icons = true,
   show_buffer_close_icons = false,
   show_close_icon = false,
+  show_tab_indicators = true,
   color_icons = false,
-  -- offsets = {
-  --   {
-  --       filetype = "NvimTree",
-  --       text = "File Explorer",
-  --         text_align = "left",
-  --         separator = true
-  --   },
-  -- },
-offsets = {
-			{
-				filetype = "NvimTree",
-				text = function()
-					-- return "File Explorer"
-					-- git symbolic-ref --short -q HEAD
-					-- git --no-pager rev-parse --show-toplevel --absolute-git-dir --abbrev-ref HEAD
-					-- git --no-pager rev-parse --short HEAD
-					-- local b = vim.fn.trim(vim.fn.system("git symbolic-ref --short -q HEAD"))
-					-- if string.match(b, "fatal") then
-					-- 	b = ""
-					-- else
-					-- 	b = "  " .. b
-					-- end
-					-- return vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t") .. b
-					return "File Explorer"
-				end,
-				padding = 1,
-				highlight = "Directory",
-				-- text_align = "center"
-				text_align = "left",
-			},
-		},
+  offsets = { { filetype = "NvimTree", text = "", padding = 1 } },
+  -- persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
+  persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+-- offsets = {
+-- 			{
+-- 				filetype = "NvimTree",
+-- 				text = function()
+-- 					return "File Explorer"
+-- 				end,
+-- 				padding = 1,
+-- 				highlight = "Directory",
+-- 				text_align = "left",
+-- 			},
+-- 		},
   -- {filetype = "NvimTree", text = "File Explorer" , text_align = "center"},
     -- {filetype = "dbui", text = "Db Explorer" , text_align = "center"},
     -- {filetype = "Outline", text = "Outline" , text_align = "center"},
@@ -60,27 +54,26 @@ offsets = {
       delay = 200,
       reveal = {'close'}
     },
-  persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
-  highlights = {
-      separator = {
-        fg = '#073642',
-        bg = '#002b36'
-      },
-      separator_selected = {
-        fg = '#073642'
-      },
-      background = {
-        fg = '#657b83',
-        bg = '#002b36'
-      },
-      buffer_selected = {
-        fg = '#fdf6e3',
-        bold = true,
-      },
-      fill = {
-        bg = '#073642'
-      },
+    highlights = {
+        separator = {
+          fg = '#073642',
+          bg = '#002b36'
+        },
+        separator_selected = {
+          fg = '#073642'
+        },
+        background = {
+          fg = '#657b83',
+          bg = '#002b36'
+        },
+        buffer_selected = {
+          fg = '#fdf6e3',
+          bold = true,
+        },
+        fill = {
+          bg = '#073642'
+        },
+      }
     }
-  }
 })
 EOF
