@@ -68,19 +68,9 @@ if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
 fi
 
-# npm global
-export NPM_PACKAGES="/usr/local/npm_packages"
-export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-
-# pnpm
-if (( $+commands[pnpm] )); then
-    export PNPM_HOME="${HOME}/.local/share/pnpm"
-    path=($PNPM_HOME $path)
-fi
 
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
-
 ##############################################################################
 # History
 ##############################################################################
@@ -258,6 +248,20 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 
 # Give nodejs (a lot) more memory.
 export NODE_OPTIONS="--max-old-space-size=65536"
+# npm global
+export NPM_PACKAGES="${HOME}/.npm-packages"
+
+# Load asdf and asdf plugins
+source $(brew --prefix)/opt/asdf/libexec/asdf.sh
+
+#asdf
+export ASDF_DATA_DIR="$HOME/.asdf"
+export ASDF_CONFIG_FILE="$HOME/.config/asdf/.asdfrc"
+export ASDF_NPM_DEFAULT_PACKAGES_FILE="$HOME/.config/asdf/default-npm-packages"
+export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="$HOME/.config/asdf/default-python-packages"
+export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="$HOME/.config/asdf/.tool-versions"
+export ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY=latest_available
+
 ##############################################################################
 # Completion
 ##############################################################################
@@ -290,8 +294,6 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="$NPM_PACKAGES/bin:$PATH"
 # Setup for pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-
