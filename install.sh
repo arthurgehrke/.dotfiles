@@ -22,5 +22,10 @@ rm -rf "$HOME/.zshrc"
 ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 
 
+# VIM deps
+if [ ! -e "$HOME/.vim/autoload/plug.vim" ]; then
+  git clone https://github.com/kristijanhusak/vim-packager ~/.vim/pack/packager/opt/vim-packager
+  #curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
 
 asdf install

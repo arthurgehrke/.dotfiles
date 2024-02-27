@@ -5,3 +5,4 @@ typescript-language-server
 vscode-langservers-extracted
 eslint 
 @babel/eslint-parser
+neovim

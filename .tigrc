@@ -3,6 +3,10 @@ bind generic G none
 # -----------------------------
 # Option manipulation
 # -----------------------------
+bind generic h scroll-left
+bind generic j move-down
+bind generic k move-up
+bind generic l scroll-right
 
 bind generic s :toggle sort-order
 bind generic S :toggle sort-field
@@ -44,11 +48,6 @@ bind generic	/	search
 bind generic	?	search-back
 bind generic	n	find-next
 bind generic	N	find-prev
-
-bind generic h scroll-left
-bind generic j move-down
-bind generic k move-up
-bind generic l scroll-right
 
 bind generic g  none
 bind generic gg move-first-line
@@ -100,4 +99,4 @@ bind generic  D :toggle date    # Toggle date display
 bind generic  A :toggle author    # Toggle author display
 
 bind generic r refresh
-bind generic Y <?bash -c "echo -n '%(commit)' | pbcopy"
+bind generic y <?bash -c "echo -n '%(commit)' | pbcopy"

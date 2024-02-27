@@ -65,3 +65,6 @@ alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictur
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 alias openhistory="nvim ~/.zhistory"
+
+alias asdfinstall="cd ~/.config/asdf && cut -d' ' -f1 .tool-versions|xargs -I{} asdf plugin add {}"
+
