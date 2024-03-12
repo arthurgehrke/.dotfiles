@@ -18,6 +18,7 @@
 	prune = true
 [push]
   default = current
+  autoSetupRemote = true
 [branch]
   autosetuprebase = always
 [color]
@@ -55,10 +56,9 @@
 [interactive]
 	diffFilter = diff-so-fancy --patch
 [credential]
+	helper = osxkeychain
 	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 
 [alias]
   gl = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

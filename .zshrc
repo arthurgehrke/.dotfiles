@@ -1,16 +1,51 @@
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
+export NODENV_ROOT=~/.nodenv
+
+export NODENV_VERSION=20.11.1
+export PATH="/opt/homebrew/bin:$PATH" 
+
+eval "$(nodenv init -)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(nodenv init - --no-rehash)"
+
+export PATH="$HOME/.nodenv/bin:$PATH"
+
+source $HOME/.themes/zsh/.p10k.zsh
+
+[[ ! -f ~/.themes/zsh/.p10k.zsh ]] || source ~/.themes/zsh/.p10k.zsh
+  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+
+# zoxide
+if command -V zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
+export PATH="/usr/local/opt/curl/bin:$PATH"
 ##############################################################################
 # Source's
 ##############################################################################
-export DOTFILES=$HOME/dotfiles
-export OPTBREWPATH=/opt/homebrew/share
-export INCLUDES=$HOME/.local/share/dotfiles
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-source $OPTBREWPATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $OPTBREWPATH/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $OPTBREWPATH/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $OPTBREWPATH/powerlevel10k/powerlevel10k.zsh-theme
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Homebrew zsh-completions
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
+
+ #Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -22,35 +57,18 @@ source $HOME/.themes/zsh/.p10k.zsh
 [[ ! -f ~/.themes/zsh/circular/.p10k.zsh ]] || source ~/.themes/zsh/.p10k.zsh
 source $HOME/.zaliases
 source $HOME/.zscripts
-# source $HOME/.zbindings
 source $HOME/.zprofile
 
 zmodload -i zsh/complist
 zmodload -i zsh/zle
 
-# zsh-completions plugin
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
   autoload -U compinit
   compinit
-fi
 
 ##############################################################################
 # Homebrew
 ##############################################################################
-if [[ "$(/usr/bin/uname -m)" == "arm64" ]]; then
-  # ARM macOS
-  HOMEBREW_PREFIX="/opt/homebrew"
-else
-  # Intel macOS
-  HOMEBREW_PREFIX="/usr/local"
-fi
-
-eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-
 # mysql client
-# export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
@@ -59,22 +77,16 @@ fi
 ##############################################################################
 # MacOs
 ##############################################################################
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-  PATH="$HOME/bin:$PATH"
-fi
-
 if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
 fi
-
 
 # prefer US English & utf-8
 export LANG=en_US.UTF-8
 ##############################################################################
 # History
 ##############################################################################
-export HISTFILE=~/.zhistory
+export HISTFILE=~/.
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
@@ -171,22 +183,14 @@ bindkey -e '^k' history-substring-search-down
 ##############################################################################
 # Fzf
 ##############################################################################
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+fi
 
-# export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --extended -i -m'
-# export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude 'Library' --exclude 'Music' --exclude 'Pictures'"
-
-# # Preview file content using bat (https://github.com/sharkdp/bat)
-# export FZF_CTRL_T_OPTS="
-#   --preview 'bat -n --color=always {}'
-#   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-
-# export FZF_CTRL_T_COMMAND='find *~Library~Applications~qmk_firmware~Creative\ Cloud\ Files~Pictures notes/  2>/dev/null'
 export BAT_THEME="gruvbox-dark"
-export FZF_DEFAULT_OPTS='--color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672'
-export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
+export FZF_DEFAULT_OPTS="--height 80% --reverse --border"
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file --no-ignore-vcs"
+export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
 # export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 export FZF_ALT_C_COMMAND="rg --files --hidden --null . 2>/dev/null | xargs -0 dirname | sort -u"
 
@@ -198,7 +202,6 @@ export FZF_ALT_C_OPTS="--no-preview"
 # Brew
 ##############################################################################
 # java sdk - jenv
-eval "$(jenv init -)"
 
 ##############################################################################
 # Various
@@ -207,9 +210,8 @@ eval "$(jenv init -)"
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
 
 # zoxide 
-eval "$(zoxide init zsh)"
 
-export ACKRC=".ackrc"
+
 ##############################################################################
 # Iterm2
 ##############################################################################
@@ -240,27 +242,18 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 # Nvm or n and Node
 ##############################################################################
-
-# export NVM_DIR="$HOME/.nvm"
-# source $(brew --prefix nvm)/nvm.sh
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Give nodejs (a lot) more memory.
 export NODE_OPTIONS="--max-old-space-size=65536"
 # npm global
-export NPM_PACKAGES="${HOME}/.npm-packages"
-
-# Load asdf and asdf plugins
-source $(brew --prefix)/opt/asdf/libexec/asdf.sh
+export NPM_PACKAGES="${HOME}/.npm-global"
 
 #asdf
-export ASDF_DATA_DIR="$HOME/.asdf"
-export ASDF_CONFIG_FILE="$HOME/.config/asdf/.asdfrc"
-export ASDF_NPM_DEFAULT_PACKAGES_FILE="$HOME/.config/asdf/default-npm-packages"
-export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="$HOME/.config/asdf/default-python-packages"
-export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="$HOME/.config/asdf/.tool-versions"
-export ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY=latest_available
+# Load asdf and asdf plugins
+
+# export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME=".tool-versions"
+# export ASDF_CONFIG_FILE="$HOME/.asdfrc"
+# export ASDF_NPM_DEFAULT_PACKAGES_FILE="$HOME/.default-npm-packages"
+# export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="$HOME/.default-python-packages"
 
 ##############################################################################
 # Completion
@@ -270,30 +263,24 @@ export ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY=latest_available
 # Python
 ##############################################################################
 export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+
+# Check if pyenv is there and initialize it
+if command -v pyenv &> /dev/null; then
+    # Make sure that we have pyenv initialized
+    eval "$(pyenv init -)"
+fi
+
 
 ##############################################################################
 # Ruby
 ##############################################################################
 export GEM_HOME="$HOME/.gem"
-# if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-#   export PATH=/opt/homebrew/opt/ruby/bin:$PATH
-#   export PATH=`gem environment gemdir`/bin:$PATH
-# fi
 
-eval "$(rbenv init - zsh)"
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
 
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="$HOME/.jenv/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 # Setup for pyenv
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH" 
+

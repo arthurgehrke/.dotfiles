@@ -1,31 +1,29 @@
 #!/bin/sh
 
-echo "Setting up your Mac..."
-
-# Check for Homebrew and install if we don't have it
-if test ! "$(command -v brew)"; then
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# Homebrew
+UNAME_MACHINE="$(/usr/bin/uname -m)"
+if [[ "${UNAME_MACHINE}" == "arm64" ]]
+then
+  HOMEBREW_PREFIX="/opt/homebrew"
+else
+  HOMEBREW_PREFIX="/usr/local"
 fi
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Update Homebrew recipes
-brew update --force # https://github.com/Homebrew/brew/issues/1151
+# git and clone this repo
+$HOMEBREW_PREFIX/brew install git
 
-# Install all our dependencies with bundle (See Brewfile)
-brew tap homebrew/bundle
-brew bundle
+# Install all brew
+$HOMEBREW_PREFIX/brew bundle install --file ~/Brewfile
 
-# Make ZSH the default shell environment
-chsh -s "$(command -v zsh)"
+# NVIM Packer
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
-# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
-rm -rf "$HOME/.zshrc"
-ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
+# Fisher
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 
+# Node
+npm install -g typescript typescript-language-server
 
-# VIM deps
-if [ ! -e "$HOME/.vim/autoload/plug.vim" ]; then
-  git clone https://github.com/kristijanhusak/vim-packager ~/.vim/pack/packager/opt/vim-packager
-  #curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-asdf install
+# Python
+pip3 install neovim

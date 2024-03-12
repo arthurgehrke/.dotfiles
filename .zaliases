@@ -3,7 +3,11 @@ alias reload!='. ~/.zshrc'
 
 # dir commands
 # using exa
-alias ls='eza'                                                         # ls
+if which exa > /dev/null; then
+  alias ls="exa -l"
+else
+  alias ls="ls -lG"
+fi
 alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'  # all list
 # speciality views
 alias lS='eza -1'			                                                  # one column, just names
@@ -39,8 +43,6 @@ alias ga-file='git add'
 alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
 
-alias alder='alder --exclude='"'"'.git|node_modules'"'"''
-
 # ip
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
@@ -68,3 +70,4 @@ alias openhistory="nvim ~/.zhistory"
 
 alias asdfinstall="cd ~/.config/asdf && cut -d' ' -f1 .tool-versions|xargs -I{} asdf plugin add {}"
 
+alias search="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs nvim"
