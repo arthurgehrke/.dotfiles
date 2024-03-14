@@ -7,9 +7,7 @@ fi
 ##############################################################################
 export PATH="/opt/homebrew/sbin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 export XDG_CONFIG_HOME=$HOME/.config
-export ZSH_THEME="powerlevel10k/powerlevel10k"
 # mosh server
 export PATH=$PATH:/usr/local/bin
 
@@ -50,7 +48,7 @@ export HOMEBREW_BREWFILE=$HOME/Brewfile
 ##############################################################################
 source $HOME/.zaliases
 source $HOME/.zscripts
-[ -e $HOME/.zprofile ] && source $HOME/.zprofile
+source $HOME/.zprofile
 source $HOME/.themes/zsh/.p10k.zsh
 
 zmodload -i zsh/complist
