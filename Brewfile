@@ -1,36 +1,26 @@
 tap "adoptopenjdk/openjdk"
-tap "b-ramsey/kali"
 tap "buo/cask-upgrade"
-tap "d99kris/nchat"
-tap "dbcli/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
-tap "metafates/mangal"
 tap "mongodb/brew"
 tap "ngrok/ngrok"
-tap "nodenv/nodenv"
-tap "owasp-amass/amass"
 tap "rbenv/tap"
 tap "ringohub/redis-cli"
-tap "tako8ki/tap"
 brew "ack"
 brew "openssl@3"
-brew "as-tree"
-brew "coreutils"
-brew "asdf"
-brew "bat"
+brew "autoconf"
 brew "sqlite"
+brew "python@3.12"
 brew "openjdk"
 brew "carrot2"
+brew "coreutils"
 brew "curl"
 brew "diff-so-fancy"
-brew "diffutils"
 brew "docker-completion"
 brew "eza"
 brew "fd"
-brew "fnm"
 brew "fzf"
 brew "gh"
 brew "git"
@@ -48,13 +38,14 @@ brew "libpq"
 brew "libxc"
 brew "luarocks"
 brew "mas"
+brew "mercurial"
 brew "minikube"
 brew "mkcert"
-brew "mongosh"
-brew "mycli"
 brew "zlib"
 brew "mysql-client"
-brew "nmap"
+brew "neovim", args: ["HEAD"]
+brew "pkg-config"
+brew "nodebrew"
 brew "nodenv"
 brew "pdfgrep"
 brew "pgcli"
@@ -68,12 +59,12 @@ brew "pyenv"
 brew "pyenv-virtualenv"
 brew "tcl-tk"
 brew "r"
+brew "ruby-build"
 brew "rbenv"
 brew "ripgrep"
 brew "ruby"
 brew "rust"
 brew "screen"
-brew "serve"
 brew "stylua"
 brew "the_silver_searcher"
 brew "tig"
@@ -90,18 +81,19 @@ brew "zsh"
 brew "zsh-autocomplete"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
+brew "zsh-fast-syntax-highlighting"
+brew "zsh-git-prompt"
 brew "zsh-history-substring-search"
 brew "zsh-syntax-highlighting"
-brew "nodenv/nodenv/nodenv-package-rehash"
+brew "zsh-you-should-use"
 brew "ringohub/redis-cli/redis-cli"
-cask "brave-browser"
-cask "chromedriver"
 cask "docker"
 cask "git-credential-manager"
 cask "google-drive"
 cask "ngrok"
 cask "notion"
 cask "onedrive"
+cask "powerphotos"
 cask "proxyman"
 cask "r"
 cask "rar"
@@ -111,8 +103,8 @@ cask "temurin8"
 mas "1Password for Safari", id: 1569813296
 mas "AdGuard for Safari", id: 1440147259
 mas "BetterSnapTool", id: 417375580
-mas "Coffee Buzz", id: 1099454186
 mas "com.getfireshot.fireshot", id: 1541862561
+mas "Content based Tab Search", id: 6477761555
 mas "Evernote", id: 406056744
 mas "Find Any File", id: 402569179
 mas "Highlights", id: 1498912833
@@ -126,10 +118,10 @@ mas "Numbers", id: 409203825
 mas "Octotree", id: 1457450145
 mas "Postman Interceptor", id: 6460587883
 mas "Refined GitHub", id: 1519867270
+mas "Spark", id: 1176895641
 mas "StopTheMadness Pro", id: 6471380298
 mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
 mas "TickTick", id: 966085870
-mas "UPDF", id: 1619925971
 mas "Web(Cache)Browser", id: 432802024
 mas "Webcam Recorder", id: 1508067444

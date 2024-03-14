@@ -1,0 +1,1 @@
+require('hlsearch').setup()

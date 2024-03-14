@@ -2,26 +2,38 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export NODENV_ROOT=~/.nodenv
+##############################################################################
+# Paths
+##############################################################################
+export PATH="/opt/homebrew/sbin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export XDG_CONFIG_HOME=$HOME/.config
+export ZSH_THEME="powerlevel10k/powerlevel10k"
+# mosh server
+export PATH=$PATH:/usr/local/bin
 
-export NODENV_VERSION=20.11.1
-export PATH="/opt/homebrew/bin:$PATH" 
+# remove duplicat entries from $PATH
+# zsh uses $path array along with $PATH 
+typeset -U PATH path
 
-eval "$(nodenv init -)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(nodenv init - --no-rehash)"
-
-export PATH="$HOME/.nodenv/bin:$PATH"
-
-source $HOME/.themes/zsh/.p10k.zsh
-
-[[ ! -f ~/.themes/zsh/.p10k.zsh ]] || source ~/.themes/zsh/.p10k.zsh
-  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
-
-# zoxide
-if command -V zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+  PATH="$HOME/bin:$PATH"
 fi
+
+##############################################################################
+# Homebrew
+##############################################################################
+if [[ "$(/usr/bin/uname -m)" == "arm64" ]]; then
+  # ARM macOS
+  export HOMEBREW_PREFIX="/opt/homebrew"
+else
+  # Intel macOS
+  export HOMEBREW_PREFIX="/usr/local"
+fi
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 if type brew &>/dev/null
 then
@@ -31,73 +43,44 @@ then
   compinit
 fi
 
-export PATH="/usr/local/opt/curl/bin:$PATH"
-##############################################################################
-# Source's
-##############################################################################
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Homebrew zsh-completions
-if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-fi
-
- #Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-source $HOME/.themes/zsh/.p10k.zsh
-# To customize prompt, run `p10k configure` or edit ~/.themes/zsh/circular/.p10k.zsh.
-[[ ! -f ~/.themes/zsh/circular/.p10k.zsh ]] || source ~/.themes/zsh/.p10k.zsh
-source $HOME/.zaliases
-source $HOME/.zscripts
-source $HOME/.zprofile
-
-zmodload -i zsh/complist
-zmodload -i zsh/zle
-
-  autoload -U compinit
-  compinit
-
-##############################################################################
-# Homebrew
-##############################################################################
-# mysql client
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-fi
+export HOMEBREW_BREWFILE=$HOME/Brewfile
 
 ##############################################################################
 # MacOs
 ##############################################################################
-if [[ "$TERM" == "tmux-256color" ]]; then
-  export TERM=screen-256color
-fi
+source $HOME/.zaliases
+source $HOME/.zscripts
+[ -e $HOME/.zprofile ] && source $HOME/.zprofile
+source $HOME/.themes/zsh/.p10k.zsh
 
-# prefer US English & utf-8
-export LANG=en_US.UTF-8
-##############################################################################
-# History
-##############################################################################
-export HISTFILE=~/.
-export HISTFILESIZE=1000000000
-export HISTSIZE=1000000000
-export HISTTIMEFORMAT="[%F %T] "
+zmodload -i zsh/complist
+zmodload -i zsh/zle
+
 export EDITOR=nvim
+export LANG=en_US.UTF-8
+
+export COLORTERM="truecolor"
+export TERM="xterm-256color"
+
+if [[ -z "$TMUX" ]]; then
+  export TERM="xterm-256color"
+fi
 
 export DISABLE_MAGIC_FUNCTIONS=true
 
-setopt EXTENDED_HISTORY          
-setopt SHARE_HISTORY             
+##############################################################################
+# History
+##############################################################################
+export HISTFILE=~/.zsh_history
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+export HISTTIMEFORMAT="[%F %T] "
+export HIST_STAMPS="yyyy-mm-dd"
+
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
 setopt BANG_HIST
-setopt HIST_EXPIRE_DUPS_FIRST    
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
@@ -106,8 +89,8 @@ setopt HIST_VERIFY               # Do not execute immediately upon history expan
 setopt INC_APPEND_HISTORY
 setopt INC_APPEND_HISTORY_TIME
 setopt HIST_REDUCE_BLANKS
-setopt IGNORE_EOF 
-setopt HIST_VERIFY  
+setopt IGNORE_EOF
+setopt HIST_VERIFY
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
@@ -143,6 +126,7 @@ fi
 autoload -z edit-command-line
 zle -N edit-command-line
 
+bindkey -e
 bindkey -e "^x" edit-command-line
 bindkey -e '^o' autosuggest-accept
 bindkey -e '^b' backward-word
@@ -152,21 +136,31 @@ bindkey -e '^l' forward-char
 bindkey -e '^i' expand-or-complete
 bindkey -e '^F' autosuggest-accept-suggested-small-word
 bindkey -e '^d' delete-char
+
+
+bindkey '^R' history-incremental-search-backward
+
 # Movement
 bindkey -e '^a' beginning-of-line
 bindkey -e '^e' end-of-line
 
-bindkey "^y" yank
-bindkey '^w' backward-kill-word
+bindkey -e "^y" yank
+bindkey -e '^w' backward-kill-word
 
 bindkey '^[[Z' reverse-menu-complete
+
 ## history-substring-search
 # Control-P/N keys
 # History
-bindkey -e '^p' up-history
-bindkey -e '^n' down-history
+# bindkey -e '^p' up-history
+# bindkey -e '^n' down-history
+
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+
 # Search using patterns as documented here:
 # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Filename-Generation
+
 bindkey -e '^r' history-incremental-pattern-search-backward
 bindkey -e '^f' history-incremental-pattern-search-forward
 
@@ -188,39 +182,27 @@ if [ -f ~/.fzf.zsh ]; then
 fi
 
 export BAT_THEME="gruvbox-dark"
-export FZF_DEFAULT_OPTS="--height 80% --reverse --border"
+export FZF_DEFAULT_OPTS="--height 75% --layout=reverse --border"
 export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file --no-ignore-vcs"
 export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
 # export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 export FZF_ALT_C_COMMAND="rg --files --hidden --null . 2>/dev/null | xargs -0 dirname | sort -u"
-
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 # Disable preview, useless for History completion
 export FZF_CTRL_R_OPTS="--no-preview"
-export FZF_ALT_C_OPTS="--no-preview"
+export FZF_ALT_C_COMMAND="fd --type d . --color=never"
 
 ##############################################################################
-# Brew
+# Java
 ##############################################################################
-# java sdk - jenv
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
 ##############################################################################
-# Various
+# Docker & Kube
 ##############################################################################
 # kubernetes
 export KUBECONFIG=.kubeconfig:$HOME/.kube/config
-
-# zoxide 
-
-
-##############################################################################
-# Iterm2
-##############################################################################
-# iTerm integration (for OS X iTerm2)
-# @see https://iterm2.com/shell_integration.html
-if [[ "`uname`" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
-  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
-  source ${HOME}/.iterm2_shell_integration.zsh
-fi
 
 ##############################################################################
 # Ls and Less
@@ -235,52 +217,84 @@ ZSH_HIGHLIGHT_STYLES[precommand]='none'
 ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
 ZSH_HIGHLIGHT_STYLES[assign]='none'
-# ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
 ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
-# ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
 
 ##############################################################################
 # Nvm or n and Node
 ##############################################################################
 # Give nodejs (a lot) more memory.
 export NODE_OPTIONS="--max-old-space-size=65536"
+
 # npm global
-export NPM_PACKAGES="${HOME}/.npm-global"
 
-#asdf
-# Load asdf and asdf plugins
+export NPM_PACKAGES=${HOME}/.npm-global
+export NPM_CONFIG_PREFIX=${HOME}/.npm-global
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 
-# export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME=".tool-versions"
-# export ASDF_CONFIG_FILE="$HOME/.asdfrc"
-# export ASDF_NPM_DEFAULT_PACKAGES_FILE="$HOME/.default-npm-packages"
-# export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="$HOME/.default-python-packages"
+# nodenv
+# export NODENV_VERSION=20.11.1
+eval "$(nodenv init -)"
+
+export PATH="$HOME/.nodenv/bin:$PATH"
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
 
 ##############################################################################
-# Completion
+# Zsh lugins
 ##############################################################################
+ZSH_AUTOSUGGESTIONS="$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -f "$ZSH_AUTOSUGGESTIONS" ] && source "$ZSH_AUTOSUGGESTIONS"
+
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
+source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source /opt/homebrew/share/zsh-you-should-use/you-should-use.plugin.zsh
+source "/opt/homebrew/opt/zsh-git-prompt/zshrc.sh"
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 
 ##############################################################################
 # Python
 ##############################################################################
-export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
 
-# Check if pyenv is there and initialize it
-if command -v pyenv &> /dev/null; then
-    # Make sure that we have pyenv initialized
-    eval "$(pyenv init -)"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
 fi
 
+# pipx
+# Setup for pyenv
+export PATH="/usr/local/bin:$PATH"
 
 ##############################################################################
 # Ruby
 ##############################################################################
 export GEM_HOME="$HOME/.gem"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
-export HOMEBREW_PREFIX="/opt/homebrew";
-export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+##############################################################################
+# Packages
+##############################################################################
+# zoxide
+if command -V zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 
-# Setup for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="/usr/local/bin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH" 
+# Add MySQL client to PATH, if it exists
+if [ -d "/opt/homebrew/opt/mysql-client/bin" ]; then
+  export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+fi
 
+##############################################################################
+# Iterm2
+##############################################################################
+# iTerm integration (for OS X iTerm2)
+# @see https://iterm2.com/shell_integration.html
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
