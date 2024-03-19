@@ -7,6 +7,8 @@ fi
 ##############################################################################
 export PATH="/opt/homebrew/sbin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+
 export XDG_CONFIG_HOME=$HOME/.config
 # mosh server
 export PATH=$PATH:/usr/local/bin
@@ -42,6 +44,7 @@ then
 fi
 
 export HOMEBREW_BREWFILE=$HOME/Brewfile
+# export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 ##############################################################################
 # MacOs
@@ -240,6 +243,11 @@ export PATH="$HOME/.nodenv/bin:$PATH"
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
 
+# ngrok
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi
+
 ##############################################################################
 # Zsh lugins
 ##############################################################################
@@ -250,22 +258,23 @@ source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
 source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source /opt/homebrew/share/zsh-you-should-use/you-should-use.plugin.zsh
-source "/opt/homebrew/opt/zsh-git-prompt/zshrc.sh"
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 
 ##############################################################################
 # Python
 ##############################################################################
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# export PATH="$(brew --prefix python)/libexec/bin:$PATH"
 
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-fi
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   eval "$(pyenv init --path)"
+#   eval "$(pyenv init -)"
+# fi
 
 # pipx
 # Setup for pyenv
@@ -290,6 +299,9 @@ if [ -d "/opt/homebrew/opt/mysql-client/bin" ]; then
   export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 fi
 
+
+# autojump
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
 ##############################################################################
 # Iterm2
 ##############################################################################

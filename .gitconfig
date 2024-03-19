@@ -1,64 +1,87 @@
 ; [include]
 ;     path = ~/.gitconfig.local
+[apply]
+  whitespace = nowarn
+
 [user]
 	user = arthurgehrke
 	email = arthurgehrke07@gmail.com
 	name = Arthur Gehrke
+
 [github]
 	user = arthurgehrke
+
 [core]
 	editor = nvim
-	excludesfile = /Users/arthurgehrke/.gitignore
+	excludesfile = ~/.gitignore
 	; autocrlf = off
   autocrlf = input
 	pager = diff-so-fancy | less --tabs=4 -RFX
+
+[pager]
+  diff = diff-so-fancy | less --tabs=4 -RFXS
+  log = less -+X
+
 [pull]
   rebase = true
+
 [fetch]
 	prune = true
+
 [push]
   default = current
   autoSetupRemote = true
+
 [branch]
   autosetuprebase = always
+
 [color]
   ui = true
+
 [diff]
   algorithm = patience
 	compactionHeuristic = true
 	tool = nvimdiff
   ignoreAllSpace = true
+
 [difftool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd L\"
+  cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd L\"
+
 ; [difftool "nvimdiff"]
 ;   cmd = "nvim -R -d -c \"wincmd l\" -d \"$LOCAL\" \"$REMOTE\""
+
 [merge]
   ; tool = nvimdiff
 	tool = nvimdiff4
 	prompt = false
+
 [mergetool "nvimdiff4"]
   prompt = false
   keepBackup = false
   cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
+
 [mergetool]
 	keepBackup = false
+
 [push]
 	autoSetupRemote = true
+
 [init]
 	defaultBranch = main
 
 [url "git@gitlab.com:"]
   insteadOf = https://gitlab.com/
+
 [url "git@gitlab.com:doare/api-v2.git"]
   insteadOf = https://gitlab.com/
+
 [interactive]
 	diffFilter = diff-so-fancy --patch
+
 [credential]
 	helper = osxkeychain
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
 
 [alias]
   gl = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
@@ -71,46 +94,3 @@
   merge = merge --no-ff
   up = merge --ff-only
 
-  co = checkout
-  ci = commit -s
-
-  st = status
-  stat = status
-
-  br = branch -v
-
-  fo = fetch origin
-  fu = fetch upstream
-  po = push origin
-  pu = pull --rebase origin master
-  pm = pull --rebase origin main
-  sync = fetch --prune
-  patch = --no-pager diff --no-color
-
-  unstage = reset HEAD
-  uncommit = reset --soft HEAD^
-  amend = commit --amend
-  who = shortlog -n -s --no-merges
-  g = grep -n --color -E
-  cp = cherry-pick -x
-
-  # Handy shortcuts for rebasing
-  rc = rebase --continue
-  rs = rebase --skip
-  ra = rebase --abort
-
-  # Show verbose output about tags, branches or remotes
-  tags = tag -l
-  branches = branch -a
-  remotes = remote -v
-
-  # List contributors with number of commits
-  contributors = shortlog --summary --numbered
-
-  # diff-so-fancy
-  df = "!f() { [ -z "$GIT_PREFIX" ] || cd "$GIT_PREFIX" '' && git diff --color "$@" | diff-so-fancy  | less --tabs=4 -RFX; }; f"
-
-  # Add list all git aliases
-  la = !git config -l | grep alias | sed s/^alias\\.//g
-
-  current-branch = !sh -c 'git rev-parse --abbrev-ref HEAD' -
