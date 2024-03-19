@@ -1,4 +1,4 @@
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/.git --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias reload!='. ~/.zshrc'
 
 # dir commands
