@@ -14,7 +14,7 @@ export XDG_CONFIG_HOME=$HOME/.config
 export PATH=$PATH:/usr/local/bin
 
 # remove duplicat entries from $PATH
-# zsh uses $path array along with $PATH 
+# zsh uses $path array along with $PATH
 typeset -U PATH path
 
 # set PATH so it includes user's private bin if it exists
@@ -33,7 +33,6 @@ else
   export HOMEBREW_PREFIX="/usr/local"
 fi
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 if type brew &>/dev/null
 then
@@ -60,12 +59,14 @@ zmodload -i zsh/zle
 export EDITOR=nvim
 export LANG=en_US.UTF-8
 
-export COLORTERM="truecolor"
-export TERM="xterm-256color"
+export TERM=xterm-256color
 
-if [[ -z "$TMUX" ]]; then
-  export TERM="xterm-256color"
-fi
+export TERM='xterm-256color'
+
+[[ "${TMUX}" != "" ]] && export TERM='screen-256color'
+# if [[ -z "$TMUX" ]]; then
+#   export TERM="xterm-256color"
+# fi
 
 export DISABLE_MAGIC_FUNCTIONS=true
 
@@ -172,6 +173,7 @@ bindkey -e '^k' history-substring-search-down
 # Bindings
 ##############################################################################
 # change Ctrl+C to Ctrl+Q - enable only on interactive shells
+PS1=$PROMPT
 [ "$PS1" ] && stty intr '^d'
 [ "$PS1" ] && stty erase '^?'
 
@@ -197,7 +199,6 @@ export FZF_ALT_C_COMMAND="fd --type d . --color=never"
 # Java
 ##############################################################################
 export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
 
 ##############################################################################
 # Docker & Kube
@@ -223,30 +224,20 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 # Nvm or n and Node
 ##############################################################################
-# Give nodejs (a lot) more memory.
-export NODE_OPTIONS="--max-old-space-size=65536"
+# nodenv
+# export NODENV_VERSION=20.11.1
+export PATH="$HOME/.nodenv/bin:$PATH"
+export NODENV_VERSION="$(nodenv-global 2>/dev/null || true)"
 
 # npm global
-
 export NPM_PACKAGES=${HOME}/.npm-global
 export NPM_CONFIG_PREFIX=${HOME}/.npm-global
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 
-# nodenv
-# export NODENV_VERSION=20.11.1
-eval "$(nodenv init -)"
-
-export PATH="$HOME/.nodenv/bin:$PATH"
-# nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
-
-# ngrok
-if command -v ngrok &>/dev/null; then
-  eval "$(ngrok completion)"
-fi
+# Give nodejs (a lot) more memory.
+export NODE_OPTIONS="--max-old-space-size=65536"
 
 ##############################################################################
 # Zsh lugins
@@ -268,13 +259,6 @@ source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # export PATH="$(brew --prefix python)/libexec/bin:$PATH"
 
 export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-# if command -v pyenv 1>/dev/null 2>&1; then
-#   eval "$(pyenv init --path)"
-#   eval "$(pyenv init -)"
-# fi
 
 # pipx
 # Setup for pyenv
@@ -284,21 +268,16 @@ export PATH="/usr/local/bin:$PATH"
 # Ruby
 ##############################################################################
 export GEM_HOME="$HOME/.gem"
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 ##############################################################################
 # Packages
 ##############################################################################
 # zoxide
-if command -V zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-fi
 
 # Add MySQL client to PATH, if it exists
 if [ -d "/opt/homebrew/opt/mysql-client/bin" ]; then
   export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 fi
-
 
 # autojump
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
@@ -308,3 +287,24 @@ fi
 # iTerm integration (for OS X iTerm2)
 # @see https://iterm2.com/shell_integration.html
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+python-update() {
+  latest=$(pyenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | tail -1 | tr -d '\n ')
+  current=$(cat "${HOME}/.anyenv/envs/pyenv/version")
+  [[ ${latest} != ${current} ]] && pyenv install ${latest} && pyenv global ${latest} && pyenv rehash
+}
+
+node-update() {
+  latest=$(curl --silent "https://api.github.com/repos/nodejs/node/releases" | jq -r '[.[]][].name' | grep LTS |  cut -f 3 -d " " | sort | tail -1 | tr -d '\n')
+  current=$(cat "${HOME}/.anyenv/envs/nodenv/version")
+  [[ ${latest} != ${current} ]] && nodenv install ${latest} && nodenv global ${latest} && nodenv rehash
+}
+
+ruby-update() {
+  latest=$(rbenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | tail -1 | tr -d '\n ')
+  IsMacOS && latest=$(rbenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | grep "2." | tail -1 | tr -d '\n ')
+  current=$(cat "${HOME}/.anyenv/envs/rbenv/version")
+  [[ ${latest} != ${current} ]] &&  rbenv install ${latest} && rbenv global ${latest} && rbenv rehash
+}
+
+export PATH="$HOME/.anyenv/bin:$PATH"
