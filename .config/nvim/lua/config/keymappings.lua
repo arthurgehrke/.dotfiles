@@ -4,16 +4,13 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- prevent unwanted paste buffer fills from delete char
-vim.keymap.set('x', 'p', '"_dP')
-vim.keymap.set('x', 'P', '"_dp')
-vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
-vim.keymap.set('n', 'dw', 'vb"_d')
-vim.keymap.set('n', 'cw', 'vb"_c')
-vim.keymap.set('n', 'x', '"_x')
-vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
-
-vim.keymap.set('', '<C-r>', ':filetype detect<CR>', { silent = true })
-vim.keymap.set('i', '<C-r>', '<Esc>:filetype detect<CR>a', { silent = true })
+-- vim.keymap.set('x', 'p', '"_dP')
+-- vim.keymap.set('x', 'P', '"_dp')
+-- vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
+-- vim.keymap.set('n', 'dw', 'vb"_d')
+-- vim.keymap.set('n', 'cw', 'vb"_c')
+-- vim.keymap.set('n', 'x', '"_x')
+-- vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
 
 -- Keep the cursor in place while joining lines
 vim.keymap.set('n', 'J', 'mzJ`z')
@@ -75,12 +72,7 @@ vim.keymap.set('n', '<leader>gvq', '<Cmd>DiffviewClose<CR>', options)
 vim.keymap.set('n', '<leader>f', vim.cmd.NvimTreeToggle, options)
 vim.keymap.set('n', '<leader>r', vim.cmd.NvimTreeRefresh, options)
 
-vim.keymap.set('n', '<leader>bo', '<cmd>%bd|e#<cr>', options) -- https://stackoverflow.com/a/42071865/516188
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, options)
-
--- formatter
-vim.keymap.set('n', '<leader>aa', '<Cmd>Format<CR>', { desc = 'Format file' })
-vim.keymap.set('v', '<leader>aa', '<Cmd>Format<CR>', { desc = 'Format visual selection' })
 
 -- diffview
 vim.keymap.set('n', '<leader>td', vim.cmd.Gvdiffsplit, { desc = 'git: diff split vertically ' })

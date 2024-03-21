@@ -6,16 +6,37 @@ alias reload!='. ~/.zshrc'
 # if which eza > /dev/null; then
 #   alias ls="eza -l"
 # else
-alias ls="ls -lG"
 # fi
+
+
+if [ -f "$(which lsd)" ]; then
+    alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
+fi
+
+if [ -f "$(which bat)" ]; then
+    alias cat='bat'
+fi
+
+if [ -f "$(which fd)" ]; then
+    alias find='fd'
+fi
+
+if [ -f "$(which pyenv)" ]; then
+    alias pr='pipenv run'
+fi
+
+# alias ls="ls -lG"
+# alias ll='ls -lAGFp'
+alias lts='ll --timesort'
 
 alias lz="eza -l"
 alias ld= "eza -lD"
 alias lf="eza -lF --color=always | grep -v /"
 alias lh="eza -dl .* --group-directories-first"
-alias ll="eza -al --group-directories-first"
 # alias ls="eza -alF --color=always --sort=size | grep -v /"
-alias lt="eza -al --sort=modified"
+# alias lt="eza -al --sort=modified"
+
+alias less='less -R'
 
 # easier to read disk human-readable sizes
 alias df='df -h'
@@ -49,6 +70,7 @@ alias zshsource='source ~/.zshrc'
 # ip
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
+alias myip="ifconfig en0|awk '/inet / { print $2 }'"
 
 # Reload the shell
 alias reload="exec ${SHELL} -l"
@@ -70,8 +92,22 @@ alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictur
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias openhistory="nvim ~/.zhistory"
 
+alias nom="rm -rf node_modules && npm cache clean && npm install"
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+
 alias search="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs nvim"
 
 alias brewcleanfromfile='brew bundle --force cleanup'
 alias brewdumpforce='brew bundle dump --file=~//Brewfile --force'
 alias brewdump='brew bundle dump --file=~//Brewfile'
+
+alias openpreview='open -a Preview'
+alias port='sudo lsof -nP i4TCP'
+
+alias npmlist="npm list --depth=0"
+alias restart="exec $SHELL -l"
+
+alias sshagentstart="eval $(ssh-agent -s) && ssh-add -A"
+
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""

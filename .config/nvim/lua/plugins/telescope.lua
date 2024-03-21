@@ -67,7 +67,7 @@ require('telescope').setup({
       'yarn%-lock.json',
     },
     borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
-    set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+    -- set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
     layout_strategy = 'horizontal',
     preview = {
       treesitter = false,

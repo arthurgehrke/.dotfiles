@@ -1,9 +1,16 @@
 -- enable mason
 require('mason').setup({
-  PATH = 'prepend',
+  ui = {
+    icons = {
+      package_installed = '',
+      package_pending = '',
+      package_uninstalled = '',
+    },
+  },
 })
 
 require('mason-lspconfig').setup({
+  ui = { check_outdated_servers_on_open = true },
   automatic_installation = true,
   auto_update = true,
   ensure_installed = {
@@ -12,30 +19,32 @@ require('mason-lspconfig').setup({
     'cssls',
     'lua_ls',
     'eslint',
+    'jsonls',
+    'bashls',
   },
 })
 
 require('mason-tool-installer').setup({
-  automatic_installation = true,
-  ensure_installed = {
-    'lua-language-server',
-    'yaml-language-server',
-    'prettierd',
-    'pyright',
-    'json-lsp',
-    'eslint_d',
-    'isort',
-    'stylua',
-    'shellcheck',
-    'shfmt',
-    'sql-formatter',
-    'black',
-    'shfmt',
-    'jq',
-    'fixjson',
-    'eslint',
-    'bashls',
-  },
+  -- automatic_installation = true,
+  -- ensure_installed = {
+  --   'lua-language-server',
+  --   'yaml-language-server',
+  --   'prettierd',
+  --   'prettier',
+  --   'pyright',
+  --   'eslint_d',
+  --   'isort',
+  --   'stylua',
+  --   'shellcheck',
+  --   'shfmt',
+  --   'sql-formatter',
+  --   'black',
+  --   'shfmt',
+  --   'jq',
+  --   'eslint',
+  --   'bashls',
+  --   'shfmt',
+  -- },
 })
 
 local dap_servers = {
@@ -46,9 +55,9 @@ local dap_servers = {
   'chrome',
 }
 
-require('mason-nvim-dap').setup({
-  ensure_installed = dap_servers,
-  automatic_installation = true,
-  automatic_setup = true,
-  auto_update = true,
-})
+-- require('mason-nvim-dap').setup({
+--   ensure_installed = dap_servers,
+--   automatic_installation = true,
+--   automatic_setup = true,
+--   auto_update = true,
+-- })

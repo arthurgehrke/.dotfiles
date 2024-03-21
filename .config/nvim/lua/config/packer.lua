@@ -4,12 +4,12 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use('wbthomason/packer.nvim')
 
-  use({ 'echasnovski/mini.surround' })
-  use({ 'nvimdev/hlsearch.nvim' })
-
   use('jalvesaq/Nvim-R')
   use('lukas-reineke/indent-blankline.nvim')
-  use('rest-nvim/rest.nvim')
+  -- use({
+  --   'rest-nvim/rest.nvim',
+  --   rocks = { 'lua-curl', 'nvim-nio', 'mimetypes', 'xml2lua' },
+  -- })
   use('b0o/schemastore.nvim')
   use('kristijanhusak/vim-dadbod-completion')
   use('kristijanhusak/vim-dadbod-ui')
@@ -19,17 +19,15 @@ return require('packer').startup(function(use)
   use('nvim-lua/plenary.nvim')
   use('JoosepAlviste/nvim-ts-context-commentstring')
 
-  use('williamboman/mason.nvim')
-  use('williamboman/mason-lspconfig.nvim')
+  use({ 'neovim/nvim-lspconfig' })
+  use({ 'williamboman/mason.nvim' })
+  use({ 'williamboman/mason-lspconfig.nvim' })
+  use('WhoIsSethDaniel/mason-tool-installer.nvim')
+
+  -- use('jay-babu/mason-nvim-dap.nvim')
   use('pmizio/typescript-tools.nvim')
 
   use('stevearc/conform.nvim')
-
-  use('WhoIsSethDaniel/mason-tool-installer.nvim')
-  use('jay-babu/mason-nvim-dap.nvim')
-
-  use({ 'RubixDev/mason-update-all' })
-  use('neovim/nvim-lspconfig')
 
   use({
     'lewis6991/gitsigns.nvim',
@@ -49,7 +47,7 @@ return require('packer').startup(function(use)
 
   use('mfussenegger/nvim-dap')
   use('theHamsta/nvim-dap-virtual-text')
-  use('rcarriga/nvim-dap-ui')
+  -- use('rcarriga/nvim-dap-ui')
 
   use('dstein64/vim-startuptime')
 

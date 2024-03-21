@@ -108,78 +108,78 @@ dap.configurations.typescript = {
 dap.configurations.javascript = dap.configurations.javascript
 dap.configurations.typescriptreact = dap.configurations.typescript
 
-local dap_ui_status_ok, dapui = pcall(require, "dapui")
-if not dap_ui_status_ok then
-   return
-end
+-- local dap_ui_status_ok, dapui = pcall(require, "dapui")
+-- if not dap_ui_status_ok then
+--    return
+-- end
 
-dapui.setup {
-   controls = {
-      element = "repl",
-      enabled = false,
-      icons = {
-         pause = "",
-         play = "",
-         step_into = "",
-         step_over = "",
-         step_out = "",
-         step_back = "",
-         run_last = "",
-         terminate = "",
-      },
-   },
-   force_buffers = true,
-   icons = { expanded = "▾", collapsed = "▸" },
-   mappings = {
-      -- Use a table to apply multiple mappings
-      expand = "<cr>",
-      open = "o",
-      remove = "d",
-      edit = "e",
-      repl = "r",
-      toggle = "t",
-   },
-   expand_lines = false,
-   layouts = {
-      {
-         elements = {
-            { id = "scopes", size = 0.25 },
-            -- { id = "watches", size = 0.5 },
-            -- { id = "breakpoints", size = 0.45 },
-            "breakpoints",
-            "stacks",
-            "watches",
-         },
-         size = 40,
-         position = "left",
-      },
-      {
-         elements = { "repl", "console" },
-         size = 0.25,
-         position = "bottom",
-      },
-   },
-   floating = {
-      max_height = nil, -- These can be integers or a float between 0 and 1.
-      max_width = nil, -- Floats will be treated as percentage of your screen.
-      border = "solid", -- Border style. Can be "single", "double" or "rounded"
-      mappings = {
-         close = { "q", "<Esc>" },
-      },
-   },
-   windows = { indent = 1 },
-   render = {
-      -- indent = 1,
-      max_type_length = nil,
-      max_value_lines = 100,
-   },
-   element_mappings = {
-      stacks = {
-         open = "<CR>",
-         expand = "o",
-      },
-   },
-}
+-- dapui.setup {
+--    controls = {
+--       element = "repl",
+--       enabled = false,
+--       icons = {
+--          pause = "",
+--          play = "",
+--          step_into = "",
+--          step_over = "",
+--          step_out = "",
+--          step_back = "",
+--          run_last = "",
+--          terminate = "",
+--       },
+--    },
+--    force_buffers = true,
+--    icons = { expanded = "▾", collapsed = "▸" },
+--    mappings = {
+--       -- Use a table to apply multiple mappings
+--       expand = "<cr>",
+--       open = "o",
+--       remove = "d",
+--       edit = "e",
+--       repl = "r",
+--       toggle = "t",
+--    },
+--    expand_lines = false,
+--    layouts = {
+--       {
+--          elements = {
+--             { id = "scopes", size = 0.25 },
+--             -- { id = "watches", size = 0.5 },
+--             -- { id = "breakpoints", size = 0.45 },
+--             "breakpoints",
+--             "stacks",
+--             "watches",
+--          },
+--          size = 40,
+--          position = "left",
+--       },
+--       {
+--          elements = { "repl", "console" },
+--          size = 0.25,
+--          position = "bottom",
+--       },
+--    },
+--    floating = {
+--       max_height = nil, -- These can be integers or a float between 0 and 1.
+--       max_width = nil, -- Floats will be treated as percentage of your screen.
+--       border = "solid", -- Border style. Can be "single", "double" or "rounded"
+--       mappings = {
+--          close = { "q", "<Esc>" },
+--       },
+--    },
+--    windows = { indent = 1 },
+--    render = {
+--       -- indent = 1,
+--       max_type_length = nil,
+--       max_value_lines = 100,
+--    },
+--    element_mappings = {
+--       stacks = {
+--          open = "<CR>",
+--          expand = "o",
+--       },
+--    },
+-- }
 
 dap.defaults.typescript.auto_continue_if_many_stopped = true
 dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
@@ -194,15 +194,15 @@ dap.listeners.after.event_initialized["dapui_config"] = nil
 --    dapui.open({})
 -- end
 
-dap.listeners.before.event_terminated["dapui_config"] = function()
- dapui.close({})
+-- dap.listeners.before.event_terminated["dapui_config"] = function()
+--  dapui.close({})
 
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close({})
-end
+-- end
+-- dap.listeners.before.event_exited["dapui_config"] = function()
+--   dapui.close({})
+-- end
 
-vim.keymap.set('n', '<space>ui', require 'dapui'.toggle)
+-- vim.keymap.set('n', '<space>ui', require 'dapui'.toggle)
 vim.keymap.set('n', '<space>dc', function() require"dap".terminate() end)
 vim.keymap.set('n', '<space>dR', function() require"dap".clear_breakpoints() end)
 vim.keymap.set('n', '<space>de', function() require"dap".set_exception_breakpoints({"all"}) end)
@@ -211,9 +211,9 @@ vim.keymap.set('n', '<space>d?', function() local widgets = require "dap.ui.widg
 vim.keymap.set('n', '<space>dk', ':lua require"dap".up()<CR>zz')
 vim.keymap.set('n', '<space>dj', ':lua require"dap".down()<CR>zz')
 vim.keymap.set('n', '<space>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
-vim.keymap.set('n', '<space>dpt', ':lua require"dapui".toggle()<CR>')
+-- vim.keymap.set('n', '<space>dpt', ':lua require"dapui".toggle()<CR>')
 vim.api.nvim_set_keymap('n', '<space>do', ':lua require("dap").repl.open()<CR>', { silent = true })
-vim.keymap.set('n', '<space>dC', function() require("dapui").close() end)
+-- vim.keymap.set('n', '<space>dC', function() require("dapui").close() end)
 vim.keymap.set('n', '<F5>', require 'dap'.continue)
 -- vim.keymap.set('n', '<F10>', require 'dap'.step_over)
 -- vim.keymap.set('n', '<F11>', require 'dap'.step_into)
@@ -226,7 +226,7 @@ end)
 require("nvim-dap-virtual-text").setup {
     enabled = true,                        -- enable this plugin (the default)
     enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
-    highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+    highlight_changed_variables = false,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
     highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
     show_stop_reason = true,               -- show stop reason when stopped for exceptions
     commented = false,                     -- prefix virtual text with comment string

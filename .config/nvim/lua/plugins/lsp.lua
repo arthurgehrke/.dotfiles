@@ -1,11 +1,4 @@
 local border = {
-
-  vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(args)
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      client.server_capabilities.semanticTokensProvider = nil
-    end,
-  }),
   { '╭', 'FloatBorder' },
   { '─', 'FloatBorder' },
   { '╮', 'FloatBorder' },
@@ -37,10 +30,10 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] =
   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { update_in_insert = false })
 
 local servers = {
-  'tsserver',
+  -- 'tsserver',
   'cssls',
   'html',
-  'jsonls',
+  -- 'jsonls',
   'lua_ls',
   -- "r_language_server"
 }
@@ -66,22 +59,7 @@ local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-
-  -- vim.api.nvim_create_autocmd('CursorHold', {
-  --   buffer = bufnr,
-  --   callback = function()
-  --     local opts = {
-  --       focusable = false,
-  --       close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-  --       border = 'rounded',
-  --       source = 'always',
-  --       prefix = ' ',
-  --       scope = 'cursor',
-  --     }
-  --     vim.diagnostic.open_float(nil, opts)
-  --   end,
-  -- })
+  client.server_capabilities.semanticTokensProvider = nil
 
   -- Mappings.
   vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', bufopts)
@@ -121,21 +99,21 @@ local on_attach = function(client, bufnr)
     vim.lsp.buf.format({ async = false })
   end, bufopts)
 
-  local signs = { Error = '󰅚 ', Warn = '󰀪 ', Hint = '󰌶 ', Info = '󰋽 ' }
+  -- local signs = { Error = '󰅚 ', Warn = '󰀪 ', Hint = '󰌶 ', Info = '󰋽 ' }
 
-  for type, icon in pairs(signs) do
-    local hl = 'DiagnosticSign' .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
-  end
+  -- for type, icon in pairs(signs) do
+  --   local hl = 'DiagnosticSign' .. type
+  --   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+  -- end
 
-  for _, diag in ipairs({ 'Error', 'Warn', 'Info', 'Hint' }) do
-    vim.fn.sign_define('DiagnosticSign' .. diag, {
-      text = '',
-      texthl = 'DiagnosticSign' .. diag,
-      linehl = '',
-      numhl = 'DiagnosticSign' .. diag,
-    })
-  end
+  -- for _, diag in ipairs({ 'Error', 'Warn', 'Info', 'Hint' }) do
+  --   vim.fn.sign_define('DiagnosticSign' .. diag, {
+  --     text = '',
+  --     texthl = 'DiagnosticSign' .. diag,
+  --     linehl = '',
+  --     numhl = 'DiagnosticSign' .. diag,
+  --   })
+  -- end
 
   -- for _, sign in ipairs(signs) do
   --   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = '' })
@@ -150,9 +128,9 @@ end
 
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup({
-    root_dir = function()
-      return vim.loop.cwd()
-    end,
+    -- root_dir = function()
+    --   return vim.loop.cwd()
+    -- end,
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,
@@ -168,15 +146,10 @@ require('lspconfig').cssls.setup({
 
 require('lspconfig').eslint.setup({
   root_dir = require('lspconfig').util.root_pattern('eslint.config.js', '.eslintrc.js', '.eslintrc.json', '.eslintrc'),
-  diagnostics = {
-    enable = true,
-    report_unused_disable_directives = false,
-  },
-  settings = { documentFormatting = false },
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-    on_attach(client, bufnr)
-  end,
+  -- diagnostics = {
+  --   enable = true,
+  --   report_unused_disable_directives = false,
+  -- },
 })
 
 require('lspconfig').lua_ls.setup({
@@ -246,8 +219,16 @@ require('lspconfig').jsonls.setup({
 
 require('lspconfig').tsserver.setup({
   on_attach = on_attach,
+  -- handlers = {
+  --   ['textDocument/publishDiagnostics'] = function() end,
+  -- },
   handlers = {
-    ['textDocument/publishDiagnostics'] = function() end,
+    ['textDocument/definition'] = function(err, result, ctx, ...)
+      if #result > 1 then
+        result = { result[1] }
+      end
+      vim.lsp.handlers['textDocument/definition'](err, result, ctx, ...)
+    end,
   },
   filetypes = {
     'javascript',
@@ -258,8 +239,9 @@ require('lspconfig').tsserver.setup({
     'typescript.tsx',
   },
   cmd = { 'typescript-language-server', '--stdio' },
-  single_file_support = false,
-  root_dir = require('lspconfig').util.root_pattern('tsconfig.json', 'package.json', '.git'),
+  -- single_file_support = false,
+  -- root_dir = require('lspconfig').util.root_pattern('tsconfig.json', 'package.json', '.git'),
+  root_dir = require('lspconfig/util').root_pattern('tsconfig.json'),
 })
 
 require('lspconfig').yamlls.setup({

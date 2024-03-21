@@ -1,21 +1,21 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
+
+
+  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 ##############################################################################
 # Paths
 ##############################################################################
-export PATH="/opt/homebrew/sbin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
-export XDG_CONFIG_HOME=$HOME/.config
-# mosh server
-export PATH=$PATH:/usr/local/bin
-
-# remove duplicat entries from $PATH
-# zsh uses $path array along with $PATH
-typeset -U PATH path
+# # remove duplicat entries from $PATH
+# # zsh uses $path array along with $PATH
+# typeset -U PATH path
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -25,6 +25,10 @@ fi
 ##############################################################################
 # Homebrew
 ##############################################################################
+
+
+
+
 if [[ "$(/usr/bin/uname -m)" == "arm64" ]]; then
   # ARM macOS
   export HOMEBREW_PREFIX="/opt/homebrew"
@@ -33,17 +37,20 @@ else
   export HOMEBREW_PREFIX="/usr/local"
 fi
 
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+#source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
+source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
-  autoload -Uz compinit
-  compinit
-fi
+    autoload -Uz compinit
+    compinit
+  fi
 
-export HOMEBREW_BREWFILE=$HOME/Brewfile
-# export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
 
 ##############################################################################
 # MacOs
@@ -51,7 +58,7 @@ export HOMEBREW_BREWFILE=$HOME/Brewfile
 source $HOME/.zaliases
 source $HOME/.zscripts
 source $HOME/.zprofile
-source $HOME/.themes/zsh/.p10k.zsh
+#source $HOME/.themes/zsh/.p10k.zsh
 
 zmodload -i zsh/complist
 zmodload -i zsh/zle
@@ -59,13 +66,13 @@ zmodload -i zsh/zle
 export EDITOR=nvim
 export LANG=en_US.UTF-8
 
-export TERM=xterm-256color
-
-export TERM='xterm-256color'
+# export TERM='xterm-256color'
+export TERM="screen-256color"
 
 [[ "${TMUX}" != "" ]] && export TERM='screen-256color'
 # if [[ -z "$TMUX" ]]; then
-#   export TERM="xterm-256color"
+[[ "${TMUX}" = "" ]] && export TERM='xterm-256color'
+#   export TERM="tmux-256color"
 # fi
 
 export DISABLE_MAGIC_FUNCTIONS=true
@@ -139,8 +146,14 @@ bindkey -e '^i' expand-or-complete
 bindkey -e '^F' autosuggest-accept-suggested-small-word
 bindkey -e '^d' delete-char
 
-
-bindkey '^R' history-incremental-search-backward
+peco-history-selection() {
+  BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+# bindkey '^R' history-incremental-search-backward
 
 # Movement
 bindkey -e '^a' beginning-of-line
@@ -153,12 +166,8 @@ bindkey '^[[Z' reverse-menu-complete
 
 ## history-substring-search
 # Control-P/N keys
-# History
-# bindkey -e '^p' up-history
-# bindkey -e '^n' down-history
-
-bindkey "^P" up-line-or-search
-bindkey "^N" down-line-or-search
+bindkey -e '^p' up-history
+bindkey -e '^n' down-history
 
 # Search using patterns as documented here:
 # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Filename-Generation
@@ -168,14 +177,6 @@ bindkey -e '^f' history-incremental-pattern-search-forward
 
 bindkey -e '^j' history-substring-search-up
 bindkey -e '^k' history-substring-search-down
-
-##############################################################################
-# Bindings
-##############################################################################
-# change Ctrl+C to Ctrl+Q - enable only on interactive shells
-PS1=$PROMPT
-[ "$PS1" ] && stty intr '^d'
-[ "$PS1" ] && stty erase '^?'
 
 ##############################################################################
 # Fzf
@@ -198,7 +199,9 @@ export FZF_ALT_C_COMMAND="fd --type d . --color=never"
 ##############################################################################
 # Java
 ##############################################################################
-export PATH="$HOME/.jenv/bin:$PATH"
+  export PATH="$HOME/.jenv/bin:$PATH"
+  eval "$(jenv init -)"
+
 
 ##############################################################################
 # Docker & Kube
@@ -226,8 +229,8 @@ ZSH_HIGHLIGHT_STYLES[suffix-alias]='none'
 ##############################################################################
 # nodenv
 # export NODENV_VERSION=20.11.1
-export PATH="$HOME/.nodenv/bin:$PATH"
-export NODENV_VERSION="$(nodenv-global 2>/dev/null || true)"
+#export PATH="$HOME/.nodenv/bin:$PATH"
+#export NODENV_VERSION="$(nodenv-global 2>/dev/null || true)"
 
 # npm global
 export NPM_PACKAGES=${HOME}/.npm-global
@@ -245,33 +248,21 @@ export NODE_OPTIONS="--max-old-space-size=65536"
 ZSH_AUTOSUGGESTIONS="$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 [ -f "$ZSH_AUTOSUGGESTIONS" ] && source "$ZSH_AUTOSUGGESTIONS"
 
-source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
-source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 
 
 ##############################################################################
 # Python
 ##############################################################################
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# export PATH="$(brew --prefix python)/libexec/bin:$PATH"
-
-export PATH="$HOME/.pyenv/bin:$PATH"
-
-# pipx
-# Setup for pyenv
-export PATH="/usr/local/bin:$PATH"
 
 ##############################################################################
 # Ruby
 ##############################################################################
-export GEM_HOME="$HOME/.gem"
 
 ##############################################################################
 # Packages
 ##############################################################################
+#export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 # zoxide
 
 # Add MySQL client to PATH, if it exists
@@ -279,8 +270,7 @@ if [ -d "/opt/homebrew/opt/mysql-client/bin" ]; then
   export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 fi
 
-# autojump
-[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
 ##############################################################################
 # Iterm2
 ##############################################################################
@@ -288,23 +278,22 @@ fi
 # @see https://iterm2.com/shell_integration.html
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-python-update() {
-  latest=$(pyenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | tail -1 | tr -d '\n ')
-  current=$(cat "${HOME}/.anyenv/envs/pyenv/version")
-  [[ ${latest} != ${current} ]] && pyenv install ${latest} && pyenv global ${latest} && pyenv rehash
-}
+# nodenv
+#if which nodenv &> /dev/null; then eval "$(nodenv init --no-rehash -)"; fi
+#export PATH="$HOME/.nodenv/bin:$PATH"
+eval "$(nodenv init -)"
 
-node-update() {
-  latest=$(curl --silent "https://api.github.com/repos/nodejs/node/releases" | jq -r '[.[]][].name' | grep LTS |  cut -f 3 -d " " | sort | tail -1 | tr -d '\n')
-  current=$(cat "${HOME}/.anyenv/envs/nodenv/version")
-  [[ ${latest} != ${current} ]] && nodenv install ${latest} && nodenv global ${latest} && nodenv rehash
-}
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
-ruby-update() {
-  latest=$(rbenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | tail -1 | tr -d '\n ')
-  IsMacOS && latest=$(rbenv install --list | sed -e '/^.*[a-zA-Z].*$/d' | grep "2." | tail -1 | tr -d '\n ')
-  current=$(cat "${HOME}/.anyenv/envs/rbenv/version")
-  [[ ${latest} != ${current} ]] &&  rbenv install ${latest} && rbenv global ${latest} && rbenv rehash
-}
+if command -V zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 
-export PATH="$HOME/.anyenv/bin:$PATH"
+# ngrok
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
