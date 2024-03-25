@@ -1,21 +1,32 @@
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
+alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias reload!='. ~/.zshrc'
 
-# dir commands
-# using exa
-# if which eza > /dev/null; then
-#   alias ls="eza -l"
-# else
-alias ls="ls -lG"
-# fi
+
+if [ -f "$(which lsd)" ]; then
+    alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
+fi
+
+if [ -f "$(which bat)" ]; then
+    alias cat='bat'
+fi
+
+if [ -f "$(which pyenv)" ]; then
+    alias pr='pipenv run'
+fi
+
+# alias ls="ls -lG"
+# alias ll='ls -lAGFp'
+alias lts='ll --timesort'
 
 alias lz="eza -l"
 alias ld= "eza -lD"
 alias lf="eza -lF --color=always | grep -v /"
 alias lh="eza -dl .* --group-directories-first"
-alias ll="eza -al --group-directories-first"
 # alias ls="eza -alF --color=always --sort=size | grep -v /"
-alias lt="eza -al --sort=modified"
+# alias lt="eza -al --sort=modified"
+
+alias less='less -R'
 
 # easier to read disk human-readable sizes
 alias df='df -h'
@@ -49,6 +60,7 @@ alias zshsource='source ~/.zshrc'
 # ip
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
+alias myip="ifconfig en0|awk '/inet / { print $2 }'"
 
 # Reload the shell
 alias reload="exec ${SHELL} -l"
@@ -70,8 +82,35 @@ alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictur
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias openhistory="nvim ~/.zhistory"
 
+alias nom="rm -rf node_modules && npm cache clean && npm install"
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+
 alias search="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs nvim"
 
 alias brewcleanfromfile='brew bundle --force cleanup'
 alias brewdumpforce='brew bundle dump --file=~//Brewfile --force'
 alias brewdump='brew bundle dump --file=~//Brewfile'
+
+alias openpreview='open -a Preview'
+alias port='sudo lsof -nP i4TCP'
+
+alias npmlist="npm list --depth=0"
+alias restart="exec $SHELL -l"
+
+alias sshagentstart="eval $(ssh-agent -s) && ssh-add -A"
+
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+if [ "$(command -v docker)" ] ; then
+  alias docker-prune="docker image prune -a && docker system prune"
+  # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
+  alias d-kali='docker run -ti --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kalilinux/kali-rolling /bin/bash'
+  alias d-debian='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-in-a-nutshell:1.0.0 /bin/bash'
+  alias d-nodejs='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-nodejs-v8:1.0.0 /bin/bash'
+  alias d-swagger-editor='docker run --rm -d -p 80:8080 swaggerapi/swagger-editor && sleep 3 && open http://localhost'
+  alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
+  alias d-juice-shop='docker run --rm -itd -p 3000:3000 bkimminich/juice-shop'
+  # https://www.linuxserver.io/blog/2021-05-05-meet-webtops-a-linux-desktop-environment-in-your-browser
+  alias d-webtop='docker run -d --name=webtop -e PUID=1000 -e PGID=1000 -e TZ=Europe/Berlin -p 3000:3000 -v $HOME/.webtop:/config --shm-size="8gb" --restart unless-stopped ghcr.io/linuxserver/webtop'
+fi
