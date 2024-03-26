@@ -1,61 +1,72 @@
-require "nvim-treesitter.configs".setup {
-  highlight = {
-    enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    disable = function(lang, buf)
-      local max_filesize = 5 * 1024 * 1024   -- 2 MB
-      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-      if ok and stats and stats.size > max_filesize then
-        return true
+return {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    version = false, -- last release is way too old and doesn't work on Windows
+    build = ':TSUpdate',
+    event = { 'BufReadPost', 'BufNewFile' },
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      'nvim-treesitter/playground',
+    },
+    opts = {
+      highlight = { enable = true },
+      indent = { enable = true },
+      ensure_installed = {
+        'bash',
+        'c',
+        'html',
+        'javascript',
+        'json',
+        'lua',
+        'luadoc',
+        'luap',
+        'markdown',
+        'markdown_inline',
+        'python',
+        'query',
+        'regex',
+        'tsx',
+        'typescript',
+        'vim',
+        'vimdoc',
+        'ssh_config',
+        'r',
+        'sql',
+        'yaml',
+        'bash',
+        'html',
+        'gitcommit',
+      },
+      match = {
+        enable = true,
+      },
+      autotag = { enable = true },
+      -- rainbow = { enable = true, extended_mode = false },
+      refactor = { highlight_definitions = { enable = true } },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = '<C-space>',
+          node_incremental = '<C-space>',
+          scope_incremental = false,
+          node_decremental = '<bs>',
+        },
+      },
+    },
+    ---@param opts TSConfig
+    config = function(_, opts)
+      if type(opts.ensure_installed) == 'table' then
+        ---@type table<string, boolean>
+        local added = {}
+        opts.ensure_installed = vim.tbl_filter(function(lang)
+          if added[lang] then
+            return false
+          end
+          added[lang] = true
+          return true
+        end, opts.ensure_installed)
       end
+      require('nvim-treesitter.configs').setup(opts)
     end,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
   },
-  indent = {
-    enable = true,
-    disable = {},
-  },
-  ignore_install = {},
-  auto_install = true,
-  sync_install = false,
-  ensure_installed = {
-    "markdown",
-    "lua",
-    "c_sharp",
-    "xml",
-    "http",
-    "html",
-    "typescript",
-    "javascript",
-    "tsx",
-    "vim",
-    "python",
-    "json",
-    "json5",
-    "jsonc",
-    "sql",
-    "scss",
-    "css",
-    "latex",
-    "yaml",
-    "toml",
-    "bash",
-    'r',
-  },
-  autotag = {
-    enable = true,
-  },
-  additional_vim_regex_highlighting = false,
 }
-
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.filetype_to_parsername = { "javascript", "typescript.tsx" }

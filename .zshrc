@@ -28,6 +28,15 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 ##############################################################################
 setopt NO_BEEP
 setopt NO_LIST_BEEP
+export LANG=en_US.UTF-8
+export EDITOR=nvim
+export TERM="tmux-256color"
+
+if [[ "$TERM" == "tmux-256color" ]]; then
+  export TERM=screen-256color
+fi
+
+export DISABLE_MAGIC_FUNCTIONS=true
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ] ; then
@@ -109,8 +118,20 @@ bindkey -e '^w' backward-kill-word
 bindkey '^[[Z' reverse-menu-complete
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
-bindkey -e '^r' history-incremental-pattern-search-backward
+
+
+# bindkey -e '^r' history-incremental-pattern-search-backward
+
+peco-history-selection() {
+  BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+
 bindkey -e '^f' history-incremental-pattern-search-forward
+
 bindkey -e '^j' history-substring-search-up
 bindkey -e '^k' history-substring-search-down
 
@@ -131,13 +152,30 @@ eval "$(jenv init -)"
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0_252)
 
 ##############################################################################
+# Fzf
+##############################################################################
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+fi
+
+export BAT_THEME="gruvbox-dark"
+export FZF_DEFAULT_OPTS="--height 75% --layout=reverse --border"
+export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file --no-ignore-vcs"
+export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+# Disable preview, useless for History completion
+export FZF_CTRL_R_OPTS="--no-preview"
+
+##############################################################################
 # Python
 ##############################################################################
 # export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 export PYENV_ROOT=$(pyenv root)
+
 export PATH="$PYENV_ROOT/shims:$PATH"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # needed
@@ -170,5 +208,13 @@ if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
 
-
+##############################################################################
+# Iterm2
+##############################################################################
+# iTerm integration (for OS X iTerm2)
+# @see https://iterm2.com/shell_integration.html
+if [[ "`uname`" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
+  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
+  source ${HOME}/.iterm2_shell_integration.zsh
+fi
 

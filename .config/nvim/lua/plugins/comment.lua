@@ -1,24 +1,32 @@
-require('Comment').setup({
-    padding = true,
-    sticky = true,
-    ignore = '^$',
-    toggler = {
+return {
+  {
+    'numToStr/Comment.nvim',
+    event = 'BufEnter',
+    lazy = true,
+    keys = { 'go', 'gcc', { 'go', mode = 'v' }, { 'ggo', mode = 'v' } },
+    opts = {
+      padding = true,
+      sticky = true,
+      ignore = '^$',
+      toggler = {
         line = 'gcc',
         block = 'gbc',
-    },
-    opleader = {
+      },
+      opleader = {
         line = 'gc',
         block = 'gb',
-    },
-    extra = {
+      },
+      extra = {
         above = 'gcO',
         below = 'gco',
         eol = 'gcA',
-    },
-    mappings = {
+      },
+      mappings = {
         basic = true,
         extra = true,
+      },
+      pre_hook = nil,
+      post_hook = nil,
     },
-    pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-    post_hook = nil,
-})
+  },
+}
