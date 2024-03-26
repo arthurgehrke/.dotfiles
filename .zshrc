@@ -27,6 +27,7 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Config
 ##############################################################################
 setopt NO_BEEP
+setopt NO_LIST_BEEP
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ] ; then
@@ -45,6 +46,36 @@ export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
 export HIST_STAMPS="yyyy-mm-dd"
+
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt BANG_HIST
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY_TIME
+setopt HIST_REDUCE_BLANKS
+setopt IGNORE_EOF
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+setopt AUTO_LIST
+setopt AUTO_REMOVE_SLASH
+setopt LIST_AMBIGUOUS
+setopt EXTENDED_GLOB  NO_BEEP      # Use extended globbing syntax.
+setopt CASE_MATCH
+setopt CASE_PATHS
+setopt CSH_NULL_GLOB
+setopt PROMPT_SP
+setopt MENU_COMPLETE
+setopt AUTO_MENU
+setopt COMPLETE_IN_WORD
+setopt PROMPT_SUBST
+setopt NO_HUP
 
 ##############################################################################
 # SSH
@@ -83,6 +114,8 @@ bindkey -e '^f' history-incremental-pattern-search-forward
 bindkey -e '^j' history-substring-search-up
 bindkey -e '^k' history-substring-search-down
 
+# exit proccess
+stty intr \^k
 ##############################################################################
 # Ruby
 ##############################################################################
@@ -93,22 +126,27 @@ eval "$(rbenv init -)"
 ##############################################################################
 # Java
 ##############################################################################
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"
-export PATH=${JAVA_HOME}/bin:$PATH
-alias jenv_set_java_home='export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"'
+export PATH="$HOME/.jenv/bin:$PATH" 
+eval "$(jenv init -)" 
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0_252)
 
 ##############################################################################
 # Python
 ##############################################################################
-export PYENV_ROOT="$HOME/.pyenv"
+# export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+export PYENV_ROOT=$(pyenv root)
+export PATH="$PYENV_ROOT/shims:$PATH"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-export PATH="$HOME/.pyenv/shims:$PATH"
+# needed
 export PYTHONPATH="${PYTHONPATH}:[Python/*version*/bin]"
+
+##############################################################################
+# Php
+##############################################################################
+export PATH=~/.composer/vendor/bin:$PATH
 
 ##############################################################################
 # Node
@@ -131,4 +169,6 @@ fi
 if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
+
+
 

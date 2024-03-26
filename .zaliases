@@ -106,7 +106,9 @@ if [ "$(command -v docker)" ] ; then
   alias docker-prune="docker image prune -a && docker system prune"
   # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
   alias d-kali='docker run -ti --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kalilinux/kali-rolling /bin/bash'
+  alias d-kali-new="docker run -ti --rm -e HOST_IP=$(ifconfig en0 | awk '/ *inet /{print $2}')  -v /Users/arthurgehrke/Documents/docker-data/kali:/home/shared -ti  kali_base /bin/bash"
   alias d-debian='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-in-a-nutshell:1.0.0 /bin/bash'
+  alias d-redis='docker run -d -p 6379:6379 redis:alpine'
   alias d-nodejs='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-nodejs-v8:1.0.0 /bin/bash'
   alias d-swagger-editor='docker run --rm -d -p 80:8080 swaggerapi/swagger-editor && sleep 3 && open http://localhost'
   alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
