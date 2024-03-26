@@ -88,7 +88,7 @@ alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias search="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs nvim"
 
 alias brewcleanfromfile='brew bundle --force cleanup'
-alias brewdumpforce='brew bundle dump --file=~//Brewfile --force'
+alias brewdumpforce='brew bundle dump --file=~Brewfile --force'
 alias brewdump='brew bundle dump --file=~//Brewfile'
 
 alias openpreview='open -a Preview'
