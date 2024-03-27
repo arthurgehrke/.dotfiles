@@ -30,7 +30,6 @@ setopt NO_BEEP
 setopt NO_LIST_BEEP
 export LANG=en_US.UTF-8
 export EDITOR=nvim
-export TERM="tmux-256color"
 
 if [[ "$TERM" == "tmux-256color" ]]; then
   export TERM=screen-256color
