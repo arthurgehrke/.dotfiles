@@ -77,13 +77,21 @@ vim.keymap.set({ "n", "v" }, "]x", next_conflict_marker)
 
 
 -- Buffer search/replace
-vim.keymap.set('n', '<leader>rr', ':%s/', { desc = 'Buffer search/replace' })
+vim.keymap.set('n', '<leader>rr', ':%s/', { desc = 'Buffer search/replace' }, options)
+
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', options)
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '<leader>co', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<leader>od', function()
+  vim.diagnostic.open_float(nil, {
+    focus = false,
+    scope = 'line',
+  })
+end, { desc = 'Show diagnostics for current line' })
+
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<Leader>sq', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
@@ -108,11 +116,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.buf.format { async = true }
     end, opts)
 
-    -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    -- vim.keymap.set('n', '<space>wl', function()
-    --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-
     vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'ca', function()
@@ -125,5 +128,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-
-vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })

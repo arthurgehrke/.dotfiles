@@ -11,13 +11,17 @@ return {
       { '<leader>f', ':NvimTreeToggle<CR>', desc = 'Toggle tree' },
     },
     config = function()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+
       local signcolumn_width = 7 -- AKA gutter width
       local min_buffer_width = 110 + signcolumn_width
       local total_dual_panel_cols = min_buffer_width * 2 + 1
       local min_sidebar_width = 10
       local max_sidebar_width = 32
 
-      vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
+      vim.cmd('autocmd Colorscheme * highlight NvimTreeNormal guibg=NONE ctermbg=NONE')
+      -- vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
 
       local get_sidebar_cols = function()
         local neovim_cols = vim.o.columns
@@ -121,15 +125,26 @@ return {
           },
         },
         renderer = {
-          symlink_destination = false,
+          add_trailing = false,
+          group_empty = false,
+          full_name = false,
+          root_folder_label = false,
+          indent_width = 2,
+          symlink_destination = true,
+          highlight_git = true,
+          highlight_diagnostics = 'none',
+          highlight_opened_files = 'none',
+          highlight_modified = 'all',
+          highlight_bookmarks = 'none',
+          highlight_clipboard = 'name',
           indent_markers = {
             enable = false,
             inline_arrows = true,
             icons = {
-              corner = ' ',
-              edge = ' ',
-              item = '┊',
-              bottom = '',
+              corner = '└',
+              edge = '│',
+              item = '│',
+              bottom = '─',
               none = ' ',
             },
           },
@@ -255,5 +270,5 @@ return {
       })
     end,
   },
-  { 'nvim-tree/nvim-web-devicons' },
+  { 'nvim-tree/nvim-web-devicons', lazy = false },
 }

@@ -17,8 +17,6 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 -- don't auto comment new line
 vim.api.nvim_create_autocmd('BufEnter', { command = [[set formatoptions-=cro]] })
 
-vim.api.nvim_set_keymap('n', '<CR>', '<CR><Cmd>cclose<CR>', { noremap = false, silent = true })
-
 vim.keymap.set('v', '<leader>o', 'zA', { desc = 'Toggle Fold' })
 
 -- close some filetypes with <q>
@@ -45,4 +43,3 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.api.nvim_set_keymap('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR><C-l><CR>', {})

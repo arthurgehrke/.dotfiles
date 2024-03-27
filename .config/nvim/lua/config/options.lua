@@ -75,6 +75,9 @@ vim.o.sidescrolloff=10
 
 vim.o.emoji = false
 
+-- Turn on the filetype plugin
+vim.opt.filetype = 'on'
+
 -- no bells
 vim.opt.errorbells = false
 vim.opt.visualbell = false
@@ -83,9 +86,10 @@ vim.opt.foldlevel = 99
 vim.opt.termguicolors = true
 
 vim.opt.mouse = "a"
+vim.opt.list = true
+vim.opt.listchars = { trail = '·', nbsp = '␣' }
 
 vim.opt.encoding = "utf-8"
-vim.opt.fileencoding = "utf-8"
 
 vim.g.loaded_perl_provider = 0
 vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'

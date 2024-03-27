@@ -12,7 +12,7 @@ return {
         mode = 'buffers',
         indicator_icon = '|',
         buffer_close_icon = '',
-        modified_icon = '●',
+        odified_icon = '●',
         close_icon = '',
         themable = false,
         left_trunc_marker = '',
@@ -24,7 +24,7 @@ return {
         max_name_length = 30,
         max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
         indicator = {
-          icon = '|', -- this should be omitted if indicator style is not 'icon'
+          icon = '|',           -- this should be omitted if indicator style is not 'icon'
           style = 'none',
         },
         numbers = 'none', -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,

@@ -50,7 +50,7 @@ return {
     formatters = {
       injected = { options = { ignore_errors = true } },
     },
-    notify_on_error = false,
+    notify_on_error = true,
     ignore_errors = true,
   },
   init = function()

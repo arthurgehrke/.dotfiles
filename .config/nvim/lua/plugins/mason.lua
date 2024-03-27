@@ -31,6 +31,7 @@ return {
       automatic_installation = true, -- not the same as ensure_installed
     })
     mason_tool_installer.setup({
+      automatic_installation = true, -- not the same as ensure_installed
       ensure_installed = {
         'lua-language-server',
         'black', -- python format
