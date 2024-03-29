@@ -23,8 +23,8 @@ vim.keymap.set("n", "se", '<cmd>silent! %bdel|edit #|normal `"<C-n><leader>q<cr>
 vim.keymap.set("n", "<C-j>", ":set paste<CR>m`o<Esc>``:set nopaste<CR>", options)
 vim.keymap.set("n", "<C-k>", ":set paste<CR>m`O<Esc>``:set nopaste<CR>", options)
 
-vim.keymap.set("n", "gvd", ":vsplit<CR><cmd>lua vim.lsp.buf.definition()<CR>")
-vim.keymap.set("n", "gsd", ":sp<CR><cmd>lua vim.lsp.buf.definition()<CR>")
+vim.keymap.set("n", "gvd", ":vsplit<CR><cmd>lua vim.lsp.buf.definition()<CR>", options)
+vim.keymap.set("n", "gsd", ":sp<CR><cmd>lua vim.lsp.buf.definition()<CR>", options)
 
 -- Move around splits using Ctrl + {h,j,k,l}
 vim.keymap.set('n', 'sh', '<C-w>h', options)
@@ -47,17 +47,8 @@ vim.keymap.set("v", ">", ">gv", options)
 -- without "auto-yanking" the overwritten text
 -- allows pasting over and over 
 -- without loosing the originally yanked text
-vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set("x", "<leader>p", [["_dP]],  options)
 
--- next greatest remap ever
--- give the ability to yank into the system clipboard
--- (to only have it into vim's register yank without leader)
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
--- NvimTree
---vim.keymap.set('n', '<leader>f', vim.cmd.NvimTreeToggle, options)
---vim.keymap.set('n', '<leader>r', vim.cmd.NvimTreeRefresh, options)
 
 -- POWERFULL SUBSTITUTION !!!
 -- space s

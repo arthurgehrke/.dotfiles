@@ -13,7 +13,6 @@ return {
     'jvgrootveld/telescope-zoxide',
     { 'nvim-telescope/telescope-ui-select.nvim' },
     { 'nvim-telescope/telescope-fzy-native.nvim', build = 'make' },
-    'nvim-lua/plenary.nvim',
   },
   keys = {
     {

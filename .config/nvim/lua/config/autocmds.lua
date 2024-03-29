@@ -17,8 +17,6 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 -- don't auto comment new line
 vim.api.nvim_create_autocmd('BufEnter', { command = [[set formatoptions-=cro]] })
 
-vim.keymap.set('v', '<leader>o', 'zA', { desc = 'Toggle Fold' })
-
 -- close some filetypes with <q>
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup('close_with_q'),

@@ -27,12 +27,16 @@ return {
         'pyright', -- python
         'rust_analyzer', -- rust lacks linter
         'yamlls', -- yaml
+        'tsserver',
+        'jqls',
       },
       automatic_installation = true, -- not the same as ensure_installed
     })
     mason_tool_installer.setup({
       automatic_installation = true, -- not the same as ensure_installed
       ensure_installed = {
+        { 'bash-language-server', auto_update = true },
+        'stylua',
         'lua-language-server',
         'black', -- python format
         'isort', -- python format

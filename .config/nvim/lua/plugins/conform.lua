@@ -6,7 +6,7 @@ return {
     {
       '<leader>mp',
       function()
-        require('conform').format({ async = false, lsp_fallback = true, timeout_ms = 500 })
+        require('conform').format({ async = false, lsp_fallback = true, timeout_ms = 1000 })
       end,
       mode = '',
       desc = 'Format buffer',
@@ -19,7 +19,7 @@ return {
       python = { 'isort', 'black' },
       sql = { 'sql_formatter' },
       javascript = { 'prettierd' },
-      typescript = { 'prettierd' },
+      typescript = { 'prettier', 'prettierd' },
       javascriptreact = { 'prettierd' },
       typescriptreact = { 'prettierd' },
       ['javascript.jsx'] = { 'prettier' },
@@ -35,8 +35,7 @@ return {
       json5 = { 'prettierd' },
       yaml = { 'prettierd' },
       html = { 'prettierd' },
-      zsh = { 'shfmt' },
-      bash = { 'shfmt' },
+      zsh = { 'shellcheck' },
 
       css = { 'prettier', 'stylelint' },
       less = { 'prettier', 'stylelint' },
@@ -45,8 +44,9 @@ return {
 
       ['_'] = { 'trim_whitespace' },
     },
+    quiet = true,
     -- Set up format-on-save
-    format = { timeout_ms = 500, async = false, quiet = true },
+    -- format = { timeout_ms = 1000, async = false, quiet = true },
     formatters = {
       injected = { options = { ignore_errors = true } },
     },

@@ -51,8 +51,6 @@ return {
         handlers = handlers,
       })
 
-      lspconfig.bashls.setup({})
-
       -- graphql
       lspconfig.jsonls.setup({
         filetypes = {

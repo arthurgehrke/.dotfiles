@@ -6,7 +6,6 @@ return {
     'nvim-tree/nvim-web-devicons',
   },
   config = function()
-    vim.opt.termguicolors = true
     require('bufferline').setup({
       options = {
         mode = 'buffers',
@@ -24,7 +23,7 @@ return {
         max_name_length = 30,
         max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
         indicator = {
-          icon = '|',           -- this should be omitted if indicator style is not 'icon'
+          icon = '|', -- this should be omitted if indicator style is not 'icon'
           style = 'none',
         },
         numbers = 'none', -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
