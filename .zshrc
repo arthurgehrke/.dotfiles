@@ -1,6 +1,15 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 # Path
+export PATH=$PATH:/usr/local/bin 
+export PATH=$PATH:/usr/local/lib
 export PATH="/usr/local/sbin:$PATH"
+export PATH="/Library/Frameworks/R.framework/Resources:$PATH"
+
+# ncurses
+export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/ncurses/lib/pkgconfig"
+export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
 
 # brew mac m1
 export PATH=/opt/homebrew/bin:$PATH
@@ -13,10 +22,10 @@ then
   compinit
 fi
 
-source $HOME/.zaliases
-source $HOME/.zscripts
+source "$HOME"/.zaliases
+source "$HOME"/.zscripts
 # source $HOME/.zprofile
-source $HOME/.themes/zsh/.p10k.zsh
+source "$HOME"/.themes/zsh/.p10k.zsh
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -31,9 +40,8 @@ setopt NO_LIST_BEEP
 export LANG=en_US.UTF-8
 export EDITOR=nvim
 
-if [[ "$TERM" == "tmux-256color" ]]; then
-  export TERM=screen-256color
-fi
+
+export TERM="tmux-256color"
 
 export DISABLE_MAGIC_FUNCTIONS=true
 
@@ -117,12 +125,13 @@ bindkey -e '^w' backward-kill-word
 bindkey '^[[Z' reverse-menu-complete
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
+# edit current command in $EDITOR
 
 
 # bindkey -e '^r' history-incremental-pattern-search-backward
 
 peco-history-selection() {
-  BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+  BUFFER=$(history -n 1 | tail -r  | awk '!a[$0]++' | peco)
   CURSOR=$#BUFFER
   zle reset-prompt
 }
@@ -212,8 +221,7 @@ fi
 ##############################################################################
 # iTerm integration (for OS X iTerm2)
 # @see https://iterm2.com/shell_integration.html
-if [[ "`uname`" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
+if [[ "$(uname)" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
   export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
-  source ${HOME}/.iterm2_shell_integration.zsh
+  source "${HOME}"/.iterm2_shell_integration.zsh
 fi
-
