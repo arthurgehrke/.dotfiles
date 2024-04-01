@@ -1,9 +1,8 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
-# Path
+
 export PATH=$PATH:/usr/local/bin 
 export PATH=$PATH:/usr/local/lib
 export PATH="/usr/local/sbin:$PATH"
-export PATH="/Library/Frameworks/R.framework/Resources:$PATH"
 
 # ncurses
 export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
@@ -39,7 +38,7 @@ setopt NO_BEEP
 setopt NO_LIST_BEEP
 export LANG=en_US.UTF-8
 export EDITOR=nvim
-
+export PAGER=less
 
 export TERM="tmux-256color"
 
@@ -148,9 +147,12 @@ stty intr \^k
 ##############################################################################
 # Ruby
 ##############################################################################
+if [ -d "$HOME/.rbenv" ]; then
+  export RBENV_ROOT="$HOME/.rbenv"
+  eval "$(rbenv init - zsh)"
+fi
+
 export GEM_HOME="$HOME/.gem"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 
 ##############################################################################
 # Java
@@ -224,4 +226,12 @@ fi
 if [[ "$(uname)" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
   export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
   source "${HOME}"/.iterm2_shell_integration.zsh
+fi
+
+##############################################################################
+# Docker
+##############################################################################
+# export PATH="$HOME/.docker/bin":$PATH
+if [ -d "$HOME/.docker" ]; then
+    export PATH="$PATH:$HOME/.docker/bin"
 fi

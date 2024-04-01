@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias reload!='. ~/.zshrc'
@@ -73,8 +75,6 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 
 alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
 alias breew='brew update && brew upgrade && brew cleanup'
-
-alias execzsh='exec zsh'
 
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
