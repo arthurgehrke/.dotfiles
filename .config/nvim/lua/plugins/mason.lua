@@ -45,7 +45,6 @@ return {
         'selene', -- lua lint
         'shellcheck', -- bash, sh, zsh lint
         'shfmt', -- bash, sh, zsh format
-        'yamllint', -- yaml lint
         'eslint_d',
         'prettier',
         'prettierd',

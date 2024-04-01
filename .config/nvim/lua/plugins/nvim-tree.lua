@@ -6,11 +6,29 @@ return {
     dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
-    cmd = 'NvimTreeToggle',
+    cmd = { 'NvimTreeFindFileToggle', 'NvimTreeToggle' },
     keys = {
-      { '<leader>f', ':NvimTreeToggle<CR>', desc = 'Toggle tree' },
+      {
+        '<leader>ee',
+        '<cmd>NvimTreeToggle<CR>',
+        desc = '[E]xplorer Op[E]n',
+      },
+      {
+        '<leader>f',
+        '<cmd>NvimTreeFindFileToggle<CR>',
+        desc = '[E]xplorer on [F]ile',
+      },
+      {
+        '<leader>ec',
+        '<cmd>NvimTreeCollapse<CR>',
+        desc = '[E]xplorer [C]ollapse',
+      },
     },
     config = function()
+      -- recommended settings from nvim-tree documentation
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+
       local signcolumn_width = 7 -- AKA gutter width
       local min_buffer_width = 110 + signcolumn_width
       local total_dual_panel_cols = min_buffer_width * 2 + 1
@@ -18,7 +36,6 @@ return {
       local max_sidebar_width = 32
 
       vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
-
 
       local get_sidebar_cols = function()
         local neovim_cols = vim.o.columns
@@ -41,6 +58,7 @@ return {
         local function opts(desc)
           return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
+
         vim.keymap.set('n', '<C-d>', api.tree.change_root_to_node, opts('CD'))
         vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
         vim.keymap.set('n', '<C-k>', api.node.show_info_popup, opts('Info'))

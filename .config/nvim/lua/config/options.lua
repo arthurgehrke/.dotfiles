@@ -83,6 +83,7 @@ vim.opt.listchars = { eol = nil, trail = '~', tab = '  ', nbsp = '␣' }
 
 vim.g.loaded_perl_provider = 0
 vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
+vim.env.PYENV_VERSION = vim.fn.system('pyenv version'):match('(%S+)%s+%(.-%)')
 vim.g.ruby_host_prog = '/usr/bin/ruby'
 
 vim.g.loaded_netrw = 1

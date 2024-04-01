@@ -1,5 +1,4 @@
 return {
-  -- dashboard
   {
     'mhinz/vim-startify',
     lazy = false,
@@ -22,20 +21,7 @@ return {
       g.startify_lists = {
         { type = 'dir', header = { '         Folders' .. fn.getcwd() } },
         { type = 'files', header = { '         Recent Files' } },
-        { type = 'sessions', header = { '         Sessions' } },
-        { type = 'bookmarks', header = { '         Bookmarks' } },
         { type = 'commands', header = { '       גּ  Commands' } },
-      }
-
-      g.startify_bookmarks = {
-        { v = '~/.config/nvim/init.vim' },
-        { b = '~/.config/kitty/kitty.conf' },
-        { s = '~/.zshrc' },
-        { z = '~/.gitconfig' },
-        { a = '~/.config/nvim/plugconf/' },
-        { t = '~/.tmux.conf' },
-        -- {d = "~/dotfiles"},
-        -- {p = "~/CodeHub/playgrounds/playground.js"}
       }
 
       g.startify_custom_header = 'startify#center(g:ascii)'
@@ -52,8 +38,8 @@ return {
       g.startify_update_oldfiles = 1
 
       vim.g.startify_commands = {
-        { f = { '  Find Word', 'Telescope live_grep' } },
-        { o = { '  Find File', 'Telescope find_files' } },
+        { f = { '  Find File', 'Telescope find_files' } },
+        { r = { '  Find Word', 'Telescope live_grep' } },
         { lc = { '  Check Plugins', 'Lazy check' } },
         { ls = { '  Sync Plugins (Lazy install, clean, update)', 'Lazy sync' } },
         { ts = { '  Update Treesitter', 'TSUpdateSync' } },
