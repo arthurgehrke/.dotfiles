@@ -1,24 +1,21 @@
 return {
   'nvim-telescope/telescope.nvim',
-  lazy = false,
+  -- lazy = false,
   cmd = { 'Telescope' },
   dependencies = {
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     { 'nvim-lua/popup.nvim' },
     { 'nvim-lua/plenary.nvim' },
-    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
-    { 'nvim-telescope/telescope-symbols.nvim' },
-    'nvim-telescope/telescope-symbols.nvim',
     'jvgrootveld/telescope-zoxide',
-    { 'nvim-telescope/telescope-ui-select.nvim' },
-    { 'nvim-telescope/telescope-fzy-native.nvim', build = 'make' },
   },
   keys = {
     {
       '<leader>fb',
-      -- stylua: ignore
-      function() require("telescope").extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = "%:p:h" }) end,
+      function()
+        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = '%:p:h' })
+      end,
       desc = '[file] [b]rowser',
     },
     {
@@ -30,8 +27,9 @@ return {
     },
     {
       '<leader>fo',
-      -- stylua: ignore
-      function() require("telescope").extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = "%:p:h" }) end,
+      function()
+        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = '%:p:h' })
+      end,
       desc = '[o]pen file browser',
     },
     {
@@ -55,17 +53,13 @@ return {
 
     { '<leader>fl', '<cmd>Telescope highlights<cr>', desc = 'Find Highlights' },
     { '<leader>fz', '<cmd>Telescope zoxide list<cr>', desc = 'Find Directory' },
-    -- {
-    --   '<leader>;',
-    --   function()
-    --     require('telescope.builtin').live_grep({
-    --       default_text = vim.fn.expand('<cword>'),
-    --     })
-    --   end,
-    --   desc = 'Grep cursor word',
-    -- },
   },
   config = function()
+    require('telescope').load_extension('file_browser')
+    require('telescope').load_extension('fzf')
+    require('telescope').load_extension('zoxide')
+    require('telescope').load_extension('live_grep_args')
+
     local telescope = require('telescope')
     local actions = require('telescope.actions')
     local actions_layout = require('telescope.actions.layout')
@@ -88,16 +82,44 @@ return {
     telescope.setup({
       defaults = {
         theme = 'dropdown',
-        prompt_prefix = ' ❯ ',
+
+        prompt_prefix = '   ',
+        selection_caret = ' ',
+        entry_prefix = '  ',
+        multi_icon = '',
+        -- prompt_prefix = ' ❯ ',
+        -- selection_caret = '> ',
+        file_sorter = require('telescope.sorters').get_fuzzy_file,
+        generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
+
+        set_env = { ['COLORTERM'] = 'truecolor' },
+        results_title = false,
+
         color_devicons = true,
         preview = {
           treesitter = false,
         },
-        file_sorter = require('telescope.sorters').get_fuzzy_file,
+        sorting_strategy = 'ascending',
+        selection_strategy = 'reset',
+        layout_strategy = 'horizontal',
+        layout_config = {
+          prompt_position = 'top',
+          horizontal = {
+            prompt_position = 'top',
+            mirror = false,
+            preview_width = 0.55,
+            results_width = 0.8,
+          },
+          vertical = {
+            mirror = false,
+          },
+          width = 0.87,
+          height = 0.80,
+          preview_cutoff = 120,
+        },
         file_ignore_patterns = {
           '__pycache__/',
           '__pycache__/*',
-          'build/',
           'dist/',
           'gradle/',
           'node_modules/',
@@ -120,37 +142,41 @@ return {
           'dist/**',
           'build/**',
           '.git/**',
+          '.next/**',
+          '.undo/**',
+          '.undo',
           'package%-lock.json',
           'yarn%-lock.json',
         },
         vimgrep_arguments = {
           'rg',
+          '-L',
           '--color=never',
           '--no-heading',
           '--with-filename',
           '--line-number',
           '--column',
           '--smart-case',
-          '--hidden',
-          '--multiline',
-          '--only-matching',
-          '--follow',
         },
         mappings = { -------------------------------------------------------------- {{{
           i = {
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
-            ['<C-x>'] = actions.select_horizontal, -- open file in split horizontal
-            ['<C-v>'] = actions.select_vertical, -- open file in split vertical
 
             ['<esc>'] = actions.close,
             ['<C-n>'] = actions.move_selection_next,
             ['<C-p>'] = actions.move_selection_previous,
 
-            ['<C-u>'] = false, -- NOTE: 为了在 insert 模式下使用 <C-u> 清空 input, 不能使用 nil.
+            ['<C-x>'] = false,
+            ['<C-u>'] = false,
             ['<C-d>'] = false,
-
-            ['<C-l>'] = actions.send_selected_to_qflist + actions.open_qflist,
+            ['<Esc>'] = actions.close,
+            ['<C-c>'] = actions.close,
+            ['<C-s>'] = actions.select_horizontal,
+            ['<C-v>'] = actions.select_vertical,
+            ['<C-t>'] = actions.select_tab,
+            ['<C-j>'] = actions.move_selection_next,
+            ['<C-k>'] = actions.move_selection_previous,
           },
 
           n = {
@@ -166,35 +192,40 @@ return {
 
             ['gg'] = actions.move_to_top,
             ['G'] = actions.move_to_bottom,
-            --["M"] = actions.move_to_middle,
+
+            ['<Esc>'] = actions.close,
+            ['j'] = actions.move_selection_next,
+            ['k'] = actions.move_selection_previous,
+            ['H'] = actions.move_to_top,
+            ['M'] = actions.move_to_middle,
+            ['L'] = actions.move_to_bottom,
 
             ['<C-u>'] = false,
             ['<C-d>'] = false,
-
-            ['<S-Up>'] = actions.results_scrolling_up,
-            ['<S-Down>'] = actions.results_scrolling_down,
-            --- actions.results_scrolling_left(), actions.results_scrolling_right()
-
-            ['<Tab>'] = actions.toggle_selection + actions.move_selection_next,
-            ['<S-Tab>'] = actions_layout.cycle_layout_next, -- layout window
-
-            --- NOTE: put all <tab> selected files to quickfix list.
-            ['<C-l>'] = actions.send_selected_to_qflist + actions.open_qflist,
           },
         },
         initial_mode = 'insert',
-        selection_strategy = 'reset',
-        sorting_strategy = 'descending',
-        layout_strategy = 'horizontal',
         borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
       },
       pickers = {
+        buffers = {
+          sort_mru = true,
+          mappings = {
+            i = { ['<c-d>'] = actions.delete_buffer },
+          },
+        },
+        live_grep = { preview = true },
+        grep_string = { preview = true },
+        man_pages = { sections = { '2', '3' } },
+        lsp_document_symbols = { path_display = { 'hidden' } },
+        lsp_workspace_symbols = { path_display = { 'shorten' } },
         find_files = {
           hidden = true,
         },
       },
       extensions = {
         fzf = {
+          fuzzy = false, -- false will only do exact matching
           fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true, -- override the file sorter
@@ -216,12 +247,5 @@ return {
         },
       },
     })
-
-    require('telescope').load_extension('live_grep_args')
-    require('telescope').load_extension('file_browser')
-    require('telescope').load_extension('fzf')
-    require('telescope').load_extension('fzy_native')
-    require('telescope').load_extension('zoxide')
-    require('telescope').load_extension('live_grep_args')
   end,
 }

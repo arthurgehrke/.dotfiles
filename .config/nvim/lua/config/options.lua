@@ -1,5 +1,25 @@
 vim.opt.clipboard = { 'unnamedplus' }
 
+vim.opt.autowrite = true
+vim.opt.conceallevel = 2
+vim.opt.textwidth = 120
+
+vim.opt.fillchars = {
+  foldopen = '',
+  foldclose = '',
+  fold = ' ',
+  foldsep = ' ',
+  diff = '╱',
+  eob = ' ',
+}
+
+if vim.fn.has('nvim-0.10') == 1 then
+  vim.opt.smoothscroll = true
+end
+
+vim.opt.grepformat = '%f:%l:%c:%m'
+vim.opt.grepprg = 'rg --vimgrep'
+
 -- gutter sizing
 vim.opt.signcolumn = 'yes:1'
 
@@ -31,16 +51,29 @@ vim.o.showmode = true
 vim.o.ruler = true
 vim.opt.cursorline = true
 
-vim.o.backup = false
-vim.o.writebackup = false
-vim.o.swapfile = false
-vim.o.writebackup = false
-vim.opt.backup = false
-vim.opt.wrap = false
-vim.opt.undofile = true
+vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
 
-vim.o.undodir = vim.fn.stdpath('cache') .. '/undoes'
-vim.o.fileformats = 'unix,dos,mac'
+-- vim.o.undodir = vim.fn.stdpath('cache') .. '/undoes'
+
+local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand('~/.config')
+vim.opt.undodir = { prefix .. '/nvim/.undo//' }
+vim.opt.backupdir = { prefix .. '/nvim/.backup//' }
+vim.opt.directory = { prefix .. '/nvim/.swp//' }
+
+-- vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
+
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+
+vim.opt.undofile = true
+vim.opt.history = 1000 --> cmd history depth
+vim.opt.swapfile = false
+vim.opt.undoreload = 10000 --> number of lines to save for undo
+vim.o.writebackup = false
+vim.opt.undolevels = 10000
+vim.opt.backup = false -- overwrites previous backups instead of making new one
+
+vim.o.fileformats = 'mac,unix,dos'
+vim.opt.wrap = false
 
 vim.opt.autoread = true
 vim.o.ttimeoutlen = 50
@@ -74,7 +107,7 @@ vim.opt.visualbell = false
 
 vim.opt.foldlevel = 999
 vim.opt.termguicolors = true
-vim.o.background = 'dark' -- or "light" for light mode
+vim.opt.background = 'dark'
 
 vim.opt.mouse = 'a'
 vim.opt.list = true
@@ -93,10 +126,10 @@ vim.g.loaded_matchparen = 1
 vim.diagnostic.config({
   virtual_text = false,
   float = { header = '', prefix = '', focusable = false },
-  update_in_insert = false,
-  severity_sort = true,
+  update_in_insert = true,
+  severity_sort = false,
   signs = {
-    severity = { min = vim.diagnostic.severity.WARN },
+    severity = { min = vim.diagnostic.severity.ERROR },
   },
   underline = {
     severity = { min = vim.diagnostic.severity.HINT },
@@ -104,8 +137,10 @@ vim.diagnostic.config({
 })
 
 -- Use nerd font for gutter signs
-local signs = { Error = "󰅚", Warn = "󰀪", Hint = "󰌶", Info = "󰋽" }
+local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
+-- local signs = { Error = '󰅚', Warn = '󰀪', Hint = '󰌶', Info = '󰋽' }
+
 for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
+  local hl = 'DiagnosticSign' .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end

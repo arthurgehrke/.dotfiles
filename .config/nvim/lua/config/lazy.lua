@@ -9,11 +9,15 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
+
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 require('lazy').setup('plugins', {
   defaults = {
     lazy = true, -- Default to lazy loading, optional
+  },
+  opts = {
+    colorscheme = 'gruvbox',
   },
   change_detection = {
     notify = false, -- I find the config changed notification super annoying

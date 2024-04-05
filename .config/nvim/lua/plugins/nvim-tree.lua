@@ -29,6 +29,23 @@ return {
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
 
+
+
+      local search_in_node = function(node)
+        if not node.absolute_path then
+          return make_finder()
+        end
+
+        if node.fs_stat.type == 'directory' then
+          return make_finder(node.absolute_path)
+        end
+
+        if node.fs_stat.type == 'file' then
+          require('nvim-tree.actions.node.open-file').fn('edit', node.absolute_path)
+          return require('telescope.builtin').current_buffer_fuzzy_find()
+        end
+      end
+
       local signcolumn_width = 7 -- AKA gutter width
       local min_buffer_width = 110 + signcolumn_width
       local total_dual_panel_cols = min_buffer_width * 2 + 1
@@ -115,10 +132,14 @@ return {
         open_on_tab = false,
         update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
         diagnostics = {
-          enable = false,
-          show_on_dirs = false,
-          show_on_open_dirs = false,
+          enable = true,
+          show_on_dirs = true,
+          show_on_open_dirs = true,
           debounce_delay = 50,
+          severity = {
+            min = vim.diagnostic.severity.ERROR,
+            max = vim.diagnostic.severity.ERROR,
+          },
         },
         update_focused_file = { -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
           enable = true,
@@ -167,6 +188,7 @@ return {
             },
             git_placement = 'before',
             modified_placement = 'after',
+            diagnostics_placement = 'after',
             webdev_colors = false,
             show = {
               file = true,
@@ -174,7 +196,7 @@ return {
               folder_arrow = true,
               git = true,
               modified = true,
-              diagnostics = false,
+              diagnostics = true,
               bookmarks = false,
             },
             glyphs = {
