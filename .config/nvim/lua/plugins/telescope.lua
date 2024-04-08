@@ -55,11 +55,6 @@ return {
     { '<leader>fz', '<cmd>Telescope zoxide list<cr>', desc = 'Find Directory' },
   },
   config = function()
-    require('telescope').load_extension('file_browser')
-    require('telescope').load_extension('fzf')
-    require('telescope').load_extension('zoxide')
-    require('telescope').load_extension('live_grep_args')
-
     local telescope = require('telescope')
     local actions = require('telescope.actions')
     local actions_layout = require('telescope.actions.layout')
@@ -226,7 +221,6 @@ return {
       extensions = {
         fzf = {
           fuzzy = false, -- false will only do exact matching
-          fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true, -- override the file sorter
           case_mode = 'smart_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
@@ -247,5 +241,10 @@ return {
         },
       },
     })
+
+    require('telescope').load_extension('file_browser')
+    require('telescope').load_extension('fzf')
+    require('telescope').load_extension('zoxide')
+    require('telescope').load_extension('live_grep_args')
   end,
 }

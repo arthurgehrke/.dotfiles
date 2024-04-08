@@ -2,7 +2,7 @@ return {
   {
     'mhinz/vim-startify',
     lazy = false,
-    disable = true,
+    enabled = false,
     config = function()
       local g, cmd = vim.g, vim.cmd
       local fn = vim.fn
