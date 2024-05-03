@@ -2,8 +2,8 @@
 
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
-alias reload!='. ~/.zshrc'
-
+alias reload!='source ~/.zshrc'
+alias restart="exec $SHELL -l"
 
 if [ -f "$(which lsd)" ]; then
     alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
@@ -13,22 +13,16 @@ if [ -f "$(which bat)" ]; then
     alias cat='bat'
 fi
 
-if [ -f "$(which pyenv)" ]; then
-    alias pr='pipenv run'
-fi
-
 # alias ls="ls -lG"
 # alias ll='ls -lAGFp'
 alias lts='ll --timesort'
+
+alias addiptomongo='atlas accessLists create '
 
 alias lz="eza -l"
 alias ld= "eza -lD"
 alias lf="eza -lF --color=always | grep -v /"
 alias lh="eza -dl .* --group-directories-first"
-# alias ls="eza -alF --color=always --sort=size | grep -v /"
-# alias lt="eza -al --sort=modified"
-
-alias less='less -R'
 
 # easier to read disk human-readable sizes
 alias df='df -h'
@@ -62,7 +56,6 @@ alias zshsource='source ~/.zshrc'
 # ip
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
-alias myip="ifconfig en0|awk '/inet / { print $2 }'"
 
 # Reload the shell
 alias reload="exec ${SHELL} -l"
@@ -95,9 +88,14 @@ alias openpreview='open -a Preview'
 alias port='sudo lsof -nP i4TCP'
 
 alias npmlist="npm list --depth=0"
-alias restart="exec $SHELL -l"
 
-alias sshagentstart="eval $(ssh-agent -s) && ssh-add -A"
+# alias sshagentstart="eval $(ssh-agent -s) && ssh-add -A"
+
+# brew install keychain
+if hash keychain 2>/dev/null; then
+  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab github`'
+  alias ssh-agent-stop='keychain --stop all'
+fi
 
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""

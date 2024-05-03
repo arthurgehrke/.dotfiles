@@ -4,12 +4,6 @@ export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/usr/local/lib
 export PATH="/usr/local/sbin:$PATH"
 
-# ncurses
-export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/ncurses/lib/pkgconfig"
-export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
-
 # brew mac m1
 export PATH=/opt/homebrew/bin:$PATH
 
@@ -23,10 +17,9 @@ fi
 
 source "$HOME"/.zaliases
 source "$HOME"/.zscripts
-# source $HOME/.zprofile
-source "$HOME"/.themes/zsh/.p10k.zsh
+source $HOME/.zprofile
+source "$HOME"/.themes/zsh/circular/.p10k.zsh
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -34,8 +27,8 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 ##############################################################################
 # Config
 ##############################################################################
-setopt NO_BEEP
-setopt NO_LIST_BEEP
+autoload -U colors && colors
+
 export LANG=en_US.UTF-8
 export EDITOR=nvim
 export PAGER=less
@@ -81,29 +74,45 @@ setopt PUSHD_SILENT         # Do not print the directory stack after pushd or po
 setopt AUTO_LIST
 setopt AUTO_REMOVE_SLASH
 setopt LIST_AMBIGUOUS
-setopt EXTENDED_GLOB  NO_BEEP      # Use extended globbing syntax.
+setopt EXTENDED_GLOB 
+setopt NO_BEEP      
 setopt CASE_MATCH
 setopt CASE_PATHS
 setopt CSH_NULL_GLOB
-setopt PROMPT_SP
-setopt MENU_COMPLETE
-setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt PROMPT_SUBST
 setopt NO_HUP
-
-##############################################################################
-# SSH
-##############################################################################
-# brew install keychain
-if hash keychain 2>/dev/null; then
-  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab github`'
-  alias ssh-agent-stop='keychain --stop all'
-fi
+setopt NO_LIST_BEEP
 
 ##############################################################################
 # KeyMappings
 ##############################################################################
+# Force the usage of Emacs keybindings. Otherwise they will be set
+# depending on whether the literal string "vi" appears in the value of
+# EDITOR, which is a terrible idea for many reasons (not least of
+# which being that my EDITOR is Vim while I want to use Emacs
+# keybindings in Zsh).
+bindkey -e
+
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list \
+    'm:{[:lower:]}={[:upper:]}' \
+    '+r:|[._-]=* r:|=*' \
+    '+l:|=*'
+
+# color
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
+zstyle ':completion:*:*:cp:*' file-sort size
+zstyle ':completion:*' file-sort modification
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
+
+zstyle ':completion:*' completer _expand _complete _approximate
+
 autoload -z edit-command-line
 zle -N edit-command-line
 
@@ -113,19 +122,25 @@ bindkey -e '^b' backward-word
 bindkey -e '^e' forward-word
 bindkey -e '^h' backward-char
 bindkey -e '^l' forward-char
-bindkey -e '^i' expand-or-complete
 bindkey -e '^F' autosuggest-accept-suggested-small-word
 bindkey -e '^d' delete-char
 #bindkey '^R' history-incremental-search-backward
 bindkey -e '^a' beginning-of-line
 bindkey -e '^e' end-of-line
-bindkey -e "^y" yank
+# bindkey -e "^y" yank
+bindkey -e '^Y' accept-search
 bindkey -e '^w' backward-kill-word
-bindkey '^[[Z' reverse-menu-complete
+
+bindkey '\t' autosuggest-accept
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
 # edit current command in $EDITOR
 
+# shift + tab
+bindkey -e '^I'   complete-word       # tab          | complete
+bindkey '^[[Z' reverse-menu-complete
+
+bindkey -e '^u' expand-or-complete
 
 # bindkey -e '^r' history-incremental-pattern-search-backward
 
@@ -137,8 +152,6 @@ peco-history-selection() {
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
-bindkey -e '^f' history-incremental-pattern-search-forward
-
 bindkey -e '^j' history-substring-search-up
 bindkey -e '^k' history-substring-search-down
 
@@ -147,12 +160,10 @@ stty intr \^k
 ##############################################################################
 # Ruby
 ##############################################################################
-if [ -d "$HOME/.rbenv" ]; then
+if command -v rbenv &>/dev/null; then
   export RBENV_ROOT="$HOME/.rbenv"
   eval "$(rbenv init - zsh)"
 fi
-
-export GEM_HOME="$HOME/.gem"
 
 ##############################################################################
 # Java
@@ -201,6 +212,7 @@ export PATH=~/.composer/vendor/bin:$PATH
 ##############################################################################
 export NPM_PACKAGES=${HOME}/.npm-global
 export NPM_CONFIG_PREFIX=${HOME}/.npm-global
+export PATH="$HOME/.npm-global/bin:$PATH"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$HOME/.nodenv/bin:$PATH"
 export NODENV_VERSION="$(nodenv-global 2>/dev/null || true)"
@@ -235,3 +247,19 @@ fi
 if [ -d "$HOME/.docker" ]; then
     export PATH="$PATH:$HOME/.docker/bin"
 fi
+
+##############################################################################
+# Brew
+##############################################################################
+export HOMEBREW_NO_AUTO_UPDATE=1
+export NO_COLOR=1
+
+export PATH=$(brew --prefix openssl)/bin:$PATH
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
+export LDFLAGS="-L/opt/homebrew/opt/llvm@17/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm@17/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/ncurses/lib/pkgconfig"
+export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
