@@ -1,6 +1,9 @@
 return {
   {
     'neovim/nvim-lspconfig',
+    dependencies = {
+      'b0o/schemastore.nvim',
+    },
     config = function()
       local lspconfig = require('lspconfig')
       local util = require('lspconfig/util')
@@ -37,10 +40,40 @@ return {
         },
       })
 
+      lspconfig.pyright.setup({
+        capabilities = capabilities,
+        settings = {
+          pyright = {
+            disableOrganizeImports = true,
+          },
+        },
+        root_dir = function(fname)
+          return util.root_pattern(
+            '.git',
+            'setup.py',
+            'setup.cfg',
+            '.venv',
+            'venv',
+            'pyproject.toml',
+            'requirements.txt'
+          )(fname) or util.path.dirname(fname)
+        end,
+      })
+
+      lspconfig.pylsp.setup({
+        capabilities = capabilities
+      })
+
       lspconfig.jsonls.setup({
         handlers = handlers,
-        init_options = {
-          provideFormatter = false,
+        filetypes = {
+          'json',
+        },
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas(),
+            validate = { enable = true },
+          },
         },
       })
 
@@ -51,7 +84,6 @@ return {
           -- formatting capabilities.
           override_formatting_capability(client, true)
         end,
-
         settings = { format = false },
         root_dir = util.root_pattern(
           '.eslintrc',
@@ -62,12 +94,6 @@ return {
           '.eslintrc.json'
         ),
         handlers = handlers,
-      })
-
-      lspconfig.jsonls.setup({
-        filetypes = {
-          'json',
-        },
       })
 
       lspconfig.yamlls.setup({
@@ -99,24 +125,7 @@ return {
       'vue',
     },
     config = function()
-      local api = require('typescript-tools.api')
       require('typescript-tools').setup({
-        handlers = {
-          ['textDocument/publishDiagnostics'] = api.filter_diagnostics({ 6133 }),
-        },
-
-        -- settings = {
-        --   tsserver_file_preferences = {
-        --     includeInlayParameterNameHints = 'literal',
-        --     includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        --     includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-        --     includeInlayFunctionParameterTypeHints = true,
-        --     includeInlayVariableTypeHints = true,
-        --     includeInlayFunctionLikeReturnTypeHints = false,
-        --     includeInlayPropertyDeclarationTypeHints = true,
-        --     includeInlayEnumMemberValueHints = true,
-        --   },
-        -- },
         settings = {
           separate_diagnostic_server = true,
           composite_mode = 'separate_diagnostic',

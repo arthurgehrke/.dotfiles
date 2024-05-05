@@ -1,8 +1,7 @@
-vim.opt.clipboard = { 'unnamedplus' }
-
 vim.opt.autowrite = true
 vim.opt.conceallevel = 2
 vim.opt.textwidth = 120
+vim.opt.clipboard = { 'unnamedplus' }
 
 vim.opt.fillchars = {
   foldopen = '',
@@ -43,7 +42,6 @@ vim.opt.numberwidth = 4
 
 vim.opt.hidden = true
 
---vim.opt.completeopt = 'menuone,noinsert,noselect'
 vim.opt.completeopt = 'menu,menuone,noselect'
 
 vim.o.showmode = true
@@ -53,18 +51,14 @@ vim.opt.cursorline = true
 
 vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
 
--- vim.o.undodir = vim.fn.stdpath('cache') .. '/undoes'
-
 local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand('~/.config')
-vim.opt.undodir = { prefix .. '/nvim/.undo//' }
+vim.opt.undofile = true
+vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
 vim.opt.backupdir = { prefix .. '/nvim/.backup//' }
 vim.opt.directory = { prefix .. '/nvim/.swp//' }
 
--- vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
-
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 
-vim.opt.undofile = true
 vim.opt.history = 1000 --> cmd history depth
 vim.opt.swapfile = false
 vim.opt.undoreload = 10000 --> number of lines to save for undo
@@ -114,27 +108,53 @@ vim.opt.list = true
 
 vim.opt.listchars = { eol = nil, trail = '~', tab = '  ', nbsp = '␣' }
 
-vim.g.loaded_perl_provider = 0
-vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
-vim.env.PYENV_VERSION = vim.fn.system('pyenv version'):match('(%S+)%s+%(.-%)')
-vim.g.ruby_host_prog = '/usr/bin/ruby'
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_matchparen = 1
 
+-- ripgrep
+vim.opt.rtp:append('/opt/homebrew/opt/fzf')
+
+-- vim.diagnostic.config({
+--   virtual_text = false,
+--   float = { header = '', prefix = '', focusable = false },
+--   update_in_insert = true,
+--   severity_sort = true,
+--   signs = {
+--     severity = { min = vim.diagnostic.severity.ERROR },
+--   },
+--   underline = {
+--     severity = { min = vim.diagnostic.severity.HINT },
+--   },
+-- })
+
 vim.diagnostic.config({
   virtual_text = false,
-  float = { header = '', prefix = '', focusable = false },
+  signs = true,
+  underline = true,
   update_in_insert = true,
-  severity_sort = false,
-  signs = {
-    severity = { min = vim.diagnostic.severity.ERROR },
-  },
-  underline = {
-    severity = { min = vim.diagnostic.severity.HINT },
-  },
+  severty_sort = true,
 })
+
+-- vim.diagnostic.config({
+--   -- underline = true,
+--   update_in_insert = true,
+--   virtual_text = false,
+--   float = { header = '', prefix = '', focusable = false },
+--   severty_sort = true,
+--   inlay_hints = { enabled = false },
+--   signs = {
+--     severity = { min = vim.diagnostic.severity.ERROR },
+--   },
+--   underline = {
+--     severity = { min = vim.diagnostic.severity.HINT },
+--   },
+--   format = {
+--     formatting_options = nil,
+--     timeout_ms = nil,
+--   },
+-- })
 
 -- Use nerd font for gutter signs
 local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
@@ -143,4 +163,17 @@ local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
 for type, icon in pairs(signs) do
   local hl = 'DiagnosticSign' .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+
+-- vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
+-- vim.env.PYENV_VERSION = vim.fn.system('pyenv version'):match('(%S+)%s+%(.-%)')
+
+vim.g.loaded_perl_provider = 0
+vim.g.ruby_host_prog = '/usr/bin/ruby'
+
+if vim.g.is_mac then
+  vim.g.python3_host_prog = '/usr/bin/python3'
+elseif vim.g.is_linux then
+  vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
 end

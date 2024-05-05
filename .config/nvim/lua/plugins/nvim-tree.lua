@@ -29,23 +29,6 @@ return {
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
 
-
-
-      local search_in_node = function(node)
-        if not node.absolute_path then
-          return make_finder()
-        end
-
-        if node.fs_stat.type == 'directory' then
-          return make_finder(node.absolute_path)
-        end
-
-        if node.fs_stat.type == 'file' then
-          require('nvim-tree.actions.node.open-file').fn('edit', node.absolute_path)
-          return require('telescope.builtin').current_buffer_fuzzy_find()
-        end
-      end
-
       local signcolumn_width = 7 -- AKA gutter width
       local min_buffer_width = 110 + signcolumn_width
       local total_dual_panel_cols = min_buffer_width * 2 + 1
@@ -79,7 +62,7 @@ return {
         vim.keymap.set('n', '<C-d>', api.tree.change_root_to_node, opts('CD'))
         vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
         vim.keymap.set('n', '<C-k>', api.node.show_info_popup, opts('Info'))
-        vim.keymap.set('n', '<C-r>', api.fs.rename_sub, opts('Rename: Omit Filename'))
+        -- vim.keymap.set('n', '<C-r>', api.fs.rename_sub, opts('Rename: Omit Filename'))
         vim.keymap.set('n', '<C-v>', api.node.open.vertical, opts('Open: Vertical Split'))
         vim.keymap.set('n', '<C-s>', api.node.open.horizontal, opts('Open: Horizontal Split'))
         vim.keymap.set('n', '<BS>', api.node.navigate.parent_close, opts('Close Directory'))
@@ -94,7 +77,6 @@ return {
         vim.keymap.set('n', 'd', api.fs.remove, opts('Delete'))
         vim.keymap.set('n', 'D', api.fs.trash, opts('Trash'))
         vim.keymap.set('n', 'E', api.tree.expand_all, opts('Expand All'))
-        vim.keymap.set('n', 'e', api.fs.rename_basename, opts('Rename: Basename'))
         vim.keymap.set('n', ']e', api.node.navigate.diagnostics.next, opts('Next Diagnostic'))
         vim.keymap.set('n', '[e', api.node.navigate.diagnostics.prev, opts('Prev Diagnostic'))
         vim.keymap.set('n', 'F', api.live_filter.clear, opts('Clean Filter'))
@@ -120,6 +102,7 @@ return {
         vim.keymap.set('n', 'y', api.fs.copy.filename, opts('Copy Name'))
         vim.keymap.set('n', 'Y', api.fs.copy.relative_path, opts('Copy Relative Path'))
       end
+
       require('nvim-tree').setup({
         on_attach = on_attach,
         sync_root_with_cwd = false,
@@ -243,8 +226,7 @@ return {
           dotfiles = false,
           git_clean = false,
           no_buffer = false,
-          custom = { 'node_modules', 'dist', '.dist', '.next' }, -- ".git$"
-          exclude = { 'tmp', 'logs' }, -- "node_modules"
+          custom = { "\\.git$", "^node_modules$", "^dist$", "^.eslintcache$", "^.next$", ".DS_Store", "tmp", "logs" },
         },
         log = {
           enable = false,

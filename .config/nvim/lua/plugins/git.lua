@@ -10,6 +10,9 @@ return {
     'tpope/vim-fugitive',
     lazy = false,
     keys = {
+      { '<Leader>ge', ':Gedit :<CR>' },
+      { '<Leader>gb', ':GBrowse<CR>' },
+      { '<Leader>gb', ":'<,'>GBrowse<CR>", mode = 'v' },
       { '<leader>gv', '<cmd>vertical Git<CR>', { desc = 'fugitive' } },
       {
         '<leader>gg',
@@ -34,8 +37,6 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim', -- required
       'sindrets/diffview.nvim', -- optional - Diff integration
-
-      -- Only one of these is needed, not both.
       'nvim-telescope/telescope.nvim', -- optional
     },
     config = true,
@@ -71,9 +72,6 @@ return {
           return '<Ignore>'
         end, { expr = true })
 
-        -- vim.keymap.set('n', '[c', '<cmd>Gitsigns prev_hunk<CR>', opts('Stage Hunk'))
-        -- vim.keymap.set('n', ']c', '<cmd>Gitsigns next_hunk<CR>', opts('Stage Hunk'))
-
         vim.keymap.set('n', '<space>hr', '<cmd>Gitsigns reset_hunk<CR>', opts('Reset Hunk'))
         vim.keymap.set('n', '<space>hR', '<cmd>Gitsigns reset_buffer<CR>', opts('Reset Buffer'))
         vim.keymap.set('n', '<space>hp', '<cmd>Gitsigns preview_hunk<CR>', opts('Preview Hunk'))
@@ -83,8 +81,8 @@ return {
         vim.keymap.set('n', '<space>hU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
         vim.keymap.set('n', '<space>hu', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
 
-        vim.keymap.set('v', '<space>hsr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
-        vim.keymap.set('v', '<space>hss', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
+        vim.keymap.set('v', '<space>hr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
+        vim.keymap.set('v', '<space>hs', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
         vim.keymap.set('n', '<leader>gd', gitsigns.diffthis)
         vim.keymap.set('n', '<leader>gD', function()
           gitsigns.diffthis('~')
@@ -99,10 +97,10 @@ return {
           topdelete = { hl = 'GitSignsDelete', text = '‾', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
           changedelete = { hl = 'GitSignsChange', text = '~', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
         },
-        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        signcolumn = true,
+        numhl = false,
+        linehl = false,
+        word_diff = false,
         watch_gitdir = {
           interval = 1000,
           follow_files = true,

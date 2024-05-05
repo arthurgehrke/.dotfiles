@@ -15,13 +15,17 @@ vim.keymap.set('n', 'vv', '<C-w>v', options) -- split window vertically
 vim.keymap.set('n', 'ss', '<C-w>s', options) -- split window horizontally
 vim.keymap.set('n', 'sx', ':close<CR>', options)
 vim.keymap.set('n', 'sd', ':bd<CR>', options)
+vim.keymap.set('n', 'sq', ':close<CR>', options)
+vim.keymap.set('n', 'tq', ':bd<cr>', options)
 vim.keymap.set('n', 'sq', '<Cmd>quit<CR>', options)
 vim.keymap.set('n', 'se', '<cmd>silent! %bdel|edit #|normal `"<C-n><leader>q<cr>', options)
 
-vim.keymap.set("x", "p", function() return 'pgv"' .. vim.v.register .. "y" end, { remap = false, expr = true })
+vim.keymap.set('x', 'p', function()
+  return 'pgv"' .. vim.v.register .. 'y'
+end, { remap = false, expr = true })
 -- vim.keymap.set("x", "p", '"_dP')
 -- vim.keymap.set("x", "P", '"_dp')
-vim.keymap.set("n", "x", '"_x')
+vim.keymap.set('n', 'x', '"_x')
 
 vim.keymap.set('n', '<Esc>', ':noh<CR>')
 
@@ -104,6 +108,9 @@ end, { desc = 'Show diagnostics for current line' })
 
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '[e', '<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>', opts)
+vim.keymap.set('n', ']e', '<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>', opts)
+
 vim.keymap.set('n', '<Leader>sq', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys

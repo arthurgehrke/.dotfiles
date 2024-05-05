@@ -31,8 +31,6 @@ return {
           'UltestOutput',
           'vimwiki',
           'markdown',
-          -- "json",
-          -- "txt",
           'vista',
           'NvimTree',
           'git',
@@ -49,7 +47,6 @@ return {
           'Outline',
           'Trouble',
           'lspinfo',
-          '', -- for all buffers without a file type
         },
       },
     })

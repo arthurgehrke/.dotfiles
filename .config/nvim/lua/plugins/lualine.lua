@@ -3,11 +3,9 @@ return {
   event = 'VeryLazy',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   init = function()
-    -- disable until lualine loads
     vim.opt.laststatus = 0
   end,
   opts = function()
-    -- miasma colors
     local colors = {
       bg = '#222222',
       black = '#1c1c1c',
@@ -63,7 +61,6 @@ return {
     -- config
     local config = {
       options = {
-        -- remove default sections and component separators
         disabled_filetypes = {
           statusline = { 'NvimTree' },
           winbar = { 'NvimTree' },

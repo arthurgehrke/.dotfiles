@@ -1,6 +1,7 @@
 return {
   'mfussenegger/nvim-lint',
   event = { 'BufReadPre', 'BufNewFile' },
+  enabled = false,
   -- lazy = true,
   config = function()
     local lint = require('lint')
@@ -11,15 +12,12 @@ return {
       javascriptreact = { 'eslint_d' },
       typescriptreact = { 'eslint_d' },
       python = { 'pylint' },
-      -- javascript = { 'eslint' },
-      -- typescript = { 'eslint' },
-      -- javascriptreact = { 'eslint' },
-      -- typescriptreact = { 'eslint' },
       sh = { 'shellcheck' },
       css = { 'stylelint' },
       scss = { 'stylelint' },
       yaml = { 'yamllint' },
     }
+
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
 
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {

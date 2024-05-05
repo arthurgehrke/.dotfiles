@@ -1,14 +1,13 @@
 return {
   'nvim-telescope/telescope.nvim',
-  -- lazy = false,
+  lazy = false,
   cmd = { 'Telescope' },
   dependencies = {
+    { 'nvim-telescope/telescope-fzy-native.nvim', build = 'make' },
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-    { 'nvim-lua/popup.nvim' },
     { 'nvim-lua/plenary.nvim' },
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
-    'jvgrootveld/telescope-zoxide',
   },
   keys = {
     {
@@ -35,13 +34,16 @@ return {
     {
       '<leader>;',
       function()
-        require('telescope.builtin').live_grep({
-          additional_args = function(args)
-            return vim.list_extend(args, { '--hidden', '--no-ignore' })
-          end,
-        })
+        require('telescope.builtin').live_grep()
       end,
-      desc = 'Find words',
+      desc = 'Grep (root dir)',
+    },
+    {
+      '<leader>+',
+      function()
+        require('telescope.builtin').live_grep({ cwd = false })
+      end,
+      desc = 'Grep (cwd)',
     },
     {
       '<leader>gs',
@@ -57,7 +59,6 @@ return {
   config = function()
     local telescope = require('telescope')
     local actions = require('telescope.actions')
-    local actions_layout = require('telescope.actions.layout')
     local transform_mod = require('telescope.actions.mt').transform_mod
     local actions_state = require('telescope.actions.state')
 
@@ -77,19 +78,14 @@ return {
     telescope.setup({
       defaults = {
         theme = 'dropdown',
-
         prompt_prefix = '   ',
         selection_caret = ' ',
         entry_prefix = '  ',
         multi_icon = '',
-        -- prompt_prefix = ' ❯ ',
-        -- selection_caret = '> ',
         file_sorter = require('telescope.sorters').get_fuzzy_file,
         generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
-
         set_env = { ['COLORTERM'] = 'truecolor' },
         results_title = false,
-
         color_devicons = true,
         preview = {
           treesitter = false,
@@ -113,16 +109,11 @@ return {
           preview_cutoff = 120,
         },
         file_ignore_patterns = {
-          '__pycache__/',
           '__pycache__/*',
-          'dist/',
-          'gradle/',
-          'node_modules/',
           'node_modules/*',
           'obj/Debug',
           'bin/Debug',
           '.dart_tool/',
-          '.git/',
           '.vscode/',
           '%.lock',
           '%.pdb',
@@ -133,7 +124,6 @@ return {
           '%.cache',
           '%.pdf',
           '%.dylib',
-          'node_modules',
           'dist/**',
           'build/**',
           '.git/**',
@@ -153,15 +143,13 @@ return {
           '--column',
           '--smart-case',
         },
-        mappings = { -------------------------------------------------------------- {{{
+        mappings = {
           i = {
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
-
             ['<esc>'] = actions.close,
             ['<C-n>'] = actions.move_selection_next,
             ['<C-p>'] = actions.move_selection_previous,
-
             ['<C-x>'] = false,
             ['<C-u>'] = false,
             ['<C-d>'] = false,
@@ -173,28 +161,22 @@ return {
             ['<C-j>'] = actions.move_selection_next,
             ['<C-k>'] = actions.move_selection_previous,
           },
-
           n = {
             ['<ESC>'] = actions.close,
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
             ['<C-x>'] = actions.select_horizontal, -- open file in split horizontal
             ['<C-v>'] = actions.select_vertical, -- open file in split vertical
-            --["<C-t>"] = actions.select_tab,  -- open file in new tab
-
             ['<C-n>'] = actions.move_selection_next,
             ['<C-p>'] = actions.move_selection_previous,
-
             ['gg'] = actions.move_to_top,
             ['G'] = actions.move_to_bottom,
-
             ['<Esc>'] = actions.close,
             ['j'] = actions.move_selection_next,
             ['k'] = actions.move_selection_previous,
             ['H'] = actions.move_to_top,
             ['M'] = actions.move_to_middle,
             ['L'] = actions.move_to_bottom,
-
             ['<C-u>'] = false,
             ['<C-d>'] = false,
           },
@@ -220,31 +202,22 @@ return {
       },
       extensions = {
         fzf = {
-          fuzzy = false, -- false will only do exact matching
+          fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true, -- override the file sorter
           case_mode = 'smart_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
           hidden = true,
         },
-        zoxide = {
-          prompt_title = '[ Zoxide directories ]',
-          mappings = {
-            default = {
-              action = function(selection)
-                vim.cmd.tcd(selection.path)
-              end,
-              after_action = function(selection)
-                vim.notify("Current working directory set to '" .. selection.path .. "'", vim.log.levels.INFO)
-              end,
-            },
-          },
+        fzy_native = {
+          override_generic_sorter = false,
+          override_file_sorter = true,
         },
       },
     })
 
+    require('telescope').load_extension('fzy_native')
     require('telescope').load_extension('file_browser')
     require('telescope').load_extension('fzf')
-    require('telescope').load_extension('zoxide')
     require('telescope').load_extension('live_grep_args')
   end,
 }

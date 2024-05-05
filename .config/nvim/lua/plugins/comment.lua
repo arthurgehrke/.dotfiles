@@ -1,74 +1,53 @@
 return {
   {
-    'numToStr/Comment.nvim',
-    dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
-    event = 'BufEnter',
+    'JoosepAlviste/nvim-ts-context-commentstring',
     lazy = true,
-    keys = { 'go', 'gcc', { 'go', mode = 'v' }, { 'ggo', mode = 'v' } },
-    opts = function(_, opts)
-      -- default mappings:
-      -- {
-      --   toggler = {
-      --     ---Line-comment toggle keymap
-      --     line = 'gcc',
-      --     ---Block-comment toggle keymap
-      --     block = 'gbc',
-      --   },
-      --   ---LHS of operator-pending mappings in NORMAL and VISUAL mode
-      --   opleader = {
-      --       ---Line-comment keymap
-      --       line = 'gc',
-      --       ---Block-comment keymap
-      --       block = 'gb',
-      --   },
-      --   ---LHS of extra mappings
-      --   extra = {
-      --       ---Add comment on the line above
-      --       above = 'gcO',
-      --       ---Add comment on the line below
-      --       below = 'gco',
-      --       ---Add comment at the end of line
-      --       eol = 'gcA',
-      --   }
-      -- }
-
-      -- hack to not load ts_context_commentstring until actually needed by the hook
-      local commentstring_avail, commentstring = pcall(require, 'ts_context_commentstring.integrations.comment_nvim')
-      if commentstring_avail then
-        opts.pre_hook = commentstring.create_pre_hook()
-      end
-
-      require('Comment').setup({
+    opts = { enable_autocmd = false },
+  },
+  {
+    'terrortylor/nvim-comment',
+    event = 'VeryLazy',
+    config = function()
+      require('nvim_comment').setup({
         padding = true,
+        ---Whether the cursor should stay at its position
         sticky = true,
-        ignore = '^$',
+        ---Lines to be ignored while (un)comment
+        ---LHS of toggle mappings in NORMAL mode
         toggler = {
+          ---Line-comment toggle keymap
           line = 'gcc',
+          ---Block-comment toggle keymap
           block = 'gbc',
         },
+        ---LHS of operator-pending mappings in NORMAL and VISUAL mode
         opleader = {
+          ---Line-comment keymap
           line = 'gc',
+          ---Block-comment keymap
           block = 'gb',
         },
+        ---LHS of extra mappings
         extra = {
+          ---Add comment on the line above
           above = 'gcO',
+          ---Add comment on the line below
           below = 'gco',
+          ---Add comment at the end of line
           eol = 'gcA',
         },
+        ---Enable keybindings
+        ---NOTE: If given `false` then the plugin won't create any mappings
         mappings = {
+          ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
           basic = true,
+          ---Extra mapping; `gco`, `gcO`, `gcA`
           extra = true,
         },
-        pre_hook = function(...)
-          if hook == nil then
-            hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook()
-          end
-          hook(...)
+        ignore = '^$', -- ignore empty lines
+        hook = function()
+          require('ts_context_commentstring.internal').update_commentstring()
         end,
-      })
-      require('Comment.ft').mysql = { '# %s', '/* %s */' }
-
-      require('ts_context_commentstring').setup({
       })
     end,
   },
