@@ -44,8 +44,8 @@ y = 0
 
 [font.normal]
 # family = "MesloLGS NF"
-family = "JetBrainsMono Nerd Font"
 # family = "Hack Nerd Font Mono"
+family = "JetBrainsMono Nerd Font"
 style = "Regular"
 
 [font.bold]
@@ -79,11 +79,6 @@ chars = "\u001BOH"
 key = "Left"
 mode = "~Vi|~Search"
 mods = "Command"
-
-# [[keyboard.bindings]]
-# chars = "h"
-# key = 0
-# mods = "Option"
 
 # Command-Right -> End - 替代 <fn - right>
 [[keyboard.bindings]]
