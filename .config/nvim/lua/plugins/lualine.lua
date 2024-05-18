@@ -206,7 +206,7 @@ return {
     -- active right section
     active_right({
       function()
-        local clients = vim.lsp.get_active_clients()
+        local clients = vim.lsp.get_clients()
         local clients_list = {}
         for _, client in pairs(clients) do
           if not clients_list[client.name] then

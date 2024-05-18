@@ -26,7 +26,7 @@ vim.opt.signcolumn = 'yes:1'
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.showmatch = true
+vim.opt.showmatch = false
 vim.opt.smartcase = true
 vim.opt.infercase = true
 
@@ -57,7 +57,6 @@ vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
 vim.opt.backupdir = { prefix .. '/nvim/.backup//' }
 vim.opt.directory = { prefix .. '/nvim/.swp//' }
 
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 
 vim.opt.history = 1000 --> cmd history depth
 vim.opt.swapfile = false
@@ -72,9 +71,9 @@ vim.opt.wrap = false
 vim.opt.autoread = true
 vim.o.ttimeoutlen = 50
 vim.o.updatetime = 50
-vim.o.showcmd = false
+vim.opt.showcmd = false
 vim.opt.cmdheight = 1
-vim.o.laststatus = 2
+vim.opt.laststatus = 2
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
 
@@ -99,7 +98,14 @@ vim.opt.lazyredraw = true
 vim.opt.errorbells = false
 vim.opt.visualbell = false
 
-vim.opt.foldlevel = 999
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+-- vim.opt.foldnestmax = 10
+-- vim.opt.foldlevelstart = 10
+-- vim.opt.foldlevel = 2
+-- vim.opt.foldlevel = 999
+vim.opt.foldenable = false
+
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 
@@ -108,26 +114,22 @@ vim.opt.list = true
 
 vim.opt.listchars = { eol = nil, trail = '~', tab = '  ', nbsp = '␣' }
 
-
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_matchparen = 1
+vim.g.loaded_matchit      = 1
+-- Do not load zipPlugin.vim, gzip.vim and tarPlugin.vim (all these plugins are
+-- related to checking files inside compressed files)
+vim.g.loaded_zipPlugin = 1
+vim.g.loaded_gzip = 1
+vim.g.loaded_tarPlugin = 1
+-- Do not load tohtml.vim
+vim.g.loaded_2html_plugin = 1
+-- Disable sql omni completion, it is broken.
+vim.g.loaded_sql_completion = 1
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')
-
--- vim.diagnostic.config({
---   virtual_text = false,
---   float = { header = '', prefix = '', focusable = false },
---   update_in_insert = true,
---   severity_sort = true,
---   signs = {
---     severity = { min = vim.diagnostic.severity.ERROR },
---   },
---   underline = {
---     severity = { min = vim.diagnostic.severity.HINT },
---   },
--- })
 
 vim.diagnostic.config({
   virtual_text = false,
@@ -136,25 +138,6 @@ vim.diagnostic.config({
   update_in_insert = true,
   severty_sort = true,
 })
-
--- vim.diagnostic.config({
---   -- underline = true,
---   update_in_insert = true,
---   virtual_text = false,
---   float = { header = '', prefix = '', focusable = false },
---   severty_sort = true,
---   inlay_hints = { enabled = false },
---   signs = {
---     severity = { min = vim.diagnostic.severity.ERROR },
---   },
---   underline = {
---     severity = { min = vim.diagnostic.severity.HINT },
---   },
---   format = {
---     formatting_options = nil,
---     timeout_ms = nil,
---   },
--- })
 
 -- Use nerd font for gutter signs
 local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
@@ -165,15 +148,6 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
-
--- vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
--- vim.env.PYENV_VERSION = vim.fn.system('pyenv version'):match('(%S+)%s+%(.-%)')
-
 vim.g.loaded_perl_provider = 0
 vim.g.ruby_host_prog = '/usr/bin/ruby'
-
-if vim.g.is_mac then
-  vim.g.python3_host_prog = '/usr/bin/python3'
-elseif vim.g.is_linux then
-  vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv/shims/python'
-end
+vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv'

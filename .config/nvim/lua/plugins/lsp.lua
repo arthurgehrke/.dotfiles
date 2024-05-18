@@ -10,10 +10,10 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      local handlers = {
-        ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
-        ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
-      }
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+
+      vim.lsp.handlers['textDocument/signatureHelp'] =
+        vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single', focusable = false, silent = true })
 
       local override_formatting_capability = function(client, override)
         client.server_capabilities.documentFormattingProvider = override
@@ -61,11 +61,10 @@ return {
       })
 
       lspconfig.pylsp.setup({
-        capabilities = capabilities
+        capabilities = capabilities,
       })
 
       lspconfig.jsonls.setup({
-        handlers = handlers,
         filetypes = {
           'json',
         },
@@ -93,7 +92,6 @@ return {
           '.eslintrc.yml',
           '.eslintrc.json'
         ),
-        handlers = handlers,
       })
 
       lspconfig.yamlls.setup({
@@ -103,11 +101,7 @@ return {
       })
 
       lspconfig.bashls.setup({
-        filetypes = {
-          'bash',
-          'sh',
-          'zsh',
-        },
+        filetypes = { 'sh', 'zsh' },
       })
     end,
   },

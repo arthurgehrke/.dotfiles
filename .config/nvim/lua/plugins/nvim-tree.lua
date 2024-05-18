@@ -109,20 +109,27 @@ return {
         auto_reload_on_write = true,
         reload_on_bufenter = true,
         disable_netrw = true,
-        hijack_cursor = false,
+        hijack_cursor = true,
         hijack_netrw = true,
+        sort_by = "case_sensitive",
         prefer_startup_root = true,
         open_on_tab = false,
         update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
-        diagnostics = {
+        -- diagnostics = {
+        --   enable = false,
+        --   show_on_dirs = false,
+        --   show_on_open_dirs = false,
+        --   debounce_delay = 50,
+        --   severity = {
+        --     -- min = vim.diagnostic.severity.HINT,
+        --     -- min = vim.diagnostic.severity.WARN,
+        --     -- max = vim.diagnostic.severity.ERROR,
+        --   },
+        -- },
+        modified = {
           enable = true,
           show_on_dirs = true,
           show_on_open_dirs = true,
-          debounce_delay = 50,
-          severity = {
-            min = vim.diagnostic.severity.ERROR,
-            max = vim.diagnostic.severity.ERROR,
-          },
         },
         update_focused_file = { -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
           enable = true,
@@ -171,7 +178,8 @@ return {
             },
             git_placement = 'before',
             modified_placement = 'after',
-            diagnostics_placement = 'after',
+            diagnostics_placement = 'signcolumn',
+            -- diagnostics_placement = 'after',
             webdev_colors = false,
             show = {
               file = true,
@@ -179,7 +187,7 @@ return {
               folder_arrow = true,
               git = true,
               modified = true,
-              diagnostics = true,
+              diagnostics = false,
               bookmarks = false,
             },
             glyphs = {
@@ -226,7 +234,7 @@ return {
           dotfiles = false,
           git_clean = false,
           no_buffer = false,
-          custom = { "\\.git$", "^node_modules$", "^dist$", "^.eslintcache$", "^.next$", ".DS_Store", "tmp", "logs" },
+          custom = { '\\.git$', '^node_modules$', '^dist$', '^.eslintcache$', '^.next$', '.DS_Store', 'tmp', 'logs' },
         },
         log = {
           enable = false,
@@ -264,7 +272,7 @@ return {
               picker = 'default',
               chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
               exclude = {
-                filetype = { 'notify', 'packer', 'qf', 'diff', 'fugitive', 'fugitiveblame' },
+                filetype = { 'notify', 'packer', 'qf', 'diff', 'fugitive', 'fugitiveblame', 'lazy'},
                 buftype = { 'nofile', 'terminal', 'help', 'diff' },
               },
             },

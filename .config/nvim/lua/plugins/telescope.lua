@@ -1,9 +1,9 @@
 return {
   'nvim-telescope/telescope.nvim',
   lazy = false,
+  -- enabled = false,
   cmd = { 'Telescope' },
   dependencies = {
-    { 'nvim-telescope/telescope-fzy-native.nvim', build = 'make' },
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     { 'nvim-lua/plenary.nvim' },
     'nvim-telescope/telescope-file-browser.nvim',
@@ -208,14 +208,22 @@ return {
           case_mode = 'smart_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
           hidden = true,
         },
-        fzy_native = {
-          override_generic_sorter = false,
-          override_file_sorter = true,
+        file_browser = {
+          theme = 'ivy',
+          -- disables netrw and use telescope-file-browser in its place
+          hijack_netrw = true,
+          mappings = {
+            ['i'] = {
+              -- your custom insert mode mappings
+            },
+            ['n'] = {
+              -- your custom normal mode mappings
+            },
+          },
         },
       },
     })
 
-    require('telescope').load_extension('fzy_native')
     require('telescope').load_extension('file_browser')
     require('telescope').load_extension('fzf')
     require('telescope').load_extension('live_grep_args')

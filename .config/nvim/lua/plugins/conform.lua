@@ -29,10 +29,10 @@ return {
       sh = { 'shfmt' },
 
       -- JSON/XML
-      json = { 'prettierd' },
-      jsonc = { 'prettierd' },
-      json5 = { 'prettierd' },
-      yaml = { 'prettierd' },
+      json = { { 'jq', 'prettierd', 'prettier' } },
+      jsonc = { { 'prettierd', 'prettier' } },
+      json5 = { { 'prettierd', 'prettier' } },
+      yaml = { { 'prettierd', 'prettier' } },
       html = { 'htmlbeautifier' },
       zsh = { 'shellcheck' },
 
@@ -46,6 +46,11 @@ return {
     quiet = true,
     formatters = {
       injected = { options = { ignore_errors = true } },
+      options = {
+        shfmt = {
+          prepend_args = { '-i', '2' },
+        },
+      },
     },
     notify_on_error = true,
     ignore_errors = true,

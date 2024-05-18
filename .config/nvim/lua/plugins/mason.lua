@@ -14,6 +14,9 @@ return {
     local mason_tool_installer = require('mason-tool-installer')
     mason.setup({
       ui = {
+        ensure_installed = {
+          'black',
+        },
         icons = {
           package_installed = '✓',
           package_pending = '➜',
@@ -31,6 +34,8 @@ return {
         'tsserver',
         'jqls',
         'lua_ls',
+        'pylsp',
+        'jsonls',
       },
       automatic_installation = true, -- not the same as ensure_installed
       auto_update = true,
@@ -42,7 +47,6 @@ return {
         { 'bash-language-server', auto_update = true },
         'tsserver',
         'stylua',
-        'pylsp',
         'cssls',
         'lua-language-server',
         'prettierd', -- yaml format
@@ -50,14 +54,13 @@ return {
         'shellcheck', -- bash, sh, zsh lint
         'shfmt', -- bash, sh, zsh format
         'prettier',
-        'prettierd',
         'eslint',
         'stylelint',
         'sqlls',
         'isort', -- python formatter
-        'black', -- python formatter
         'pylint', -- python linter
         'eslint_d', -- js linter
+        'jq',
       },
     })
   end,

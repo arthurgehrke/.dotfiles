@@ -28,16 +28,6 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufNewFile' }, {
   command = 'set filetype=conf',
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'sh',
-  callback = function()
-    vim.lsp.start({
-      name = 'bash-language-server',
-      cmd = { 'bash-language-server', 'start' },
-    })
-  end,
-})
-
 -- don't auto comment new line
 vim.api.nvim_create_autocmd('BufEnter', { command = [[set formatoptions-=cro]] })
 
@@ -117,3 +107,4 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo[event.buf].buflisted = false
   end,
 })
+

@@ -1,5 +1,6 @@
 return {
 	"sindrets/diffview.nvim",
+  enabled = false,
 	keys = {
 		{
 			"<leader>go",
