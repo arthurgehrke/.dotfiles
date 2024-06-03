@@ -1,1 +1,2 @@
-maptimeout 0
+# Ensures that the default shell is the same as the value of the $SHELL env variable
+shell -$SHELL
