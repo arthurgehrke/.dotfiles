@@ -57,7 +57,6 @@ vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
 vim.opt.backupdir = { prefix .. '/nvim/.backup//' }
 vim.opt.directory = { prefix .. '/nvim/.swp//' }
 
-
 vim.opt.history = 1000 --> cmd history depth
 vim.opt.swapfile = false
 vim.opt.undoreload = 10000 --> number of lines to save for undo
@@ -117,16 +116,13 @@ vim.opt.listchars = { eol = nil, trail = '~', tab = '  ', nbsp = '␣' }
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_matchparen = 1
-vim.g.loaded_matchit      = 1
--- Do not load zipPlugin.vim, gzip.vim and tarPlugin.vim (all these plugins are
--- related to checking files inside compressed files)
+vim.g.loaded_matchit = 1
 vim.g.loaded_zipPlugin = 1
 vim.g.loaded_gzip = 1
 vim.g.loaded_tarPlugin = 1
--- Do not load tohtml.vim
 vim.g.loaded_2html_plugin = 1
--- Disable sql omni completion, it is broken.
 vim.g.loaded_sql_completion = 1
+vim.g.loaded_spec = 1
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')
@@ -134,6 +130,7 @@ vim.opt.rtp:append('/opt/homebrew/opt/fzf')
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
+  float = { border = 'rounded' },
   underline = true,
   update_in_insert = true,
   severty_sort = true,

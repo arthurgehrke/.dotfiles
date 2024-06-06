@@ -1,4 +1,5 @@
------ Autocommands from LazyVim!
+vim.cmd('filetype on')
+
 local function augroup(name)
   return vim.api.nvim_create_augroup('lazyvim_' .. name, { clear = true })
 end
@@ -21,12 +22,23 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   end,
 })
 
-vim.cmd('filetype on')
+vim.api.nvim_command('au! BufNewFile,BufRead .env.* set filetype=sh')
+vim.api.nvim_command('au! BufNewFile,BufRead zshrc set filetype=sh')
+vim.api.nvim_command('au! BufNewFile,BufRead *.conf set filetype=ini')
 
-vim.api.nvim_create_autocmd({ 'BufEnter', 'BufNewFile' }, {
-  pattern = '.env*',
-  command = 'set filetype=conf',
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  group = augroup('json_conceal'),
+  pattern = { 'json', 'jsonc', 'json5' },
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
 })
+
+-- vim.api.nvim_create_autocmd({ 'BufEnter', 'BufNewFile' }, {
+--   pattern = '.env*',
+--   command = 'set filetype=conf',
+-- })
 
 -- don't auto comment new line
 vim.api.nvim_create_autocmd('BufEnter', { command = [[set formatoptions-=cro]] })
@@ -55,32 +67,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- Create missing directories on save
-vim.api.nvim_create_autocmd('BufWritePre', {
-  group = vim.api.nvim_create_augroup('CreateMissingDirectoriesOnSave', {}),
-  pattern = '*',
-  callback = function()
-    local dir = vim.fn.expand('<afile>:p:h')
-    if vim.fn.isdirectory(dir) == 0 then
-      vim.fn.mkdir(dir, 'p')
-    end
-  end,
-})
-
--- 7. Make q close help, man, quickfix, dap floats
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  desc = 'Make q close help, man, quickfix, dap floats',
-  group = augroup('q_close_windows', { clear = true }),
-  callback = function(event)
-    local filetype = vim.api.nvim_get_option_value('filetype', { buf = event.buf })
-    local buftype = vim.api.nvim_get_option_value('buftype', { buf = event.buf })
-    if buftype == 'nofile' or filetype == 'help' then
-      vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true, nowait = true })
-    end
-  end,
-})
-
--- 9. Unlist quickfist buffers
+-- Unlist quickfist buffers
 vim.api.nvim_create_autocmd('FileType', {
   desc = 'Unlist quickfist buffers',
   group = augroup('unlist_quickfist', { clear = true }),
@@ -90,21 +77,28 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- Fix conceallevel for json files
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-  group = augroup('json_conceal'),
-  pattern = { 'json', 'jsonc', 'json5' },
-  callback = function()
-    vim.opt_local.conceallevel = 0
-  end,
-})
-
--- make it easier to close man-files when opened inline
-vim.api.nvim_create_autocmd('FileType', {
-  group = augroup('man_unlisted'),
-  pattern = { 'man' },
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  group = augroup('auto_create_dir'),
   callback = function(event)
-    vim.bo[event.buf].buflisted = false
+    if event.match:match('^%w%w+:[\\/][\\/]') then
+      return
+    end
+    local file = vim.uv.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
 
+vim.filetype.add({
+  extension = { rasi = 'rasi', rofi = 'rasi', wofi = 'rasi' },
+  filename = {
+    ['vifmrc'] = 'vim',
+  },
+  pattern = {
+    ['.*/waybar/config'] = 'jsonc',
+    ['.*/mako/config'] = 'dosini',
+    ['.*/kitty/.+%.conf'] = 'bash',
+    ['.*/hypr/.+%.conf'] = 'hyprlang',
+    ['%.env%.[%w_.-]+'] = 'sh',
+  },
+})

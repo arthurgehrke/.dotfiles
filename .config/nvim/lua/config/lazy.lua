@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('plugins', {
   defaults = {
-    lazy = true, -- Default to lazy loading, optional
+    lazy = false,
   },
   opts = {
     colorscheme = 'gruvbox',

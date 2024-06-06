@@ -6,8 +6,6 @@ return {
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
   },
-  keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
-  build = ':MasonUpdate',
   config = function()
     local mason = require('mason')
     local mason_lspconfig = require('mason-lspconfig')
@@ -45,10 +43,8 @@ return {
       auto_update = true,
       ensure_installed = {
         { 'bash-language-server', auto_update = true },
-        'tsserver',
         'stylua',
         'cssls',
-        'lua-language-server',
         'prettierd', -- yaml format
         'selene', -- lua lint
         'shellcheck', -- bash, sh, zsh lint

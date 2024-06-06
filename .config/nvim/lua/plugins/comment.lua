@@ -1,14 +1,18 @@
+vim.g.skip_ts_context_commentstring_module = true
+
 return {
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    lazy = true,
+    lazy = false,
     opts = { enable_autocmd = false },
   },
   {
-    'terrortylor/nvim-comment',
-    event = 'VeryLazy',
+    'numToStr/Comment.nvim',
+    lazy = false,
     config = function()
-      require('nvim_comment').setup({
+      local ft = require('Comment.ft')
+
+      require('Comment').setup({
         padding = true,
         ---Whether the cursor should stay at its position
         sticky = true,
@@ -45,10 +49,13 @@ return {
           extra = true,
         },
         ignore = '^$', -- ignore empty lines
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
         hook = function()
           require('ts_context_commentstring.internal').update_commentstring()
         end,
       })
+
+      ft.set('dotenv', { '//%s', '/*%s*/' })
     end,
   },
 }

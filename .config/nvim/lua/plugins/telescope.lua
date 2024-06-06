@@ -1,7 +1,6 @@
 return {
   'nvim-telescope/telescope.nvim',
   lazy = false,
-  -- enabled = false,
   cmd = { 'Telescope' },
   dependencies = {
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
@@ -20,14 +19,14 @@ return {
     {
       'ff',
       function()
-        require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
+        require('telescope.builtin').find_files({ hidden = true })
       end,
       desc = '[f]ind [f]iles',
     },
     {
       '<leader>fo',
       function()
-        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope').extensions.file_browser.file_browser({ hidden = true, path = '%:p:h' })
       end,
       desc = '[o]pen file browser',
     },
@@ -205,7 +204,7 @@ return {
           fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true, -- override the file sorter
-          case_mode = 'smart_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
+          case_mode = 'ignore_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
           hidden = true,
         },
         file_browser = {

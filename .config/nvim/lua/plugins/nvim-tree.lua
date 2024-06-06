@@ -26,8 +26,6 @@ return {
     },
     config = function()
       -- recommended settings from nvim-tree documentation
-      vim.g.loaded_netrw = 1
-      vim.g.loaded_netrwPlugin = 1
 
       local signcolumn_width = 7 -- AKA gutter width
       local min_buffer_width = 110 + signcolumn_width
@@ -105,16 +103,18 @@ return {
 
       require('nvim-tree').setup({
         on_attach = on_attach,
+        hijack_unnamed_buffer_when_opening = true,
         sync_root_with_cwd = false,
         auto_reload_on_write = true,
         reload_on_bufenter = true,
         disable_netrw = true,
-        hijack_cursor = true,
         hijack_netrw = true,
-        sort_by = "case_sensitive",
         prefer_startup_root = true,
         open_on_tab = false,
         update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
+        diagnostics = {
+          enable = false,
+        },
         -- diagnostics = {
         --   enable = false,
         --   show_on_dirs = false,
@@ -152,6 +152,7 @@ return {
         },
         renderer = {
           highlight_modified = 'all',
+          highlight_diagnostics = "none",
           highlight_git = true,
           symlink_destination = false,
           indent_markers = {
@@ -179,7 +180,6 @@ return {
             git_placement = 'before',
             modified_placement = 'after',
             diagnostics_placement = 'signcolumn',
-            -- diagnostics_placement = 'after',
             webdev_colors = false,
             show = {
               file = true,
@@ -218,6 +218,7 @@ return {
           },
         },
         view = {
+          centralize_selection = true,
           preserve_window_proportions = false,
           debounce_delay = 15,
           relativenumber = false,
@@ -272,7 +273,7 @@ return {
               picker = 'default',
               chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
               exclude = {
-                filetype = { 'notify', 'packer', 'qf', 'diff', 'fugitive', 'fugitiveblame', 'lazy'},
+                filetype = { 'notify', 'packer', 'qf', 'diff', 'fugitive', 'fugitiveblame', 'lazy' },
                 buftype = { 'nofile', 'terminal', 'help', 'diff' },
               },
             },

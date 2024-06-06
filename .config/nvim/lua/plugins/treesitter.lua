@@ -1,10 +1,13 @@
 return {
   'nvim-treesitter/nvim-treesitter',
-  event = 'VeryLazy',
+  -- event = 'VeryLazy',
+  version = false,
+  lazy = false,
   build = function()
-    require('nvim-treesitter.install').update({ with_sync = true })
+    require('nvim-treesitter.install').update({ with_sync = true })()
   end,
   -- event = { 'BufReadPre', 'BufNewFile' },
+  event = { 'BufReadPre', 'BufReadPost', 'BufNewFile' },
   cmd = {
     'TSBufDisable',
     'TSBufEnable',
@@ -22,18 +25,8 @@ return {
   },
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'nvim-treesitter/playground',
     'JoosepAlviste/nvim-ts-context-commentstring',
   },
-  init = function(plugin)
-    -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-    -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-    -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-    -- Luckily, the only things that those plugins need are the custom queries, which we make available
-    -- during startup.
-    require('lazy.core.loader').add_to_rtp(plugin)
-    require('nvim-treesitter.query_predicates')
-  end,
   opts = {
     auto_install = true,
     highlight = {
@@ -65,6 +58,9 @@ return {
       'html',
       'javascript',
       'json',
+      'jsonc',
+      'jsdoc',
+      'json5',
       'lua',
       'markdown',
       'ruby',
@@ -76,7 +72,6 @@ return {
       'markdown',
       'markdown_inline',
       'dockerfile',
-      'jsdoc',
       'python',
       'query',
       'regex',
@@ -90,7 +85,6 @@ return {
       'yaml',
       'c',
       'bash',
-      'html',
       'gitcommit',
     },
     match = {
@@ -101,6 +95,18 @@ return {
     refactor = { highlight_definitions = { enable = true } },
     incremental_selection = {
       enable = false,
+    },
+    context_commentstring = {
+      config = {
+        javascript = {
+          __default = '// %s',
+          jsx_element = '{/* %s */}',
+          jsx_fragment = '{/* %s */}',
+          jsx_attribute = '// %s',
+          comment = '// %s',
+        },
+        typescript = { __default = '// %s', __multiline = '/* %s */' },
+      },
     },
   },
   ---@param opts TSConfig

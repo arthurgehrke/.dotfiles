@@ -15,18 +15,21 @@ return {
       vim.lsp.handlers['textDocument/signatureHelp'] =
         vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single', focusable = false, silent = true })
 
-      local override_formatting_capability = function(client, override)
-        client.server_capabilities.documentFormattingProvider = override
-        client.server_capabilities.documentRangeFormattingProvider = override
-      end
+      -- local override_formatting_capability = function(client, override)
+      --   client.server_capabilities.documentFormattingProvider = override
+      --   client.server_capabilities.documentRangeFormattingProvider = override
+      -- end
 
       lspconfig.tsserver.setup({
+        -- capabilities = capabilities,
         root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
-        settings = {
-          completions = {
-            completeFunctionCalls = true,
-          },
-        },
+        filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
+        cmd = { 'typescript-language-server', '--stdio' },
+        -- settings = {
+        --   completions = {
+        --     completeFunctionCalls = true,
+        --   },
+        -- },
       })
 
       lspconfig.lua_ls.setup({
@@ -65,9 +68,9 @@ return {
       })
 
       lspconfig.jsonls.setup({
-        filetypes = {
-          'json',
-        },
+        -- filetypes = {
+        --   'json',
+        -- },
         settings = {
           json = {
             schemas = require('schemastore').json.schemas(),
@@ -77,13 +80,13 @@ return {
       })
 
       lspconfig.eslint.setup({
-        on_attach = function(client, bufnr)
-          -- This LS doesn't broadcast formatting support initially and Neovim
-          -- doesn't support dynamic registration so force broadcasting
-          -- formatting capabilities.
-          override_formatting_capability(client, true)
-        end,
-        settings = { format = false },
+        -- on_attach = function(client, bufnr)
+        -- This LS doesn't broadcast formatting support initially and Neovim
+        -- doesn't support dynamic registration so force broadcasting
+        -- formatting capabilities.
+        -- override_formatting_capability(client, true)
+        -- end,
+        settings = { format = false, documentFormatting = false },
         root_dir = util.root_pattern(
           '.eslintrc',
           '.eslintrc.js',
