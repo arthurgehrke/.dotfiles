@@ -1,5 +1,3 @@
-vim.cmd('filetype on')
-
 local function augroup(name)
   return vim.api.nvim_create_augroup('lazyvim_' .. name, { clear = true })
 end
@@ -21,10 +19,6 @@ vim.api.nvim_create_autocmd('BufReadPost', {
     end
   end,
 })
-
-vim.api.nvim_command('au! BufNewFile,BufRead .env.* set filetype=sh')
-vim.api.nvim_command('au! BufNewFile,BufRead zshrc set filetype=sh')
-vim.api.nvim_command('au! BufNewFile,BufRead *.conf set filetype=ini')
 
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ 'FileType' }, {
@@ -89,16 +83,3 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   end,
 })
 
-vim.filetype.add({
-  extension = { rasi = 'rasi', rofi = 'rasi', wofi = 'rasi' },
-  filename = {
-    ['vifmrc'] = 'vim',
-  },
-  pattern = {
-    ['.*/waybar/config'] = 'jsonc',
-    ['.*/mako/config'] = 'dosini',
-    ['.*/kitty/.+%.conf'] = 'bash',
-    ['.*/hypr/.+%.conf'] = 'hyprlang',
-    ['%.env%.[%w_.-]+'] = 'sh',
-  },
-})

@@ -39,7 +39,9 @@ require('lazy').setup('plugins', {
     '2html_plugin',
     'logipat',
     'rrhelper',
-    'spellfile_plugin',
+        "2html_plugin",
     'matchit',
+    'ftplugin',
+    'syntax',
   },
 })

@@ -49,8 +49,6 @@ vim.o.showmode = true
 vim.o.ruler = true
 vim.opt.cursorline = true
 
-vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
-
 local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand('~/.config')
 vim.opt.undofile = true
 vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
@@ -87,9 +85,6 @@ vim.o.sidescrolloff = 10
 
 vim.o.emoji = false
 
--- Turn on the filetype plugin
-vim.opt.filetype = 'on'
-
 vim.opt.encoding = 'utf-8'
 vim.opt.lazyredraw = true
 
@@ -120,9 +115,9 @@ vim.g.loaded_matchit = 1
 vim.g.loaded_zipPlugin = 1
 vim.g.loaded_gzip = 1
 vim.g.loaded_tarPlugin = 1
-vim.g.loaded_2html_plugin = 1
-vim.g.loaded_sql_completion = 1
-vim.g.loaded_spec = 1
+-- vim.g.loaded_2html_plugin = 1
+-- vim.g.loaded_sql_completion = 1
+-- vim.g.loaded_spec = 1
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')
