@@ -14,8 +14,53 @@ if [ -f "$(which bat)" ]; then
 fi
 
 # alias ls="ls -lG"
+alias ls='ls -G -F --color=auto'
 # alias ll='ls -lAGFp'
 alias lts='ll --timesort'
+alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
+alias chromium-http='chromium --proxy-server=localhost:7777'
+
+alias difficdiff='git difftool --extcmd icdiff'
+# side-by-side diffs for uncommitted files
+alias ic='hg icdiff'
+# diff all changes since the base revision, including uncommitted
+# (from master if you are using bookmarks, for example)
+alias ica='hg icdiff -r .^'
+# diff the existing changes, excluding uncommitted
+alias ice='hg icdiff --ch .'
+
+# vim edit remote file
+function vscp() {
+  if [[ -z $1 ]]; then
+    echo "usage: vscp [[user@]host1:]file1 ... [[user@]host2:]file2"
+    return
+  fi
+  declare -a targs=()
+  echo "Editing Remote Files"
+  for iarg in $@; do
+    targ="scp://$(echo $iarg | sed -e 's@:/@//@' | sed -e 's@:@/@')"
+    targs=("${targs[@]}" $targ)
+  done
+  echo ${targs[@]}
+  vim ${targs[@]}
+}
+compdef vscp=scp
+
+gvimscp()
+{
+    if [[ -z $1 ]]; then
+        echo "usage: gvimscp [[user@]host1:]file1 ... [[user@]host2:]file2"
+        return
+    fi
+    declare -a targs=()
+    for iarg in $@
+    do
+        # adapt syntax for vim
+        targ="scp://$(echo $iarg | sed -e 's@:/@//@' | sed -e 's@:@/@')"
+        targs=("${targs[@]}" $targ)
+    done
+    gvim ${targs[@]}
+}
 
 alias addiptomongo='atlas accessLists create '
 
@@ -101,7 +146,7 @@ alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 if [ "$(command -v docker)" ] ; then
-  alias docker-prune="docker image prune -a && docker system prune"
+  alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'
   # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
   alias d-kali="docker run -ti --privileged --net='host' --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kali_base /bin/bash"
   alias d-kali-new="docker run -ti --privileged --net="host" --rm -e HOST_IP=$(ifconfig en0 | awk '/ *inet /{print $2}')  -v /Users/arthurgehrke/Documents/docker-data/kali:/home/shared -ti  kali_base /bin/bash"
@@ -114,3 +159,5 @@ if [ "$(command -v docker)" ] ; then
   # https://www.linuxserver.io/blog/2021-05-05-meet-webtops-a-linux-desktop-environment-in-your-browser
   alias d-webtop='docker run -d --name=webtop -e PUID=1000 -e PGID=1000 -e TZ=Europe/Berlin -p 3000:3000 -v $HOME/.webtop:/config --shm-size="8gb" --restart unless-stopped ghcr.io/linuxserver/webtop'
 fi
+
+# vim: ft=zsh

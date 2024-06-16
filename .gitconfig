@@ -1,5 +1,3 @@
-; [include]
-;     path = ~/.gitconfig.local
 [apply]
   whitespace = nowarn
 
@@ -23,10 +21,14 @@
   log = less -+X
 
 [pull]
-  rebase = true
+  rebase = off
+  ff = only
 
 [fetch]
 	prune = true
+
+[rebase]
+  autosquash = true
 
 [push]
   default = current
@@ -54,6 +56,7 @@
   ; tool = nvimdiff
 	tool = nvimdiff4
 	prompt = false
+  ff = only
 
 [mergetool "nvimdiff4"]
   prompt = false
@@ -61,6 +64,7 @@
   cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $BASE $REMOTE $LOCAL $MERGED -c '$wincmd w' -c 'wincmd J' -c '$wincmd w' -c 'wincmd k'
   ; cmd = nvim -d -u ~/.config/nvim/init.vim $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J' -c 'wincmd k'
+  ff = only
 
 [mergetool]
 	keepBackup = false
@@ -100,11 +104,16 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
+
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[commit]
-	template = /Users/arthurgehrke/.stCommitMsg
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green

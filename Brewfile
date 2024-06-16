@@ -31,14 +31,12 @@ brew "curl"
 brew "php"
 brew "composer"
 brew "coreutils"
-brew "libevent"
-brew "llvm"
-brew "pkg-config"
 brew "diff-so-fancy"
 brew "diffutils"
 brew "docker-machine"
 brew "dust"
 brew "eza"
+brew "libevent"
 brew "fd"
 brew "libarchive"
 brew "tesseract"
@@ -59,8 +57,8 @@ brew "ipinfo-cli"
 brew "jenv"
 brew "jq"
 brew "keychain"
-brew "lazydocker"
 brew "lazygit"
+brew "llvm"
 brew "llvm@17"
 brew "lsd"
 brew "luajit", args: ["HEAD"]
@@ -72,6 +70,7 @@ brew "mkcert"
 brew "mongosh"
 brew "tree-sitter", args: ["HEAD"]
 brew "neovim"
+brew "pkg-config"
 brew "nodenv"
 brew "ocrmypdf"
 brew "openssh"
@@ -117,7 +116,6 @@ cask "chromium"
 cask "docker"
 cask "firefox@developer-edition"
 cask "font-hack-nerd-font"
-cask "font-headland-one"
 cask "font-powerline-symbols"
 cask "google-chrome"
 cask "google-drive"
@@ -125,28 +123,7 @@ cask "iterm2"
 cask "mongodb-compass"
 cask "ngrok"
 cask "onedrive"
-cask "openinterminal"
 cask "postman"
 cask "redis-stack-server"
 cask "temurin"
 cask "temurin8"
-mas "1Password for Safari", id: 1569813296
-mas "AdGuard for Safari", id: 1440147259
-mas "BetterSnapTool", id: 417375580
-mas "Evernote", id: 406056744
-mas "Find Any File", id: 402569179
-mas "Highlights", id: 1498912833
-mas "HP Smart", id: 1474276998
-mas "Hush", id: 1544743900
-mas "Microsoft Excel", id: 462058435
-mas "Microsoft PowerPoint", id: 462062816
-mas "Microsoft Word", id: 462054704
-mas "Notion Web Clipper", id: 1559269364
-mas "Numbers", id: 409203825
-mas "Octotree", id: 1457450145
-mas "Postman Interceptor", id: 6460587883
-mas "Super Agent", id: 1568262835
-mas "Surfshark", id: 1437809329
-mas "Web(Cache)Browser", id: 432802024
-mas "Webcam Recorder", id: 1508067444
-mas "‎WhatsApp", id: 310633997
