@@ -29,11 +29,6 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   end,
 })
 
--- vim.api.nvim_create_autocmd({ 'BufEnter', 'BufNewFile' }, {
---   pattern = '.env*',
---   command = 'set filetype=conf',
--- })
-
 -- don't auto comment new line
 vim.api.nvim_create_autocmd('BufEnter', { command = [[set formatoptions-=cro]] })
 
@@ -82,4 +77,3 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
-

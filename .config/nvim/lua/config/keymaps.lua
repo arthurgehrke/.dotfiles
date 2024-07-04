@@ -106,6 +106,15 @@ vim.keymap.set('n', '<leader>od', function()
   })
 end, { desc = 'Show diagnostics for current line' })
 
+vim.keymap.set('n', '<leader>dd', function()
+  local cmd = 'disable'
+  if vim.b.diagnostics_disabled == true then
+    cmd = 'enable'
+  end
+  vim.b.diagnostics_disabled = not vim.b.diagnostics_disabled
+  vim.diagnostic[cmd](0)
+end, { buffer = bufnr })
+
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '[e', '<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>', opts)
@@ -138,7 +147,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
 
-    vim.keymap.set('n', 'oi', function()
+    vim.keymap.set('n', '<leader>oi', function()
       vim.lsp.buf.code_action({
         apply = true,
         context = {
@@ -160,3 +169,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 vim.keymap.set({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren' })
+
+

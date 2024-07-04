@@ -1,7 +1,31 @@
 vim.opt.autowrite = true
 vim.opt.conceallevel = 2
-vim.opt.textwidth = 120
+-- vim.opt.textwidth = 120
+
+-- Faster scrolling
+vim.o.lazyredraw = true
+-- Decrease redraw time
+vim.o.redrawtime = 100
+
+-- Disable intro message
+vim.opt.shortmess:append('I')
+
+-- go to previous/next line with h,l,left arrow and right arrow
+-- when cursor reaches end/beginning of line
+vim.opt.whichwrap:append('<>hl')
+
+-- Disable search count res from the bottom right corner
+vim.opt.shortmess:append('S')
+
+-- Disable ins-completion-menu messages
+vim.opt.shortmess:append('c')
+
+-- Wrap long lines at a blank
+vim.o.linebreak = true
+
+vim.o.showbreak = '⤿ '
 vim.opt.clipboard = { 'unnamedplus' }
+vim.opt.breakindent = true
 
 vim.opt.fillchars = {
   foldopen = '',
@@ -27,6 +51,7 @@ vim.opt.signcolumn = 'yes:1'
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.showmatch = false
+vim.opt.matchpairs = '(:),{:},[:],<:>'
 vim.opt.smartcase = true
 vim.opt.infercase = true
 
@@ -64,15 +89,25 @@ vim.opt.backup = false -- overwrites previous backups instead of making new one
 
 vim.o.fileformats = 'mac,unix,dos'
 vim.opt.wrap = false
+-- vim.o.whichwrap = "b,s,<,>,[,]"
+-- vim.opt.whichwrap = "b,s"
+
+vim.o.wildignorecase = true
+vim.o.wildignore = "*.o,*.obj,*~,*.so,*.swp,*.DS_Store,'*/cache/*', '*/tmp/*'" -- stuff to ignore when tab completing
+vim.o.showfulltag = true
+
+vim.opt.errorformat:prepend('%f|%l col %c|%m')
 
 vim.opt.autoread = true
 vim.o.ttimeoutlen = 50
-vim.o.updatetime = 50
+vim.o.updatetime = 250
+
 vim.opt.showcmd = false
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
+vim.o.infercase = true -- ignore case on insert completion
 
 vim.o.autoindent = true
 vim.o.shiftwidth = 2
@@ -118,6 +153,7 @@ vim.g.loaded_tarPlugin = 1
 -- vim.g.loaded_2html_plugin = 1
 -- vim.g.loaded_sql_completion = 1
 -- vim.g.loaded_spec = 1
+vim.g.vim_json_conceal = 0
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')
