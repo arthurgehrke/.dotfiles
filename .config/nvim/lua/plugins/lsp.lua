@@ -47,25 +47,23 @@ return {
         capabilities = capabilities,
         settings = {
           pyright = {
+            autoImportCompletion = true,
             disableOrganizeImports = true,
           },
+          python = {
+            analysis = {
+              -- Ignore all files for analysis to exclusively use Ruff for linting
+              -- ignore = { '*', '*/*' },
+              autoSearchPaths = true,
+              diagnosticMode = 'workspace',
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = 'off',
+            },
+          },
         },
-        root_dir = function(fname)
-          return util.root_pattern(
-            '.git',
-            'setup.py',
-            'setup.cfg',
-            '.venv',
-            'venv',
-            'pyproject.toml',
-            'requirements.txt'
-          )(fname) or util.path.dirname(fname)
-        end,
       })
 
-      lspconfig.pylsp.setup({
-        capabilities = capabilities,
-      })
+      lspconfig.pylsp.setup({})
 
       lspconfig.jsonls.setup({
         -- filetypes = {
@@ -80,12 +78,6 @@ return {
       })
 
       lspconfig.eslint.setup({
-        -- on_attach = function(client, bufnr)
-        -- This LS doesn't broadcast formatting support initially and Neovim
-        -- doesn't support dynamic registration so force broadcasting
-        -- formatting capabilities.
-        -- override_formatting_capability(client, true)
-        -- end,
         settings = { format = false, documentFormatting = false },
         root_dir = util.root_pattern(
           '.eslintrc',
@@ -106,6 +98,10 @@ return {
       lspconfig.bashls.setup({
         filetypes = { 'sh', 'zsh' },
       })
+
+      vim.g.LanguageClient_serverCommands = {
+        r = { 'R', '--slave', '-e', 'languageserver::run()' },
+      }
     end,
   },
   {

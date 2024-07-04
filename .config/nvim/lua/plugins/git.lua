@@ -1,12 +1,5 @@
 return {
   {
-    'kdheepak/lazygit.nvim',
-    lazy = false,
-    config = function()
-      vim.g.lazygit_floating_window_scaling_factor = 1.0
-    end,
-  },
-  {
     'tpope/vim-fugitive',
     lazy = false,
     keys = {
@@ -28,25 +21,10 @@ return {
       { '<leader>gpo', '<cmd>G push origin -u HEAD<cr>', desc = '[G]it [P]ush [O]rigin' },
       { '<leader>gu', ':G reset --soft HEAD~1', desc = '[G]it [U]ndo' },
       { '<leader>sum', ':G stash -um ', desc = 'Git [S]tash [UM]' },
-
       { '<Leader>ge', ':Gedit :<CR>' },
       { '<Leader>gb', ':GBrowse<CR>' },
       { '<Leader>gb', ":'<,'>GBrowse<CR>", mode = 'v' },
       { '<leader>gv', '<cmd>vertical Git<CR>', { desc = 'fugitive' } },
-      {
-        '<leader>gg',
-        function()
-          Util.terminal({ 'lazygit' }, { cwd = Util.root(), esc_esc = false, ctrl_hjkl = false })
-        end,
-        { desc = 'Lazygit (root dir)' },
-      },
-      {
-        '<leader>gG',
-        function()
-          Util.terminal({ 'lazygit' }, { esc_esc = false, ctrl_hjkl = false })
-        end,
-        { desc = 'Lazygit (cwd)' },
-      },
     },
   },
   { 'akinsho/git-conflict.nvim', version = '*', config = true, lazy = false },
@@ -110,22 +88,58 @@ return {
 
       gitsigns.setup({
         signs = {
-          add = { hl = 'GitSignsAdd', text = '│', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
-          change = { hl = 'GitSignsChange', text = '│', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
-          delete = { hl = 'GitSignsDelete', text = '_', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
-          topdelete = { hl = 'GitSignsDelete', text = '‾', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
-          changedelete = { hl = 'GitSignsChange', text = '~', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+          add = { text = '│' },
+          change = { text = '│' },
+          delete = { text = '_' },
+          topdelete = { text = '‾' },
+          changedelete = { text = '~' },
+          untracked = { text = '┆' },
         },
-        signcolumn = true,
-        attach_to_untracked = true,
-        numhl = false,
-        linehl = false,
-        word_diff = false,
-        watch_gitdir = {
-          interval = 1000,
-          follow_files = true,
-        },
+        -- current_line_blame_opts = {
+        --   virt_text = true,
+        --   virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+        --   delay = 1000,
+        --   ignore_whitespace = true,
+        --   virt_text_priority = 100,
+        -- },
+        -- signcolumn = true,
+        -- numhl = false,
+        -- linehl = false,
+        -- word_diff = false,
+        -- auto_attach = true,
+        -- attach_to_untracked = false,
+        -- update_debounce = 50,
+        -- watch_gitdir = {
+        --   interval = 1000,
+        --   follow_files = true,
+        -- },
         on_attach = gitsigns_keymap_attach,
+        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        watch_gitdir = { interval = 1000, follow_files = true },
+        attach_to_untracked = true,
+        current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
+        current_line_blame_opts = {
+          virt_text = true,
+          virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+          delay = 0,
+          ignore_whitespace = false,
+        },
+        current_line_blame_formatter = '      <author>, <author_time:%R> - <summary>',
+        sign_priority = 6,
+        update_debounce = 100,
+        status_formatter = nil, -- Use default
+        max_file_length = 40000,
+        preview_config = {
+          -- Options passed to nvim_open_win
+          border = 'single',
+          style = 'minimal',
+          relative = 'cursor',
+          row = 0,
+          col = 1,
+        },
       })
     end,
   },

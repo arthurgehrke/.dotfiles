@@ -4,7 +4,7 @@ return {
   cmd = { 'ConformInfo' },
   keys = {
     {
-      '<leader>mp',
+      '<leader>mm',
       function()
         require('conform').format({ async = false, lsp_fallback = true, timeout_ms = 1000 })
       end,
@@ -14,6 +14,10 @@ return {
   },
   opts = {
     formatters_by_ft = {
+      bash = { 'shellharden', 'beautysh' },
+      sh = { 'shellharden', 'beautysh' },
+      zsh = { 'shellharden', 'beautysh' },
+
       lua = { 'stylua' },
       python = { 'isort', 'black' },
       sql = { 'sql_formatter' },
@@ -26,15 +30,15 @@ return {
       ts = { { 'prettierd', 'prettier' } },
       tsx = { { 'prettierd', 'prettier' } },
       vue = { 'prettierd' },
-      sh = { 'shfmt' },
 
       -- JSON/XML
       json = { { 'jq', 'prettierd', 'prettier' } },
       jsonc = { { 'prettierd', 'prettier' } },
       json5 = { { 'prettierd', 'prettier' } },
-      yaml = { { 'prettierd', 'prettier' } },
+      -- yaml = { { 'prettierd', 'prettier' } },
+      yaml = { 'yamlfix' },
+
       html = { 'htmlbeautifier' },
-      zsh = { 'shellcheck' },
 
       css = { 'prettier', 'stylelint' },
       less = { 'prettier', 'stylelint' },

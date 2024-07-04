@@ -25,10 +25,10 @@ return {
     mason_lspconfig.setup({
       ensure_installed = {
         'html',
-        'bashls', -- bash, sh, zsh
-        'pyright', -- python
+        'bashls',        -- bash, sh, zsh
+        'pyright',       -- python
         'rust_analyzer', -- rust lacks linter
-        'yamlls', -- yaml
+        'yamlls',        -- yaml
         'tsserver',
         'jqls',
         'lua_ls',
@@ -45,18 +45,26 @@ return {
         { 'bash-language-server', auto_update = true },
         'stylua',
         'cssls',
-        'prettierd', -- yaml format
-        'selene', -- lua lint
+        'prettierd',  -- yaml format
+        'selene',     -- lua lint
         'shellcheck', -- bash, sh, zsh lint
-        'shfmt', -- bash, sh, zsh format
+        'shfmt',      -- bash, sh, zsh format
         'prettier',
         'eslint',
         'stylelint',
         'sqlls',
-        'isort', -- python formatter
-        'pylint', -- python linter
+        'isort',    -- python formatter
+        'pylint',   -- python linter
         'eslint_d', -- js linter
         'jq',
+        'yamlfix',
+        'nginx-language-server',
+        'htmlbeautifier',
+        'htmlhint',
+        'shellharden',
+        'beautysh',
+        'gitlab-ci-ls',
+        'gitlint'
       },
     })
   end,

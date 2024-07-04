@@ -60,6 +60,8 @@ return {
     local actions = require('telescope.actions')
     local transform_mod = require('telescope.actions.mt').transform_mod
     local actions_state = require('telescope.actions.state')
+		local lga_actions = require("telescope-live-grep-args.actions")
+		local lga_shortcuts = require("telescope-live-grep-args.shortcuts")
 
     local my_action = transform_mod({
       edit_or_qf = function(prompt_bufnr)
@@ -200,6 +202,14 @@ return {
         },
       },
       extensions = {
+        live_grep_args = {
+          auto_quoting = true,
+          mappings = {
+            i = {
+              ['<c-\\>'] = lga_actions.quote_prompt({ postfix = ' --hidden ' }),
+            },
+          },
+        },
         fzf = {
           fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter

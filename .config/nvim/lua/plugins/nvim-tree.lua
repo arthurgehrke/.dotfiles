@@ -151,20 +151,28 @@ return {
           },
         },
         renderer = {
-          highlight_modified = 'all',
-          highlight_diagnostics = "none",
-          highlight_git = true,
+          highlight_modified = 'none',
+          highlight_diagnostics = 'none',
+          highlight_git = 'none',
           symlink_destination = false,
+          indent_width = 2,
           indent_markers = {
             enable = false,
             inline_arrows = true,
             icons = {
-              corner = ' ',
-              edge = ' ',
-              item = '┊',
-              bottom = '',
+              corner = '└',
+              edge = '│',
+              item = '│',
+              bottom = '─',
               none = ' ',
             },
+            -- icons = {
+            --   corner = ' ',
+            --   edge = ' ',
+            --   item = '┊',
+            --   bottom = '',
+            --   none = ' ',
+            -- },
           },
           icons = {
             web_devicons = {
