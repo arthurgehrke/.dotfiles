@@ -1,20 +1,20 @@
 # Make things in my homedir the first to be tried for easy customization
-export PATH=~/bin:$PATH
+# export PATH=~/bin:$PATH
 
 # remove duplicat entries from $PATH
 # zsh uses $path array along with $PATH
-export PATH="/opt/homebrew/sbin:$PATH"
+# export PATH="/opt/homebrew/sbin:$PATH"
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/usr/local/lib
 export PATH=$(brew --prefix openssl)/bin:$PATH
-# export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
-export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+# export PATH="/opt/homebrew/opt/llvm@17/bin:$PATH"
+# export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/llvm@17/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/llvm@17/include"
+# export PKG_CONFIG_PATH="/opt/homebrew/opt/ncurses/lib/pkgconfig"
+
 # export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib"
-export LDFLAGS="-L/opt/homebrew/opt/llvm@17/lib"
 # export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm@17/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/ncurses/lib/pkgconfig"
 
 ##############################################################################
 # Brew
@@ -36,7 +36,6 @@ source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh #should come before substring-search plugin
 source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/forgit/forgit.plugin.zsh
 
 ##############################################################################
 # Config
@@ -265,7 +264,7 @@ export GIT_MERGE_AUTOEDIT=1
 ##############################################################################
 # iTerm integration (for OS X iTerm2)
 # @see https://iterm2.com/shell_integration.html
-if [[ "$(uname)" == "Darwin" ]] && [[ -z "$NVIM" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
+if [[ "$(uname)" == "Darwin" ]] && [[ -f ${HOME}/.iterm2_shell_integration.zsh ]]; then
   export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
   source "${HOME}"/.iterm2_shell_integration.zsh
 fi
@@ -284,3 +283,4 @@ fi
 # Homebrew requires this path.
 
 source /Users/arthurgehrke/.config/broot/launcher/bash/br
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
