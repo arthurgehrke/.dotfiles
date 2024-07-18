@@ -21,14 +21,14 @@
   log = less -+X
 
 [pull]
-  rebase = off
-  ff = only
+  rebase = true
 
 [fetch]
 	prune = true
 
 [rebase]
-  autosquash = true
+  autoStash = true
+  autoSquash = true
 
 [push]
   default = current
@@ -107,7 +107,7 @@
 
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
