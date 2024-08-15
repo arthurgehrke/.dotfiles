@@ -19,29 +19,33 @@ return {
       zsh = { 'shellharden', 'beautysh' },
 
       lua = { 'stylua' },
+
       python = { 'isort', 'black' },
+
       sql = { 'sql_formatter' },
-      javascript = { { 'prettierd', 'prettier' } },
-      typescript = { { 'prettierd', 'prettier' } },
-      javascriptreact = { { 'prettierd', 'prettier' } },
-      typescriptreact = { { 'prettierd', 'prettier' } },
-      ['javascript.jsx'] = { { 'prettierd', 'prettier' } },
-      ['typescript.jsx'] = { { 'prettierd', 'prettier' } },
-      ts = { { 'prettierd', 'prettier' } },
-      tsx = { { 'prettierd', 'prettier' } },
-      vue = { 'prettierd' },
+
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
+
+      javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+
+      ['javascript.jsx'] = { 'prettierd', 'prettier', stop_after_first = true },
+      ['typescript.jsx'] = { 'prettierd', 'prettier', stop_after_first = true },
+
+      ts = { 'prettierd', 'prettier', stop_after_first = true },
+      tsx = { 'prettierd', 'prettier', stop_after_first = true },
 
       -- JSON/XML
-      json = { { 'jq', 'prettierd', 'prettier' } },
-      jsonc = { { 'prettierd', 'prettier' } },
-      json5 = { { 'prettierd', 'prettier' } },
+      json = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
+      jsonc = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
+      json5 = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
       -- yaml = { { 'prettierd', 'prettier' } },
       yaml = { 'yamlfix' },
 
       html = { 'htmlbeautifier' },
 
       css = { 'prettier', 'stylelint' },
-      less = { 'prettier', 'stylelint' },
       scss = { 'prettier', 'stylelint' },
       sass = { 'prettier', 'stylelint' },
 
@@ -49,6 +53,36 @@ return {
     },
     quiet = true,
     formatters = {
+      prettier = {
+        condition = function(self, ctx)
+          return vim.fs.find({
+            '.prettierrc',
+            '.prettierrc.json',
+            '.prettierrc.yml',
+            '.prettierrc.yaml',
+            '.prettierrc.json5',
+            '.prettierrc.js',
+            '.prettierrc.cjs',
+            '.prettierrc.mjs',
+            '.prettierrc.toml',
+            'prettier.config.js',
+            'prettier.config.cjs',
+            'prettier.config.mjs',
+          }, {
+            path = ctx.dirname,
+            upward = true,
+          })[1]
+        end,
+      },
+      yamlfix = {
+        -- Change where to find the command
+        command = 'local/path/yamlfix',
+
+        -- Adds environment args to the yamlfix formatter
+        env = {
+          YAMLFIX_SEQUENCE_STYLE = 'block_style',
+        },
+      },
       injected = { options = { ignore_errors = true } },
       options = {
         shfmt = {

@@ -219,12 +219,17 @@ eval "$(nodenv init -)"
 ##############################################################################
 # Python
 ##############################################################################
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+# export PATH="$(pyenv root)/shims:$PATH"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
+export PATH="/Users/arthurgehrke/.pyenv/shims:${PATH}"
 ##############################################################################
 # Fzf
 ##############################################################################
@@ -254,6 +259,7 @@ if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
 
+
 ##############################################################################
 # Git
 ##############################################################################
@@ -281,6 +287,8 @@ fi
 # Paths
 ##############################################################################
 # Homebrew requires this path.
-
 source /Users/arthurgehrke/.config/broot/launcher/bash/br
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# Created by `pipx` on 2024-07-18 22:45:41
+export PATH="$PATH:/Users/arthurgehrke/.local/bin"

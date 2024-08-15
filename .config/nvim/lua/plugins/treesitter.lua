@@ -56,6 +56,7 @@ return {
       'markdown',
       'markdown_inline',
       'r',
+      'toml',
       'rnoweb',
       'tmux',
       'html',
@@ -68,6 +69,7 @@ return {
       'ruby',
       'rust',
       'scss',
+      'css',
       'luadoc',
       'luap',
       'dockerfile',
@@ -124,5 +126,7 @@ return {
     vim.api.nvim_set_option_value('foldmethod', 'expr', {})
     vim.api.nvim_set_option_value('foldexpr', 'nvim_treesitter#foldexpr()', {})
     require('nvim-treesitter.configs').setup(opts)
+    local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+    parser_config.tsx.filetype_to_parsername = { 'javascript', 'typescript.tsx' }
   end,
 }

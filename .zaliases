@@ -6,16 +6,20 @@ alias reload!='source ~/.zshrc'
 alias restart="exec $SHELL -l"
 
 if [ -f "$(which lsd)" ]; then
-    alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
+  alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
 fi
 
 if [ -f "$(which bat)" ]; then
-    alias cat='bat'
+  alias cat='bat'
 fi
+
+alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 
 # alias ls="ls -lG"
 alias ls='ls -G -F --color=auto'
+
 # alias ll='ls -lAGFp'
+
 alias lts='ll --timesort'
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
 alias chromium-http='chromium --proxy-server=localhost:7777'
@@ -37,29 +41,27 @@ function vscp() {
   fi
   declare -a targs=()
   echo "Editing Remote Files"
-  for iarg in $@; do
-    targ="scp://$(echo $iarg | sed -e 's@:/@//@' | sed -e 's@:@/@')"
-    targs=("${targs[@]}" $targ)
+  for iarg in "$@"; do
+    targ="scp://$(echo "$iarg" | sed -e 's@:/@//@' | sed -e 's@:@/@')"
+    targs=("${targs[@]}" "$targ")
   done
-  echo ${targs[@]}
-  vim ${targs[@]}
+  echo "${targs[@]}"
+  vim "${targs[@]}"
 }
 compdef vscp=scp
 
-gvimscp()
-{
-    if [[ -z $1 ]]; then
-        echo "usage: gvimscp [[user@]host1:]file1 ... [[user@]host2:]file2"
-        return
-    fi
-    declare -a targs=()
-    for iarg in $@
-    do
-        # adapt syntax for vim
-        targ="scp://$(echo $iarg | sed -e 's@:/@//@' | sed -e 's@:@/@')"
-        targs=("${targs[@]}" $targ)
-    done
-    gvim ${targs[@]}
+gvimscp() {
+  if [[ -z $1 ]]; then
+    echo "usage: gvimscp [[user@]host1:]file1 ... [[user@]host2:]file2"
+    return
+  fi
+  declare -a targs=()
+  for iarg in "$@"; do
+    # adapt syntax for vim
+    targ="scp://$(echo "$iarg" | sed -e 's@:/@//@' | sed -e 's@:@/@')"
+    targs=("${targs[@]}" "$targ")
+  done
+  gvim "${targs[@]}"
 }
 
 alias addiptomongo='atlas accessLists create '
@@ -90,11 +92,6 @@ alias .....='cd ../../../..'
 
 alias grep='grep --color=auto'
 
-# git commands
-alias gs='git status'
-alias ga='git add'
-alias ga-file='git add'
-
 alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
 
@@ -117,13 +114,11 @@ alias breew='brew update && brew upgrade && brew cleanup'
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
 alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}'"
-alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias openhistory="nvim ~/.zhistory"
 
 alias nom="rm -rf node_modules && npm cache clean && npm install"
 alias preview="fzf --preview 'bat --color \"always\" {}'"
-
-alias search="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs nvim"
 
 alias brewcleanfromfile='brew bundle --force cleanup'
 alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
@@ -145,7 +140,7 @@ fi
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
-if [ "$(command -v docker)" ] ; then
+if [ "$(command -v docker)" ]; then
   alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'
   # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
   alias d-kali="docker run -ti --privileged --net='host' --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kali_base /bin/bash"
@@ -155,9 +150,4 @@ if [ "$(command -v docker)" ] ; then
   alias d-nodejs='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-nodejs-v8:1.0.0 /bin/bash'
   alias d-swagger-editor='docker run --rm -d -p 80:8080 swaggerapi/swagger-editor && sleep 3 && open http://localhost'
   alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
-  alias d-juice-shop='docker run --rm -itd -p 3000:3000 bkimminich/juice-shop'
-  # https://www.linuxserver.io/blog/2021-05-05-meet-webtops-a-linux-desktop-environment-in-your-browser
-  alias d-webtop='docker run -d --name=webtop -e PUID=1000 -e PGID=1000 -e TZ=Europe/Berlin -p 3000:3000 -v $HOME/.webtop:/config --shm-size="8gb" --restart unless-stopped ghcr.io/linuxserver/webtop'
 fi
-
-# vim: ft=zsh

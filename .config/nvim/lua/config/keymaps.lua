@@ -169,5 +169,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 vim.keymap.set({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren' })
-
-

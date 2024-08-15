@@ -4,6 +4,7 @@ return {
     dependencies = {
       'b0o/schemastore.nvim',
     },
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lspconfig = require('lspconfig')
       local util = require('lspconfig/util')
@@ -23,7 +24,7 @@ return {
       lspconfig.tsserver.setup({
         -- capabilities = capabilities,
         root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
-        filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
+        filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact' },
         cmd = { 'typescript-language-server', '--stdio' },
         -- settings = {
         --   completions = {
@@ -79,6 +80,14 @@ return {
 
       lspconfig.eslint.setup({
         settings = { format = false, documentFormatting = false },
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+        },
         root_dir = util.root_pattern(
           '.eslintrc',
           '.eslintrc.js',

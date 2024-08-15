@@ -5,6 +5,7 @@ return {
   dependencies = {
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     { 'nvim-lua/plenary.nvim' },
+    { 'smartpde/telescope-recent-files' },
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
   },
@@ -38,6 +39,12 @@ return {
       desc = 'Grep (root dir)',
     },
     {
+      '<leader>fr',
+      function()
+        require('telescope').extensions.recent_files.pick()
+      end,
+    },
+    {
       '<leader>+',
       function()
         require('telescope.builtin').live_grep({ cwd = false })
@@ -60,8 +67,8 @@ return {
     local actions = require('telescope.actions')
     local transform_mod = require('telescope.actions.mt').transform_mod
     local actions_state = require('telescope.actions.state')
-		local lga_actions = require("telescope-live-grep-args.actions")
-		local lga_shortcuts = require("telescope-live-grep-args.shortcuts")
+    local lga_actions = require('telescope-live-grep-args.actions')
+    local lga_shortcuts = require('telescope-live-grep-args.shortcuts')
 
     local my_action = transform_mod({
       edit_or_qf = function(prompt_bufnr)
@@ -210,6 +217,7 @@ return {
             },
           },
         },
+        recent_files = {},
         fzf = {
           fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
@@ -236,5 +244,6 @@ return {
     require('telescope').load_extension('file_browser')
     require('telescope').load_extension('fzf')
     require('telescope').load_extension('live_grep_args')
+    require('telescope').load_extension('recent_files')
   end,
 }

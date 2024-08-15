@@ -25,15 +25,15 @@ return {
     mason_lspconfig.setup({
       ensure_installed = {
         'html',
-        'bashls',        -- bash, sh, zsh
-        'pyright',       -- python
+        'bashls', -- bash, sh, zsh
+        'pyright', -- python
         'rust_analyzer', -- rust lacks linter
-        'yamlls',        -- yaml
         'tsserver',
         'jqls',
         'lua_ls',
         'pylsp',
         'jsonls',
+        'eslint',
       },
       automatic_installation = true, -- not the same as ensure_installed
       auto_update = true,
@@ -41,30 +41,33 @@ return {
     mason_tool_installer.setup({
       automatic_installation = true, -- not the same as ensure_installed
       auto_update = true,
+      start_delay = 3000,
+      debounce_hours = 5,
+      run_on_start = true,
       ensure_installed = {
-        { 'bash-language-server', auto_update = true },
+        { 'typescript-language-server' },
+        'black',
+        'bash-language-server',
         'stylua',
         'cssls',
-        'prettierd',  -- yaml format
-        'selene',     -- lua lint
+        'prettierd', -- yaml format
+        'selene', -- lua lint
         'shellcheck', -- bash, sh, zsh lint
-        'shfmt',      -- bash, sh, zsh format
+        'shfmt', -- bash, sh, zsh format
         'prettier',
-        'eslint',
         'stylelint',
         'sqlls',
-        'isort',    -- python formatter
-        'pylint',   -- python linter
+        'isort', -- python formatter
+        'pylint', -- python linter
         'eslint_d', -- js linter
         'jq',
         'yamlfix',
+        'yamllint',
         'nginx-language-server',
         'htmlbeautifier',
         'htmlhint',
-        'shellharden',
         'beautysh',
-        'gitlab-ci-ls',
-        'gitlint'
+        'gitlint',
       },
     })
   end,

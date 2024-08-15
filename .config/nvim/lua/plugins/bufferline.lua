@@ -20,8 +20,8 @@ return {
         tab_size = 21,
         diagnostics = false, -- | "nvim_lsp" | "coc",
         diagnostics_update_in_insert = false,
-        max_name_length = 30,
-        max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
+        max_name_length = 40,
+        max_prefix_length = 40, -- prefix used when a buffer is de-duplicated
         indicator = {
           icon = '|', -- this should be omitted if indicator style is not 'icon'
           style = 'none',

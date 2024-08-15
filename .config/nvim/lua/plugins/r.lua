@@ -1,6 +1,7 @@
 return {
   'R-nvim/R.nvim',
   lazy = false,
+  enabled = false,
   ft = { 'r', 'rmd' },
   keys = {
     { '<LocalLeader>r', '', desc = '+R' },
