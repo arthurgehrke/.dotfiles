@@ -133,3 +133,16 @@ cask "temurin"
 cask "temurin8"
 cask "whatsapp"
 cask "xquartz"
+mas "AdGuard for Safari", id: 1440147259
+mas "Anybox", id: 1593408455
+mas "BetterSnapTool", id: 417375580
+mas "com.getfireshot.fireshot", id: 1541862561
+mas "Find Any File", id: 402569179
+mas "Hush", id: 1544743900
+mas "JSONPeep", id: 1458969831
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "Postman Interceptor", id: 6460587883
+mas "TickTick", id: 966085870
+mas "Web(Cache)Browser", id: 432802024
+mas "Webcam Recorder", id: 1508067444
