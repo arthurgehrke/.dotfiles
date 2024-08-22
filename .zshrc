@@ -43,6 +43,7 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 autoload -U colors && colors
 
 # export NO_COLOR=1
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export EDITOR=nvim
 export VISUAL="$EDITOR"
