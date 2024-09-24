@@ -16,7 +16,7 @@ fi
 alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 
 # alias ls="ls -lG"
-alias ls='ls -G -F --color=auto'
+# alias ls='ls -G -F --color=auto'
 
 # alias ll='ls -lAGFp'
 
