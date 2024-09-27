@@ -8,53 +8,44 @@ return {
       function()
         require('conform').format({ async = false, lsp_fallback = true, timeout_ms = 1000 })
       end,
-      mode = '',
       desc = 'Format buffer',
     },
   },
   opts = {
     formatters_by_ft = {
-      bash = { 'shellharden', 'beautysh' },
-      sh = { 'shellharden', 'beautysh' },
-      zsh = { 'shellharden', 'beautysh' },
-
+      sh = { 'shfmt' },
+      bash = { 'shfmt' },
+      zsh = { 'shfmt' },
       lua = { 'stylua' },
-
       python = { 'isort', 'black' },
-
+      go = { 'goimports', 'gofumpt' },
       sql = { 'sql_formatter' },
-
       javascript = { 'prettierd', 'prettier', stop_after_first = true },
       typescript = { 'prettierd', 'prettier', stop_after_first = true },
-
       javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
       typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-
       ['javascript.jsx'] = { 'prettierd', 'prettier', stop_after_first = true },
       ['typescript.jsx'] = { 'prettierd', 'prettier', stop_after_first = true },
-
       ts = { 'prettierd', 'prettier', stop_after_first = true },
       tsx = { 'prettierd', 'prettier', stop_after_first = true },
-
-      -- JSON/XML
       json = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
       jsonc = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
       json5 = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
-      -- yaml = { { 'prettierd', 'prettier' } },
-      yaml = { 'yamlfix' },
-
+      yaml = { 'yamlfix', 'yamlfix' },
+      psql = { 'sqlfluff' },
+      rust = { 'rustfmt' },
       html = { 'htmlbeautifier' },
-
       css = { 'prettier', 'stylelint' },
       scss = { 'prettier', 'stylelint' },
       sass = { 'prettier', 'stylelint' },
 
+      -- Default formatter
       ['_'] = { 'trim_whitespace' },
     },
     quiet = true,
     formatters = {
       prettier = {
-        condition = function(self, ctx)
+        condition = function(_, ctx)
           return vim.fs.find({
             '.prettierrc',
             '.prettierrc.json',
@@ -68,17 +59,11 @@ return {
             'prettier.config.js',
             'prettier.config.cjs',
             'prettier.config.mjs',
-          }, {
-            path = ctx.dirname,
-            upward = true,
-          })[1]
+          }, { path = ctx.dirname, upward = true })[1] ~= nil
         end,
       },
       yamlfix = {
-        -- Change where to find the command
         command = 'local/path/yamlfix',
-
-        -- Adds environment args to the yamlfix formatter
         env = {
           YAMLFIX_SEQUENCE_STYLE = 'block_style',
         },

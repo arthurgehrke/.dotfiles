@@ -1,15 +1,12 @@
 return {
   'nvim-treesitter/nvim-treesitter',
-  -- event = 'VeryLazy',
-  version = false,
   lazy = false,
+  version = false,
   build = function()
     require('nvim-treesitter.install').update({ with_sync = true })()
   end,
-  -- event = { 'BufReadPre', 'BufNewFile' },
   event = { 'BufReadPre', 'BufReadPost', 'BufNewFile' },
   cmd = {
-
     'TSBufDisable',
     'TSBufEnable',
     'TSBufToggle',
@@ -34,6 +31,16 @@ return {
       enable = true,
       disable = function(_, buf)
         local max_filesize = 1000 * 1024 -- 1000 KB
+        local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+
+        if filetype == 'tmux' then
+          return false -- keeps Treesitter to tmux, but without regex adds
+        end
+
+        if filetype == 'markdown' then
+          return false -- keeps Treesitter to tmux, but without regex adds
+        end
+
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then
           return true
@@ -42,62 +49,44 @@ return {
       additional_vim_regex_highlighting = false,
     },
     indent = { enable = true },
-    autopairs = {
-      enable = false,
-    },
-    fold = { enable = false },
-    endwise = {
-      enable = false,
-    },
-    autotag = {
-      enable = false,
-    },
     ensure_installed = {
-      'markdown',
-      'markdown_inline',
-      'r',
-      'toml',
-      'rnoweb',
-      'tmux',
+      'bash',
+      'c',
+      'css',
+      'dockerfile',
+      'git_config',
+      'gitcommit',
       'html',
       'javascript',
-      'json',
-      'jsonc',
       'jsdoc',
+      'json',
       'json5',
+      'jsonc',
       'lua',
+      'luadoc',
+      'luap',
+      'markdown',
+      'markdown_inline',
+      'python',
+      'query',
+      'r',
+      'regex',
       'ruby',
       'rust',
       'scss',
-      'css',
-      'luadoc',
-      'luap',
-      'dockerfile',
-      'python',
-      'query',
-      'regex',
+      'sql',
+      'ssh_config',
+      'tmux',
+      'toml',
       'tsx',
       'typescript',
       'vim',
       'vimdoc',
-      'ssh_config',
-      'r',
-      'sql',
       'yaml',
-      'c',
-      'bash',
-      'gitcommit',
-      'git_config',
-    },
-    match = {
-      enable = false,
-    },
-    matchup = { enable = false },
-    refactor = { highlight_definitions = { enable = true } },
-    incremental_selection = {
-      enable = false,
     },
     context_commentstring = {
+      enable = true,
+      enable_autocmd = false,
       config = {
         javascript = {
           __default = '// %s',
@@ -109,23 +98,46 @@ return {
         typescript = { __default = '// %s', __multiline = '/* %s */' },
       },
     },
+    refactor = {
+      highlight_definitions = { enable = false },
+      highlight_current_scope = { enable = false },
+      smart_rename = {
+        enable = true,
+        keymaps = {
+          smart_rename = 'grr',
+        },
+      },
+      navigation = {
+        enable = false,
+      },
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          ['af'] = '@function.outer',
+          ['if'] = '@function.inner',
+          ['ac'] = '@class.outer',
+          ['ic'] = '@class.inner',
+        },
+      },
+      move = {
+        enable = false,
+      },
+    },
   },
   ---@param opts TSConfig
   config = function(_, opts)
     if type(opts.ensure_installed) == 'table' then
-      ---@type table<string, boolean>
-      local added = {}
-      opts.ensure_installed = vim.tbl_filter(function(lang)
-        if added[lang] then
-          return false
-        end
-        added[lang] = true
-        return true
-      end, opts.ensure_installed)
+      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
     end
-    vim.api.nvim_set_option_value('foldmethod', 'expr', {})
-    vim.api.nvim_set_option_value('foldexpr', 'nvim_treesitter#foldexpr()', {})
+
+    vim.opt.foldmethod = 'expr'
+    vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+
     require('nvim-treesitter.configs').setup(opts)
+
     local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
     parser_config.tsx.filetype_to_parsername = { 'javascript', 'typescript.tsx' }
   end,

@@ -1,4 +1,4 @@
-import = ["~/.config/alacritty/base16-gruvbox-dark-hard.toml"]
+import = ["~/.config/alacritty/themes/gruvbox_dark.toml"]
 
 live_config_reload = true
 
@@ -7,6 +7,41 @@ duration = 0
 
 [colors]
 draw_bold_text_with_bright_colors = false
+[colors.primary]
+background = "#282828"  # Fundo escuro
+foreground = "#ebdbb2"  # Texto claro
+
+# Cores normais
+[colors.normal]
+black   = "#282828"
+red     = "#cc241d"
+green   = "#98971a"
+yellow  = "#d79921"
+blue    = "#458588"
+magenta = "#b16286"
+cyan    = "#689d6a"
+white   = "#a89984"
+
+# Cores brilhantes
+[colors.bright]
+black   = "#928374"
+red     = "#fb4934"
+green   = "#b8bb26"
+yellow  = "#fabd2f"
+blue    = "#83a598"
+magenta = "#d3869b"
+cyan    = "#8ec07c"
+white   = "#ebdbb2"
+
+# Configuração da cor do cursor
+[colors.cursor]
+text = "#282828"
+cursor = "#ebdbb2"
+
+# Seleção de texto
+[colors.selection]
+text = "#282828"
+background = "#ebdbb2"
 
 [cursor.style]
 blinking = "Off"
@@ -15,127 +50,72 @@ shape = "Block"
 [env]
 TERM = "xterm-256color"
 
-# [font.bold]
-# family = "Hack Nerd Font Mono"
-# style = "Bold"
-
-# [font.bold_italic]
-# family = "Hack Nerd Font Mono"
-# style = "Bold Italic"
-
-# [font.italic]
-# family = "Hack Nerd Font Mono"
-# style = "Italic"
-
-# [font.normal]
-# family = "Hack Nerd Font Mono"
-# style = "Regular"
-
-# [font.offset]
-# x = 2  # compacter letter spacing
-# y = 5  # compacter line spacing
-
 [font]
-size = 14
-
-[font.offset]
-x = 0
-y = 0
-
-[font.normal]
-# family = "MesloLGS NF"
-# family = "Hack Nerd Font Mono"
-family = "JetBrainsMono Nerd Font"
-style = "Regular"
-
-[font.bold]
-# family = "MesloLGS NF"
-# family = "Hack Nerd Font Mono"
-
-[font.italic]
-# family = "MesloLGS NF"
-# family = "Hack Nerd Font Mono"
-
-[font.bold_italic]
-# family = "MesloLGS NF"
-# family = "Hack Nerd Font Mono"
+size = 13.5
+offset = {x = 1, y = 0}
+normal = { family = "MesloLGS NF", style = "Regular" }
+bold = { family = "MesloLGS NF" }
+italic = { family = "MesloLGS NF" }
+bold_italic = { family = "MesloLGS NF" }
 
 [[keyboard.bindings]]
-chars = "\u001B[5~"
 key = "Up"
-mode = "~Vi|~Search"
 mods = "Command"
+chars = "\u001B[5~"
+mode = "~Vi|~Search"
 
-# Command-Down -> PageDown - 替代 <fn - down>
 [[keyboard.bindings]]
-chars = "\u001B[6~"
 key = "Down"
-mode = "~Vi|~Search"
 mods = "Command"
+chars = "\u001B[6~"
+mode = "~Vi|~Search"
 
-# Command-Left -> Home - 替代 <fn - left>
 [[keyboard.bindings]]
-chars = "\u001BOH"
 key = "Left"
-mode = "~Vi|~Search"
 mods = "Command"
+chars = "\u001BOH"
+mode = "~Vi|~Search"
 
-# Command-Right -> End - 替代 <fn - right>
 [[keyboard.bindings]]
-chars = "\u001BOF"
 key = "Right"
-mode = "~Vi|~Search"
 mods = "Command"
+chars = "\u001BOF"
+mode = "~Vi|~Search"
 
 [[keyboard.bindings]]
-action = "Paste"
 key = "Paste"
-
-[[keyboard.bindings]]
-action = "Copy"
-key = "Copy"
-
-[[keyboard.bindings]]
 action = "Paste"
+
+[[keyboard.bindings]]
+key = "Copy"
+action = "Copy"
+
+[[keyboard.bindings]]
 key = "V"
 mods = "Control|Shift"
+action = "Paste"
 
 [[keyboard.bindings]]
-action = "Copy"
 key = "C"
 mods = "Control|Shift"
+action = "Copy"
 
 [[keyboard.bindings]]
-action = "PasteSelection"
 key = "Insert"
 mods = "Shift"
+action = "PasteSelection"
 
 [scrolling]
 history = 100000
 
 [window]
-# decorations = "buttonless"
 decorations = "full"
-# decorations_theme_variant = "None"
 startup_mode = "Maximized"
-# option_as_alt = "Both"
 option_as_alt = "OnlyLeft"
 dynamic_title = false
-# padding = { x = 2, y = 2 }
-dynamic_padding = false
+padding = {x = 1, y = 1}
+dimensions = {columns = 150, lines = 50}
 title = "Alacritty"
-
-[window.class]
-general = "Alacritty"
-instance = "Alacritty"
-
-[window.padding]
-x = 1
-y = 1
-
-[window.dimensions]
-columns = 150
-lines = 50
 
 [selection]
 save_to_clipboard = true
@@ -143,7 +123,3 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
 [mouse]
 hide_when_typing = true
-
-[[mouse.bindings]]
-action = "PasteSelection"
-mouse = "Middle"

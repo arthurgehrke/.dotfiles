@@ -7,8 +7,8 @@ vim.o.lazyredraw = true
 -- Decrease redraw time
 vim.o.redrawtime = 100
 
--- Disable intro message
-vim.opt.shortmess:append('I')
+-- shortmess is used to avoid excessive messages
+vim.opt.shortmess = vim.opt.shortmess + { c = true }
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
@@ -67,8 +67,6 @@ vim.opt.numberwidth = 4
 
 vim.opt.hidden = true
 
-vim.opt.completeopt = 'menu,menuone,noselect'
-
 vim.o.showmode = true
 
 vim.o.ruler = true
@@ -106,7 +104,12 @@ vim.opt.showcmd = false
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 
-vim.opt.completeopt = 'menuone,noinsert,noselect'
+-- completeopt is used to manage code suggestions
+-- menuone: show popup even when there is only one suggestion
+-- noinsert: Only insert text when selection is confirmed
+-- noselect: force us to select one from the suggestions
+vim.opt.completeopt = { 'menuone', 'noselect', 'noinsert', 'preview' }
+
 vim.o.infercase = true -- ignore case on insert completion
 
 vim.o.autoindent = true
@@ -179,3 +182,11 @@ end
 vim.g.loaded_perl_provider = 0
 vim.g.ruby_host_prog = '/usr/bin/ruby'
 vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv'
+
+if os.getenv('TERM') == 'alacritty' then
+  vim.o.ttymouse = 'sgr'
+end
+
+if vim.env.TERM == 'alacritty' then
+  vim.opt.ttymouse = 'sgr'
+end

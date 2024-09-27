@@ -62,6 +62,8 @@ return {
     local config = {
       options = {
         disabled_filetypes = {
+          -- statusline = { 'neo-tree' },
+          -- winbar = { 'neo-tree' },
           statusline = { 'NvimTree' },
           winbar = { 'NvimTree' },
         },

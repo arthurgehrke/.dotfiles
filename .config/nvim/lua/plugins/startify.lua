@@ -48,6 +48,7 @@ return {
         { G = { '  Git (Fugitive)', 'G' } },
         { ch = { '  Check Health', 'checkhealth' } },
         { m = { '  Mason', 'Mason' } },
+        { l = {'Lazy', ':Lazy'}},
       }
 
       -- Help texts should not be added to the session

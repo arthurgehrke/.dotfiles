@@ -1,1 +1,1 @@
-return {  'kylechui/nvim-surround',  version = '*',  layy = false,  keys = { 'ys', 'cs', 'ds' },  config = function()    require('nvim-surround').setup({      -- Configuration here, or leave empty to use defaults    })  end,}
+return {  'kylechui/nvim-surround',  version = '*',  layy = false,  keys = { 'ys', 'cs', 'ds' },  config = function()    require('nvim-surround').setup({})  end,}

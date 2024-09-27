@@ -20,7 +20,13 @@ return {
     {
       'ff',
       function()
-        require('telescope.builtin').find_files({ hidden = true })
+        require('telescope.builtin').find_files({
+          hidden = true,
+          no_ignore = true,
+          path = '%:p:h',
+          no_ignore_parent = true,
+          find_command = { 'rg', '--files', '--hidden', '-g', '!.git' },
+        })
       end,
       desc = '[f]ind [f]iles',
     },
@@ -34,7 +40,7 @@ return {
     {
       '<leader>;',
       function()
-        require('telescope.builtin').live_grep()
+        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true, path = '%:p:h' })
       end,
       desc = 'Grep (root dir)',
     },
@@ -54,7 +60,7 @@ return {
     {
       '<leader>gs',
       function()
-        require('telescope.builtin').grep_string()
+        require('telescope.builtin').grep_string({ hidden = true, no_ignore = true, path = '%:p:h' })
       end,
       desc = 'Find word under cursor',
     },
@@ -123,17 +129,22 @@ return {
           'bin/Debug',
           '.dart_tool/',
           '.vscode/',
+          '.pyenv/**',
+          '.rbenv/**',
           '%.lock',
           '%.pdb',
           '%.so',
           '%.dll',
           '%.class',
+          '.rustup/**',
           '%.exe',
           '%.cache',
           '%.pdf',
           '%.dylib',
           'dist/**',
           'build/**',
+          'go/**',
+          '.rye/**',
           '.git/**',
           '.next/**',
           '.undo/**',
@@ -150,6 +161,8 @@ return {
           '--line-number',
           '--column',
           '--smart-case',
+          '--hidden',
+          '--no-ignore-vcs ',
         },
         mappings = {
           i = {
@@ -204,8 +217,19 @@ return {
         man_pages = { sections = { '2', '3' } },
         lsp_document_symbols = { path_display = { 'hidden' } },
         lsp_workspace_symbols = { path_display = { 'shorten' } },
+        hidden = true,
         find_files = {
-          hidden = true,
+          find_command = {
+            'ag',
+            '--silent',
+            '--nocolor',
+            '--follow',
+            '-g',
+            '',
+            '--literal',
+            '--hidden',
+            '.git ',
+          },
         },
       },
       extensions = {

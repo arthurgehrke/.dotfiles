@@ -10,11 +10,9 @@ return {
     local mason = require('mason')
     local mason_lspconfig = require('mason-lspconfig')
     local mason_tool_installer = require('mason-tool-installer')
+
     mason.setup({
       ui = {
-        ensure_installed = {
-          'black',
-        },
         icons = {
           package_installed = '✓',
           package_pending = '➜',
@@ -22,53 +20,53 @@ return {
         },
       },
     })
+
     mason_lspconfig.setup({
       ensure_installed = {
-        'html',
-        'bashls', -- bash, sh, zsh
-        'pyright', -- python
-        'rust_analyzer', -- rust lacks linter
-        'tsserver',
-        'jqls',
-        'lua_ls',
-        'pylsp',
-        'jsonls',
-        'eslint',
+        'bashls', -- Bash, sh, zsh
+        'pyright', -- Python
+        'rust_analyzer', -- Rust
+        'ts_ls', -- TypeScript
+        'jsonls', -- JSON
+        'eslint', -- JavaScript Linter
+        'html', -- HTML
+        'lua_ls', -- Lua
+        'jqls', -- jq (JSON)
+        'yamlls',
+        'marksman'
       },
-      automatic_installation = true, -- not the same as ensure_installed
-      auto_update = true,
+      automatic_installation = true,
     })
+
     mason_tool_installer.setup({
-      automatic_installation = true, -- not the same as ensure_installed
-      auto_update = true,
-      start_delay = 3000,
-      debounce_hours = 5,
-      run_on_start = true,
       ensure_installed = {
-        { 'typescript-language-server' },
-        'black',
-        'bash-language-server',
-        'stylua',
-        'cssls',
-        'prettierd', -- yaml format
-        'selene', -- lua lint
-        'shellcheck', -- bash, sh, zsh lint
-        'shfmt', -- bash, sh, zsh format
-        'prettier',
-        'stylelint',
-        'sqlls',
-        'isort', -- python formatter
-        'pylint', -- python linter
-        'eslint_d', -- js linter
-        'jq',
-        'yamlfix',
-        'yamllint',
-        'nginx-language-server',
-        'htmlbeautifier',
-        'htmlhint',
-        'beautysh',
-        'gitlint',
+        'shfmt',
+        'black', -- Python formatter
+        'bash-language-server', -- Bash LSP
+        'stylua', -- Lua formatter
+        'prettierd', -- Prettier daemon
+        'selene', -- Lua linter
+        'shellcheck', -- Bash linter
+        'shellharden', 
+        'shfmt', -- Bash formatter
+        'prettier', -- General formatter
+        'stylelint', -- CSS linter
+        'sqlls', -- SQL LSP
+        'isort', -- Python import sorter
+        'pylint', -- Python linter
+        'eslint_d', -- JavaScript linter daemon
+        'jq', -- JSON processor
+        'yamlfix', -- YAML fixer
+        'yamllint', -- YAML linter
+        'nginx-language-server', -- Nginx LSP
+        'htmlbeautifier', -- HTML beautifier
+        'htmlhint', -- HTML linter
+        'gitlint', -- Git commit linter
       },
+      auto_update = true,
+      run_on_start = true,
+      start_delay = 3000, -- Delay for installation at start
+      debounce_hours = 5, -- Delay before running updates
     })
   end,
 }
