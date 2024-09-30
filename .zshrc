@@ -21,6 +21,7 @@ fi
 ##############################################################################
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
+source "$HOME/.zfunctions"
 
 source $HOME/.themes/zsh/minimalist/.p10k.zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -43,6 +44,57 @@ fi
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+typeset -A ZSH_HIGHLIGHT_STYLES
+# Default style
+ZSH_HIGHLIGHT_STYLES[default]=fg=#ebdbb2,bold
+# Errors and unknown tokens
+ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=#fb4934
+# Reserved words like if, then, etc.
+ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934,standout
+# Alias commands
+ZSH_HIGHLIGHT_STYLES[alias]=fg=#fe8019,bold
+# Built-in shell commands like `cd`
+ZSH_HIGHLIGHT_STYLES[builtin]=fg=#b8bb26,bold
+# Functions
+ZSH_HIGHLIGHT_STYLES[function]=fg=#d3869b,bold
+# External commands like `ls`
+ZSH_HIGHLIGHT_STYLES[command]=fg=#83a598,bold
+# Commands before pipes, like `sudo` or `time`
+ZSH_HIGHLIGHT_STYLES[precommand]=fg=#fabd2f,bold
+# Command separator (`;` or `&&`)
+ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=#fabd2f,bold
+# Hashed commands from `$PATH`
+ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=#b8bb26,bold
+# File paths
+ZSH_HIGHLIGHT_STYLES[path]=fg=#8ec07c,underline
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]=fg=#d79921,underline
+ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=#b16286,underline
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=fg=#d79921,underline
+# Globbing (wildcards like `*`)
+ZSH_HIGHLIGHT_STYLES[globbing]=fg=#fabd2f,bold
+# History expansion (`!`)
+ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=#fabd2f,bold,underline
+# Options (like `-a`, `--help`)
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=#fabd2f,bold
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=#d79921,bold
+# Quoted arguments
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=#8ec07c,bold
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=#d3869b,bold
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=#b16286,bold
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument_unclosed]=fg=#cc241d,bold
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=#fabd2f,bold
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=#fe8019,bold
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=#fabd2f,bold
+# Comments
+ZSH_HIGHLIGHT_STYLES[comment]=fg=#928374,bold
+# Redirection (`>`, `>>`)
+ZSH_HIGHLIGHT_STYLES[redirection]=fg=#fe8019,bold
+# Assignments (like `foo=bar`)
+ZSH_HIGHLIGHT_STYLES[assign]=fg=#b16286,bold
+# Highlight the word "sudo"
+ZSH_HIGHLIGHT_REGEXP+=('\bsudo\b' fg=#d79921,bold)
+
 ##############################################################################
 # Configurações Gerais
 ##############################################################################
@@ -50,15 +102,10 @@ export LANG=en_US.UTF-8
 export EDITOR=nvim
 export VISUAL="$EDITOR"
 export PAGER=less
-# export TERM="tmux-256color"
-# Export TERM correctly for tmux
-# [[ $TERM == "screen" ]] && export TERM=screen-256color
-# [[ $TERM == "tmux" ]] && export TERM=tmux-256color
 export TERM="xterm-256color"
 
 export DISABLE_AUTO_TITLE=true
 export DISABLE_MAGIC_FUNCTIONS=true
-
 
 # ls com cores
 if [ -x /usr/bin/dircolors ]; then
@@ -184,82 +231,11 @@ export FZF_CTRL_R_OPTS="--no-preview"
 ##############################################################################
 # Misc
 ##############################################################################
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-
-typeset -A ZSH_HIGHLIGHT_STYLES
-
-# Default style
-ZSH_HIGHLIGHT_STYLES[default]=fg=#ebdbb2,bold
-
-# Errors and unknown tokens
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=#fb4934
-
-# Reserved words like if, then, etc.
-ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934,standout
-
-# Alias commands
-ZSH_HIGHLIGHT_STYLES[alias]=fg=#fe8019,bold
-
-# Built-in shell commands like `cd`
-ZSH_HIGHLIGHT_STYLES[builtin]=fg=#b8bb26,bold
-
-# Functions
-ZSH_HIGHLIGHT_STYLES[function]=fg=#d3869b,bold
-
-# External commands like `ls`
-ZSH_HIGHLIGHT_STYLES[command]=fg=#83a598,bold
-
-# Commands before pipes, like `sudo` or `time`
-ZSH_HIGHLIGHT_STYLES[precommand]=fg=#fabd2f,bold
-
-# Command separator (`;` or `&&`)
-ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=#fabd2f,bold
-
-# Hashed commands from `$PATH`
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=#b8bb26,bold
-
-# File paths
-ZSH_HIGHLIGHT_STYLES[path]=fg=#8ec07c,underline
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]=fg=#d79921,underline
-ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=#b16286,underline
-ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=fg=#d79921,underline
-
-# Globbing (wildcards like `*`)
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=#fabd2f,bold
-
-# History expansion (`!`)
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=#fabd2f,bold,underline
-
-# Options (like `-a`, `--help`)
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=#d79921,bold
-
-# Quoted arguments
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=#8ec07c,bold
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=#d3869b,bold
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=#b16286,bold
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument_unclosed]=fg=#cc241d,bold
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=#fe8019,bold
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=#fabd2f,bold
-
-# Comments
-ZSH_HIGHLIGHT_STYLES[comment]=fg=#928374,bold
-
-# Redirection (`>`, `>>`)
-ZSH_HIGHLIGHT_STYLES[redirection]=fg=#fe8019,bold
-
-# Assignments (like `foo=bar`)
-ZSH_HIGHLIGHT_STYLES[assign]=fg=#b16286,bold
-
-# Highlight the word "sudo"
-ZSH_HIGHLIGHT_REGEXP+=('\bsudo\b' fg=#d79921,bold)
 
 # exit proccess
 if [ -t 0 ]; then
   stty intr \^k
 fi
-# stty intr \^k
 
 autoload -U compinit && compinit
 autoload -U promptinit && promptinit
@@ -327,6 +303,8 @@ if command -v pyenv &>/dev/null; then
   eval "$(pyenv virtualenv-init -)"
 fi
 
+
+export PATH="$HOME/.cargo/bin:$PATH"
 . "$HOME/.cargo/env"
 
 source /Users/arthurgehrke/.config/broot/launcher/bash/br
