@@ -127,7 +127,6 @@
   context = 246
   filename = 214
   function = 142
-  lineno = 108
 
 [npm]
   prefix = ~/.npm-global
