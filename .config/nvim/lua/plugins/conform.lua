@@ -39,7 +39,6 @@ return {
       scss = { 'prettier', 'stylelint' },
       sass = { 'prettier', 'stylelint' },
 
-      -- Default formatter
       ['_'] = { 'trim_whitespace' },
     },
     quiet = true,
@@ -69,11 +68,6 @@ return {
         },
       },
       injected = { options = { ignore_errors = true } },
-      options = {
-        shfmt = {
-          prepend_args = { '-i', '2' },
-        },
-      },
     },
     notify_on_error = true,
     ignore_errors = true,

@@ -1,21 +1,18 @@
 return {
-  -- Configuração principal do LSP
   {
     'neovim/nvim-lspconfig',
     dependencies = {
       'b0o/schemastore.nvim',
-      'hrsh7th/cmp-nvim-lsp', -- Para autocompletar com LSP
+      'hrsh7th/cmp-nvim-lsp',
     },
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lspconfig = require('lspconfig')
       local util = require('lspconfig/util')
 
-      -- Configurações de capacidades e integração com nvim-cmp
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      -- Configuração de handlers globais com bordas arredondadas
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
       vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
         border = 'single',
@@ -24,22 +21,18 @@ return {
       })
 
       local servers = {
-        -- TypeScript e JavaScript (tsserver)
         ts_ls = {
           root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
           filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact' },
           cmd = { 'typescript-language-server', '--stdio' },
           on_attach = function(client, bufnr)
-            -- Reativar formatação no tsserver
             client.server_capabilities.documentFormattingProvider = true
             client.server_capabilities.documentRangeFormattingProvider = true
 
-            -- Desativar formatação no eslint para evitar conflitos
             if client.name == 'eslint' then
               client.server_capabilities.documentFormattingProvider = false
             end
 
-            -- Configurar keymap para formatação
             vim.api.nvim_buf_set_keymap(
               bufnr,
               'n',
@@ -86,11 +79,9 @@ return {
             },
           },
         },
-        -- Python (pylsp) - desativado por padrão para evitar conflitos com pyright
         pylsp = {
           enabled = false,
         },
-        -- JSON (jsonls)
         jsonls = {
           settings = {
             json = {
@@ -99,7 +90,6 @@ return {
             },
           },
         },
-        -- ESLint (eslint)
         eslint = {
           root_dir = util.root_pattern(
             '.eslintrc',
@@ -112,22 +102,18 @@ return {
             '.git'
           ),
           on_attach = function(client, bufnr)
-            -- Desativa formatação do eslint para evitar conflito com prettier/tsserver
             client.server_capabilities.documentFormattingProvider = false
             client.server_capabilities.documentRangeFormattingProvider = false
 
-            -- Configuração para executar o eslint sempre que o buffer for salvo
             vim.api.nvim_create_autocmd('BufWritePre', {
               buffer = bufnr,
               command = 'EslintFixAll',
             })
           end,
           settings = {
-            -- Certifique-se de que o eslint respeite as configurações do projeto
             workingDirectory = { mode = 'auto' },
           },
         },
-        -- YAML (yamlls)
         yamlls = {
           settings = {
             yaml = {
@@ -135,11 +121,9 @@ return {
             },
           },
         },
-        -- Bash/Shell (bashls)
         bashls = {
           filetypes = { 'sh', 'bash', 'zsh' },
         },
-        -- CSS (cssls)
         cssls = {
           capabilities = capabilities,
           cmd = { 'vscode-css-language-server', '--stdio' },
@@ -150,7 +134,6 @@ return {
             less = { validate = true },
           },
         },
-        -- HTML (html)
         html = {
           capabilities = capabilities,
           cmd = { 'vscode-html-language-server', '--stdio' },
@@ -162,7 +145,6 @@ return {
             },
           },
         },
-        -- R (R Language Server)
         r_language_server = {
           cmd = { 'R', '--slave', '-e', 'languageserver::run()' },
           filetypes = { 'r', 'rmd' },
@@ -171,7 +153,6 @@ return {
         },
       }
 
-      -- Configuração dos servidores LSP
       for server, config in pairs(servers) do
         if config.enabled ~= false then
           lspconfig[server].setup(vim.tbl_deep_extend('force', {
@@ -181,8 +162,6 @@ return {
       end
     end,
   },
-
-  -- Configuração do typescript-tools.nvim para TypeScript
   {
     'pmizio/typescript-tools.nvim',
     lazy = true,
@@ -204,7 +183,6 @@ return {
         },
       })
 
-      -- Keymaps específicos para TypeScript
       vim.keymap.set('n', '<leader>to', '<cmd>TSToolsOrganizeImports<cr>', { desc = 'TS Organize Imports' })
       vim.keymap.set('n', '<leader>ts', '<cmd>TSToolsSortImports<cr>', { desc = 'TS Sort Imports' })
       vim.keymap.set('n', '<leader>tru', '<cmd>TSToolsRemoveUnused<cr>', { desc = 'TS Remove Unused' })
