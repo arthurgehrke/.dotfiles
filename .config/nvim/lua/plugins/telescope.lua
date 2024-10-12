@@ -20,20 +20,14 @@ return {
     {
       'ff',
       function()
-        require('telescope.builtin').find_files({
-          hidden = true,
-          no_ignore = true,
-          path = '%:p:h',
-          no_ignore_parent = true,
-          find_command = { 'rg', '--files', '--hidden', '-g', '!.git' },
-        })
+        require('telescope.builtin').find_files({ hidden = true, no_ignore = true, path = '%:p:h' })
       end,
       desc = '[f]ind [f]iles',
     },
     {
       '<leader>fo',
       function()
-        require('telescope').extensions.file_browser.file_browser({ hidden = true, path = '%:p:h' })
+        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true, path = '%:p:h' })
       end,
       desc = '[o]pen file browser',
     },
@@ -60,11 +54,10 @@ return {
     {
       '<leader>gs',
       function()
-        require('telescope.builtin').grep_string({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope.builtin').grep_string()
       end,
       desc = 'Find word under cursor',
     },
-
     { '<leader>fl', '<cmd>Telescope highlights<cr>', desc = 'Find Highlights' },
     { '<leader>fz', '<cmd>Telescope zoxide list<cr>', desc = 'Find Directory' },
   },
@@ -217,8 +210,8 @@ return {
         man_pages = { sections = { '2', '3' } },
         lsp_document_symbols = { path_display = { 'hidden' } },
         lsp_workspace_symbols = { path_display = { 'shorten' } },
-        hidden = true,
         find_files = {
+          hidden = true,
           find_command = {
             'ag',
             '--silent',
@@ -228,6 +221,7 @@ return {
             '',
             '--literal',
             '--hidden',
+            '--ignore',
             '.git ',
           },
         },

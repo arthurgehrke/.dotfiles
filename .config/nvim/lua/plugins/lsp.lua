@@ -150,7 +150,7 @@ return {
           filetypes = { 'r', 'rmd' },
           root_dir = util.root_pattern('.git', '.Rprofile'),
           settings = {},
-        },
+        }
       }
 
       for server, config in pairs(servers) do

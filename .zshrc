@@ -3,11 +3,18 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if type brew &>/dev/null
+then
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    autoload -Uz compinit
+    compinit
+fi
+
 ##############################################################################
 # Homebrew Configurações
 ##############################################################################
 if [ -d "/opt/homebrew/bin" ]; then
-  export PATH="/opt/homebrew/bin:$PATH"
+    export PATH="/opt/homebrew/bin:$PATH"
 fi
 
 if type brew &>/dev/null; then
@@ -21,15 +28,17 @@ fi
 ##############################################################################
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
-source "$HOME/.zfunctions"
+source "$HOME"/.zfunctions
 
-source $HOME/.themes/zsh/minimalist/.p10k.zsh
+fpath=( "$HOME/.zfunctions" $fpath )
+
+source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
+source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # homebrew completion
 if type brew &>/dev/null; then
@@ -108,12 +117,16 @@ export DISABLE_AUTO_TITLE=true
 export DISABLE_MAGIC_FUNCTIONS=true
 
 # ls com cores
-if [ -x /usr/bin/dircolors ]; then
-    if [ -r ~/.dircolors ]; then
-        eval "$(dircolors -b ~/.dircolors)"
-    else
-        eval "$(dircolors -b)"
-    fi
+# if [ -x /usr/bin/dircolors ]; then
+#     if [ -r ~/.dircolors ]; then
+#         eval "$(dircolors -b ~/.dircolors)"
+#     else
+#         eval "$(dircolors -b)"
+#     fi
+# fi
+
+if which dircolors > /dev/null 2>&1; then
+  eval $(dircolors ${ZDOTDIR:-${HOME}}/.dircolors)
 fi
 
 ##############################################################################
@@ -129,14 +142,16 @@ export SAVEHIST=1000000000
 HISTCONTROL=ignoredups
 setopt HISTIGNORESPACE
 unsetopt EXTENDED_HISTORY
-unsetopt SHARE_HISTORY
 setopt BANG_HIST
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE # Do not record an event starting with a space.
-setopt HIST_SAVE_NO_DUPS 
-setopt HIST_VERIFY       
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
+
+setopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY
 setopt IGNORE_EOF
 setopt PUSHD_IGNORE_DUPS # Do not store duplicates in the stack.
 setopt PUSHD_SILENT      # Do not print the directory stack after pushd or popd.
@@ -202,13 +217,13 @@ bindkey "\e\e" sudo-command-line
 user-complete(){
     case $BUFFER in
         "" )                       # 空行填入 "cd "
-        BUFFER="cd "
-        zle end-of-line
-        zle expand-or-complete
-        ;;
+            BUFFER="cd "
+            zle end-of-line
+            zle expand-or-complete
+            ;;
         * )
-        zle expand-or-complete
-        ;;
+            zle expand-or-complete
+            ;;
     esac
 }
 zle -N user-complete
@@ -233,9 +248,17 @@ export FZF_CTRL_R_OPTS="--no-preview"
 ##############################################################################
 
 # exit proccess
-if [ -t 0 ]; then
-  stty intr \^k
-fi
+# if [ -t 0 ]; then
+#     stty intr \^k
+# fi
+
+# stty intr \^q
+
+# stty -ixon -ixoff
+stty intr "^K"
+# stty intr \^k
+
+stty intr    "^q"          2> /dev/null
 
 autoload -U compinit && compinit
 autoload -U promptinit && promptinit
@@ -263,49 +286,51 @@ export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 
-# Created by `pipx` 
+# Created by `pipx`
 export PATH="$PATH:/Users/arthurgehrke/.local/bin"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH=$(pyenv root)/shims:$PATH
 
 export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+export GOPATH=$HOME/go
+export PATH=$PATH:/Users/arthurgehrke/go/bin
 
 # rbenv (Ruby)
 if command -v rbenv &>/dev/null; then
-  export RBENV_ROOT=~/.rbenv
-  eval "$(rbenv init -)"
+    export RBENV_ROOT=~/.rbenv
+    eval "$(rbenv init -)"
 fi
 
 # jenv (Java)
 if command -v jenv &>/dev/null; then
-  export PATH="$HOME/.jenv/bin:$PATH"
-  eval "$(jenv init - --no-rehash)"
+    export PATH="$HOME/.jenv/bin:$PATH"
+    eval "$(jenv init - --no-rehash)"
 fi
 
 # Composer (PHP)
 if command -v composer &>/dev/null; then
-  export PATH="$HOME/.composer/vendor/bin:$PATH"
+    export PATH="$HOME/.composer/vendor/bin:$PATH"
 fi
 
 # nodenv (Node.js)
 if command -v nodenv &>/dev/null; then
-  export PATH="$HOME/.nodenv/bin:$PATH"
-  eval "$(nodenv init -)"
+    export PATH="$HOME/.nodenv/bin:$PATH"
+    eval "$(nodenv init -)"
 fi
 
 # rye (Python)
 if command -v pyenv &>/dev/null; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
 
 
 export PATH="$HOME/.cargo/bin:$PATH"
 . "$HOME/.cargo/env"
+
 
 source /Users/arthurgehrke/.config/broot/launcher/bash/br
 
@@ -322,43 +347,8 @@ function capitalize() {
     echo "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^\w\|\s\w/\U&/g'
 }
 
-function ff() {
-  if [ -n "$1" ]; then
-    cd "$1"
-  fi
-  
-  if type lf &>/dev/null &&  type ueberzug &>/dev/null; then
-    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-      lf "$@"
-    else
-      rm -rf "$HOME/.cache/lf"
-      [ ! -d "$HOME/.cache/lf" ] && mkdir --parents "$HOME/.cache/lf"
-      export FIFO_UEBERZUG="$HOME/.cache/lf/ueberzug-$RANDOM"
-      mkfifo "$FIFO_UEBERZUG" &> /dev/null
-      (ueberzug layer -s <"$FIFO_UEBERZUG" -p bash &) &> /dev/null
-      exec 3>"$FIFO_UEBERZUG"
-      # trap lfcleanup EXIT
-      lf "$@" 3>&-
-    fi
-  fi
-}
-
-function fzf-cd-widget() {
-	local tokens=(${(z)LBUFFER})
-	if (( $#tokens <= 1 )); then
-		zle fzf-find-widget 'only_dir'
-		if [[ -d $LBUFFER ]]; then
-			cd $LBUFFER
-			local ret=$?
-			LBUFFER=
-			zle fzf-redraw-prompt
-			return $ret
-		fi
-	fi
-}
-
 function cf() {
-    cmd=$(complete-fzf --alias="`alias`" --command="$*")
+    cmd=$(complete-fzf --alias="$(alias)" --command="$*")
     _confirm_run "$cmd"
 }
 
@@ -366,3 +356,11 @@ function cr() {
     cmd=`history | sed 's/\s\+[0-9]\+\s\+//g' | sort -rn | awk '!x[$0]++' | fzf --layout=reverse --prompt='Cmd> '`
     _confirm_run "$cmd"
 }
+
+
+if [ ! -z "$MY_TERMINAL" ]; then
+    if [ "$MY_TERMINAL" != "alacritty"  ] ;then
+        stty -ixon
+    fi
+fi
+

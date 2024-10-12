@@ -13,9 +13,9 @@ return {
   },
   opts = {
     formatters_by_ft = {
-      sh = { 'shfmt' },
-      bash = { 'shfmt' },
-      zsh = { 'shfmt' },
+      bash = { 'shellharden', 'beautysh' },
+      sh = { 'shellharden', 'beautysh' },
+      zsh = { 'shellharden', 'beautysh' },
       lua = { 'stylua' },
       python = { 'isort', 'black' },
       go = { 'goimports', 'gofumpt' },

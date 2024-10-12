@@ -4,7 +4,6 @@ live_config_reload = true
 
 [shell]
 program = "/bin/zsh"
-args = ["-l", "-c", "tmux"]
 
 [bell]
 duration = 0
@@ -120,7 +119,6 @@ title = "Alacritty"
 
 [selection]
 save_to_clipboard = true
-semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
 [mouse]
 hide_when_typing = true

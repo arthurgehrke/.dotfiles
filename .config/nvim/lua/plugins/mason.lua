@@ -33,7 +33,7 @@ return {
         'lua_ls', -- Lua
         'jqls', -- jq (JSON)
         'yamlls',
-        'marksman'
+        'marksman',
       },
       automatic_installation = true,
     })
@@ -47,7 +47,7 @@ return {
         'prettierd', -- Prettier daemon
         'selene', -- Lua linter
         'shellcheck', -- Bash linter
-        'shellharden', 
+        'shellharden',
         'shfmt', -- Bash formatter
         'prettier', -- General formatter
         'stylelint', -- CSS linter
@@ -60,8 +60,9 @@ return {
         'yamllint', -- YAML linter
         'nginx-language-server', -- Nginx LSP
         'htmlbeautifier', -- HTML beautifier
-        'htmlhint', -- HTML linter
-        'gitlint', -- Git commit linter
+        'htmlhint',
+        'gitlint',
+        'goimports'
       },
       auto_update = true,
       run_on_start = true,
