@@ -28,12 +28,8 @@ fi
 ##############################################################################
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
-source "$HOME"/.zfunctions
-
-fpath=( "$HOME/.zfunctions" $fpath )
-
+source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
-ZSH_THEME="powerlevel10k/powerlevel10k"
 
 source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
 source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -117,16 +113,12 @@ export DISABLE_AUTO_TITLE=true
 export DISABLE_MAGIC_FUNCTIONS=true
 
 # ls com cores
-# if [ -x /usr/bin/dircolors ]; then
-#     if [ -r ~/.dircolors ]; then
-#         eval "$(dircolors -b ~/.dircolors)"
-#     else
-#         eval "$(dircolors -b)"
-#     fi
-# fi
-
-if which dircolors > /dev/null 2>&1; then
-  eval $(dircolors ${ZDOTDIR:-${HOME}}/.dircolors)
+if [ -x /usr/bin/dircolors ]; then
+    if [ -r ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
 fi
 
 ##############################################################################
@@ -149,7 +141,6 @@ setopt HIST_IGNORE_SPACE # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
-
 setopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY
 setopt IGNORE_EOF
@@ -197,6 +188,7 @@ zle -N edit-command-line
 bindkey -e '^x' edit-command-line
 
 autoload -U modify-current-argument
+
 # Esc + s
 _quote-previous-word-in-single() {
     modify-current-argument '${(qq)${(Q)ARG}}'
@@ -205,29 +197,6 @@ _quote-previous-word-in-single() {
 bindkey '^z' _quote-previous-word-in-single
 zle -N _quote-previous-word-in-single
 
-## insert sudo {{{
-sudo-command-line() {
-    [[ -z $BUFFER ]] && zle up-history
-    [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
-    zle end-of-line                 # move cursor to end-of-line
-}
-zle -N sudo-command-line
-bindkey "\e\e" sudo-command-line
-
-user-complete(){
-    case $BUFFER in
-        "" )                       # 空行填入 "cd "
-            BUFFER="cd "
-            zle end-of-line
-            zle expand-or-complete
-            ;;
-        * )
-            zle expand-or-complete
-            ;;
-    esac
-}
-zle -N user-complete
-bindkey "\t" user-complete
 
 ##############################################################################
 # Fzf
@@ -246,19 +215,15 @@ export FZF_CTRL_R_OPTS="--no-preview"
 ##############################################################################
 # Misc
 ##############################################################################
-
-# exit proccess
-# if [ -t 0 ]; then
-#     stty intr \^k
-# fi
-
 # stty intr \^q
-
 # stty -ixon -ixoff
-stty intr "^K"
+# stty intr "^K"
 # stty intr \^k
+# stty intr    "^q"          2> /dev/null
 
-stty intr    "^q"          2> /dev/null
+if [ -t 0 ]; then
+    stty intr \^k
+fi
 
 autoload -U compinit && compinit
 autoload -U promptinit && promptinit
@@ -357,10 +322,33 @@ function cr() {
     _confirm_run "$cmd"
 }
 
-
 if [ ! -z "$MY_TERMINAL" ]; then
     if [ "$MY_TERMINAL" != "alacritty"  ] ;then
         stty -ixon
     fi
 fi
+
+function irg() {
+    rm -f /tmp/rg-fzf-{r,f}
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case '(?=.*{q})(?=.*{q2})'"
+    INITIAL_QUERY="${*:-}"
+    : | fzf --ansi --disabled --query "$INITIAL_QUERY" \
+        --bind "start:reload($RG_PREFIX {q})+unbind(ctrl-r)" \
+        --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+        --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+        --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+        --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --prompt '1. ripgrep> ' \
+        --delimiter : \
+        --header '╱ CTRL-R (ripgrep mode) ╱ CTRL-F (fzf mode) ╱' \
+        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+        --bind 'enter:become(nvim {1} +{2})'
+}
+
+
+function fif() {
+    if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+    rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
 

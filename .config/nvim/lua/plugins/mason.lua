@@ -62,7 +62,8 @@ return {
         'htmlbeautifier', -- HTML beautifier
         'htmlhint',
         'gitlint',
-        'goimports'
+        'goimports',
+        'textlint',
       },
       auto_update = true,
       run_on_start = true,

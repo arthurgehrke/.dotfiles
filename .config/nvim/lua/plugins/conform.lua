@@ -14,6 +14,7 @@ return {
   opts = {
     formatters_by_ft = {
       bash = { 'shellharden', 'beautysh' },
+      markdown = { 'textlint', 'marksman' },
       sh = { 'shellharden', 'beautysh' },
       zsh = { 'shellharden', 'beautysh' },
       lua = { 'stylua' },

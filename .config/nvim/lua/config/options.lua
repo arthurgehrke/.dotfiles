@@ -182,11 +182,3 @@ end
 vim.g.loaded_perl_provider = 0
 vim.g.ruby_host_prog = '/usr/bin/ruby'
 vim.g.python3_host_prog = '/Users/arthurgehrke/.pyenv'
-
--- if os.getenv('TERM') == 'alacritty' then
---   vim.o.ttymouse = 'sgr'
--- end
-
--- if vim.env.TERM == 'alacritty' then
---   vim.opt.ttymouse = 'sgr'
--- end

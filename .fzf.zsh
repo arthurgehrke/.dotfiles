@@ -1,1 +1,1 @@
-#!/usr/bin/env zsh# Setup fzf# ---------# Key bindings# ------------export RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build,~/dotfiles/**} --hidden --type file"
+#!/usr/bin/env zsh# Setup fzf# ---------export RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build,~/dotfiles/**} --hidden --type file"# Key bindings# ------------
