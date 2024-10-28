@@ -77,3 +77,26 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
+
+-- auto recon filetypes
+local filetypes = {
+    {ext = "*.json",    type = "json"},
+    {ext = "*.py",      type = "python"},
+    {ext = "*.lua",     type = "lua"},
+    {ext = "*.md",      type = "markdown"},
+    {ext = "*.js",      type = "javascript"},
+    {ext = "*.ts",      type = "typescript"},
+    {ext = "*.html",    type = "html"},
+    {ext = "*.css",     type = "css"},
+    {ext = "*.sh",      type = "sh"},
+    {ext = "*.go",      type = "go"},
+    {ext = "*.rs",      type = "rust"}
+}
+
+-- Iterar sobre a tabela para criar autocmds para cada extensão
+for _, ft in ipairs(filetypes) do
+    vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+        pattern = ft.ext,
+        command = "set filetype=" .. ft.type
+    })
+end

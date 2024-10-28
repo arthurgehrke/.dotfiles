@@ -23,6 +23,8 @@ if type brew &>/dev/null; then
     compinit
 fi
 
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
@@ -106,7 +108,8 @@ ZSH_HIGHLIGHT_REGEXP+=('\bsudo\b' fg=#d79921,bold)
 export LANG=en_US.UTF-8
 export EDITOR=nvim
 export VISUAL="$EDITOR"
-export PAGER=less
+# export PAGER="nvim -R"
+export PAGER=vimpager
 export TERM="xterm-256color"
 
 export DISABLE_AUTO_TITLE=true
@@ -352,3 +355,4 @@ function fif() {
     rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
