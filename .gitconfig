@@ -10,17 +10,21 @@
   user = arthurgehrke
 
 [core]
-  editor = nvim
+	editor = nvim
   excludesfile = /Users/arthurgehrke/.gitignore
 	autocrlf = false
-  pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = nvimpager
+  ; pager = diff-so-fancy | less --tabs=4 -RFX
 
 [pager]
-  diff = diff-so-fancy | less --tabs=4 -RFXS
-  log = less -+X
+	; difftool = true
+	branch = false
 
 [pull]
   rebase = true
+
+[rebase]
+	updateRefs = true
 
 [fetch]
   prune = true
@@ -36,25 +40,29 @@
 [branch]
   autosetuprebase = always
 
-[color]
-  ui = true
-
 [diff]
-  algorithm = patience
-  compactionHeuristic = true
-  tool = nvimdiff
-  ignoreAllSpace = true
+  ; tool = difftastic
+  ; tool = nvimdiff
+	external = nvimdiff
+  ; algorithm = patience
+	algorithm = histogram
+  ; compactionHeuristic = true
+  ; ignoreAllSpace = true
 
 [difftool]
-  prompt = false
+  prompt = true
 
-[difftool "nvimdiff"]
-  ; cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c 'wincmd w' -c 'wincmd L'
-  cmd = nvim -d $LOCAL $REMOTE -c 'wincmd w' -c 'wincmd L'
-  trustExitCode = true
+; [difftool "nvimdiff"]
+;   ; cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c 'wincmd w' -c 'wincmd L'
+;   cmd = nvim -d $LOCAL $REMOTE -c 'wincmd w' -c 'wincmd L'
+;   trustExitCode = true
+
+; [difftool "difftastic"]
+;   cmd = difft "$LOCAL" "$REMOTE"
 
 [merge]
-  tool = nvimdiff4
+	tool = nvimdiff
+	conflictStyle = zdiff3
   prompt = false
   ff = only
 
@@ -80,53 +88,39 @@
 [url "git@gitlab.com:doare/api-v2.git"]
   insteadOf = https://gitlab.com/
 
-[interactive]
-  diffFilter = diff-so-fancy --patch
-
 [credential]
   helper = osxkeychain
 
-[icdiff]
-  options = --highlight --line-numbers
+[color]
+	ui = true
 
 ; [color "branch"]
 ;   current = yellow reverse
 ;   local = yellow
 ;   remote = green
 
-[color]
-  ui = true
+; [color "diff"]
+;   meta = yellow bold
+;   frag = magenta bold # line info
+;   old = red # deletions
+;   new = green # additions
 
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
+; [color "status"]
+;   added = yellow
+;   changed = green
+;   untracked = cyan
 
-[color "diff"]
-  meta = 246
-  frag = 214
-  old = 223
-  new = 142
-  commit = 215
-  whitespace = red reverse
+; [color "interactive"]
+;   prompt = 214
+;   header = 108
+;   help = 142
+;   error = 167
 
-[color "status"]
-  added = 142
-  changed = 214
-  untracked = 223
-  branch = 214
-
-[color "interactive"]
-  prompt = 214
-  header = 108
-  help = 142
-  error = 167
-
-[color "grep"]
-  match = 142
-  context = 246
-  filename = 214
-  function = 142
+; [color "grep"]
+;   match = 142
+;   context = 246
+;   filename = 214
+;   function = 142
 
 [npm]
   prefix = ~/.npm-global
