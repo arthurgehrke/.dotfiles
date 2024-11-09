@@ -1,7 +1,8 @@
 # Hopefully this loads powerlevel10k theme faster
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 if type brew &>/dev/null
 then
@@ -28,9 +29,12 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
+autoload -U compinit && compinit
+[[ -f "$HOME/.zfunctions.zsh" ]] && source "$HOME/.zfunctions.zsh"
+
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
-source "$HOME"/.zfunctions.zsh
+# source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
 
 source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
@@ -47,6 +51,7 @@ fi
 # Prompt & Completion
 ##############################################################################
 # autoload -U colors && colors
+autoload -U compinit && compinit
 
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
@@ -109,7 +114,7 @@ export LANG=en_US.UTF-8
 export EDITOR=nvim
 export VISUAL="$EDITOR"
 # export PAGER="nvim -R"
-export PAGER=vimpager
+export PAGER=nvimpager
 export TERM="xterm-256color"
 
 export DISABLE_AUTO_TITLE=true
@@ -149,10 +154,12 @@ setopt INC_APPEND_HISTORY
 setopt IGNORE_EOF
 setopt PUSHD_IGNORE_DUPS # Do not store duplicates in the stack.
 setopt PUSHD_SILENT      # Do not print the directory stack after pushd or popd.
+setopt AUTO_PUSHD        # Make cd push the old directory onto the directory stack.
+setopt AUTOPARAMSLASH    # tab completing directory appends a slash
 # setopt AUTO_LIST
 # setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
-setopt EXTENDED_GLOB
+setopt EXTENDED_GLOB # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc. (An initial unquoted ‘~’ always produces named directory expansion.)
 setopt NO_BEEP
 setopt GLOB_COMPLETE
 setopt MENU_COMPLETE
@@ -168,6 +175,7 @@ setopt NO_NOMATCH
 ##############################################################################
 bindkey -e
 
+bindkey -e '^y' accept-search
 bindkey -e '^o' autosuggest-accept
 bindkey -e '^l' forward-char
 bindkey -e '^e' forward-word
@@ -200,7 +208,6 @@ _quote-previous-word-in-single() {
 bindkey '^z' _quote-previous-word-in-single
 zle -N _quote-previous-word-in-single
 
-
 ##############################################################################
 # Fzf
 ##############################################################################
@@ -218,17 +225,40 @@ export FZF_CTRL_R_OPTS="--no-preview"
 ##############################################################################
 # Misc
 ##############################################################################
-# stty intr \^q
-# stty -ixon -ixoff
-# stty intr "^K"
-# stty intr \^k
-# stty intr    "^q"          2> /dev/null
 
-if [ -t 0 ]; then
-    stty intr \^k
+# if [ -t 0 ]; then
+#   stty sane 
+
+#   tty intr \^k
+#   # stty intr '^k'
+# else 
+#   stty sane 
+#   tty intr \^k
+#   # stty intr   '^k'
+# fi
+
+# function set_interrupt_key {
+#     stty intr "\^k"
+# }
+
+# add-zsh-hook precmd set_interrupt_key
+
+# if [[ $- == *i* ]]; then
+#     stty intr   '^k'
+# fi
+
+if [[ $- == *i* ]]; then
+  stty -ixon <$TTY >$TTY
+  function set_interrupt_key {
+    if [ -t 0 ]; then
+      stty intr "^k"
+    fi
+  }
+  add-zsh-hook precmd set_interrupt_key
+else
+  stty intr "^k" 2>/dev/null || true
 fi
 
-autoload -U compinit && compinit
 autoload -U promptinit && promptinit
 autoload -U add-zsh-hook
 
@@ -256,6 +286,7 @@ MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 
 # Created by `pipx`
 export PATH="$PATH:/Users/arthurgehrke/.local/bin"
+
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH=$(pyenv root)/shims:$PATH
 
@@ -263,6 +294,10 @@ export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
 export GOPATH=$HOME/go
 export PATH=$PATH:/Users/arthurgehrke/go/bin
+
+export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
 
 # rbenv (Ruby)
 if command -v rbenv &>/dev/null; then
@@ -332,21 +367,35 @@ if [ ! -z "$MY_TERMINAL" ]; then
 fi
 
 function irg() {
-    rm -f /tmp/rg-fzf-{r,f}
-    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case '(?=.*{q})(?=.*{q2})'"
-    INITIAL_QUERY="${*:-}"
-    : | fzf --ansi --disabled --query "$INITIAL_QUERY" \
-        --bind "start:reload($RG_PREFIX {q})+unbind(ctrl-r)" \
-        --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-        --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
-        --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
-        --color "hl:-1:underline,hl+:-1:underline:reverse" \
-        --prompt '1. ripgrep> ' \
-        --delimiter : \
-        --header '╱ CTRL-R (ripgrep mode) ╱ CTRL-F (fzf mode) ╱' \
-        --preview 'bat --color=always {1} --highlight-line {2}' \
-        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-        --bind 'enter:become(nvim {1} +{2})'
+  local file
+  local line
+  local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+  local INITIAL_QUERY="${*:-}"
+  # The preview window bit is described in the man page section for the --preview-window option but basically: ~2 is
+  # the top 2 lines as a fixed header, +{2} is the base scroll offset extracted from the second field, +2 is an extra
+  # 2 line offset to account for the header, /2 is put in the middle of the preview area
+  # For the color bit, -1 keeps the original color from the input
+  read -r file line <<<"$(
+    FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+    fzf --ansi \
+    --disabled --query "$INITIAL_QUERY" \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --header='Press ? to toggle preview / CTRL-R for ripgrep / CTRL-F for fzf' \
+    --bind '?:toggle-preview' \
+    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+    --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+    --bind "start:unbind(ctrl-r)" \
+    --prompt '1. ripgrep> ' \
+    --layout reverse \
+    --delimiter : \
+    --preview-window 'up,60%,border-bottom,~2,+{2}+2/2' \
+    --preview 'bat --style=full --color=always --highlight-line {2} {1}' | awk -F: '{print $1, $2}'
+  )"
+
+  if [[ -n "$file" ]]; then
+     vim "$file" "+$line"
+  fi
 }
 
 
@@ -356,3 +405,7 @@ function fif() {
 }
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+function findBigFiles() {
+  find ~/Documents/ -size +100M -ls | sort -k7nr
+}
