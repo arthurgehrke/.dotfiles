@@ -84,13 +84,13 @@ local cmd = vim.api.nvim_create_user_command
 cmd('Cwd', function()
   vim.cmd(':cd %:p:h')
   vim.cmd(':pwd')
-end, { desc = "cd current file's directory" })
+end, { desc = 'cd current file\'s directory' })
 
 -- Set working directory (alias)
 cmd('Swd', function()
   vim.cmd(':cd %:p:h')
   vim.cmd(':pwd')
-end, { desc = "cd current file's directory" })
+end, { desc = 'cd current file\'s directory' })
 
 -- Buffer search/replace
 vim.keymap.set('n', '<leader>rr', ':%s/', { desc = 'Buffer search/replace' }, options)
@@ -140,9 +140,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gtD', vim.lsp.buf.type_definition, opts)
     vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, opts)
 
-    vim.keymap.set('n', 'gq', function()
-      vim.lsp.buf.format({ async = true })
-    end, opts)
+    -- vim.keymap.set('n', 'gq', function()
+    --   vim.lsp.buf.format({ async = true })
+    -- end, opts)
+
+    vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', { noremap = true, silent = true })
 
     vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)

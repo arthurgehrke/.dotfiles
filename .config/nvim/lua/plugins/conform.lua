@@ -14,12 +14,12 @@ return {
   config = function()
     require('conform').setup({
       formatters_by_ft = {
-        bash = { 'shellharden', 'beautysh' },
-        markdown = { 'textlint', 'marksman' },
-        sh = { 'shellharden', 'beautysh' },
-        zsh = { 'shellharden', 'beautysh' },
+        bash = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
+        sh = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
+        markdown = { 'textlint', 'marksman', stop_after_first = true },
+        zsh = { 'shellharden', 'beautysh', stop_after_first = true },
         lua = { 'stylua' },
-        python = { 'isort', 'black' },
+        python = { 'isort', 'black', stop_after_first = true },
         go = { 'goimports', 'gofumpt' },
         sql = { 'sql_formatter' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -33,11 +33,11 @@ return {
         json = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
         jsonc = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
         json5 = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
-        yaml = { 'yamlfix', 'yamlfix' },
+        yaml = { 'yamlfix' },
         psql = { 'sqlfluff' },
         rust = { 'rustfmt' },
         html = { 'htmlbeautifier' },
-        css = { 'prettier', 'stylelint' },
+        css = { 'prettier', 'stylelint', stop_after_first = true },
         scss = { 'prettier', 'stylelint' },
         sass = { 'prettier', 'stylelint' },
 
@@ -56,8 +56,14 @@ return {
       end
       require('conform').format({ async = true, lsp_format = 'fallback', range = range })
     end, { range = true })
+
+    require('conform').formatters.shfmt = {
+      prepend_args = function(self, ctx)
+        return { '-i', '2' }
+      end,
+    }
   end,
   init = function()
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    vim.o.formatexpr = 'v:lua.require\'conform\'.formatexpr()'
   end,
 }

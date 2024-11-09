@@ -12,7 +12,7 @@
 #
 #   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
@@ -1307,7 +1307,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
   #############[ kubecontext: current kubernetes context (https://kubernetes.io/) ]#############
   # Show kubecontext only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show kubecontext.
-  typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|kubeseal|skaffold|kubent|kubecolor|cmctl|sparkctl'
+  typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND=''
 
   # Kubernetes context classes for the purpose of using different colors, icons and expansions with
   # different contexts.
@@ -1394,7 +1394,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
   #[ aws: aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) ]#
   # Show aws only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show aws.
-  typeset -g POWERLEVEL9K_AWS_SHOW_ON_COMMAND='aws|awless|cdk|terraform|pulumi|terragrunt'
+  typeset -g POWERLEVEL9K_AWS_SHOW_ON_COMMAND=''
 
   # POWERLEVEL9K_AWS_CLASSES is an array with even number of elements. The first element
   # in each pair defines a pattern against which the current AWS profile gets matched.
@@ -1441,7 +1441,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
   ##########[ azure: azure account name (https://docs.microsoft.com/en-us/cli/azure) ]##########
   # Show azure only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show azure.
-  typeset -g POWERLEVEL9K_AZURE_SHOW_ON_COMMAND='az|terraform|pulumi|terragrunt'
+  typeset -g POWERLEVEL9K_AZURE_SHOW_ON_COMMAND=''
 
   # POWERLEVEL9K_AZURE_CLASSES is an array with even number of elements. The first element
   # in each pair defines a pattern against which the current azure account name gets matched.
@@ -1479,7 +1479,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
   ##########[ gcloud: google cloud account and project (https://cloud.google.com/) ]###########
   # Show gcloud only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show gcloud.
-  typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND='gcloud|gcs|gsutil'
+  typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND=''
    # Google cloud color.
   typeset -g POWERLEVEL9K_GCLOUD_FOREGROUND=32
 
@@ -1520,7 +1520,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
   #[ google_app_cred: google application credentials (https://cloud.google.com/docs/authentication/production) ]#
   # Show google_app_cred only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show google_app_cred.
-  typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_SHOW_ON_COMMAND='terraform|pulumi|terragrunt'
+  typeset -g POWERLEVEL9K_GOOGLE_APP_CRED_SHOW_ON_COMMAND=''
 
   # Google application credentials classes for the purpose of using different colors, icons and
   # expansions with different credentials.

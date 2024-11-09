@@ -52,7 +52,6 @@ return {
         --     client.server_capabilities.documentRangeFormattingProvider = false
         --   end,
         -- },
-        -- Lua (lua_ls)
         lua_ls = {
           settings = {
             Lua = {
@@ -67,7 +66,6 @@ return {
           },
         },
         marksman = {},
-        -- Python (pyright)
         pyright = {
           settings = {
             python = {
@@ -79,9 +77,7 @@ return {
             },
           },
         },
-        pylsp = {
-          enabled = false,
-        },
+        pylsp = {},
         jsonls = {
           settings = {
             json = {
@@ -90,30 +86,30 @@ return {
             },
           },
         },
-        eslint = {
-          root_dir = util.root_pattern(
-            '.eslintrc',
-            '.eslintrc.js',
-            '.eslintrc.cjs',
-            '.eslintrc.yaml',
-            '.eslintrc.yml',
-            '.eslintrc.json',
-            'package.json',
-            '.git'
-          ),
-          on_attach = function(client, bufnr)
-            client.server_capabilities.documentFormattingProvider = false
-            client.server_capabilities.documentRangeFormattingProvider = false
+        -- eslint = {
+        --   root_dir = util.root_pattern(
+        --     '.eslintrc',
+        --     '.eslintrc.js',
+        --     '.eslintrc.cjs',
+        --     '.eslintrc.yaml',
+        --     '.eslintrc.yml',
+        --     '.eslintrc.json',
+        --     'package.json',
+        --     '.git'
+        --   ),
+        --   on_attach = function(client, bufnr)
+        --     client.server_capabilities.documentFormattingProvider = false
+        --     client.server_capabilities.documentRangeFormattingProvider = false
 
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              buffer = bufnr,
-              command = 'EslintFixAll',
-            })
-          end,
-          settings = {
-            workingDirectory = { mode = 'auto' },
-          },
-        },
+        --     vim.api.nvim_create_autocmd('BufWritePre', {
+        --       buffer = bufnr,
+        --       command = 'EslintFixAll',
+        --     })
+        --   end,
+        --   settings = {
+        --     workingDirectory = { mode = 'auto' },
+        --   },
+        -- },
         yamlls = {
           settings = {
             yaml = {
@@ -122,7 +118,8 @@ return {
           },
         },
         bashls = {
-          filetypes = { 'sh', 'bash', 'zsh' },
+          cmd = { 'bash-language-server', 'start' },
+          filetypes = { 'sh', 'bash', 'zsh', 'conf' },
         },
         cssls = {
           capabilities = capabilities,
@@ -141,7 +138,7 @@ return {
           settings = {
             html = {
               format = { enable = true },
-              hover = { documentation = true, references = true },
+              hover = { documentation = false, references = false },
             },
           },
         },
@@ -150,7 +147,7 @@ return {
           filetypes = { 'r', 'rmd' },
           root_dir = util.root_pattern('.git', '.Rprofile'),
           settings = {},
-        }
+        },
       }
 
       for server, config in pairs(servers) do

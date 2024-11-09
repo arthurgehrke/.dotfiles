@@ -1,12 +1,13 @@
 return {
   'R-nvim/R.nvim',
   lazy = false,
-  enabled = false,
+  enabled = true,
+  version = '~0.1.0',
   ft = { 'r', 'rmd' },
   keys = {
     { '<LocalLeader>r', '', desc = '+R' },
-    { ft = { 'r', 'rdoc' }, '<leader><Space>', '<Plug>RDSendLine', desc = 'which_key_ignore' },
-    { ft = { 'r', 'rdoc' }, mode = 'x', '<leader><Space>', '<Plug>RDSendSelection', desc = 'Send Selection to R' },
+    -- { ft = { 'r', 'rdoc' }, '<leader><Space>', '<Plug>RDSendLine', desc = 'which_key_ignore' },
+    -- { ft = { 'r', 'rdoc' }, mode = 'x', '<leader><Space>', '<Plug>RDSendSelection', desc = 'Send Selection to R' },
     { '<LocalLeader>r:', ':RSend ', desc = 'Send R Command' },
     { '<LocalLeader>rf', '<Plug>RStart', desc = 'Start R' },
     { '<LocalLeader>ro', '<Plug>ROBToggle', desc = 'Object Browser' },
@@ -75,8 +76,8 @@ return {
   },
 
   config = function()
-    -- Create a table with the options to be passed to setup()
     local opts = {
+      R_path = '/opt/homebrew/bin/R',
       R_args = { '--quiet', '--no-save' },
       user_maps_only = true,
       hook = {

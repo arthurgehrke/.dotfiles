@@ -175,19 +175,12 @@ return {
               bottom = '─',
               none = ' ',
             },
-            -- icons = {
-            --   corner = ' ',
-            --   edge = ' ',
-            --   item = '┊',
-            --   bottom = '',
-            --   none = ' ',
-            -- },
           },
           icons = {
             web_devicons = {
               file = {
                 enable = true,
-                color = false,
+                -- color = false,
               },
               folder = {
                 enable = false,
@@ -324,5 +317,22 @@ return {
       })
     end,
   },
-  { 'nvim-tree/nvim-web-devicons' },
+  {
+    'nvim-tree/nvim-web-devicons',
+    opts = {
+      default = true,
+    },
+    config = function()
+      require('nvim-web-devicons').setup({
+        override = {
+          toml = {
+            icon = '',
+            color = '#6d8086',
+            name = 'TOML',
+          },
+        },
+        default = true,
+      })
+    end,
+  },
 }

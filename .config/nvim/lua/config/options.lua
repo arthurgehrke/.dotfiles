@@ -74,24 +74,22 @@ vim.opt.cursorline = true
 
 local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand('~/.config')
 vim.opt.undofile = true
-vim.opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
-vim.opt.backupdir = { prefix .. '/nvim/.backup//' }
-vim.opt.directory = { prefix .. '/nvim/.swp//' }
+vim.opt.undodir = prefix .. '/nvim/undodir'
+vim.opt.backupdir = { prefix .. '/nvim/backup//' }
+vim.opt.directory = { prefix .. '/nvim/swap//' }
 
-vim.opt.history = 1000 --> cmd history depth
+vim.opt.history = 1000
 vim.opt.swapfile = false
-vim.opt.undoreload = 10000 --> number of lines to save for undo
+vim.opt.undoreload = 10000
 vim.o.writebackup = false
 vim.opt.undolevels = 10000
-vim.opt.backup = false -- overwrites previous backups instead of making new one
+vim.opt.backup = false
 
-vim.o.fileformats = 'mac,unix,dos'
+vim.o.fileformats = 'unix'
 vim.opt.wrap = false
--- vim.o.whichwrap = "b,s,<,>,[,]"
--- vim.opt.whichwrap = "b,s"
 
 vim.o.wildignorecase = true
-vim.o.wildignore = "*.o,*.obj,*~,*.so,*.swp,*.DS_Store,'*/cache/*', '*/tmp/*'" -- stuff to ignore when tab completing
+vim.o.wildignore = '*.o,*.obj,*~,*.so,*.swp,*.DS_Store,\'*/cache/*\', \'*/tmp/*\'' -- stuff to ignore when tab completing
 vim.o.showfulltag = true
 
 vim.opt.errorformat:prepend('%f|%l col %c|%m')
@@ -130,6 +128,7 @@ vim.opt.lazyredraw = true
 vim.opt.errorbells = false
 vim.opt.visualbell = false
 
+vim.opt.statusline = vim.opt.statusline:get() .. ' [%{&fileformat}]'
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 -- vim.opt.foldnestmax = 10
@@ -140,7 +139,6 @@ vim.opt.foldenable = false
 
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
-
 vim.opt.mouse = 'a'
 vim.opt.list = true
 

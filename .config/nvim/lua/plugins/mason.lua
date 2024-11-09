@@ -34,6 +34,8 @@ return {
         'jqls', -- jq (JSON)
         'yamlls',
         'marksman',
+        'rust_analyzer',
+        'gopls',
       },
       automatic_installation = true,
     })
@@ -41,8 +43,8 @@ return {
     mason_tool_installer.setup({
       ensure_installed = {
         'shfmt',
-        'black', -- Python formatter
-        'bash-language-server', -- Bash LSP
+        'pylsp',
+        'python-lsp-black',
         'stylua', -- Lua formatter
         'prettierd', -- Prettier daemon
         'selene', -- Lua linter
@@ -52,7 +54,6 @@ return {
         'prettier', -- General formatter
         'stylelint', -- CSS linter
         'sqlls', -- SQL LSP
-        'isort', -- Python import sorter
         'pylint', -- Python linter
         'eslint_d', -- JavaScript linter daemon
         'jq', -- JSON processor
