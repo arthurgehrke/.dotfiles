@@ -1,10 +1,13 @@
+tap "brewsci/base"
 tap "buo/cask-upgrade"
+tap "harelba/q"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "jandedobbeleer/oh-my-posh"
 tap "morantron/tmux-fingers"
 tap "ringohub/redis-cli"
 tap "samtay/tui"
+tap "saulpw/vd"
 tap "thecasualcoder/stable"
 tap "xwmx/taps"
 brew "ack"
@@ -27,6 +30,7 @@ brew "libpq", link: true
 brew "php"
 brew "composer"
 brew "coreutils"
+brew "csvkit"
 brew "diff-so-fancy"
 brew "difftastic"
 brew "docker"
@@ -41,6 +45,7 @@ brew "geckodriver"
 brew "ghostscript"
 brew "git"
 brew "go"
+brew "hstr"
 brew "htop"
 brew "httpie"
 brew "httrack"
@@ -52,6 +57,7 @@ brew "lynx"
 brew "make"
 brew "mas"
 brew "mercurial"
+brew "miller"
 brew "mongosh"
 brew "neovim"
 brew "nmap"
@@ -83,11 +89,13 @@ brew "scrypt"
 brew "speedtest-cli"
 brew "stylua"
 brew "the_silver_searcher"
+brew "thefuck"
 brew "tig"
 brew "tmux"
 brew "toilet"
 brew "tor"
 brew "wget"
+brew "xsv"
 brew "yarn"
 brew "z"
 brew "zoxide"
@@ -98,6 +106,7 @@ brew "zsh-syntax-highlighting"
 brew "zssh"
 brew "ringohub/redis-cli/redis-cli"
 brew "samtay/tui/tetris"
+brew "saulpw/vd/visidata"
 brew "thecasualcoder/stable/csvdiff"
 cask "adobe-creative-cloud"
 cask "alacritty"
@@ -106,6 +115,7 @@ cask "chatgpt"
 cask "chromedriver"
 cask "diffmerge"
 cask "discord"
+cask "disk-inventory-x"
 cask "fission"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
@@ -123,7 +133,27 @@ cask "postman"
 cask "qflipper"
 cask "rectangle"
 cask "redisinsight"
+cask "ssh-config-editor"
 cask "temurin@11"
 cask "temurin@17"
 cask "tunnelblick"
 cask "zen-browser"
+mas "AdGuard for Safari", id: 1440147259
+mas "Amphetamine", id: 937984704
+mas "Anybox", id: 1593408455
+mas "Extractor", id: 1626704817
+mas "Find Any File", id: 402569179
+mas "JSONPeep", id: 1458969831
+mas "Kindle", id: 302584613
+mas "Menu Bar Calendar", id: 1558360383
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "Postman Interceptor", id: 6460587883
+mas "ProFind", id: 1441703569
+mas "Regex for Safari", id: 1597580456
+mas "Spect", id: 1409975750
+mas "TickTick", id: 966085870
+mas "Web(Cache)Browser", id: 432802024
+mas "Webcam Recorder", id: 1508067444
+mas "xIncognito", id: 1604606074
+mas "xReload", id: 1588834516

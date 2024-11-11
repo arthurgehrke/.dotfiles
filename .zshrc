@@ -49,7 +49,7 @@ fi
 ##############################################################################
 # Prompt & Completion
 ##############################################################################
-# autoload -U colors && colors
+autoload -U colors && colors
 autoload -U compinit && compinit
 
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
@@ -250,6 +250,10 @@ fi
 # ngrok
 if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
+fi
+
+if command -v thefuck >/dev/null 2>&1; then
+  eval "$(thefuck --alias)"
 fi
 
 ##############################################################################
