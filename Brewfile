@@ -32,7 +32,6 @@ brew "composer"
 brew "coreutils"
 brew "csvkit"
 brew "diff-so-fancy"
-brew "difftastic"
 brew "docker"
 brew "exiftool"
 brew "eza"
@@ -51,6 +50,8 @@ brew "httpie"
 brew "httrack"
 brew "jenv"
 brew "jq"
+brew "julia"
+brew "jupyterlab"
 brew "lazygit"
 brew "lsd"
 brew "lynx"
@@ -61,6 +62,7 @@ brew "miller"
 brew "mongosh"
 brew "neovim"
 brew "nmap"
+brew "pkgconf"
 brew "node-build"
 brew "nodenv"
 brew "nvimpager"
@@ -110,10 +112,8 @@ brew "saulpw/vd/visidata"
 brew "thecasualcoder/stable/csvdiff"
 cask "adobe-creative-cloud"
 cask "alacritty"
-cask "beyond-compare"
 cask "chatgpt"
 cask "chromedriver"
-cask "diffmerge"
 cask "discord"
 cask "disk-inventory-x"
 cask "fission"
@@ -133,27 +133,7 @@ cask "postman"
 cask "qflipper"
 cask "rectangle"
 cask "redisinsight"
-cask "ssh-config-editor"
 cask "temurin@11"
 cask "temurin@17"
 cask "tunnelblick"
 cask "zen-browser"
-mas "AdGuard for Safari", id: 1440147259
-mas "Amphetamine", id: 937984704
-mas "Anybox", id: 1593408455
-mas "Extractor", id: 1626704817
-mas "Find Any File", id: 402569179
-mas "JSONPeep", id: 1458969831
-mas "Kindle", id: 302584613
-mas "Menu Bar Calendar", id: 1558360383
-mas "Numbers", id: 409203825
-mas "Octotree", id: 1457450145
-mas "Postman Interceptor", id: 6460587883
-mas "ProFind", id: 1441703569
-mas "Regex for Safari", id: 1597580456
-mas "Spect", id: 1409975750
-mas "TickTick", id: 966085870
-mas "Web(Cache)Browser", id: 432802024
-mas "Webcam Recorder", id: 1508067444
-mas "xIncognito", id: 1604606074
-mas "xReload", id: 1588834516
