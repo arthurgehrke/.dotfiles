@@ -4,23 +4,13 @@
 #     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
 
-if type brew &>/dev/null; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  autoload -Uz compinit
-  compinit
-fi
-
 ##############################################################################
 # Homebrew Configurações
 ##############################################################################
-if [ -d "/opt/homebrew/bin" ]; then
-  export PATH="/opt/homebrew/bin:$PATH"
-fi
-
 if type brew &>/dev/null; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  autoload -Uz compinit
-  compinit
+  export PATH="$(brew --prefix)/bin:$PATH"
+  export FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
+  export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -28,12 +18,9 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
-autoload -U compinit && compinit
-[[ -f "$HOME/.zfunctions.zsh" ]] && source "$HOME/.zfunctions.zsh"
-
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
-# source "$HOME"/.zfunctions.zsh
+source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
 
 source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
@@ -41,17 +28,9 @@ source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.
 source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# homebrew completion
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-fi
-
 ##############################################################################
 # Prompt & Completion
 ##############################################################################
-autoload -U colors && colors
-autoload -U compinit && compinit
-
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 
@@ -91,9 +70,11 @@ ZSH_HIGHLIGHT_STYLES[assign]=fg=#b16286,bold
 export LANG=en_US.UTF-8
 export EDITOR=nvim
 export VISUAL="$EDITOR"
-# export PAGER="nvim -R"
 export PAGER=nvimpager
-export TERM="xterm-256color"
+
+# if [[ "$TERM" != "xterm-256color" ]]; then
+#   export TERM="xterm-256color"
+# fi
 
 export DISABLE_AUTO_TITLE=true
 export DISABLE_MAGIC_FUNCTIONS=true
@@ -111,9 +92,9 @@ fi
 # History
 ##############################################################################
 export HISTFILE=~/.zsh_history
-export HISTFILESIZE=1000000000
-export HISTSIZE=1000000000
-export SAVEHIST=1000000000
+export HISTSIZE=500000
+export SAVEHIST=500000
+export HISTFILESIZE=500000
 # export HISTTIMEFORMAT="[%F %T] "
 # export HIST_STAMPS="yyyy-mm-dd"
 
@@ -134,8 +115,6 @@ setopt PUSHD_IGNORE_DUPS # Do not store duplicates in the stack.
 setopt PUSHD_SILENT      # Do not print the directory stack after pushd or popd.
 setopt AUTO_PUSHD        # Make cd push the old directory onto the directory stack.
 setopt AUTOPARAMSLASH    # tab completing directory appends a slash
-# setopt AUTO_LIST
-# setopt AUTO_MENU
 setopt LIST_AMBIGUOUS
 setopt EXTENDED_GLOB # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc. (An initial unquoted ‘~’ always produces named directory expansion.)
 setopt NO_BEEP
@@ -151,23 +130,31 @@ setopt NO_NOMATCH
 ##############################################################################
 # KeyMappings
 ##############################################################################
+autoload -U compinit && compinit
+autoload -U promptinit && promptinit
+autoload -U add-zsh-hook
+
 bindkey -e
 
-bindkey -e '^y' accept-search
-bindkey -e '^o' autosuggest-accept
+# navigation
 bindkey -e '^l' forward-char
-bindkey -e '^e' forward-word
 bindkey -e '^h' backward-char
+bindkey -e '^e' forward-word
 bindkey -e '^b' backward-word
 bindkey -e '^d' delete-char
 bindkey -e '^0' beginning-of-line
 bindkey -e '^;' end-of-line
+
+# history
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
+# Autossugestões
+bindkey -e '^y' accept-search
+bindkey -e '^o' autosuggest-accept
+
 bindkey -r ^M accept-search
-# bindkey -e '^Y' accept-search
-bindkey -r ^Y accept-line
+
 
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^R' fzf-history-widget
@@ -190,15 +177,6 @@ zle -N _quote-previous-word-in-single
 # Fzf
 ##############################################################################
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source <(fzf --zsh)
-set rtp+= "$HOMEBREW"/fzf
-export BAT_THEME="gruvbox-dark"
-export FZF_DEFAULT_OPTS="--height 30 --ansi --layout=reverse --preview 'echo {} | batcat --color=always --language=bash --style=plain' --preview-window down:7:wrap"
-export FZF_DEFAULT_COMMAND="fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --hidden --type file --no-ignore-vcs"
-export FZF_ALT_C_COMMAND='fd --follow --type d --exclude "Library/" --exclude "Music/"'
-export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-export FZF_CTRL_R_OPTS="--no-preview"
 
 ##############################################################################
 # Misc
@@ -226,7 +204,7 @@ export FZF_CTRL_R_OPTS="--no-preview"
 # fi
 
 if [[ $- == *i* ]]; then
-  stty -ixon <$TTY >$TTY
+  stty -ixon <"$TTY" >"$TTY"
   function set_interrupt_key {
     if [ -t 0 ]; then
       stty intr "^k"
@@ -237,8 +215,11 @@ else
   stty intr "^k" 2>/dev/null || true
 fi
 
-autoload -U promptinit && promptinit
-autoload -U add-zsh-hook
+if [ ! -z "$MY_TERMINAL" ]; then
+  if [ "$MY_TERMINAL" != "alacritty" ]; then
+    stty -ixon
+  fi
+fi
 
 ##############################################################################
 # Packages
@@ -252,10 +233,6 @@ if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
 
-if command -v thefuck >/dev/null 2>&1; then
-  eval "$(thefuck --alias)"
-fi
-
 ##############################################################################
 # Path
 ##############################################################################
@@ -266,13 +243,11 @@ export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 
-# Created by `pipx`
-export PATH="$PATH:/Users/arthurgehrke/.local/bin"
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH=$(pyenv root)/shims:$PATH
-
-export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+# Pipx
+if command -v pipx &>/dev/null; then
+  export PIPX_HOME="$HOME/.local"
+  export PATH="$PIPX_HOME/bin:$PATH"
+fi
 
 export GOPATH=$HOME/go
 export PATH=$PATH:/Users/arthurgehrke/go/bin
@@ -280,6 +255,8 @@ export PATH=$PATH:/Users/arthurgehrke/go/bin
 export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
+
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rbenv (Ruby)
 if command -v rbenv &>/dev/null; then
@@ -308,89 +285,27 @@ if command -v nodenv &>/dev/null; then
   eval "$(nodenv init -)"
 fi
 
-# rye (Python)
+# pyenv (Python)
 if command -v pyenv &>/dev/null; then
   export PYENV_ROOT="$HOME/.pyenv"
+  export PATH=$(pyenv root)/shims:$PATH
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
 
-export PATH="$HOME/.cargo/bin:$PATH"
-. "$HOME/.cargo/env"
-
-source /Users/arthurgehrke/.config/broot/launcher/bash/br
-
-function upper() {
-  echo "$*" | tr '[:lower:]' '[:upper:]'
-}
-
-function lower() {
-  echo "$*" | tr '[:upper:]' '[:lower:]'
-}
-
-function capitalize() {
-  echo "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^\w\|\s\w/\U&/g'
-}
-
-function cf() {
-  cmd=$(complete-fzf --alias="$(alias)" --command="$*")
-  _confirm_run "$cmd"
-}
-
-function cr() {
-  cmd=$(history | sed 's/\s\+[0-9]\+\s\+//g' | sort -rn | awk '!x[$0]++' | fzf --layout=reverse --prompt='Cmd> ')
-  _confirm_run "$cmd"
-}
-
-if [ ! -z "$MY_TERMINAL" ]; then
-  if [ "$MY_TERMINAL" != "alacritty" ]; then
-    stty -ixon
-  fi
+# Rustup (via Homebrew)
+if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
+  export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 fi
 
-function irg() {
-  local file
-  local line
-  local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-  local INITIAL_QUERY="${*:-}"
-  # The preview window bit is described in the man page section for the --preview-window option but basically: ~2 is
-  # the top 2 lines as a fixed header, +{2} is the base scroll offset extracted from the second field, +2 is an extra
-  # 2 line offset to account for the header, /2 is put in the middle of the preview area
-  # For the color bit, -1 keeps the original color from the input
-  read -r file line <<<"$(
-    FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
-      fzf --ansi \
-      --disabled --query "$INITIAL_QUERY" \
-      --color "hl:-1:underline,hl+:-1:underline:reverse" \
-      --header='Press ? to toggle preview / CTRL-R for ripgrep / CTRL-F for fzf' \
-      --bind '?:toggle-preview' \
-      --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-      --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
-      --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
-      --bind "start:unbind(ctrl-r)" \
-      --prompt '1. ripgrep> ' \
-      --layout reverse \
-      --delimiter : \
-      --preview-window 'up,60%,border-bottom,~2,+{2}+2/2' \
-      --preview 'bat --style=full --color=always --highlight-line {2} {1}' | awk -F: '{print $1, $2}'
-  )"
+# Cargo (Rust)
+if command -v cargo &>/dev/null; then
+  export CARGO_HOME="$HOME/.cargo"
+  export PATH="$CARGO_HOME/bin:$PATH"
+  [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
+fi
 
-  if [[ -n "$file" ]]; then
-    vim "$file" "+$line"
-  fi
-}
 
-function fif() {
-  if [ ! "$#" -gt 0 ]; then
-    echo "Need a string to search for!"
-    return 1
-  fi
-  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
-}
 
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-function findBigFiles() {
-  find ~/Documents/ -size +100M -ls | sort -k7nr
-}

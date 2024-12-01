@@ -2,7 +2,7 @@
 
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
-alias reload!='source ~/.zshrc'
+alias reload="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
 
 if [ -f "$(which lsd)" ]; then
@@ -21,6 +21,7 @@ alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 # alias ll='ls -lAGFp'
 
 alias lts='ll --timesort'
+alias lsc="ls -ltU"
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
 alias chromium-http='chromium --proxy-server=localhost:7777'
 
@@ -34,7 +35,7 @@ alias ica='hg icdiff -r .^'
 alias ice='hg icdiff --ch .'
 
 # vim edit remote file
-function vscp() {
+vscp() {
   if [[ -z $1 ]]; then
     echo "usage: vscp [[user@]host1:]file1 ... [[user@]host2:]file2"
     return
@@ -48,7 +49,6 @@ function vscp() {
   echo "${targs[@]}"
   vim "${targs[@]}"
 }
-compdef vscp=scp
 
 gvimscp() {
   if [[ -z $1 ]]; then
@@ -99,9 +99,6 @@ alias zshsource='source ~/.zshrc'
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
 
-# Reload the shell
-alias reload="exec ${SHELL} -l"
-
 alias bup="brew -v update && brew -v upgrade && brew -v cleanup --prune=2 && brew doctor && brew -v upgrade --casks --greedy"
 
 # View HTTP traffic
@@ -139,6 +136,8 @@ fi
 
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+alias sqlcheat='find ${SQL_CHEATS_DIR:-~/repositories/sql-cheats} -type f -name "*.sql" | fzf --preview "bat --style=numbers --color=always {}"'
 
 if [ "$(command -v docker)" ]; then
   alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'

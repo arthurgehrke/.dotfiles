@@ -1,1 +1,19 @@
-# # Don't let ripgrep vomit really long lines to my terminal, and show a preview.# --max-columns=150# --max-columns-preview# # Add my 'web' type.# --type-add# web:*.{html,css,js}*# # Using glob patterns to include/exclude files or folders# --glob=!git/*# # or# --glob# !git/*# # Set the colors.# --colors=line:none# --colors=line:style:bold# # Because who cares about case!?# --smart-case--smart-case--hidden
+--glob '!.git/**'
+--glob '!node_modules/**'
+--glob '!dist/**'
+--glob '!build/**'
+--glob '!target/**'
+--glob '!undodir/**'
+--glob '!.DS_Store'
+--hidden
+--smart-case
+--path-separator /
+--no-heading
+--before-context 2
+--after-context 2
+--max-filesize 10M
+--ignore-file ~/.rgignore
+--threads 12
+--type-add 'conf:*.conf'
+--type-add 'env:*.env'
+--type-list
