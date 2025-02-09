@@ -128,10 +128,8 @@ cask "google-chrome"
 cask "google-drive"
 cask "gstreamer-runtime"
 cask "iterm2"
-cask "jetbrains-toolbox"
 cask "kitty"
 cask "mongodb-compass"
-cask "navicat-premium"
 cask "ngrok"
 cask "notion"
 cask "obs"
@@ -142,5 +140,19 @@ cask "rectangle"
 cask "redis-insight"
 cask "temurin@11"
 cask "temurin@17"
-cask "tunnelblick"
 cask "zen-browser"
+mas "AdBlock Pro", id: 1018301773
+mas "AdGuard for Safari", id: 1440147259
+mas "BetterSnapTool", id: 417375580
+mas "JSONPeep", id: 1458969831
+mas "Menu Bar Calendar", id: 1558360383
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft Word", id: 462054704
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "Postman Interceptor", id: 6460587883
+mas "Spark Desktop", id: 6445813049
+mas "superagent", id: 1568262835
+mas "UPDF", id: 1619925971
+mas "Wipr", id: 1662217862
+mas "xIncognito", id: 1604606074
