@@ -3,12 +3,22 @@ echo Time to install all apps at once!
 read -p "Press any key to continue... " -n1 -s
 echo  '\n'
 
-echo Installing Homebrew...
+# Brew
+echo "Installing 🍺 Brew!"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-echo Installing taps...
+# Disable brew analytics
+brew analytics off
+
+# Update
+brew update
+brew upgrade
+
 # Configure Homebrew
 brew dump restore
+
+# Cleanup
+brew cleanup -s
 
 echo Installing Apps from the App Store...
 
@@ -17,16 +27,19 @@ mas install 1147396723 # WhatsApp
 mas install 937984704 # Amphetamine
 mas install 425424353 # The Unarchiver
 mas install 419330170 # Moom
-mas install 522324709 # Multimon
 mas install 1295203466 # Microsoft Remote Desktop
 mas install 823766827 # OneDrive
-mas install 1507246666 # Presentify
-mas install 409201541 # Pages
 mas install 405399194 # Kindle
-mas install 1289197285 # MindNode
 mas install 409203825 # Numbers
 
-echo Everything is ready. Enjoy your new Mac!
+# Xcode command tools
+xcode-select --install
+
+# Install Rosetta for M1
+sudo softwareupdate --install-rosetta --agree-to-license
+
+# download and force install software updates
+softwareupdate --all --install --force
 
 #################
 # Tmux
