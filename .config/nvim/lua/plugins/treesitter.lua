@@ -38,7 +38,7 @@ return {
         end
 
         if filetype == 'markdown' then
-          return false -- keeps Treesitter to tmux, but without regex adds
+          return true -- keeps Treesitter to tmux, but without regex adds
         end
 
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -66,7 +66,6 @@ return {
       'luadoc',
       'luap',
       'markdown',
-      'markdown_inline',
       'python',
       'query',
       'r',

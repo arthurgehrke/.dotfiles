@@ -1,5 +1,31 @@
 local options = { noremap = true, silent = true }
+
+vim.keymap.set('n', '<leader>gp', function()
+  local pattern = vim.fn.input('Search Regex: ')
+  local filetype = vim.fn.input('File Glob: ')
+
+  local cmd = string.format('vimgrep /%s/gj **/%s', pattern, filetype)
+
+  vim.cmd(cmd)
+  vim.cmd('copen')
+end, { desc = 'Vimgrep for pattern & Glob' })
+
+vim.keymap.set('n', '<leader>fd', '<cmd> Telescope diagnostics <CR>', { desc = 'Show diagnostics' })
+vim.keymap.set('n', '<leader>gt', '<cmd> Telescope git_status <CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>fw', '<cmd> Telescope live_grep <CR>', { desc = 'Live Grep' })
+
+vim.keymap.set('n', '<leader>rl', ':%s/^$\\n*//<CR>', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>lf', vim.diagnostic.open_float, { desc = 'Floating Diagnostics' })
+
+vim.keymap.set('n', '<leader>x', '<cmd> bd <CR>', { desc = 'Close Tab' })
+vim.keymap.set('n', '<leader>X', '<cmd> bd! <CR>', { desc = 'Force Close Tab' })
+
+-- Folding
+vim.keymap.set('n', '<leader>fb', '$zf%', { desc = 'Fold block' })
+
 -- Clear search with <esc>
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', options)
 
 vim.keymap.set('n', '<c-l>', ':bnext<cr>', options)
 vim.keymap.set('n', '<c-h>', ':bprevious<cr>', options)
@@ -23,11 +49,10 @@ vim.keymap.set('n', 'se', '<cmd>silent! %bdel|edit #|normal `"<C-n><leader>q<cr>
 vim.keymap.set('x', 'p', function()
   return 'pgv"' .. vim.v.register .. 'y'
 end, { remap = false, expr = true })
+
 -- vim.keymap.set("x", "p", '"_dP')
 -- vim.keymap.set("x", "P", '"_dp')
 vim.keymap.set('n', 'x', '"_x')
-
-vim.keymap.set('n', '<Esc>', ':noh<CR>')
 
 -- Insert empty line
 vim.keymap.set('n', '<C-j>', ':set paste<CR>m`o<Esc>``:set nopaste<CR>', options)
@@ -86,19 +111,13 @@ cmd('Cwd', function()
   vim.cmd(':pwd')
 end, { desc = 'cd current file\'s directory' })
 
--- Set working directory (alias)
 cmd('Swd', function()
   vim.cmd(':cd %:p:h')
   vim.cmd(':pwd')
 end, { desc = 'cd current file\'s directory' })
 
--- Buffer search/replace
 vim.keymap.set('n', '<leader>rr', ':%s/', { desc = 'Buffer search/replace' }, options)
 
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', options)
-
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<leader>od', function()
   vim.diagnostic.open_float(nil, {
     focus = false,
@@ -122,8 +141,6 @@ vim.keymap.set('n', ']e', '<cmd>lua vim.diagnostic.goto_next({ severity = vim.di
 
 vim.keymap.set('n', '<Leader>sq', vim.diagnostic.setloclist)
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
@@ -131,7 +148,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', '<Leader>d', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -140,11 +156,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gtD', vim.lsp.buf.type_definition, opts)
     vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, opts)
 
-    -- vim.keymap.set('n', 'gq', function()
-    --   vim.lsp.buf.format({ async = true })
-    -- end, opts)
-
-    vim.keymap.set('n', 'gq', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', { noremap = true, silent = true })
+    vim.keymap.set(
+      'n',
+      'gq',
+      '<cmd>lua vim.lsp.buf.format({ async = false, timeout_ms = 2000 })<CR>',
+      { noremap = true, silent = true }
+    )
 
     vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
@@ -168,6 +185,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
       })
     end, opts)
   end,
+
+  vim.keymap.set('n', '<leader>gd', function()
+    vim.lsp.buf.definition({
+      on_list = function(list)
+        vim.lsp.util.jump_to_location(list.items[1].user_data, 'utf-8', true)
+      end,
+    })
+  end),
 })
 
 vim.keymap.set({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren' })

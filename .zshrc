@@ -18,6 +18,9 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
+autoload -Uz compinit
+compinit
+
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
 source "$HOME"/.zfunctions.zsh
@@ -276,7 +279,7 @@ if command -v composer &>/dev/null; then
 fi
 
 if command -v pipenv &>/dev/null; then
-  eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+ eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 fi
 
 # nodenv (Node.js)
@@ -289,7 +292,7 @@ fi
 if command -v pyenv &>/dev/null; then
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH=$(pyenv root)/shims:$PATH
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
@@ -305,7 +308,4 @@ if command -v cargo &>/dev/null; then
   export PATH="$CARGO_HOME/bin:$PATH"
   [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
 fi
-
-
-
 

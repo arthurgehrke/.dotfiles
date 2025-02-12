@@ -19,7 +19,7 @@ return {
         markdown = { 'textlint', 'marksman', stop_after_first = true },
         zsh = { 'shellharden', 'beautysh', stop_after_first = true },
         lua = { 'stylua' },
-        python = { 'isort', 'black', stop_after_first = true },
+        python = { 'black', stop_after_first = true },
         go = { 'goimports', 'gofumpt' },
         sql = { 'sql_formatter' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },

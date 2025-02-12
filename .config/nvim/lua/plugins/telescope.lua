@@ -8,33 +8,34 @@ return {
     { 'smartpde/telescope-recent-files' },
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
+    'andrew-george/telescope-themes',
   },
   keys = {
     {
       '<leader>fb',
       function()
-        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true })
       end,
       desc = '[file] [b]rowser',
     },
     {
       'ff',
       function()
-        require('telescope.builtin').find_files({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
       end,
       desc = '[f]ind [f]iles',
     },
     {
       '<leader>fo',
       function()
-        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true })
       end,
       desc = '[o]pen file browser',
     },
     {
       '<leader>;',
       function()
-        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true, path = '%:p:h' })
+        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true })
       end,
       desc = 'Grep (root dir)',
     },
@@ -85,6 +86,7 @@ return {
     telescope.setup({
       defaults = {
         theme = 'dropdown',
+        path_display = { 'absolute' },
         prompt_prefix = '   ',
         selection_caret = ' ',
         entry_prefix = '  ',
@@ -141,6 +143,7 @@ return {
           '.git/**',
           '.next/**',
           '.undo/**',
+          'undodir/**',
           '.undo',
           'package%-lock.json',
           'yarn%-lock.json',
@@ -153,6 +156,7 @@ return {
           '--line-number',
           '--column',
           '--smart-case',
+          '--hidden',
         },
         mappings = {
           i = {
@@ -210,16 +214,32 @@ return {
         find_files = {
           hidden = true,
           find_command = {
-            'ag',
-            '--silent',
-            '--nocolor',
-            '--follow',
-            '-g',
-            '',
-            '--literal',
+            'rg',
+            '--files',
             '--hidden',
-            '--ignore',
-            '.git ',
+            '--no-ignore-vcs',
+            '--glob',
+            '!.git',
+            '--glob',
+            '!node_modules',
+            '--glob',
+            '!dist',
+            '--glob',
+            '!build',
+            '--glob',
+            '!target',
+            '--glob',
+            '!vendor',
+            '--glob',
+            '!*.lock',
+            '--glob',
+            '!package-lock.json',
+            '--glob',
+            '!__pycache__',
+            '--glob',
+            '!bin',
+            '--glob',
+            '!undodir',
           },
         },
       },
@@ -230,6 +250,22 @@ return {
             i = {
               ['<c-\\>'] = lga_actions.quote_prompt({ postfix = ' --hidden ' }),
             },
+          },
+        },
+        themes = {
+          layout_config = {
+            horizontal = {
+              width = 0.8,
+              height = 0.7,
+            },
+          },
+          enable_previewer = true,
+          persist = {
+            -- enable persisting last theme choice
+            enabled = true,
+
+            -- override path to file that execute colorscheme command
+            path = vim.fn.stdpath("config") .. "/lua/colorscheme.lua"
           },
         },
         recent_files = {},
@@ -260,5 +296,6 @@ return {
     require('telescope').load_extension('fzf')
     require('telescope').load_extension('live_grep_args')
     require('telescope').load_extension('recent_files')
+    require('telescope').load_extension('themes')
   end,
 }

@@ -23,19 +23,26 @@ return {
 
     mason_lspconfig.setup({
       ensure_installed = {
-        'bashls', -- Bash, sh, zsh
-        'pyright', -- Python
-        'rust_analyzer', -- Rust
-        'ts_ls', -- TypeScript
-        'jsonls', -- JSON
-        'eslint', -- JavaScript Linter
-        'html', -- HTML
-        'lua_ls', -- Lua
-        'jqls', -- jq (JSON)
+        'bashls',
+        'pyright',
+        'pylsp',
+        'rust_analyzer',
+        'ts_ls',
+        'jsonls',
+        'eslint',
+        'html',
+        'lua_ls',
+        'jqls',
         'yamlls',
-        'marksman',
         'rust_analyzer',
         'gopls',
+        'cssls',
+        'dockerls',
+        'julials',
+        'nginx_language_server',
+        'ruby_lsp',
+        'sqlls',
+        'gitlab_ci_ls'
       },
       automatic_installation = true,
     })
@@ -43,33 +50,23 @@ return {
     mason_tool_installer.setup({
       ensure_installed = {
         'shfmt',
-        'pylsp',
-        'python-lsp-black',
-        'stylua', -- Lua formatter
-        'prettierd', -- Prettier daemon
-        'selene', -- Lua linter
-        'shellcheck', -- Bash linter
+        'black',
+        'stylua',
+        'prettierd',
+        'selene',
+        'shellcheck',
         'shellharden',
-        'shfmt', -- Bash formatter
-        'prettier', -- General formatter
-        'stylelint', -- CSS linter
-        'sqlls', -- SQL LSP
-        'pylint', -- Python linter
-        'eslint_d', -- JavaScript linter daemon
-        'jq', -- JSON processor
-        'yamlfix', -- YAML fixer
-        'yamllint', -- YAML linter
-        'nginx-language-server', -- Nginx LSP
-        'htmlbeautifier', -- HTML beautifier
-        'htmlhint',
-        'gitlint',
-        'goimports',
+        'eslint_d',
+        'prettier',
+        'stylelint',
+        'pylint',
+        'jq',
+        'yamlfix',
+        'yamllint',
+        'htmlbeautifier',
         'textlint',
+        'sqlfluff',
       },
-      auto_update = true,
-      run_on_start = true,
-      start_delay = 3000, -- Delay for installation at start
-      debounce_hours = 5, -- Delay before running updates
     })
   end,
 }

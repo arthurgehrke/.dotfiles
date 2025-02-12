@@ -89,6 +89,8 @@ vim.o.fileformats = 'unix'
 vim.opt.wrap = false
 
 vim.o.wildignorecase = true
+vim.opt.wildmode = "longest:full,full"
+vim.opt.wildmenu = true
 vim.o.wildignore = '*.o,*.obj,*~,*.so,*.swp,*.DS_Store,\'*/cache/*\', \'*/tmp/*\'' -- stuff to ignore when tab completing
 vim.o.showfulltag = true
 
@@ -155,6 +157,7 @@ vim.g.loaded_tarPlugin = 1
 -- vim.g.loaded_sql_completion = 1
 -- vim.g.loaded_spec = 1
 vim.g.vim_json_conceal = 0
+vim.g.markdown_syntax_conceal = 0
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')

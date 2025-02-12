@@ -1,7 +1,8 @@
 return {
   {
     'tpope/vim-fugitive',
-    lazy = false,
+    lazy = true,
+    event = 'VeryLazy',
     keys = {
       { '<leader>ga', '<cmd>G add %<cr>', desc = '[G]it [A]dd' },
       { '<leader>gal', '<cmd>G add --all<cr>', desc = '[G]it [A]dd A[l]l' },
@@ -23,21 +24,11 @@ return {
       { '<leader>sum', ':G stash -um ', desc = 'Git [S]tash [UM]' },
       { '<Leader>ge', ':Gedit :<CR>' },
       { '<Leader>gb', ':GBrowse<CR>' },
-      { '<Leader>gb', ":'<,'>GBrowse<CR>", mode = 'v' },
+      { '<Leader>gb', ':\'<,\'>GBrowse<CR>', mode = 'v' },
       { '<leader>gv', '<cmd>vertical Git<CR>', { desc = 'fugitive' } },
     },
   },
-  { 'akinsho/git-conflict.nvim', version = '*', config = true, lazy = false },
-  {
-    'NeogitOrg/neogit',
-    lazy = false,
-    dependencies = {
-      'nvim-lua/plenary.nvim', -- required
-      'sindrets/diffview.nvim', -- optional - Diff integration
-      'nvim-telescope/telescope.nvim', -- optional
-    },
-    config = true,
-  },
+  { 'akinsho/git-conflict.nvim', version = '*', config = true, lazy = true, event = 'VeryLazy' },
   {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
@@ -77,6 +68,9 @@ return {
         vim.keymap.set('n', '<space>hS', '<cmd>Gitsigns stage_buffer<CR>', opts('Stage Buffer'))
         vim.keymap.set('n', '<space>hU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
         vim.keymap.set('n', '<space>hu', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
+        vim.keymap.set('n', '<leader>tb', '<cmd>Gitsigns toggle_current_line_blame<CR>', opts('Toggle Current Line Blame'))
+
+        vim.keymap.set({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 
         vim.keymap.set('v', '<space>hr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
         vim.keymap.set('v', '<space>hs', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
@@ -95,13 +89,6 @@ return {
           changedelete = { text = '~' },
           untracked = { text = '┆' },
         },
-        -- current_line_blame_opts = {
-        --   virt_text = true,
-        --   virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        --   delay = 1000,
-        --   ignore_whitespace = true,
-        --   virt_text_priority = 100,
-        -- },
         -- signcolumn = true,
         -- numhl = false,
         -- linehl = false,
@@ -123,8 +110,8 @@ return {
         current_line_blame_opts = {
           virt_text = true,
           virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-          delay = 0,
-          ignore_whitespace = false,
+          delay = 1000,
+          ignore_whitespace = true,
         },
         current_line_blame_formatter = '      <author>, <author_time:%R> - <summary>',
         sign_priority = 6,

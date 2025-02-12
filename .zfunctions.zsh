@@ -147,3 +147,11 @@ fzstash() {
     fi
   done
 }
+
+pyenv-brew-relink() {
+    rm -f "$HOME/.pyenv/versions/*-brew"
+    for i in $(brew --cellar)/python* ; do
+        ln -s -f "$p" "$HOME/.pyenv/versions/${i##/*/}-brew"
+    done
+    pyenv rehash
+}

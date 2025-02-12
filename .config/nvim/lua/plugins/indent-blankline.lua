@@ -30,7 +30,7 @@ return {
           'UltestSummary',
           'UltestOutput',
           'vimwiki',
-          'markdown',
+          -- 'markdown',
           'vista',
           'NvimTree',
           'git',
