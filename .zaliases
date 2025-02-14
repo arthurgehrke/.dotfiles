@@ -25,6 +25,8 @@ alias lsc="ls -ltU"
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
 alias chromium-http='chromium --proxy-server=localhost:7777'
 
+alias nvimdiff='nvim -d'
+
 alias difficdiff='git difftool --extcmd icdiff'
 # side-by-side diffs for uncommitted files
 alias ic='hg icdiff'
