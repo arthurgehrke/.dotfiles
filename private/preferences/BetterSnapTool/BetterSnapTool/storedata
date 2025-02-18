@@ -1,0 +1,63 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE database SYSTEM "file:///System/Library/DTDs/CoreData.dtd">
+
+<database>
+    <databaseInfo>
+        <version>134481920</version>
+        <UUID>F41208B4-7B60-4BB1-B61C-717EC802D5EF</UUID>
+        <nextObjectID>102</nextObjectID>
+        <metadata>
+            <plist version="1.0">
+                <dict>
+                    <key>NSPersistenceFrameworkVersion</key>
+                    <integer>1419</integer>
+                    <key>NSStoreModelVersionChecksumKey</key>
+                    <string>WDHj0RImRBEb1jO2k0Vl2EkbPgsd8XoLY5DKDnhcbqI=</string>
+                    <key>NSStoreModelVersionHashes</key>
+                    <dict>
+                        <key>BSTCDisplay</key>
+                        <data>
+		zdi0M6puE0kjvjYQ7nXaSd4QuZJmHqWs6xtpu7xo8sw=
+		</data>
+                        <key>BSTDragPoint</key>
+                        <data>
+		jXbK7SHKPDEUmufAMl5HMXvcLk88FSGdrS5qAJq3SC0=
+		</data>
+                        <key>BSTDragPointApp</key>
+                        <data>
+		LgaXfFKQb3gJMiOmpHQ5drEo0/DlQSJpKdOSqWMEvD0=
+		</data>
+                        <key>BTTBaseEntity</key>
+                        <data>
+		CS1oLwRB+wi2yezOlvyGn94SgLGzxlM1uo6ohxJ5/f4=
+		</data>
+                    </dict>
+                    <key>NSStoreModelVersionHashesDigest</key>
+                    <string>FxWSAyHMv7TKn9wt4x+6C8Q40f+ORRcTthagFsKUuDtcsDn1VRDgNSVCjkwd7lII2kI+h1roA7oRkIdu0mKoMQ==</string>
+                    <key>NSStoreModelVersionHashesVersion</key>
+                    <integer>3</integer>
+                    <key>NSStoreModelVersionIdentifiers</key>
+                    <array>
+                        <string></string>
+                    </array>
+                </dict>
+            </plist>
+        </metadata>
+    </databaseInfo>
+    <object type="BSTCDISPLAY" id="z102">
+        <attribute name="displayname" type="string">Built-in Retina Display</attribute>
+        <attribute name="vendor" type="int32">1552</attribute>
+        <attribute name="serialnumber" type="string">4251086178</attribute>
+        <attribute name="screensize" type="string">{301.21411312327666, 195.62980098350377}</attribute>
+        <attribute name="screenframe" type="string">{{0, 0}, {1512, 982}}</attribute>
+        <attribute name="resolution" type="string">{1512, 982}</attribute>
+        <attribute name="model" type="int32">41039</attribute>
+        <attribute name="maindisplay" type="int32">1</attribute>
+        <attribute name="displayuuid" type="string">37D8832A-2D66-02CA-B9F7-8F30A301B230</attribute>
+        <attribute name="displayid" type="int32">1</attribute>
+        <attribute name="builtin" type="bool">1</attribute>
+        <attribute name="uniqueidentifier" type="string">8B796C8B-E6C5-4B86-A4DD-CF006C6E6930</attribute>
+        <relationship name="displayeddragpoints" type="0/0" destination="BSTDRAGPOINT"></relationship>
+        <relationship name="snappeddragpoints" type="0/0" destination="BSTDRAGPOINT"></relationship>
+    </object>
+</database>
