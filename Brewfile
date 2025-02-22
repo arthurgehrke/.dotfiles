@@ -24,7 +24,6 @@ brew "bash-completion"
 brew "bat"
 brew "brew-cask-completion"
 brew "broot"
-brew "carrot2"
 brew "cmatrix"
 brew "curl"
 brew "libpq", link: true
@@ -40,7 +39,6 @@ brew "eza"
 brew "fastfetch"
 brew "fd"
 brew "feh"
-brew "ffmpeg"
 brew "fzf"
 brew "gawk"
 brew "geckodriver"
@@ -49,17 +47,14 @@ brew "ghostscript"
 brew "git"
 brew "glow"
 brew "go"
-brew "hcxtools"
 brew "hstr"
 brew "htop"
 brew "httpie"
 brew "httrack"
-brew "hurl"
 brew "iproute2mac"
 brew "jenv"
 brew "jq"
 brew "lazygit"
-brew "legit"
 brew "libpcap"
 brew "lnav"
 brew "lsd"
@@ -121,7 +116,6 @@ brew "xh"
 brew "xsv"
 brew "yarn"
 brew "yazi"
-brew "yt-dlp"
 brew "z"
 brew "zoxide"
 brew "zsh"
@@ -159,3 +153,27 @@ cask "redis-insight"
 cask "sessionrestore"
 cask "temurin@11"
 cask "temurin@17"
+mas "AdBlock Pro", id: 1018301773
+mas "AdGuard for Safari", id: 1440147259
+mas "Amphetamine", id: 937984704
+mas "BetterSnapTool", id: 417375580
+mas "Cookie Buster", id: 1661435962
+mas "ExtractImages", id: 1641059203
+mas "Extractor", id: 1626704817
+mas "Find Any File", id: 402569179
+mas "JSONPeep", id: 1458969831
+mas "Log-Viewer", id: 1543753042
+mas "loginsight", id: 6504901532
+mas "Menu Bar Calendar", id: 1558360383
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "Parallels Desktop", id: 1085114709
+mas "Postman Interceptor", id: 6460587883
+mas "Regex for Safari", id: 1597580456
+mas "SingleFile", id: 6444322545
+mas "Spark Desktop", id: 6445813049
+mas "Spect", id: 1409975750
+mas "superagent", id: 1568262835
+mas "Webcam Recorder", id: 1508067444
+mas "Wipr", id: 1662217862
+mas "xIncognito", id: 1604606074
