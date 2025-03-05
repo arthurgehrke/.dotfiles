@@ -3,15 +3,16 @@ tap "buo/cask-upgrade"
 tap "harelba/q"
 tap "homebrew/bundle"
 tap "homebrew/services"
+tap "kismetwireless/kismet"
 tap "ringohub/redis-cli"
 tap "samtay/tui"
-tap "saulpw/vd"
 tap "thecasualcoder/stable"
 brew "ack"
 brew "openssl@3"
 brew "readline"
 brew "sqlite"
 brew "aircrack-ng"
+brew "xz"
 brew "ncurses"
 brew "asciiquarium"
 brew "aspell"
@@ -22,8 +23,12 @@ brew "awscli"
 brew "bash"
 brew "bash-completion"
 brew "bat"
+brew "bison"
 brew "brew-cask-completion"
 brew "broot"
+brew "carrot2"
+brew "chruby"
+brew "clipboard"
 brew "cmatrix"
 brew "curl"
 brew "libpq", link: true
@@ -34,11 +39,14 @@ brew "csvkit"
 brew "csvtk"
 brew "diff-so-fancy"
 brew "dsq"
+brew "libyaml"
 brew "esptool"
+brew "exiftool"
 brew "eza"
 brew "fastfetch"
 brew "fd"
 brew "feh"
+brew "ffmpeg"
 brew "fzf"
 brew "gawk"
 brew "geckodriver"
@@ -47,14 +55,18 @@ brew "ghostscript"
 brew "git"
 brew "glow"
 brew "go"
+brew "hcxtools"
 brew "hstr"
 brew "htop"
 brew "httpie"
 brew "httrack"
+brew "hurl"
 brew "iproute2mac"
 brew "jenv"
 brew "jq"
 brew "lazygit"
+brew "legit"
+brew "libffi"
 brew "libpcap"
 brew "lnav"
 brew "lsd"
@@ -91,12 +103,12 @@ brew "pyenv-pip-migrate"
 brew "pyenv-virtualenv"
 brew "r"
 brew "ranger"
-brew "rbenv"
 brew "reattach-to-user-namespace"
 brew "ripgrep"
 brew "rlwrap"
 brew "roapi"
 brew "rsync"
+brew "ruby-install"
 brew "rust"
 brew "rustscan"
 brew "rustup"
@@ -116,6 +128,7 @@ brew "xh"
 brew "xsv"
 brew "yarn"
 brew "yazi"
+brew "yt-dlp"
 brew "z"
 brew "zoxide"
 brew "zsh"
@@ -127,6 +140,7 @@ brew "ringohub/redis-cli/redis-cli"
 brew "samtay/tui/tetris"
 brew "thecasualcoder/stable/csvdiff"
 cask "alacritty"
+cask "alfred"
 cask "alt-tab"
 cask "chatgpt"
 cask "chromedriver"
@@ -150,30 +164,27 @@ cask "postman"
 cask "qflipper"
 cask "reaper"
 cask "redis-insight"
-cask "sessionrestore"
 cask "temurin@11"
 cask "temurin@17"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
 mas "Amphetamine", id: 937984704
-mas "BetterSnapTool", id: 417375580
-mas "Cookie Buster", id: 1661435962
-mas "ExtractImages", id: 1641059203
 mas "Extractor", id: 1626704817
 mas "Find Any File", id: 402569179
 mas "JSONPeep", id: 1458969831
-mas "Log-Viewer", id: 1543753042
 mas "loginsight", id: 6504901532
 mas "Menu Bar Calendar", id: 1558360383
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft Word", id: 462054704
 mas "Numbers", id: 409203825
 mas "Octotree", id: 1457450145
 mas "Parallels Desktop", id: 1085114709
 mas "Postman Interceptor", id: 6460587883
-mas "Regex for Safari", id: 1597580456
+mas "ProFind", id: 1441703569
 mas "SingleFile", id: 6444322545
 mas "Spark Desktop", id: 6445813049
-mas "Spect", id: 1409975750
 mas "superagent", id: 1568262835
+mas "UPDF", id: 1619925971
 mas "Webcam Recorder", id: 1508067444
 mas "Wipr", id: 1662217862
 mas "xIncognito", id: 1604606074
