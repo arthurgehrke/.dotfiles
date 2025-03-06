@@ -19,6 +19,9 @@ return {
           package_uninstalled = '✗',
         },
       },
+      pip = {
+        upgrade_pip = true,
+      }
     })
 
     mason_lspconfig.setup({
@@ -35,14 +38,8 @@ return {
         'jqls',
         'yamlls',
         'rust_analyzer',
-        'gopls',
         'cssls',
-        'dockerls',
-        'julials',
-        'nginx_language_server',
-        'ruby_lsp',
         'sqlls',
-        'gitlab_ci_ls'
       },
       automatic_installation = true,
     })
@@ -55,7 +52,7 @@ return {
         'prettierd',
         'selene',
         'shellcheck',
-        'shellharden',
+        'shellharden', -- needs cargo installed
         'eslint_d',
         'prettier',
         'stylelint',

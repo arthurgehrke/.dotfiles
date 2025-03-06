@@ -101,6 +101,9 @@ defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 # Enable Safari’s Debug menu
 defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 
+mkdir -p ~/.ssh/sockets
+chmod 700 ~/.ssh/sockets
+
 killall Finder
 killall Dock
 

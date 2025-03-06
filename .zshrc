@@ -262,10 +262,14 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rbenv (Ruby)
-if command -v rbenv &>/dev/null; then
-  export RBENV_ROOT=~/.rbenv
-  eval "$(rbenv init -)"
-fi
+# if command -v rbenv &>/dev/null; then
+#   # export RBENV_ROOT=~/.rbenv
+#   eval "$(rbenv init -)"
+#   export PATH=$HOME/.rbenv/shims:$PATH
+#   export RBENV_ROOT="$(brew --prefix rbenv)"
+#   export GEM_HOME="$(brew --prefix)/opt/gems"
+#   export GEM_PATH="$(brew --prefix)/opt/gems"
+# fi
 
 # jenv (Java)
 if command -v jenv &>/dev/null; then
@@ -288,7 +292,6 @@ if command -v nodenv &>/dev/null; then
   eval "$(nodenv init -)"
 fi
 
-# pyenv (Python)
 if command -v pyenv &>/dev/null; then
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH=$(pyenv root)/shims:$PATH
@@ -309,3 +312,8 @@ if command -v cargo &>/dev/null; then
   [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
 fi
 
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+# chruby ruby-3.4.1
+
+. "$HOME/.cargo/env"

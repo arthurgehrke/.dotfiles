@@ -3,6 +3,11 @@
 # *
 !~/dotfiles/**
 
+.DS_Store
+
+.docker/
+!.docker/config.json
+
 *.png
 
 ~/.config/.dotfiles
