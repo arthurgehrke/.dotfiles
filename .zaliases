@@ -20,6 +20,8 @@ alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 
 # alias ll='ls -lAGFp'
 
+alias find_mas_apps="find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print | sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##'"
+
 alias lts='ll --timesort'
 alias lsc="ls -ltU"
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'

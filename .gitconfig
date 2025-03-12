@@ -2,36 +2,32 @@
   whitespace = nowarn
 
 [user]
-  user = arthurgehrke
-  email = arthurgehrke07@gmail.com
   name = Arthur Gehrke
+  email = arthurgehrke07@gmail.com
 
-[github]
-  user = arthurgehrke
+[credential]
+  helper = osxkeychain
 
 [core]
-	editor = nvim
+  editor = nvim
   excludesfile = /Users/arthurgehrke/.gitignore
-	autocrlf = input
-	pager = nvimpager
-  ; pager = diff-so-fancy | less --tabs=4 -RFX
+  autocrlf = input
+  pager = nvimpager
+  ; Alternativa: diff-so-fancy | less --tabs=4 -RFX
 
 [pager]
-	; difftool = true
-	branch = false
+  branch = false
 
 [pull]
   rebase = true
 
 [rebase]
-	updateRefs = true
+  updateRefs = true
+  autoStash = true
+  autoSquash = true
 
 [fetch]
   prune = true
-
-[rebase]
-  autoStash = true
-  autoSquash = true
 
 [push]
   default = current
@@ -41,43 +37,23 @@
   autosetuprebase = always
 
 [diff]
-  ; tool = difftastic
-  ; tool = nvimdiff
-	external = nvimdiff
-  ; algorithm = patience
-	algorithm = histogram
-  ; compactionHeuristic = true
-  ; ignoreAllSpace = true
+  tool = nvimdiff
+  algorithm = histogram
+  prompt = false
 
-[difftool]
-  prompt = true
-
-; [difftool "nvimdiff"]
-;   ; cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c 'wincmd w' -c 'wincmd L'
-;   cmd = nvim -d $LOCAL $REMOTE -c 'wincmd w' -c 'wincmd L'
-;   trustExitCode = true
-
-; [difftool "difftastic"]
-;   cmd = difft "$LOCAL" "$REMOTE"
+[difftool "nvimdiff"]
+  cmd = nvim -d "$LOCAL" "$REMOTE"
+  trustExitCode = true
 
 [merge]
-	tool = nvimdiff
-	conflictStyle = zdiff3
-  prompt = false
-  ff = only
+  tool = nvimdiff
+  conflictStyle = zdiff3
 
-[mergetool]
+[mergetool "nvimdiff"]
+  cmd = nvim -d "$LOCAL" "$BASE" "$REMOTE" -c 'wincmd w' -c 'wincmd L'
+  trustExitCode = true
   keepBackup = false
   prompt = false
-  trustExitCode = true
-
-[mergetool "nvimdiff4"]
-  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'wincmd w' -c 'wincmd J'
-  keepBackup = false
-  trustExitCode = true
-
-[push]
-  autoSetupRemote = true
 
 [init]
   defaultBranch = main
@@ -85,42 +61,8 @@
 [url "git@gitlab.com:"]
   insteadOf = https://gitlab.com/
 
-[url "git@gitlab.com:doare/api-v2.git"]
-  insteadOf = https://gitlab.com/
-
-[credential]
-  helper = osxkeychain
-
 [color]
-	ui = true
-
-; [color "branch"]
-;   current = yellow reverse
-;   local = yellow
-;   remote = green
-
-; [color "diff"]
-;   meta = yellow bold
-;   frag = magenta bold # line info
-;   old = red # deletions
-;   new = green # additions
-
-; [color "status"]
-;   added = yellow
-;   changed = green
-;   untracked = cyan
-
-; [color "interactive"]
-;   prompt = 214
-;   header = 108
-;   help = 142
-;   error = 167
-
-; [color "grep"]
-;   match = 142
-;   context = 246
-;   filename = 214
-;   function = 142
+  ui = true
 
 [npm]
   prefix = ~/.npm-global
