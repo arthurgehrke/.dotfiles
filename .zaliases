@@ -79,9 +79,9 @@ alias df='df -h'
 alias free='free -m'
 
 # get top process eating memory
-alias psmem='ps auxf | sort -nr -k 4 | head -5'
+alias psmem='ps aux --sort=-%mem | head -10'
 # get top process eating cpu ##
-alias pscpu='ps auxf | sort -nr -k 3 | head -5'
+alias pscpu='ps aux --sort=-%cpu | head -10'
 
 alias rmorigfiles="find . -name '*.orig' -delete"
 alias rmjsfiles="find . -type f -name '*.js' -exec rm {} +"
@@ -109,15 +109,15 @@ alias brewdump='brew bundle dump --file=~/Brewfile'
 
 
 # View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+alias sniff="sudo ngrep -d 'any' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i any -n -s 0 -w - | grep -a -o -E 'Host\: .*|GET \/.*'"
 
 alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
 
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
-alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}'"
-alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias fzfp='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"'
+alias search="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}'"
 alias openhistory="nvim ~/.zhistory"
 
 alias nom="rm -rf node_modules && npm cache clean && npm install"
@@ -142,7 +142,9 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 alias sqlcheat='find ${SQL_CHEATS_DIR:-~/repositories/sql-cheats} -type f -name "*.sql" | fzf --preview "bat --style=numbers --color=always {}"'
 
 if [ "$(command -v docker)" ]; then
-  alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'
+  alias d-prune='docker container prune -f && docker image prune -a -f && docker volume prune -f && docker system prune -f'
+  alias d-clean='docker stop $(docker ps -a -q) && d-prune'
+  alias d-restart='docker restart $(docker ps -q)'
   # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
   alias d-kali="docker run -ti --privileged --net='host' --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kali_base /bin/bash"
   alias d-kali-new="docker run -ti --privileged --net="host" --rm -e HOST_IP=$(ifconfig en0 | awk '/ *inet /{print $2}')  -v /Users/arthurgehrke/Documents/docker-data/kali:/home/shared -ti  kali_base /bin/bash"
