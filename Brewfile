@@ -1,7 +1,7 @@
 tap "brewsci/base"
 tap "buo/cask-upgrade"
 tap "harelba/q"
-tap homebrew/cask-fonts
+tap "homebrew/cask-fonts"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "ringohub/redis-cli"
