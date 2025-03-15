@@ -101,14 +101,18 @@ alias zshsource='source ~/.zshrc'
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
 
-alias bup="brew -v update && brew -v upgrade && brew -v cleanup --prune=2 && brew doctor && brew -v upgrade --casks --greedy"
+alias bup='brew update && brew upgrade && brew upgrade --cask --greedy && brew autoremove && brew cleanup --prune=2 && brew bundle cleanup --force && brew doctor && brew missing'
+alias brewsync='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
+alias brewcleanfromfile='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
+alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
+alias brewdump='brew bundle dump --file=~/Brewfile'
+
 
 # View HTTP traffic
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
-alias breew='brew update && brew upgrade && brew cleanup'
 
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
@@ -118,10 +122,6 @@ alias openhistory="nvim ~/.zhistory"
 
 alias nom="rm -rf node_modules && npm cache clean && npm install"
 alias preview="fzf --preview 'bat --color \"always\" {}'"
-
-alias brewcleanfromfile='brew bundle --force cleanup'
-alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
-alias brewdump='brew bundle dump --file=~//Brewfile'
 
 alias openpreview='open -a Preview'
 alias port='sudo lsof -nP i4TCP'

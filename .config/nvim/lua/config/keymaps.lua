@@ -34,7 +34,7 @@ vim.keymap.set('i', 'jj', '<Esc>', options)
 vim.keymap.set('i', 'jk', '<Esc>', options)
 
 -- toggles relativenumber
-vim.keymap.set('n', '<leader>st', ':set relativenumber!<CR>', options)
+vim.keymap.set('n', 'tt', ':set relativenumber!<CR>', options)
 
 -- Move around splits using Ctrl + {h,j,k,l}
 vim.keymap.set('n', 'vv', '<C-w>v', options) -- split window vertically
