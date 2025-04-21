@@ -19,6 +19,29 @@ alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 # alias ls='ls -G -F --color=auto'
 
 # alias ll='ls -lAGFp'
+alias ddk="killall com.docker.osx.hyperkit.linux"   # docker restart
+alias dps="docker ps"  
+alias dports='docker ps --format "table {{.Names}}\t{{.Ports}}"'
+
+# wireless en0, wired en1: PRIVATE_IP address: 172.20.1.91 or 192.168.1.253
+alias privip="ipconfig getifaddr en0"
+
+# Public ip like https://www.whatismyip.com/:
+# alias mac="curl http://canhazip.com"  # public IP
+# alias pubip="curl https://checkip.amazonaws.com"  # public IP
+alias pubip="curl -s ifconfig.me"  # public IP
+# alias ipa="ip a"  # analyze networking
+alias ipinfo="curl ipinfo.io"  # more verbose JSON containing country and zip of IP
+alias ipcity="curl -s ipinfo.io | jq -r .city"
+alias wanip4="dig @resolver1.opendns.com ANY myip.opendns.com +short"
+# alias wanip6="dig @resolver1.opendns.com AAAA myip.opendns.com +short -6"
+# https://blog.apnic.net/2021/06/17/how-a-small-free-ip-tool-survived/
+# alias wanip6="curl -s https://ipv6.icanhazip.com"
+# https://ipv4.icanhazip.com/
+alias ports="lsof -i -n -P | grep TCP"
+alias listening="lsof -nP +c 15 | grep LISTEN"
+   # rapportd          596 johndoe    9u     IPv6  0x93d60554f660a3a        0t0                 TCP *:50866 (LISTEN)
+
 
 alias find_mas_apps="find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print | sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##'"
 

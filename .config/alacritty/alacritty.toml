@@ -50,10 +50,10 @@ TERM = "xterm-256color"
 [font]
 size = 13.5
 offset = {x = 1, y = 0}
-normal = { family = "MesloLGS NF", style = "Regular" }
-bold = { family = "MesloLGS NF" }
-italic = { family = "MesloLGS NF" }
-bold_italic = { family = "MesloLGS NF" }
+normal = { family = "MesloLGS Nerd Font Mono", style = "Regular" }
+bold = { family = "MesloLGS Nerd Font Mono", style = "Bold" }
+italic = { family = "MesloLGS Nerd Font Mono", style = "Italic" }
+bold_italic = { family = "MesloLGS Nerd Font Mono", style = "Bold Italic" }
 
 [[keyboard.bindings]]
 key = "Up"
