@@ -9,7 +9,6 @@
 ##############################################################################
 if type brew &>/dev/null; then
   export PATH="$(brew --prefix)/bin:$PATH"
-  export FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
   export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
@@ -103,7 +102,6 @@ export HISTFILESIZE=500000
 
 HISTCONTROL=ignoredups
 setopt HISTIGNORESPACE
-unsetopt EXTENDED_HISTORY
 setopt BANG_HIST
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_ALL_DUPS
@@ -145,8 +143,8 @@ bindkey -e '^h' backward-char
 bindkey -e '^e' forward-word
 bindkey -e '^b' backward-word
 bindkey -e '^d' delete-char
-bindkey -e '^0' beginning-of-line
-bindkey -e '^;' end-of-line
+bindkey -e '^a' beginning-of-line
+bindkey -e '^f' end-of-line
 
 # history
 bindkey -M emacs '^P' history-substring-search-up
@@ -157,7 +155,6 @@ bindkey -e '^y' accept-search
 bindkey -e '^o' autosuggest-accept
 
 bindkey -r ^M accept-search
-
 
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^R' fzf-history-widget
@@ -309,11 +306,28 @@ fi
 if command -v cargo &>/dev/null; then
   export CARGO_HOME="$HOME/.cargo"
   export PATH="$CARGO_HOME/bin:$PATH"
-  [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
+  
+  # Verifica se o arquivo de ambiente do Cargo existe antes de carregá-lo
+  if [ -f "$CARGO_HOME/env" ]; then
+    source "$CARGO_HOME/env"
+  fi
 fi
 
-source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-# chruby ruby-3.4.1
+# # Cargo (Rust)
+# if command -v cargo &>/dev/null; then
+#   export CARGO_HOME="$HOME/.cargo"
+#   export PATH="$CARGO_HOME/bin:$PATH"
+#   [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
+# fi
 
-. "$HOME/.cargo/env"
+# chruby (Ruby)
+if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
+  source "/opt/homebrew/opt/chruby/share/chruby/chruby.sh"
+  source "/opt/homebrew/opt/chruby/share/chruby/auto.sh"
+
+  # Definir versão padrão do Ruby, se necessário
+  if command -v ruby &>/dev/null; then
+    chruby ruby-3.4.2
+  fi
+fi
+
