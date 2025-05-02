@@ -35,6 +35,7 @@ brew "coreutils"
 brew "csvkit"
 brew "csvtk"
 brew "diff-so-fancy"
+brew "dnsmap"
 brew "dsq"
 brew "libyaml"
 brew "esptool"
@@ -65,7 +66,6 @@ brew "lazygit"
 brew "legit"
 brew "libffi"
 brew "libpcap"
-brew "lnav"
 brew "lsd"
 brew "lynx"
 brew "m-cli"
@@ -170,13 +170,15 @@ mas "Cookie Buster", id: 1661435962
 mas "CorelDRAW", id: 1447605203
 mas "Extractor", id: 1626704817
 mas "Find Any File", id: 402569179
+mas "GoPro Player", id: 1460836908
+mas "GoPro Quik", id: 561350520
+mas "GoPro Webcam", id: 6477835262
 mas "JSONPeep", id: 1458969831
 mas "loginsight", id: 6504901532
 mas "Menu Bar Calendar", id: 1558360383
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft Word", id: 462054704
 mas "Numbers", id: 409203825
-mas "Octotree", id: 1457450145
 mas "Parallels Desktop", id: 1085114709
 mas "Postman Interceptor", id: 6460587883
 mas "ProFind", id: 1441703569
@@ -184,9 +186,7 @@ mas "SingleFile", id: 6444322545
 mas "Spark Desktop", id: 6445813049
 mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
-mas "Transcriber", id: 1460290478
 mas "UPDF", id: 1619925971
-mas "UTM", id: 1538878817
 mas "Webcam Recorder", id: 1508067444
 mas "WhatsApp", id: 310633997
 mas "Wipr", id: 1662217862

@@ -124,6 +124,9 @@ alias zshsource='source ~/.zshrc'
 alias localip='ipconfig getifaddr en0'
 alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
 
+# tmux
+alias tf="tmux refresh-client -S && tmux source-file ~/.tmux.conf"
+
 alias bup='brew update && brew upgrade && brew upgrade --cask && brew cleanup --prune=2 && brew bundle dump --file="$HOME/Brewfile" --force && brew bundle cleanup --force --file="$HOME/Brewfile" && brew doctor'
 alias bdump='cp "$HOME/Brewfile" "$HOME/Brewfile.bak.$(date +%F_%T)" && brew bundle dump --file="$HOME/Brewfile" --force'
 alias bclean='brew cleanup --prune=2 && brew autoremove && rm -rf "$(brew --cache)"'
