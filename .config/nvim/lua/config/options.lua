@@ -89,7 +89,7 @@ vim.o.fileformats = 'unix'
 vim.opt.wrap = false
 
 vim.o.wildignorecase = true
-vim.opt.wildmode = "longest:full,full"
+vim.opt.wildmode = 'longest:full,full'
 vim.opt.wildmenu = true
 vim.o.wildignore = '*.o,*.obj,*~,*.so,*.swp,*.DS_Store,\'*/cache/*\', \'*/tmp/*\'' -- stuff to ignore when tab completing
 vim.o.showfulltag = true
@@ -165,7 +165,15 @@ vim.opt.rtp:append('/opt/homebrew/opt/fzf')
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
-  float = { border = 'rounded' },
+  -- float = { border = 'rounded' },
+  float = {
+    focusable = false,
+    style = 'minimal',
+    border = 'single',
+    -- source = 'always',
+    header = '',
+    prefix = '',
+  },
   underline = true,
   update_in_insert = true,
   severty_sort = true,
@@ -175,9 +183,22 @@ vim.diagnostic.config({
 local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
 -- local signs = { Error = '󰅚', Warn = '󰀪', Hint = '󰌶', Info = '󰋽' }
 
+-- for type, icon in pairs(signs) do
+--   local hl = 'DiagnosticSign' .. type
+--   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+-- end
+
 for type, icon in pairs(signs) do
-  local hl = 'DiagnosticSign' .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+  local name = 'DiagnosticSign' .. type
+  vim.diagnostic.config({
+    signs = {
+      [vim.diagnostic.severity[type:upper()]] = {
+        text = icon,
+        texthl = name,
+        numhl = name,
+      },
+    },
+  })
 end
 
 vim.g.loaded_perl_provider = 0

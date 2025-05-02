@@ -61,12 +61,50 @@ return {
     },
     { '<leader>fl', '<cmd>Telescope highlights<cr>', desc = 'Find Highlights' },
     { '<leader>fz', '<cmd>Telescope zoxide list<cr>', desc = 'Find Directory' },
+    {
+      '<leader>gb',
+      function()
+        require('telescope.builtin').git_branches()
+      end,
+      desc = '[g]it [b]ranches',
+    },
+    {
+      '<leader>gbd',
+      function()
+        vim.cmd('GitBranchesByDate')
+      end,
+      desc = '[g]it [b]ranches by [d]ate',
+    },
+    {
+      '<leader>gB',
+      function()
+        require('telescope.builtin').git_bcommits()
+      end,
+      desc = '[g]it [B]uffer commits',
+    },
+    {
+      '<leader>gc',
+      function()
+        require('telescope.builtin').git_commits()
+      end,
+      desc = '[g]it [c]ommits (repo)',
+    },
+    {
+      '<leader>gS',
+      function()
+        require('telescope.builtin').git_status()
+      end,
+      desc = '[g]it [S]tatus',
+    },
   },
   config = function()
     local telescope = require('telescope')
     local actions = require('telescope.actions')
     local transform_mod = require('telescope.actions.mt').transform_mod
     local actions_state = require('telescope.actions.state')
+    local pickers = require('telescope.pickers')
+    local finders = require('telescope.finders')
+    local conf = require('telescope.config').values
     local lga_actions = require('telescope-live-grep-args.actions')
     local lga_shortcuts = require('telescope-live-grep-args.shortcuts')
 
@@ -83,6 +121,33 @@ return {
       end,
     })
 
+    local function git_branches_by_date()
+      local output = vim.fn.systemlist(
+        'git for-each-ref --sort=-committerdate --format=\'%(refname:short) %(committerdate:relative)\' refs/heads/'
+      )
+
+      pickers
+        .new({}, {
+          prompt_title = 'Git Branches (by last commit)',
+          finder = finders.new_table({
+            results = output,
+          }),
+          sorter = conf.generic_sorter({}),
+          attach_mappings = function(prompt_bufnr, map)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = actions_state.get_selected_entry()[1]
+              local branch = vim.split(selection, ' ')[1]
+              vim.cmd('Git checkout ' .. branch)
+            end)
+            return true
+          end,
+        })
+        :find()
+    end
+
+    vim.api.nvim_create_user_command('GitBranchesByDate', git_branches_by_date, {})
+
     telescope.setup({
       defaults = {
         theme = 'dropdown',
@@ -96,9 +161,7 @@ return {
         set_env = { ['COLORTERM'] = 'truecolor' },
         results_title = false,
         color_devicons = true,
-        preview = {
-          treesitter = false,
-        },
+        preview = { treesitter = false },
         sorting_strategy = 'ascending',
         selection_strategy = 'reset',
         layout_strategy = 'horizontal',
@@ -110,9 +173,7 @@ return {
             preview_width = 0.55,
             results_width = 0.8,
           },
-          vertical = {
-            mirror = false,
-          },
+          vertical = { mirror = false },
           width = 0.87,
           height = 0.80,
           preview_cutoff = 120,
@@ -180,8 +241,8 @@ return {
             ['<ESC>'] = actions.close,
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
-            ['<C-x>'] = actions.select_horizontal, -- open file in split horizontal
-            ['<C-v>'] = actions.select_vertical, -- open file in split vertical
+            ['<C-x>'] = actions.select_horizontal,
+            ['<C-v>'] = actions.select_vertical,
             ['<C-n>'] = actions.move_selection_next,
             ['<C-p>'] = actions.move_selection_previous,
             ['gg'] = actions.move_to_top,
@@ -254,48 +315,34 @@ return {
         },
         themes = {
           layout_config = {
-            horizontal = {
-              width = 0.8,
-              height = 0.7,
-            },
+            horizontal = { width = 0.8, height = 0.7 },
           },
           enable_previewer = true,
           persist = {
-            -- enable persisting last theme choice
             enabled = true,
-
-            -- override path to file that execute colorscheme command
-            path = vim.fn.stdpath("config") .. "/lua/colorscheme.lua"
+            path = vim.fn.stdpath('config') .. '/lua/colorscheme.lua',
           },
         },
         recent_files = {},
         fzf = {
-          fuzzy = true, -- false will only do exact matching
-          override_generic_sorter = true, -- override the generic sorter
-          override_file_sorter = true, -- override the file sorter
-          case_mode = 'ignore_case', -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = 'ignore_case',
           hidden = true,
         },
         file_browser = {
           theme = 'ivy',
-          -- disables netrw and use telescope-file-browser in its place
           hijack_netrw = true,
-          mappings = {
-            ['i'] = {
-              -- your custom insert mode mappings
-            },
-            ['n'] = {
-              -- your custom normal mode mappings
-            },
-          },
+          mappings = { ['i'] = {}, ['n'] = {} },
         },
       },
     })
 
-    require('telescope').load_extension('file_browser')
-    require('telescope').load_extension('fzf')
-    require('telescope').load_extension('live_grep_args')
-    require('telescope').load_extension('recent_files')
-    require('telescope').load_extension('themes')
+    telescope.load_extension('file_browser')
+    telescope.load_extension('fzf')
+    telescope.load_extension('live_grep_args')
+    telescope.load_extension('recent_files')
+    telescope.load_extension('themes')
   end,
 }

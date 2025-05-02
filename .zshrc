@@ -25,10 +25,10 @@ source "$HOME"/.zprofile
 source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
 
-source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
-source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
+source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 ##############################################################################
 # Prompt & Completion
@@ -39,7 +39,8 @@ unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[default]=fg=#ebdbb2,bold
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=#fb4934
-ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934,standout
+# ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934,standout
+ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934
 ZSH_HIGHLIGHT_STYLES[alias]=fg=#fe8019,bold
 ZSH_HIGHLIGHT_STYLES[builtin]=fg=#b8bb26,bold
 ZSH_HIGHLIGHT_STYLES[function]=fg=#d3869b,bold
@@ -131,7 +132,6 @@ setopt NO_NOMATCH
 ##############################################################################
 # KeyMappings
 ##############################################################################
-autoload -U compinit && compinit
 autoload -U promptinit && promptinit
 autoload -U add-zsh-hook
 

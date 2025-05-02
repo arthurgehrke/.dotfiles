@@ -56,7 +56,10 @@ return {
             bg = '#002b36',
           },
           buffer_selected = {
-            fg = '#fdf6e3',
+            -- fg = '#fdf6e3',
+            -- bold = true,
+            fg = '#ebdbb2',
+            bg = '#3c3836',
             bold = true,
           },
           fill = {

@@ -20,6 +20,18 @@ return {
         silent = true,
       })
 
+      vim.lsp.handlers['textDocument/definition'] = function(_, result, ctx, _)
+        if not result or vim.tbl_isempty(result) then
+          print('Definition not found')
+          return
+        end
+        if vim.tbl_islist(result) then
+          vim.lsp.util.jump_to_location(result[1], 'utf-8')
+        else
+          vim.lsp.util.jump_to_location(result, 'utf-8')
+        end
+      end
+
       local servers = {
         ts_ls = {
           root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
@@ -42,21 +54,11 @@ return {
             )
           end,
         },
-        -- tsserver = {
-        --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
-        --   filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact' },
-        --   cmd = { 'typescript-language-server', '--stdio' },
-        --   on_attach = function(client, bufnr)
-        --     -- Desativa formatação do tsserver para evitar conflito com prettier/eslint
-        --     client.server_capabilities.documentFormattingProvider = false
-        --     client.server_capabilities.documentRangeFormattingProvider = false
-        --   end,
-        -- },
         lua_ls = {
           settings = {
             Lua = {
               diagnostics = {
-                globals = { 'vim' }, -- Reconhecer 'vim' como global
+                globals = { 'vim' },
               },
               workspace = {
                 library = vim.api.nvim_get_runtime_file('', true),
@@ -86,30 +88,6 @@ return {
             },
           },
         },
-        -- eslint = {
-        --   root_dir = util.root_pattern(
-        --     '.eslintrc',
-        --     '.eslintrc.js',
-        --     '.eslintrc.cjs',
-        --     '.eslintrc.yaml',
-        --     '.eslintrc.yml',
-        --     '.eslintrc.json',
-        --     'package.json',
-        --     '.git'
-        --   ),
-        --   on_attach = function(client, bufnr)
-        --     client.server_capabilities.documentFormattingProvider = false
-        --     client.server_capabilities.documentRangeFormattingProvider = false
-
-        --     vim.api.nvim_create_autocmd('BufWritePre', {
-        --       buffer = bufnr,
-        --       command = 'EslintFixAll',
-        --     })
-        --   end,
-        --   settings = {
-        --     workingDirectory = { mode = 'auto' },
-        --   },
-        -- },
         yamlls = {
           settings = {
             yaml = {
