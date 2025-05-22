@@ -110,6 +110,8 @@ alias rmorigfiles="find . -name '*.orig' -delete"
 alias rmjsfiles="find . -type f -name '*.js' -exec rm {} +"
 alias rmdsfiles="find . -type f -name '*.DS_Store' -exec rm {} +"
 
+alias brewinstallpentest='brew install nmap amass theharvester whois ffuf gobuster dirsearch httpx sqlmap hydra medusa nikto john hashcat crackmapexec tcpdump wireshark netcat socat jq yq fzf bat'
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'

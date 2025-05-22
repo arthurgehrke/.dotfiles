@@ -8,10 +8,8 @@ tap "samtay/tui"
 tap "thecasualcoder/stable"
 brew "ack"
 brew "openssl@3"
-brew "readline"
 brew "sqlite"
 brew "aircrack-ng"
-brew "xz"
 brew "ncurses"
 brew "asciiquarium"
 brew "aspell"
@@ -27,7 +25,6 @@ brew "brew-cask-completion"
 brew "broot"
 brew "chruby"
 brew "cmatrix"
-brew "curl"
 brew "libpq", link: true
 brew "php"
 brew "composer"
@@ -37,7 +34,6 @@ brew "csvtk"
 brew "diff-so-fancy"
 brew "dnsmap"
 brew "dsq"
-brew "libyaml"
 brew "esptool"
 brew "exiftool"
 brew "eza"
@@ -75,7 +71,6 @@ brew "masscan"
 brew "mercurial"
 brew "micropython"
 brew "miller"
-brew "node"
 brew "mongosh"
 brew "neovim"
 brew "nmap"
@@ -160,13 +155,10 @@ cask "postman"
 cask "qflipper"
 cask "reaper"
 cask "redis-insight"
-cask "spotify"
 cask "temurin@11"
 cask "temurin@17"
-cask "wifispoof"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
-mas "Cookie Buster", id: 1661435962
 mas "CorelDRAW", id: 1447605203
 mas "Extractor", id: 1626704817
 mas "Find Any File", id: 402569179
@@ -186,6 +178,7 @@ mas "SingleFile", id: 6444322545
 mas "Spark Desktop", id: 6445813049
 mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
+mas "Telegram", id: 747648890
 mas "UPDF", id: 1619925971
 mas "Webcam Recorder", id: 1508067444
 mas "WhatsApp", id: 310633997
