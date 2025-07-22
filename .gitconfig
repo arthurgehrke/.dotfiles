@@ -19,7 +19,7 @@
 
 [rebase]
   updateRefs = true
-  autoStash = true
+  autoStash = false
   autoSquash = true
 
 [fetch]

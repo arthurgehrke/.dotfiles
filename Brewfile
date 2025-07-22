@@ -6,8 +6,8 @@ tap "xpipe-io/tap"
 brew "ack"
 brew "openssl@3"
 brew "readline"
-brew "sqlite"
 brew "aircrack-ng"
+brew "amass"
 brew "xz"
 brew "ncurses"
 brew "asciiquarium"
@@ -22,6 +22,7 @@ brew "bash-completion"
 brew "bat"
 brew "bison"
 brew "broot"
+brew "cairo"
 brew "chruby"
 brew "cmatrix"
 brew "curl"
@@ -45,6 +46,7 @@ brew "fastfetch"
 brew "fclones"
 brew "fd"
 brew "feh"
+brew "pango"
 brew "ffmpeg"
 brew "fzf"
 brew "gawk"
@@ -54,6 +56,9 @@ brew "ghostscript"
 brew "git"
 brew "glow"
 brew "go"
+brew "gobuster"
+brew "gtk+"
+brew "handbrake"
 brew "hcxtools"
 brew "historian"
 brew "hstr"
@@ -72,7 +77,9 @@ brew "keychain"
 brew "lazygit"
 brew "legit"
 brew "libffi"
+brew "libmagic"
 brew "libpcap"
+brew "lnav"
 brew "lsd"
 brew "lynx"
 brew "m-cli"
@@ -83,7 +90,6 @@ brew "mcfly"
 brew "mercurial"
 brew "micropython"
 brew "miller"
-brew "node"
 brew "mongosh"
 brew "ncdu"
 brew "neovim"
@@ -98,6 +104,7 @@ brew "pass"
 brew "pdfcpu"
 brew "poppler"
 brew "pdfgrep"
+brew "pdftk-java"
 brew "peco"
 brew "pgcli"
 brew "pinentry-mac"
@@ -145,8 +152,8 @@ brew "ugrep"
 brew "unar"
 brew "w3m"
 brew "wget"
+brew "whois"
 brew "xh"
-brew "xsv"
 brew "yarn"
 brew "yazi"
 brew "yt-dlp"
@@ -161,7 +168,6 @@ brew "ringohub/redis-cli/redis-cli"
 brew "thecasualcoder/stable/csvdiff"
 cask "alacritty"
 cask "alfred"
-cask "android-platform-tools"
 cask "chatgpt"
 cask "chromedriver"
 cask "curiosity"
@@ -182,13 +188,11 @@ cask "losslesscut"
 cask "mongodb-compass"
 cask "ngrok"
 cask "notion"
-cask "obs"
 cask "onedrive"
 cask "postman"
 cask "qflipper"
 cask "reaper"
 cask "redis-insight"
-cask "spotify"
 cask "temurin@11"
 cask "temurin@17"
 cask "tor-browser"
@@ -200,11 +204,14 @@ mas "Code Reader - QR Reader", id: 1225393668
 mas "Disk Space Analyzer", id: 446243721
 mas "Duplicate File Finder", id: 1032755628
 mas "Extractor", id: 1626704817
+mas "Cookie Buster", id: 1661435962
+mas "Extractor", id: 1626704817
+mas "Code Reader - QR Reader", id: 1225393668
 mas "Find Any File", id: 402569179
 mas "GoPro Player", id: 1460836908
 mas "GoPro Quik", id: 561350520
 mas "GoPro Webcam", id: 6477835262
-mas "Images", id: 6499503497
+mas "Highlighter", id: 1385628859
 mas "JSONPeep", id: 1458969831
 mas "Keyword Search", id: 1558453954
 mas "Kindle", id: 302584613
@@ -216,7 +223,6 @@ mas "Numbers", id: 409203825
 mas "Parallels Desktop", id: 1085114709
 mas "PD", id: 510365488
 mas "PDF - Compress, Reduce and Optimize", id: 1023345938
-mas "Photos Duplicate Cleaner", id: 592704001
 mas "Postman Interceptor", id: 6460587883
 mas "ProFind", id: 1441703569
 mas "QR Capture", id: 1369524274
