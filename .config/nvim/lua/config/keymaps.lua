@@ -149,12 +149,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Buffer local mappings.
     local opts = { buffer = ev.buf }
-    vim.keymap.set('n', '<Leader>d', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', 'gtD', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
 
     vim.keymap.set(
       'n',
@@ -185,14 +185,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
       })
     end, opts)
   end,
-
-  vim.keymap.set('n', '<leader>gd', function()
-    vim.lsp.buf.definition({
-      on_list = function(list)
-        vim.lsp.util.jump_to_location(list.items[1].user_data, 'utf-8', true)
-      end,
-    })
-  end),
 })
 
 vim.keymap.set({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren' })
+
+-- block anoying command history window
+vim.keymap.set('n', 'q:', '<Nop>')
+vim.keymap.set('n', 'q/', '<Nop>')
+vim.keymap.set('n', 'q?', '<Nop>')

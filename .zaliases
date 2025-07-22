@@ -1,9 +1,12 @@
 #!/usr/bin/env zsh
 
+alias reload="source ~/.zshrc && echo '🔁 .zshrc reloaded.'"
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
-alias reload="exec ${SHELL} -l"
+alias execshell="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
+
+alias cdicloud="cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents"
 
 if [ -f "$(which lsd)" ]; then
   alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
@@ -127,6 +130,12 @@ alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
 # tmux
 alias tf="tmux refresh-client -S && tmux source-file ~/.tmux.conf"
 
+# rg and fzf
+alias frg='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
+alias frgp='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always --regexp {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
+alias skag='f() { sk --ansi -i -c "ag --color \"$1\"" }; f'
+
+
 alias bup='brew update && brew upgrade && brew upgrade --cask && brew cleanup --prune=2 && brew bundle dump --file="$HOME/Brewfile" --force && brew bundle cleanup --force --file="$HOME/Brewfile" && brew doctor'
 alias bdump='cp "$HOME/Brewfile" "$HOME/Brewfile.bak.$(date +%F_%T)" && brew bundle dump --file="$HOME/Brewfile" --force'
 alias bclean='brew cleanup --prune=2 && brew autoremove && rm -rf "$(brew --cache)"'
@@ -165,9 +174,11 @@ alias npmlist="npm list --depth=0"
 
 # brew install keychain
 if hash keychain 2>/dev/null; then
-  alias ssh-agent-start='eval `keychain --eval --agents ssh --inherit any gitlab github`'
+  alias ssh-agent-start='eval "$(keychain --eval)"; for k in ~/.ssh/*.pem; do [[ -f "$k" ]] && ssh-add "$k" 2>/dev/null; done'
   alias ssh-agent-stop='keychain --stop all'
 fi
+
+alias chmod-pems='find ~/.ssh -type f -name "*.pem" -exec chmod 600 {} \;'
 
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""

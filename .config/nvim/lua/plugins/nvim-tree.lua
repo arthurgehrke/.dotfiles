@@ -254,15 +254,14 @@ return {
           git_clean = false,
           no_buffer = false,
           custom = {
-            '\\.git$',
+            '^.git$',
             '^node_modules$',
             '^dist$',
             '^.eslintcache$',
             '^.next$',
             '.DS_Store',
             'tmp',
-            'logs',
-            '^\\.git',
+            -- 'logs',
           },
         },
         log = {

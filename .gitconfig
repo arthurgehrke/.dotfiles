@@ -4,10 +4,6 @@
 [user]
   name = Arthur Gehrke
   email = arthurgehrke07@gmail.com
-
-[credential]
-  helper = osxkeychain
-
 [core]
   editor = nvim
   excludesfile = /Users/arthurgehrke/.gitignore

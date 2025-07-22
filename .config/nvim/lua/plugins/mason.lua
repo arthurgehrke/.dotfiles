@@ -7,6 +7,7 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
   },
   config = function()
+    local lspconfig = require('lspconfig')
     local mason = require('mason')
     local mason_lspconfig = require('mason-lspconfig')
     local mason_tool_installer = require('mason-tool-installer')
@@ -21,7 +22,7 @@ return {
       },
       pip = {
         upgrade_pip = true,
-      }
+      },
     })
 
     mason_lspconfig.setup({
@@ -65,5 +66,10 @@ return {
         'sqlfluff',
       },
     })
+
+    local servers = mason_lspconfig.get_installed_servers()
+    for _, server_name in ipairs(servers) do
+      lspconfig[server_name].setup({})
+    end
   end,
 }
