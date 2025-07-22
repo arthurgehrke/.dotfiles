@@ -136,11 +136,11 @@ alias frgp='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash 
 alias skag='f() { sk --ansi -i -c "ag --color \"$1\"" }; f'
 
 
-alias bup='brew update && brew upgrade && brew upgrade --cask && brew cleanup --prune=2 && brew bundle dump --file="$HOME/Brewfile" --force && brew bundle cleanup --force --file="$HOME/Brewfile" && brew doctor'
-alias bdump='cp "$HOME/Brewfile" "$HOME/Brewfile.bak.$(date +%F_%T)" && brew bundle dump --file="$HOME/Brewfile" --force'
-alias bclean='brew cleanup --prune=2 && brew autoremove && rm -rf "$(brew --cache)"'
+alias bcleanup='brew bundle --force cleanup --file="~/Brewfile"'
+alias binstall='brew bundle install -v --file="~/Brewfile"'
+alias bcuall='brew cu --all --cleanup --yes'
+alias bup='brew update && brew upgrade && bcleanup && brew autoremove'
 alias bcheck='brew doctor && brew missing && brew outdated'
-alias bverify='brew list --formula | xargs brew reinstall --formula --dry-run'
 alias bdoctor='brew doctor && brew config && brew analytics'
 alias breinstall='brew bundle --file="$HOME/Brewfile" --force'
 alias bservices='brew services list'

@@ -1,18 +1,18 @@
 # Hopefully this loads powerlevel10k theme faster
 
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 ##############################################################################
 # Homebrew Configurações
 ##############################################################################
 if type brew &>/dev/null; then
   export PATH="$(brew --prefix)/bin:$PATH"
-  export HOMEBREW_NO_AUTO_UPDATE=1
+  # export HOMEBREW_NO_AUTO_UPDATE=1
+  export HOMEBREW_BUNDLE_FILE_GLOBAL="$HOME"/Brewfile
 fi
 
-export HOMEBREW_NO_AUTO_UPDATE=1
 
 ##############################################################################
 # Sourcing e Plugins
@@ -71,9 +71,9 @@ ZSH_HIGHLIGHT_STYLES[assign]=fg=#b16286,bold
 # Configurações Gerais
 ##############################################################################
 export LANG=en_US.UTF-8
-export EDITOR=nvim
+export EDITOR='nvim'
 export VISUAL="$EDITOR"
-export PAGER=nvimpager
+export PAGER=less
 
 # if [[ "$TERM" != "xterm-256color" ]]; then
 #   export TERM="xterm-256color"
@@ -110,6 +110,7 @@ setopt HIST_IGNORE_SPACE # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
+setopt INTERACTIVECOMMENTS
 setopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY
 setopt IGNORE_EOF
@@ -119,9 +120,8 @@ setopt AUTO_PUSHD        # Make cd push the old directory onto the directory sta
 setopt AUTOPARAMSLASH    # tab completing directory appends a slash
 setopt LIST_AMBIGUOUS
 setopt EXTENDED_GLOB # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc. (An initial unquoted ‘~’ always produces named directory expansion.)
+setopt ALWAYS_TO_END   
 setopt NO_BEEP
-setopt GLOB_COMPLETE
-setopt MENU_COMPLETE
 setopt COMPLETE_ALIASES
 setopt CASE_PATHS
 setopt COMPLETE_IN_WORD
@@ -129,11 +129,23 @@ setopt PROMPT_SUBST
 setopt NO_HUP
 setopt NO_NOMATCH
 
+unsetopt GLOB_COMPLETE
+unsetopt MENU_COMPLETE
+zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _complete
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
+# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+l:|=* r:|=*'
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path ~/.zsh/cache
+
 ##############################################################################
 # KeyMappings
 ##############################################################################
 autoload -U promptinit && promptinit
 autoload -U add-zsh-hook
+autoload -Uz edit-command-line
+autoload -Uz modify-current-argument
+autoload -Uz history-substring-search-up history-substring-search-down
 
 bindkey -e
 
@@ -145,6 +157,8 @@ bindkey -e '^b' backward-word
 bindkey -e '^d' delete-char
 bindkey -e '^a' beginning-of-line
 bindkey -e '^f' end-of-line
+bindkey -e '^g' backward-kill-word
+bindkey -e '^I' expand-or-complete-prefix
 
 # history
 bindkey -M emacs '^P' history-substring-search-up
@@ -159,11 +173,8 @@ bindkey -r ^M accept-search
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^R' fzf-history-widget
 
-autoload -z edit-command-line
 zle -N edit-command-line
 bindkey -e '^x' edit-command-line
-
-autoload -U modify-current-argument
 
 # Esc + s
 _quote-previous-word-in-single() {
@@ -203,6 +214,7 @@ zle -N _quote-previous-word-in-single
 #     stty intr   '^k'
 # fi
 
+# exit with C-k
 if [[ $- == *i* ]]; then
   stty -ixon <"$TTY" >"$TTY"
   function set_interrupt_key {
@@ -250,12 +262,12 @@ if command -v pipx &>/dev/null; then
 fi
 
 export GOPATH=$HOME/go
-export PATH=$PATH:/Users/arthurgehrke/go/bin
+export PATH=$PATH:$GOPATH:/bin
 
 export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
-
+export PATH="/usr/local/sbin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rbenv (Ruby)
@@ -269,9 +281,13 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 # fi
 
 # jenv (Java)
+# export JAVA_HOME="/opt/homebrew/opt/openjdk@11/"
+export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 if command -v jenv &>/dev/null; then
   export PATH="$HOME/.jenv/bin:$PATH"
-  eval "$(jenv init - --no-rehash)"
+  # eval "$(jenv init - --no-rehash)"
+  eval "$(jenv init -)"
 fi
 
 # Composer (PHP)
@@ -302,6 +318,10 @@ if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 fi
 
+if command -v atuin &> /dev/null; then
+  eval "$(atuin init zsh --disable-up-arrow)"
+fi
+
 # Cargo (Rust)
 if command -v cargo &>/dev/null; then
   export CARGO_HOME="$HOME/.cargo"
@@ -313,13 +333,6 @@ if command -v cargo &>/dev/null; then
   fi
 fi
 
-# # Cargo (Rust)
-# if command -v cargo &>/dev/null; then
-#   export CARGO_HOME="$HOME/.cargo"
-#   export PATH="$CARGO_HOME/bin:$PATH"
-#   [[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
-# fi
-
 # chruby (Ruby)
 if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
   source "/opt/homebrew/opt/chruby/share/chruby/chruby.sh"
@@ -330,4 +343,3 @@ if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
     chruby ruby-3.4.2
   fi
 fi
-
