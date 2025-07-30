@@ -171,7 +171,8 @@ bindkey -e '^o' autosuggest-accept
 bindkey -r ^M accept-search
 
 bindkey '^[[Z' reverse-menu-complete
-bindkey '^R' fzf-history-widget
+# bindkey '^R' fzf-history-widget
+bindkey '^R' atuin-search
 
 zle -N edit-command-line
 bindkey -e '^x' edit-command-line
@@ -295,7 +296,13 @@ if command -v composer &>/dev/null; then
   export PATH="$HOME/.composer/vendor/bin:$PATH"
 fi
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1                                             # My personal prompt has it's own display for Python virtualenvs.
+
 if command -v pipenv &>/dev/null; then
+  export PIPENV_DONT_LOAD_ENV=1                                                   # Direnv manages our '.env', tell Pipenv not to load it.
+  export PIPENV_IGNORE_VIRTUALENVS=1                                              # Don't try and detect running in an existing Python virtualenv.
+  export PIPENV_VENV_IN_PROJECT=1                                                 # Place Pipenv virtualenvs in '.venv' directories.
+  export PIP_REQUIRE_VIRTUALENV=1                                                 # Require that Pip is run inside a virtualenv.
  eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 fi
 
