@@ -9,6 +9,7 @@ return {
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
     'andrew-george/telescope-themes',
+    { 'nvim-telescope/telescope-ui-select.nvim' },
   },
   keys = {
     {
@@ -45,6 +46,19 @@ return {
         require('telescope').extensions.live_grep_args.live_grep_args()
       end,
       desc = 'Live Grep with args (root dir)',
+    },
+    {
+      '<leader>f;',
+      function()
+        require('telescope').extensions.live_grep_args.live_grep_args({
+          vimgrep_arguments = vim.tbl_extend(
+            'force',
+            require('telescope.config').values.vimgrep_arguments,
+            { '--fixed-strings' }
+          ),
+        })
+      end,
+      desc = 'Live Grep literal (sem regex)',
     },
     {
       '<leader>fr',
@@ -114,6 +128,35 @@ return {
     local conf = require('telescope.config').values
     local lga_actions = require('telescope-live-grep-args.actions')
     local lga_shortcuts = require('telescope-live-grep-args.shortcuts')
+
+    vim.keymap.set('n', '<leader>s/', function()
+      builtin.live_grep({
+        grep_open_files = true,
+        prompt_title = 'Live Grep in Open Files',
+      })
+    end, { desc = '[S]earch [/] in Open Files' })
+
+    vim.keymap.set('n', '<leader>sf', function()
+      builtin.find_files({ hidden = true })
+    end, { desc = '[S]earch [F]iles' })
+
+    vim.keymap.set('n', '<leader>trw', function()
+      require('telescope').extensions.live_grep_args.live_grep_args({
+        additional_args = function()
+          return { '--fixed-strings' }
+        end,
+      })
+    end, {})
+
+    vim.keymap.set('n', '<leader>sg', function()
+      require('telescope').extensions.live_grep_args.live_grep_args({
+        additional_args = { '--hidden' },
+      })
+    end, {})
+
+    vim.keymap.set('n', '<leader>sh', function()
+      require('telescope').extensions.live_grep_args.live_grep_args({ cwd = '/Users/arthurgehrke' })
+    end, { desc = '[S]earch [H]ome' })
 
     local my_action = transform_mod({
       edit_or_qf = function(prompt_bufnr)
@@ -225,54 +268,43 @@ return {
           '--column',
           '--smart-case',
           '--hidden',
-          '--glob',
-          '!src/**',
-          '!src/**',
-          '--glob',
-          '!.git/',
-          '--glob',
-          '!node_modules/**',
         },
         mappings = {
           i = {
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
+            ['<esc>'] = actions.close,
+            ['<C-n>'] = actions.move_selection_next,
+            ['<C-p>'] = actions.move_selection_previous,
+            ['<C-x>'] = false,
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
             ['<Esc>'] = actions.close,
             ['<C-c>'] = actions.close,
-            ['<C-h>'] = actions.which_key,
+            ['<C-s>'] = actions.select_horizontal,
+            ['<C-v>'] = actions.select_vertical,
+            ['<C-t>'] = actions.select_tab,
             ['<C-j>'] = actions.move_selection_next,
             ['<C-k>'] = actions.move_selection_previous,
-            ['<C-n>'] = actions.move_selection_next,
-            ['<C-p>'] = actions.move_selection_previous,
-            ['<C-u>'] = actions.preview_scrolling_up,
-            ['<C-d>'] = actions.preview_scrolling_down,
-            ['<C-s>'] = actions.select_horizontal,
-            ['<C-v>'] = actions.select_vertical,
-            ['<C-t>'] = actions.select_tab,
           },
           n = {
-            ['<Esc>'] = actions.close,
+            ['<ESC>'] = actions.close,
             ['<CR>'] = my_action.edit_or_qf,
             ['<C-e>'] = my_action.edit_or_qf,
-            ['j'] = actions.move_selection_next,
-            ['k'] = actions.move_selection_previous,
-            ['n'] = actions.move_selection_next,
-            ['N'] = actions.move_selection_previous,
+            ['<C-x>'] = actions.select_horizontal,
+            ['<C-v>'] = actions.select_vertical,
             ['<C-n>'] = actions.move_selection_next,
             ['<C-p>'] = actions.move_selection_previous,
-            ['h'] = actions.preview_scrolling_left,
-            ['l'] = actions.preview_scrolling_right,
             ['gg'] = actions.move_to_top,
             ['G'] = actions.move_to_bottom,
-            ['q'] = actions.close,
-            ['<C-u>'] = actions.preview_scrolling_up,
-            ['<C-d>'] = actions.preview_scrolling_down,
-            ['<C-s>'] = actions.select_horizontal,
-            ['<C-v>'] = actions.select_vertical,
-            ['<C-t>'] = actions.select_tab,
+            ['<Esc>'] = actions.close,
+            ['j'] = actions.move_selection_next,
+            ['k'] = actions.move_selection_previous,
             ['H'] = actions.move_to_top,
             ['M'] = actions.move_to_middle,
             ['L'] = actions.move_to_bottom,
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
           },
         },
         initial_mode = 'insert',
@@ -349,6 +381,9 @@ return {
           case_mode = 'ignore_case',
           hidden = true,
         },
+        ['ui-selection'] = {
+          require('telescope.themes').get_dropdown({}),
+        },
         file_browser = {
           theme = 'ivy',
           hijack_netrw = true,
@@ -362,5 +397,6 @@ return {
     telescope.load_extension('live_grep_args')
     telescope.load_extension('recent_files')
     telescope.load_extension('themes')
+    telescope.load_extension('ui-select')
   end,
 }

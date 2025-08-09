@@ -171,8 +171,7 @@ bindkey -e '^o' autosuggest-accept
 bindkey -r ^M accept-search
 
 bindkey '^[[Z' reverse-menu-complete
-# bindkey '^R' fzf-history-widget
-bindkey '^R' atuin-search
+bindkey '^R' fzf-history-widget
 
 zle -N edit-command-line
 bindkey -e '^x' edit-command-line
@@ -323,10 +322,6 @@ fi
 # Rustup (via Homebrew)
 if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-fi
-
-if command -v atuin &> /dev/null; then
-  eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 # Cargo (Rust)

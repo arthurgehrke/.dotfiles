@@ -13,7 +13,6 @@ brew "ncurses"
 brew "asciiquarium"
 brew "aspell"
 brew "atlas"
-brew "atuin"
 brew "automake"
 brew "awk"
 brew "awscli"
@@ -138,7 +137,7 @@ brew "the_silver_searcher"
 brew "tig"
 brew "tmux"
 brew "toilet"
-brew "tor"
+brew "tor", restart_service: :changed
 brew "torsocks"
 brew "trufflehog"
 brew "ugrep"
@@ -175,9 +174,9 @@ cask "forkgram-telegram"
 cask "google-chrome"
 cask "google-drive"
 cask "guitar-pro"
-cask "iterm2"
 cask "jdownloader"
 cask "kitty"
+cask "localxpose"
 cask "losslesscut"
 cask "mongodb-compass"
 cask "ngrok"
@@ -185,6 +184,7 @@ cask "notion"
 cask "obs"
 cask "onedrive"
 cask "postman"
+cask "qbittorrent"
 cask "qflipper"
 cask "reaper"
 cask "redis-insight"
@@ -196,6 +196,7 @@ cask "wifispoof"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
 mas "BetterSnapTool", id: 417375580
+mas "Bitwarden", id: 1352778147
 mas "Code Reader - QR Reader", id: 1225393668
 mas "Disk Space Analyzer", id: 446243721
 mas "Duplicate File Finder", id: 1032755628
@@ -206,17 +207,16 @@ mas "GoPro Quik", id: 561350520
 mas "GoPro Webcam", id: 6477835262
 mas "Images", id: 6499503497
 mas "JSONPeep", id: 1458969831
-mas "Keyword Search", id: 1558453954
 mas "Kindle", id: 302584613
 mas "loginsight", id: 6504901532
 mas "Menu Bar Calendar", id: 1558360383
 mas "Microsoft Excel", id: 462058435
+mas "Microsoft Outlook", id: 985367838
 mas "Microsoft Word", id: 462054704
 mas "Numbers", id: 409203825
 mas "Parallels Desktop", id: 1085114709
 mas "PD", id: 510365488
 mas "PDF - Compress, Reduce and Optimize", id: 1023345938
-mas "Photos Duplicate Cleaner", id: 592704001
 mas "Postman Interceptor", id: 6460587883
 mas "ProFind", id: 1441703569
 mas "QR Capture", id: 1369524274
