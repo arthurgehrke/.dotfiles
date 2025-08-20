@@ -6,6 +6,13 @@ alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias execshell="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
 
+alias torpath='cd /opt/homebrew/etc/tor'
+
+# python
+alias mkvenv='function _mkvenv(){ python3 -m venv "$1" && echo "✅ Virtualenv created on $1. Activate with: source $1/bin/activate"; }; _mkvenv'
+alias mkvenv-activate='function _mkvenv_act(){ python3 -m venv "$1" && source "$1/bin/activate"; }; _mkvenv_act'
+alias mkvenv-global='function _mkvenv_global(){ mkdir -p ~/.virtualenvs && python3 -m venv "$HOME/.virtualenvs/$1" && echo "✅ Virtualenv global created on ~/.virtualenvs/$1. Active with: source ~/.virtualenvs/$1/bin/activate"; }; _mkvenv_global'
+
 alias cdicloud="cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents"
 
 if [ -f "$(which lsd)" ]; then
@@ -135,16 +142,6 @@ alias frg='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -
 alias frgp='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always --regexp {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
 alias skag='f() { sk --ansi -i -c "ag --color \"$1\"" }; f'
 
-
-alias bcleanup='brew bundle --force cleanup --file="~/Brewfile"'
-alias binstall='brew bundle install -v --file="~/Brewfile"'
-alias bcuall='brew cu --all --cleanup --yes'
-alias bup='brew update && brew upgrade && bcleanup && brew autoremove'
-alias bcheck='brew doctor && brew missing && brew outdated'
-alias bdoctor='brew doctor && brew config && brew analytics'
-alias breinstall='brew bundle --file="$HOME/Brewfile" --force'
-alias bservices='brew services list'
-
 alias brewsync='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
 alias brewcleanfromfile='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
 alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
@@ -158,7 +155,9 @@ alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut 
 
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
-alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}'"
+alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}' \
+  | fzf --preview 'bat --style=numbers --color=always {} | head -200' \
+  --bind 'enter:execute(nvim {})+abort'"
 alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias openhistory="nvim ~/.zhistory"
 

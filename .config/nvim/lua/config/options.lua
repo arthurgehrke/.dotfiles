@@ -7,7 +7,7 @@ vim.o.lazyredraw = true
 -- Decrease redraw time
 vim.o.redrawtime = 100
 
-vim.opt.shortmess:append("Fc")
+vim.opt.shortmess:append('Fc')
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
@@ -196,6 +196,7 @@ for type, icon in pairs(signs) do
         texthl = name,
         numhl = name,
       },
+      severity_sort = true
     },
   })
 end

@@ -9,7 +9,7 @@ fi
 ##############################################################################
 if type brew &>/dev/null; then
   export PATH="$(brew --prefix)/bin:$PATH"
-  # export HOMEBREW_NO_AUTO_UPDATE=1
+  unset HOMEBREW_NO_AUTO_UPDATE
   export HOMEBREW_BUNDLE_FILE_GLOBAL="$HOME"/Brewfile
 fi
 
@@ -258,6 +258,7 @@ MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 # Pipx
 if command -v pipx &>/dev/null; then
   export PIPX_HOME="$HOME/.local"
+  export PATH="$HOME/.local/bin:$PATH"
   export PATH="$PIPX_HOME/bin:$PATH"
 fi
 
@@ -271,14 +272,14 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rbenv (Ruby)
-# if command -v rbenv &>/dev/null; then
-#   # export RBENV_ROOT=~/.rbenv
-#   eval "$(rbenv init -)"
-#   export PATH=$HOME/.rbenv/shims:$PATH
-#   export RBENV_ROOT="$(brew --prefix rbenv)"
-#   export GEM_HOME="$(brew --prefix)/opt/gems"
-#   export GEM_PATH="$(brew --prefix)/opt/gems"
-# fi
+if command -v rbenv &>/dev/null; then
+  # export RBENV_ROOT=~/.rbenv
+  eval "$(rbenv init -)"
+  export PATH=$HOME/.rbenv/shims:$PATH
+  export RBENV_ROOT="$(brew --prefix rbenv)"
+  export GEM_HOME="$(brew --prefix)/opt/gems"
+  export GEM_PATH="$(brew --prefix)/opt/gems"
+fi
 
 # jenv (Java)
 # export JAVA_HOME="/opt/homebrew/opt/openjdk@11/"

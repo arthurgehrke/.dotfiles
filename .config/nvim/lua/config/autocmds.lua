@@ -78,7 +78,6 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   end,
 })
 
--- auto recon filetypes
 local filetypes = {
   { ext = '*.json', type = 'json' },
   { ext = '*.py', type = 'python' },
@@ -93,7 +92,6 @@ local filetypes = {
   { ext = '*.rs', type = 'rust' },
 }
 
--- Iterar sobre a tabela para criar autocmds para cada extensão
 for _, ft in ipairs(filetypes) do
   vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
     pattern = ft.ext,

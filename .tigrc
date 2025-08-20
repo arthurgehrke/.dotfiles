@@ -92,14 +92,20 @@ bind stash A !?git stash apply %(stash)
 bind main <F4> !git difftool -d %(commit)^!
 bind main B !git rebase -i %(commit)
 
-# -----------------------------
-# Notes (edit commit note)
-# -----------------------------
 bind generic T !git notes edit %(commit)
+bind generic	e	edit			# Open in editor
+bind generic	:	prompt			# Open the prompt
+bind generic	F	:toggle file-name
+bind generic	I	:toggle sort-order
+bind generic	i	:toggle sort-field
+bind generic	D	:toggle date
+bind generic	A	:toggle autho
+bind generic	~	:toggle line-graphics
+bind generic	F	:toggle file-name
+bind generic	W	:toggle ignore-space
 
-# -----------------------------
-# View configuration
-# -----------------------------
+bind generic	%	:toggle file-filter
+
 set main-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
 set stash-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
 set tree-view  = mode author:display=full date:display=relative id file-size file-name
@@ -111,3 +117,116 @@ set tree-view  = mode author:display=full date:display=relative id file-size fil
 # set stash-view  = line-number:no,interval=1 id:no date:default author:full commit-title
 # set status-view = line-number:no,interval=1 status:short file-name
 # set tree-view   = line-number:no,interval=1 mode author:full file-size date:default id:no file-name
+
+color "diff --"			yellow	default
+color "--- "			yellow	default
+color "+++ "			yellow	default
+color "@@"			magenta	default
+color "+"			green	default
+color " +"			green	default
+color "-"			red	default
+color " -"			red	default
+color "index "			blue	default
+color "old file mode "		yellow	default
+color "new file mode "		yellow	default
+color "deleted file mode "	yellow	default
+color "copy from "		yellow	default
+color "copy to "		yellow	default
+color "rename from "		yellow	default
+color "rename to "		yellow	default
+color "similarity "		yellow	default
+color "dissimilarity "		yellow	default
+color "diff-tree "		cyan	default
+color "Author: "		cyan	default
+color "Commit: "		magenta	default
+color "Tagger: "		magenta	default
+color "Merge: "			cyan	default
+color "Date: "			yellow	default
+color "AuthorDate: "		yellow	default
+color "CommitDate: "		yellow	default
+color "TaggerDate: "		yellow	default
+color "Refs: "			red	default
+color "Reflog: "		red	default
+color "Reflog message: "	yellow	default
+color "stash@{"			magenta	default
+color "commit "			green	default
+color "parent "			cyan	default
+color "tree "			cyan	default
+color "author "			green	default
+color "committer "		magenta	default
+color "    Signed-off-by"	yellow	default
+color "    Acked-by"		yellow	default
+color "    Tested-by"		yellow	default
+color "    Reviewed-by"		yellow	default
+color default			default	default	normal
+color cursor			white	green	bold
+color status			green	default
+color delimiter			magenta	default
+color date			cyan	default
+color mode			cyan	default
+color id			magenta	default
+color overflow			red	default
+color header			yellow	default
+color section			cyan	default
+color directory			yellow	default
+color file			default	default
+color grep.file			cyan	default
+color file-size			default	default
+color line-number		cyan	default
+color title-blur		white	blue
+color title-focus		white	blue	bold
+color main-commit		default	default
+color main-tag			magenta	default	bold
+color main-local-tag		magenta	default
+color main-remote		yellow	default
+color main-replace		cyan	default
+color main-tracked		yellow	default	bold
+color main-ref			cyan	default
+color main-head			cyan	default	bold
+color stat-none			default	default
+color stat-staged		magenta	default
+color stat-unstaged		magenta	default
+color stat-untracked		magenta	default
+color help-group		cyan	default
+color help-action		yellow	default
+color diff-stat			cyan	default
+color palette-0			magenta	default
+color palette-1			yellow	default
+color palette-2			cyan	default
+color palette-3			green	default
+color palette-4			default	default
+color palette-5			white	default
+color palette-6			red	default
+color palette-7			magenta	default bold
+color palette-8			yellow	default bold
+color palette-9			cyan	default bold
+color palette-10		green	default bold
+color palette-11		default	default bold
+color palette-12		white	default bold
+color palette-13		red	default bold
+color graph-commit		cyan	default
+color search-result		black	yellow
+
+set git-colors = \
+	branch.current=main-head \
+	branch.local=main-ref \
+	branch.plain=main-ref \
+	branch.remote=main-remote \
+	\
+	diff.meta=diff-header \
+	diff.meta=diff-index \
+	diff.meta=diff-oldmode \
+	diff.meta=diff-newmode \
+	diff.frag=diff-chunk \
+	diff.old=diff-del \
+	diff.new=diff-add \
+	\
+	grep.filename=grep.file \
+	grep.linenumber=grep.line-number \
+	grep.separator=grep.delimiter \
+	\
+	status.branch=status.header \
+	status.added=stat-staged \
+	status.updated=stat-staged \
+	status.changed=stat-unstaged \
+	status.untracked=stat-untracked

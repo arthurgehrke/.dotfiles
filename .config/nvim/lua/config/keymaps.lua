@@ -87,6 +87,11 @@ vim.cmd([[autocmd cursormoved * set nohlsearch]])
 vim.keymap.set('n', 'n', 'n:set hlsearch<cr>', { noremap = true, silent = true })
 vim.keymap.set('n', 'N', 'N:set hlsearch<cr>', { noremap = true, silent = true })
 
+vim.keymap.set('n', '<leader>w', ':set wrap! wrap?<CR>')
+
+vim.keymap.set({ 'n', 'v' }, ';', 'getcharsearch().forward ? \',\' : \';\'', { expr = true })
+vim.keymap.set({ 'n', 'v' }, '\'', 'getcharsearch().forward ? \';\' : \',\'', { expr = true })
+
 local function next_conflict_marker()
   vim.fn.search('\\(<<<<<<<\\|=======\\|>>>>>>>\\)')
 end
@@ -193,4 +198,3 @@ vim.keymap.set({ 'n', 'x' }, '<BS>', '%', { remap = true, desc = 'Jump to Paren'
 vim.keymap.set('n', 'q:', '<Nop>')
 vim.keymap.set('n', 'q/', '<Nop>')
 vim.keymap.set('n', 'q?', '<Nop>')
-

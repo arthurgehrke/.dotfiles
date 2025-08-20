@@ -35,7 +35,7 @@ return {
     local servers = {
       ts_ls = {
         root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git'),
-        filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact' },
+        filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
         cmd = { 'typescript-language-server', '--stdio' },
         on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = true
@@ -65,6 +65,17 @@ return {
               checkThirdParty = false,
             },
           },
+        },
+      },
+      eslint = {
+        settings = { workingDirectories = { mode = 'auto' } },
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
         },
       },
       marksman = {},

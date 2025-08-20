@@ -1,4 +1,5 @@
 tap "brewsci/base"
+tap "buo/cask-upgrade"
 tap "harelba/q"
 tap "ringohub/redis-cli"
 tap "thecasualcoder/stable"
@@ -9,6 +10,7 @@ brew "readline"
 brew "sqlite"
 brew "aircrack-ng"
 brew "xz"
+brew "asciinema"
 brew "ncurses"
 brew "asciiquarium"
 brew "aspell"
@@ -112,6 +114,7 @@ brew "pyenv-virtualenv"
 brew "qpdf"
 brew "r"
 brew "ranger"
+brew "rbenv"
 brew "reattach-to-user-namespace"
 brew "ripgrep"
 brew "ripgrep-all"
@@ -166,6 +169,7 @@ cask "chromedriver"
 cask "curiosity"
 cask "discord"
 cask "docker-desktop"
+cask "duckduckgo"
 cask "firefox"
 cask "fission"
 cask "font-hack-nerd-font"
@@ -174,6 +178,7 @@ cask "forkgram-telegram"
 cask "google-chrome"
 cask "google-drive"
 cask "guitar-pro"
+cask "insomnia"
 cask "jdownloader"
 cask "kitty"
 cask "localxpose"
@@ -202,11 +207,10 @@ mas "Disk Space Analyzer", id: 446243721
 mas "Duplicate File Finder", id: 1032755628
 mas "Extractor", id: 1626704817
 mas "Find Any File", id: 402569179
-mas "GoPro Player", id: 1460836908
 mas "GoPro Quik", id: 561350520
 mas "GoPro Webcam", id: 6477835262
 mas "Images", id: 6499503497
-mas "JSONPeep", id: 1458969831
+mas "JSON Peep", id: 1458969831
 mas "Kindle", id: 302584613
 mas "loginsight", id: 6504901532
 mas "Menu Bar Calendar", id: 1558360383
