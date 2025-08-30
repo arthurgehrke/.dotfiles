@@ -25,9 +25,7 @@ return {
       },
     },
     config = function()
-      -- recommended settings from nvim-tree documentation
-
-      local signcolumn_width = 7 -- AKA gutter width
+      local signcolumn_width = 7
       local min_buffer_width = 110 + signcolumn_width
       local total_dual_panel_cols = min_buffer_width * 2 + 1
       local min_sidebar_width = 10

@@ -1,8 +1,16 @@
 return {
   { 'rebelot/kanagawa.nvim', lazy = false },
   {
-    'ellisonleao/gruvbox.nvim',
+    'eddyekofo94/gruvbox-flat.nvim',
+    lazy = false,
     enabled = true,
+    config = function()
+      vim.cmd([[colorscheme gruvbox-flat]])
+    end,
+  },
+  {
+    'ellisonleao/gruvbox.nvim',
+    enabled = false,
     lazy = false,
     -- disable = true,
     priority = 1000,

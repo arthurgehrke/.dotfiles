@@ -150,8 +150,50 @@ fzstash() {
 
 pyenv-brew-relink() {
     rm -f "$HOME/.pyenv/versions/*-brew"
-    for i in $(brew --cellar)/python* ; do
+    for i in "$(brew --cellar)"/python* ; do
         ln -s -f "$p" "$HOME/.pyenv/versions/${i##/*/}-brew"
     done
     pyenv rehash
 }
+
+fg() {
+    rg --color=always --line-number --no-heading --smart-case "${*:-}" -g '!{**/node_modules/*,**/.git/*,**lock,**/zig-cache/*}' | \
+    fzf \
+    --ansi \
+    --delimiter : \
+    --prompt="Live Grep ▶ " \
+    --preview "bat --color=always --style=plain {1} --highlight-line {2}" \
+    --preview-window "right:60%:wrap" \
+    --bind "enter:execute:(${EDITOR:-nvim} {1} +{2})"
+}
+
+ff() {
+    fdfind --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
+    fzf \
+    --prompt="Find File ▶ " \
+    --color dark \
+    --color fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#98c379 \
+    --color info:#98c379,prompt:#61afef,pointer:#e5c07b,marker:#e5c07b,spinner:#61afef,header:#61afef \
+    --preview "bat --color=always --style=plain {1}" \
+    --preview-window "right:60%:wrap" \
+    --bind "enter:execute:(${EDITOR:-nvim} {})"
+}
+
+fcf() {
+    fdfind --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
+    fzf \
+    --prompt="Find File ▶ " \
+    --color dark \
+    --color fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#98c379 \
+    --color info:#98c379,prompt:#61afef,pointer:#e5c07b,marker:#e5c07b,spinner:#61afef,header:#61afef \
+    --preview "bat --color=always --style=plain {1}" \
+    --preview-window "right:60%:wrap" \
+    --bind "enter:execute:(nvim --server ./nvim/nvimsocket --remote {})"
+}
+
+# Keep the default fg functionality
+fgg() {
+    [[ -z $(jobs) ]] && return 1
+    [ $# -gt 0 ] && builtin fg "$@" || builtin fg
+}
+

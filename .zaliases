@@ -161,6 +161,8 @@ alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictur
 alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias openhistory="nvim ~/.zhistory"
 
+alias fe="fzf -m --preview 'batcat --color=always {}' --bind 'enter:become(nvim {+})'"
+
 alias nom="rm -rf node_modules && npm cache clean && npm install"
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 

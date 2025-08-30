@@ -41,8 +41,15 @@ return {
         'rust_analyzer',
         'cssls',
         'sqlls',
+        'marksman',
+        'tailwindcss',
+        'ruby_lsp',
+        'dockerls',
       },
       automatic_installation = true,
+      pip = {
+        upgrade_pip = true,
+      },
     })
 
     mason_tool_installer.setup({
