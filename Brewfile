@@ -20,10 +20,12 @@ brew "automake"
 brew "awk"
 brew "awscli"
 brew "bash"
-brew "bash-completion"
+brew "bash-completion", link: false
 brew "bat"
 brew "bison"
 brew "broot"
+brew "cadaver"
+brew "censys"
 brew "chruby"
 brew "cmatrix"
 brew "curl"
@@ -56,7 +58,10 @@ brew "ghostscript"
 brew "git"
 brew "glow"
 brew "go"
+brew "gobuster"
 brew "hcxtools"
+brew "node"
+brew "heroku"
 brew "historian"
 brew "hstr"
 brew "htop"
@@ -84,18 +89,20 @@ brew "make"
 brew "mas"
 brew "masscan"
 brew "mcfly"
+brew "medusa"
 brew "mercurial"
 brew "micropython"
 brew "miller"
-brew "node"
 brew "mongosh"
 brew "ncdu"
 brew "neovim"
+brew "nikto"
 brew "nmap"
 brew "nnn"
 brew "pkgconf"
 brew "node-build"
 brew "nodenv"
+brew "nuclei"
 brew "nvimpager"
 brew "obfs4proxy"
 brew "openssh"
@@ -132,9 +139,12 @@ brew "rustscan"
 brew "rustup"
 brew "screen"
 brew "scrypt"
+brew "sherlock"
+brew "shodan"
 brew "sk"
 brew "sniffnet"
 brew "speedtest-cli"
+brew "spoof-mac"
 brew "sqlmap"
 brew "ssh-audit"
 brew "streamlink"
@@ -145,15 +155,17 @@ brew "tailscale"
 brew "telegram-downloader"
 brew "tesseract-lang"
 brew "the_silver_searcher"
+brew "theharvester"
 brew "tig"
 brew "tmux"
 brew "toilet"
-brew "tor", restart_service: :changed
+brew "tor"
 brew "torsocks"
 brew "trufflehog"
 brew "ugrep"
 brew "unar"
 brew "w3m"
+brew "webdav"
 brew "wget"
 brew "xh"
 brew "xsv"
@@ -170,43 +182,47 @@ brew "zssh"
 brew "ringohub/redis-cli/redis-cli"
 brew "thecasualcoder/stable/csvdiff"
 cask "alacritty"
-cask "alfred"
-cask "android-platform-tools"
+cask "alt-tab"
+cask "appcleaner"
+cask "applite"
+cask "bluestacks"
 cask "curiosity"
+cask "dnsmonitor"
 cask "docker-desktop"
 cask "docker-desktop"
-cask "fission"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
 cask "google-drive"
 cask "guitar-pro"
+cask "hyper"
 cask "ilok-license-manager"
 cask "jdownloader"
+cask "keepingyouawake"
 cask "kitty"
+cask "latest"
 cask "localxpose"
 cask "losslesscut"
 cask "ngrok"
 cask "obs"
 cask "onedrive"
-cask "qbittorrent"
+cask "pearcleaner"
 cask "qflipper"
 cask "redis-insight"
+cask "signal"
 cask "temurin@11"
 cask "temurin@17"
+cask "virtualbox"
 cask "wifispoof"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
 mas "BetterSnapTool", id: 417375580
 mas "Bitwarden", id: 1352778147
-mas "Code Reader - QR Reader", id: 1225393668
-mas "Disk Space Analyzer", id: 446243721
-mas "Duplicate File Finder", id: 1032755628
-mas "Extractor", id: 1626704817
+mas "DaVinci Resolve", id: 571213070
 mas "Find Any File", id: 402569179
+mas "GoPro Player", id: 1460836908
 mas "GoPro Quik", id: 561350520
 mas "GoPro Webcam", id: 6477835262
-mas "Images", id: 6499503497
-mas "JSON Peep", id: 1458969831
+mas "iMovie", id: 408981434
 mas "Kindle", id: 302584613
 mas "loginsight", id: 6504901532
 mas "Menu Bar Calendar", id: 1558360383
@@ -219,11 +235,9 @@ mas "PD", id: 510365488
 mas "PDF - Compress, Reduce and Optimize", id: 1023345938
 mas "Postman Interceptor", id: 6460587883
 mas "ProFind", id: 1441703569
-mas "QR Capture", id: 1369524274
 mas "SingleFile", id: 6444322545
 mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
-mas "Tabs to Links", id: 1451408472
 mas "Telegram", id: 747648890
 mas "UPDF", id: 1619925971
 mas "Webcam Recorder", id: 1508067444

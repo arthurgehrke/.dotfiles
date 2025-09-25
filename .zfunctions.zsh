@@ -167,18 +167,6 @@ fg() {
     --bind "enter:execute:(${EDITOR:-nvim} {1} +{2})"
 }
 
-ff() {
-    fdfind --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
-    fzf \
-    --prompt="Find File ▶ " \
-    --color dark \
-    --color fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#98c379 \
-    --color info:#98c379,prompt:#61afef,pointer:#e5c07b,marker:#e5c07b,spinner:#61afef,header:#61afef \
-    --preview "bat --color=always --style=plain {1}" \
-    --preview-window "right:60%:wrap" \
-    --bind "enter:execute:(${EDITOR:-nvim} {})"
-}
-
 fcf() {
     fdfind --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
     fzf \

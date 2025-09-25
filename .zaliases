@@ -6,6 +6,8 @@ alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias execshell="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
 
+alias dehashed='curl -s -u "progeny.tiles-3g@icloud.com:xS2D4+W++wl2s6ONgTZpJUc4hxpRv4xl67KcgT7RlQM4w0ScPgysjWk=" "https://api.dehashed.com/search?query="'
+
 alias torpath='cd /opt/homebrew/etc/tor'
 
 # python

@@ -95,9 +95,9 @@ fi
 # History
 ##############################################################################
 export HISTFILE=~/.zsh_history
-export HISTSIZE=500000
-export SAVEHIST=500000
-export HISTFILESIZE=500000
+export HISTSIZE=500000000
+export SAVEHIST=500000000
+export HISTFILESIZE=50000000
 # export HISTTIMEFORMAT="[%F %T] "
 # export HIST_STAMPS="yyyy-mm-dd"
 
