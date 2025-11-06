@@ -1,6 +1,7 @@
 tap "brewsci/base"
 tap "buo/cask-upgrade"
 tap "harelba/q"
+tap "morantron/tmux-fingers"
 tap "ringohub/redis-cli"
 tap "thecasualcoder/stable"
 tap "xpipe-io/tap"
@@ -34,6 +35,9 @@ brew "libpq", link: true
 brew "php"
 brew "composer"
 brew "coreutils"
+brew "libyaml"
+brew "llvm"
+brew "pkgconf"
 brew "csvkit"
 brew "csvtk"
 brew "diff-so-fancy"
@@ -41,7 +45,7 @@ brew "dnsmap"
 brew "docker"
 brew "dsq"
 brew "dust"
-brew "libyaml"
+brew "eg-examples"
 brew "esptool"
 brew "exiftool"
 brew "eza"
@@ -50,6 +54,7 @@ brew "fclones"
 brew "fd"
 brew "feh"
 brew "ffmpeg"
+brew "ffuf"
 brew "fzf"
 brew "gawk"
 brew "geckodriver"
@@ -73,6 +78,7 @@ brew "icu4c@76"
 brew "libheif"
 brew "libraw"
 brew "imagemagick"
+brew "instalooter"
 brew "iproute2mac"
 brew "jenv"
 brew "jq"
@@ -81,8 +87,10 @@ brew "lazygit"
 brew "legit"
 brew "libffi"
 brew "libpcap"
+brew "libtommath"
 brew "lnav"
 brew "lsd"
+brew "lsusb"
 brew "lynx"
 brew "m-cli"
 brew "make"
@@ -93,13 +101,14 @@ brew "medusa"
 brew "mercurial"
 brew "micropython"
 brew "miller"
+brew "mkcert"
 brew "mongosh"
+brew "navi"
 brew "ncdu"
 brew "neovim"
 brew "nikto"
 brew "nmap"
 brew "nnn"
-brew "pkgconf"
 brew "node-build"
 brew "nodenv"
 brew "nuclei"
@@ -150,13 +159,16 @@ brew "ssh-audit"
 brew "streamlink"
 brew "stripe-cli"
 brew "stylua"
+brew "subfinder"
 brew "superfile"
 brew "tailscale"
 brew "telegram-downloader"
+brew "termshark"
 brew "tesseract-lang"
 brew "the_silver_searcher"
 brew "theharvester"
 brew "tig"
+brew "tldr"
 brew "tmux"
 brew "toilet"
 brew "tor"
@@ -165,6 +177,7 @@ brew "trufflehog"
 brew "ugrep"
 brew "unar"
 brew "w3m"
+brew "waybackpy"
 brew "webdav"
 brew "wget"
 brew "xh"
@@ -179,17 +192,19 @@ brew "zsh-autosuggestions"
 brew "zsh-history-substring-search"
 brew "zsh-syntax-highlighting"
 brew "zssh"
+brew "morantron/tmux-fingers/tmux-fingers"
 brew "ringohub/redis-cli/redis-cli"
 brew "thecasualcoder/stable/csvdiff"
 cask "alacritty"
-cask "alt-tab"
-cask "appcleaner"
-cask "applite"
 cask "bluestacks"
+cask "burp-suite"
+cask "charles"
 cask "curiosity"
-cask "dnsmonitor"
+cask "devtoys"
 cask "docker-desktop"
 cask "docker-desktop"
+cask "dropbox"
+cask "ferdium"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
 cask "google-drive"
@@ -199,38 +214,47 @@ cask "ilok-license-manager"
 cask "jdownloader"
 cask "keepingyouawake"
 cask "kitty"
-cask "latest"
 cask "localxpose"
 cask "losslesscut"
+cask "maltego"
+cask "microsoft-edge"
+cask "microsoft-outlook"
+cask "microsoft-teams"
+cask "modern-csv"
+cask "netspot"
 cask "ngrok"
+cask "notunes"
 cask "obs"
 cask "onedrive"
-cask "pearcleaner"
 cask "qflipper"
 cask "redis-insight"
 cask "signal"
 cask "temurin@11"
 cask "temurin@17"
-cask "virtualbox"
 cask "wifispoof"
+cask "wireshark-app"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
 mas "BetterSnapTool", id: 417375580
 mas "Bitwarden", id: 1352778147
-mas "DaVinci Resolve", id: 571213070
+mas "CodeRunner", id: 955297617
+mas "Copy 'Em", id: 876540291
+mas "Extractor", id: 1626704817
 mas "Find Any File", id: 402569179
 mas "GoPro Player", id: 1460836908
 mas "GoPro Quik", id: 561350520
 mas "GoPro Webcam", id: 6477835262
-mas "iMovie", id: 408981434
-mas "Kindle", id: 302584613
+mas "Images", id: 6499503497
 mas "loginsight", id: 6504901532
+mas "Magnet", id: 441258766
+mas "Mapper", id: 1589391989
 mas "Menu Bar Calendar", id: 1558360383
 mas "Microsoft Excel", id: 462058435
-mas "Microsoft Outlook", id: 985367838
 mas "Microsoft Word", id: 462054704
+mas "Mirror Magnet", id: 1563698880
 mas "Numbers", id: 409203825
 mas "Parallels Desktop", id: 1085114709
+mas "Patterns", id: 429449079
 mas "PD", id: 510365488
 mas "PDF - Compress, Reduce and Optimize", id: 1023345938
 mas "Postman Interceptor", id: 6460587883
@@ -240,7 +264,9 @@ mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
 mas "Telegram", id: 747648890
 mas "UPDF", id: 1619925971
+mas "Vidimote", id: 1585702412
 mas "Webcam Recorder", id: 1508067444
+mas "WeTransfer", id: 1114922065
 mas "WhatsApp", id: 310633997
 mas "Wipr", id: 1662217862
 mas "xIncognito", id: 1604606074

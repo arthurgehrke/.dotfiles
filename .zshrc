@@ -23,7 +23,7 @@ compinit
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
 source "$HOME"/.zfunctions.zsh
-source "$HOME"/.themes/zsh/minimalist/.p10k.zsh
+source "$HOME"/.themes/zsh/simple-theme/.p10k.zsh
 
 source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
@@ -296,15 +296,15 @@ if command -v composer &>/dev/null; then
   export PATH="$HOME/.composer/vendor/bin:$PATH"
 fi
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1                                             # My personal prompt has it's own display for Python virtualenvs.
-
+# Pyenv (python)
+# pipenv
 if command -v pipenv &>/dev/null; then
-  export PIPENV_DONT_LOAD_ENV=1                                                   # Direnv manages our '.env', tell Pipenv not to load it.
-  export PIPENV_IGNORE_VIRTUALENVS=1                                              # Don't try and detect running in an existing Python virtualenv.
+  # export PIPENV_DONT_LOAD_ENV=1                                                   # Direnv manages our '.env', tell Pipenv not to load it.
+  # export PIPENV_IGNORE_VIRTUALENVS=1                                              # Don't try and detect running in an existing Python virtualenv.
   export PIPENV_VENV_IN_PROJECT=1                                                 # Place Pipenv virtualenvs in '.venv' directories.
-  export PIP_REQUIRE_VIRTUALENV=1                                                 # Require that Pip is run inside a virtualenv.
- eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+  # export PIP_REQUIRE_VIRTUALENV=1                                                 # Require that Pip is run inside a virtualenv.
 fi
+
 
 # nodenv (Node.js)
 if command -v nodenv &>/dev/null; then
@@ -319,7 +319,6 @@ if command -v pyenv &>/dev/null; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
-
 # Rustup (via Homebrew)
 if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"

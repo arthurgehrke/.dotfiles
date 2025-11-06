@@ -5,9 +5,12 @@ return {
   dependencies = {
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+
+    { 'mason-org/mason.nvim', opts = {} },
+    'neovim/nvim-lspconfig',
   },
   config = function()
-    local lspconfig = require('lspconfig')
+    -- local lspconfig = require('lspconfig')
     local mason = require('mason')
     local mason_lspconfig = require('mason-lspconfig')
     local mason_tool_installer = require('mason-tool-installer')
@@ -25,38 +28,15 @@ return {
       },
     })
 
-    mason_lspconfig.setup({
-      ensure_installed = {
-        'bashls',
-        'pyright',
-        'pylsp',
-        'rust_analyzer',
-        'ts_ls',
-        'jsonls',
-        'eslint',
-        'html',
-        'lua_ls',
-        'jqls',
-        'yamlls',
-        'rust_analyzer',
-        'cssls',
-        'sqlls',
-        'marksman',
-        'tailwindcss',
-        'ruby_lsp',
-        'dockerls',
-      },
-      automatic_installation = true,
-      pip = {
-        upgrade_pip = true,
-      },
-    })
+require("mason-lspconfig").setup {
+    ensure_installed = { "lua_ls", "rust_analyzer" },
+}
 
     mason_tool_installer.setup({
       ensure_installed = {
         'shfmt',
         'black',
-        'stylua',
+        -- 'stylua',
         'prettierd',
         'selene',
         'shellcheck',
@@ -74,9 +54,10 @@ return {
       },
     })
 
-    local servers = mason_lspconfig.get_installed_servers()
-    for _, server_name in ipairs(servers) do
-      lspconfig[server_name].setup({})
-    end
+    -- local servers = mason_lspconfig.get_installed_servers()
+
+    -- for _, server_name in ipairs(servers) do
+    --   lspconfig[server_name].setup({})
+    -- end
   end,
 }
