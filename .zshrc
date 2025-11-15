@@ -1,3 +1,4 @@
+# zmodload zsh/zprof
 # Hopefully this loads powerlevel10k theme faster
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -17,8 +18,12 @@ fi
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
-autoload -Uz compinit
-compinit
+autoload -Uz compinit 
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+	compinit;
+else
+	compinit -C;
+fi;
 
 source "$HOME"/.zaliases
 source "$HOME"/.zprofile
@@ -29,6 +34,10 @@ source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
 source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+if [ -f "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh" ]; then
+  source "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh"
+fi
 
 ##############################################################################
 # Prompt & Completion
@@ -175,6 +184,9 @@ bindkey '^R' fzf-history-widget
 
 zle -N edit-command-line
 bindkey -e '^x' edit-command-line
+
+bindkey -e '^j' history-substring-search-up
+bindkey -e '^k' history-substring-search-down
 
 # Esc + s
 _quote-previous-word-in-single() {
@@ -345,3 +357,4 @@ if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
     chruby ruby-3.4.2
   fi
 fi
+# zprof

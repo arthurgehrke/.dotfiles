@@ -78,6 +78,13 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = { '.env', '*.env' },
+  callback = function()
+    vim.bo.filetype = 'dotenv'
+  end,
+})
+
 local filetypes = {
   { ext = '*.json', type = 'json' },
   { ext = '*.py', type = 'python' },
