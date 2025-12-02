@@ -1,7 +1,7 @@
 return {
   'R-nvim/R.nvim',
   lazy = false,
-  enabled = true,
+  enabled = false,
   version = '~0.1.0',
   ft = { 'r', 'rmd' },
   keys = {

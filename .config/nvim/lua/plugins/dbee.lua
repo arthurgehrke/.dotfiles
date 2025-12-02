@@ -1,6 +1,7 @@
 return {
   'kndndrj/nvim-dbee',
   lazy = false,
+  enabled = false,
   dependencies = { 'MunifTanjim/nui.nvim' },
   build = function()
     require('dbee').install()

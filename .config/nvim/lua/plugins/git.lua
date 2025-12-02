@@ -68,9 +68,14 @@ return {
         vim.keymap.set('n', '<space>hS', '<cmd>Gitsigns stage_buffer<CR>', opts('Stage Buffer'))
         vim.keymap.set('n', '<space>hU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
         vim.keymap.set('n', '<space>hu', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
-        vim.keymap.set('n', '<leader>tb', '<cmd>Gitsigns toggle_current_line_blame<CR>', opts('Toggle Current Line Blame'))
+        vim.keymap.set(
+          'n',
+          '<leader>tb',
+          '<cmd>Gitsigns toggle_current_line_blame<CR>',
+          opts('Toggle Current Line Blame')
+        )
 
-        vim.keymap.set({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+        vim.keymap.set({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 
         vim.keymap.set('v', '<space>hr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
         vim.keymap.set('v', '<space>hs', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
@@ -88,6 +93,11 @@ return {
           topdelete = { text = '‾' },
           changedelete = { text = '~' },
           untracked = { text = '┆' },
+          -- add = { text = '+' },
+          -- change = { text = '~' },
+          -- delete = { text = '_' },
+          -- topdelete = { text = '‾' },
+          -- changedelete = { text = '~' },
         },
         -- signcolumn = true,
         -- numhl = false,

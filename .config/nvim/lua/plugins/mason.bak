@@ -28,9 +28,10 @@ return {
       },
     })
 
-require("mason-lspconfig").setup {
-    ensure_installed = { "lua_ls", "rust_analyzer" },
-}
+    require("mason-lspconfig").setup {
+      ensure_installed = { "lua_ls", "rust_analyzer" },
+
+    }
 
     mason_tool_installer.setup({
       ensure_installed = {

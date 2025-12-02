@@ -132,10 +132,6 @@ vim.opt.visualbell = false
 vim.opt.statusline = vim.opt.statusline:get() .. ' [%{&fileformat}]'
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
--- vim.opt.foldnestmax = 10
--- vim.opt.foldlevelstart = 10
--- vim.opt.foldlevel = 2
--- vim.opt.foldlevel = 999
 vim.opt.foldenable = false
 
 vim.opt.termguicolors = true

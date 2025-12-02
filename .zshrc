@@ -325,6 +325,7 @@ if command -v nodenv &>/dev/null; then
 fi
 
 if command -v pyenv &>/dev/null; then
+  export NODENV_VERSION=20.7.0
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH=$(pyenv root)/shims:$PATH
   # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"

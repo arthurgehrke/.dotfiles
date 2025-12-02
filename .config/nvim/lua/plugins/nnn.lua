@@ -1,6 +1,7 @@
 return {
   'luukvbaal/nnn.nvim',
   lazy = false,
+  enabled = false,
   keys = {
     {
       '<leader>n',
