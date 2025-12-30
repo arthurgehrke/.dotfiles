@@ -68,6 +68,7 @@ brew "geckodriver"
 brew "gh"
 brew "ghostscript"
 brew "git"
+brew "git-delta"
 brew "glow"
 brew "go"
 brew "gobuster"
@@ -210,17 +211,14 @@ brew "morantron/tmux-fingers/tmux-fingers"
 brew "ringohub/redis-cli/redis-cli"
 brew "thecasualcoder/stable/csvdiff"
 cask "alacritty"
-cask "alt-tab"
 cask "bluestacks"
 cask "burp-suite"
 cask "charles"
-cask "devtoys"
 cask "dnsmonitor"
 cask "docker-desktop"
 cask "docker-desktop"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
-cask "genymotion"
 cask "google-drive"
 cask "guitar-pro"
 cask "hyper"
@@ -244,7 +242,6 @@ cask "postman-cli"
 cask "qflipper"
 cask "redis-insight"
 cask "signal"
-cask "studio-3t"
 cask "temurin@11"
 cask "temurin@17"
 cask "vlc"
@@ -252,12 +249,12 @@ cask "wifispoof"
 cask "wireshark-app"
 mas "AdBlock Pro", id: 1018301773
 mas "AdGuard for Safari", id: 1440147259
+mas "Amphetamine", id: 937984704
 mas "BetterSnapTool", id: 417375580
 mas "Bitwarden", id: 1352778147
 mas "CodeRunner", id: 955297617
 mas "Compressor", id: 424390742
 mas "Cookie DNT", id: 1594049656
-mas "DuckDuckGo 2", id: 663592361
 mas "Extractor", id: 1626704817
 mas "Final Cut Pro", id: 424389933
 mas "Find Any File", id: 402569179
@@ -266,14 +263,11 @@ mas "HP", id: 1474276998
 mas "Images", id: 6499503497
 mas "Logic Pro", id: 634148309
 mas "loginsight", id: 6504901532
-mas "Maccy", id: 1527619437
 mas "Magnet", id: 441258766
 mas "MainStage", id: 634159523
-mas "Mapper", id: 1589391989
 mas "Menu Bar Calendar", id: 1558360383
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft Word", id: 462054704
-mas "Mirror Magnet", id: 1563698880
 mas "Motion", id: 434290957
 mas "Numbers", id: 409203825
 mas "Parallels Desktop", id: 1085114709
