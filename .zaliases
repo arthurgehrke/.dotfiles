@@ -178,6 +178,14 @@ alias npmlist="npm list --depth=0"
 # brew install keychain
 if hash keychain 2>/dev/null; then
   alias ssh-agent-start='eval "$(keychain --eval)"; for k in ~/.ssh/*.pem; do [[ -f "$k" ]] && ssh-add "$k" 2>/dev/null; done'
+  # alias ssh-agent-start='eval "$(keychain --eval --agents ssh)"; \
+  #   for k in ~/.ssh/*; do \
+  #     [[ -f "$k" ]] || continue; \
+  #     [[ "$k" == *.pub ]] && continue; \
+  #     [[ "$k" == *known_hosts* ]] && continue; \
+  #     [[ "$k" == */config ]] && continue; \
+  #     ssh-add "$k" 2>/dev/null; \
+  #   done'
   alias ssh-agent-stop='keychain --stop all'
 fi
 

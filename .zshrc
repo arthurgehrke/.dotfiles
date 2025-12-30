@@ -1,6 +1,3 @@
-# zmodload zsh/zprof
-# Hopefully this loads powerlevel10k theme faster
-
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -277,9 +274,9 @@ fi
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH:/bin
 
-export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
+# export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
+# export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
@@ -311,10 +308,10 @@ fi
 # Pyenv (python)
 # pipenv
 if command -v pipenv &>/dev/null; then
-  # export PIPENV_DONT_LOAD_ENV=1                                                   # Direnv manages our '.env', tell Pipenv not to load it.
-  # export PIPENV_IGNORE_VIRTUALENVS=1                                              # Don't try and detect running in an existing Python virtualenv.
-  export PIPENV_VENV_IN_PROJECT=1                                                 # Place Pipenv virtualenvs in '.venv' directories.
-  # export PIP_REQUIRE_VIRTUALENV=1                                                 # Require that Pip is run inside a virtualenv.
+  # export PIPENV_DONT_LOAD_ENV=1                                                   
+  # export PIPENV_IGNORE_VIRTUALENVS=1                                              
+  export PIPENV_VENV_IN_PROJECT=1                                                 
+  # export PIP_REQUIRE_VIRTUALENV=1                                                 
 fi
 
 

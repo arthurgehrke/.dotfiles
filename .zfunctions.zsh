@@ -23,7 +23,7 @@ function irg() {
           --height 40% \
           --layout=reverse \
           --delimiter : \
-          --preview-window 'up,70%,border-bottom,~2,+{2}+2/2' \
+          --preview-window 'up,50%,border-bottom,~2,+{2}+2/2' \
           --preview 'bat --style=full --color=always --highlight-line {2} {1}' | awk -F: '{print $1, $2}'
   )"
 
