@@ -1,3 +1,6 @@
+# detect slow issues on startuptime on zsh
+# zmodload zsh/zprof
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -108,12 +111,12 @@ export HISTFILESIZE=50000000
 # export HIST_STAMPS="yyyy-mm-dd"
 
 HISTCONTROL=ignoredups
-setopt HISTIGNORESPACE
 setopt BANG_HIST
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE # Do not record an event starting with a space.
-setopt HIST_SAVE_NO_DUPS
+# setopt HIST_EXPIRE_DUPS_FIRST
+# setopt HIST_IGNORE_ALL_DUPS
+# setopt HIST_IGNORE_SPACE 
+# setopt HIST_SAVE_NO_DUPS
+setopt EXTENDED_HISTORY
 setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
 setopt INTERACTIVECOMMENTS
@@ -137,12 +140,17 @@ setopt NO_NOMATCH
 
 unsetopt GLOB_COMPLETE
 unsetopt MENU_COMPLETE
-zstyle ':completion:*' menu select
-zstyle ':completion:*' completer _complete
+# zstyle ':completion:*' menu select
+zstyle ':completion:*' menu select=2
+# zstyle ':completion:*' completer _complete
+zstyle ':completion:*' completer _complete _approximate
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 # zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+l:|=* r:|=*'
 zstyle ':completion::complete:*' use-cache on
 zstyle ':completion::complete:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' file-sort modification
+zstyle ':completion:*' sort false
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 ##############################################################################
 # KeyMappings
@@ -282,38 +290,24 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rbenv (Ruby)
 if command -v rbenv &>/dev/null; then
-  # export RBENV_ROOT=~/.rbenv
-  eval "$(rbenv init -)"
-  export PATH=$HOME/.rbenv/shims:$PATH
-  export RBENV_ROOT="$(brew --prefix rbenv)"
-  export GEM_HOME="$(brew --prefix)/opt/gems"
-  export GEM_PATH="$(brew --prefix)/opt/gems"
+  export RBENV_ROOT="$HOME/.rbenv"
+  export PATH="$RBENV_ROOT/bin:$PATH"
+  eval "$(rbenv init - --no-rehash)"
 fi
 
 # jenv (Java)
 # export JAVA_HOME="/opt/homebrew/opt/openjdk@11/"
-export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+# export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 if command -v jenv &>/dev/null; then
   export PATH="$HOME/.jenv/bin:$PATH"
-  # eval "$(jenv init - --no-rehash)"
-  eval "$(jenv init -)"
+  eval "$(jenv init - --no-rehash)"
 fi
 
 # Composer (PHP)
 if command -v composer &>/dev/null; then
   export PATH="$HOME/.composer/vendor/bin:$PATH"
 fi
-
-# Pyenv (python)
-# pipenv
-if command -v pipenv &>/dev/null; then
-  # export PIPENV_DONT_LOAD_ENV=1                                                   
-  # export PIPENV_IGNORE_VIRTUALENVS=1                                              
-  export PIPENV_VENV_IN_PROJECT=1                                                 
-  # export PIP_REQUIRE_VIRTUALENV=1                                                 
-fi
-
 
 # nodenv (Node.js)
 if command -v nodenv &>/dev/null; then
@@ -327,7 +321,7 @@ if command -v pyenv &>/dev/null; then
   export PATH=$(pyenv root)/shims:$PATH
   # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  # eval "$(pyenv virtualenv-init -)"
 fi
 # Rustup (via Homebrew)
 if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
@@ -345,14 +339,15 @@ if command -v cargo &>/dev/null; then
   fi
 fi
 
-# chruby (Ruby)
-if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
-  source "/opt/homebrew/opt/chruby/share/chruby/chruby.sh"
-  source "/opt/homebrew/opt/chruby/share/chruby/auto.sh"
+# # chruby (Ruby)
+# if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
+#   source "/opt/homebrew/opt/chruby/share/chruby/chruby.sh"
+#   source "/opt/homebrew/opt/chruby/share/chruby/auto.sh"
 
-  # Definir versão padrão do Ruby, se necessário
-  if command -v ruby &>/dev/null; then
-    chruby ruby-3.4.2
-  fi
-fi
+#   # Definir versão padrão do Ruby, se necessário
+#   if command -v ruby &>/dev/null; then
+#     chruby ruby-3.4.2
+#   fi
+# fi
+
 # zprof
