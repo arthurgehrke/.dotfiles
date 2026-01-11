@@ -196,22 +196,8 @@ rgcsv() {
 }
 
 turbo_csv() {
-    # CONFIGURAÇÃO DE PERFORMANCE
-    # LIMIT: Máximo de linhas mostradas no fzf por vez. 
-    # 300 é o suficiente para ver se achou o que queria. 
-    # Isso IMPEDE o travamento.
     local LIMIT=300
-
-    # Comando base do Ripgrep
-    # -F: Texto exato (fundamental para os espaços)
-    # --max-count: Para de buscar no arquivo após N matches (economiza disco)
     local rg_base="rg --column --line-number --no-heading --color=always --smart-case -F"
-
-    # Comando de Preview OTIMIZADO
-    # O truque aqui é usar o --line-range do bat duas vezes:
-    # 1:1 -> Mostra sempre a linha 1 (Cabeçalho do CSV)
-    # {2}:+2 -> Mostra a linha do match e mais 2 abaixo para contexto
-    # Sem pipes, sem sed, sem xsv. Apenas leitura crua e rápida.
     local preview_cmd='bat --style=header,grid --color=always --line-range 1:1 --line-range {2}:+2 {1}'
 
     local selection=$(
@@ -229,7 +215,36 @@ turbo_csv() {
         local file=$(echo "$selection" | cut -d: -f1)
         local line=$(echo "$selection" | cut -d: -f2)
         
-        # Abre o Neovim na linha exata
         nvim "$file" "+$line" -c "normal! zz"
+    fi
+}
+
+udump() {
+    local term="$1"
+
+    if [[ -z "$term" ]]; then
+        echo -n "Digite o termo exato a ser pesquisado: "
+        read term
+    fi
+
+    if [[ -z "$term" ]]; then
+        echo "❌ Empty search."
+        return 1
+    fi
+
+    local safe_name=$(echo "$term" | tr ' ' '_')
+    local output_file="./result_${safe_name}.txt"
+
+    echo "🔍 Buscando por: '$term'..."
+    
+    ugrep -F -r -n -I --color=never "$term" . > "$output_file"
+
+    if [[ -s "$output_file" ]]; then
+        local count=$(wc -l < "$output_file" | tr -d ' ')
+        echo "✅ Success! $count saved on:"
+        echo "📄 $output_file"
+    else
+        echo "⚠️  No result found."
+        rm "$output_file" # Remove o arquivo vazio para não poluir
     fi
 }
