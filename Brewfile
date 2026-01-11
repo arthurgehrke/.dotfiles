@@ -1,16 +1,9 @@
-tap "brewsci/base"
-tap "buo/cask-upgrade"
-tap "harelba/q"
-tap "morantron/tmux-fingers"
-tap "ringohub/redis-cli"
-tap "thecasualcoder/stable"
-tap "xpipe-io/tap"
 brew "ack"
+brew "xz"
 brew "openssl@3"
 brew "readline"
 brew "sqlite"
 brew "aircrack-ng"
-brew "xz"
 brew "node"
 brew "angular-cli"
 brew "asciinema"
@@ -20,7 +13,6 @@ brew "aspell"
 brew "atlas"
 brew "bash"
 brew "autoenv"
-brew "autojump"
 brew "automake"
 brew "awk"
 brew "awscli"
@@ -29,12 +21,10 @@ brew "bat"
 brew "bison"
 brew "broot"
 brew "cadaver"
-brew "python@3.14"
 brew "censys"
-brew "chruby"
-brew "cloudflared"
 brew "cmatrix"
 brew "curl"
+brew "dav1d"
 brew "libavif"
 brew "libpq", link: true
 brew "php"
@@ -47,6 +37,9 @@ brew "pkgconf"
 brew "csvkit"
 brew "csvq"
 brew "csvtk"
+brew "ffmpeg"
+brew "libheif"
+brew "czkawka"
 brew "diff-so-fancy"
 brew "dnsmap"
 brew "docker"
@@ -60,7 +53,6 @@ brew "fastfetch"
 brew "fclones"
 brew "fd"
 brew "feh"
-brew "ffmpeg"
 brew "ffuf"
 brew "fzf"
 brew "gawk"
@@ -77,12 +69,10 @@ brew "heroku"
 brew "historian"
 brew "hstr"
 brew "htop"
-brew "httpie"
 brew "httrack"
 brew "hurl"
 brew "hydra"
 brew "icu4c@76"
-brew "libheif"
 brew "libraw"
 brew "imagemagick"
 brew "instalooter"
@@ -194,12 +184,12 @@ brew "w3m"
 brew "waybackpy"
 brew "webdav"
 brew "wget"
+brew "witr"
 brew "xh"
 brew "xsv"
 brew "yarn"
 brew "yazi"
 brew "yt-dlp"
-brew "z"
 brew "zoxide"
 brew "zsh"
 brew "zsh-autosuggestions"
@@ -219,6 +209,7 @@ cask "docker-desktop"
 cask "docker-desktop"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
+cask "font-ubuntu-mono-nerd-font"
 cask "google-drive"
 cask "guitar-pro"
 cask "hyper"
@@ -235,10 +226,11 @@ cask "microsoft-outlook"
 cask "microsoft-teams"
 cask "mitmproxy"
 cask "modern-csv"
+cask "motrix"
 cask "netspot"
 cask "ngrok"
 cask "onedrive"
-cask "postman-cli"
+cask "pearcleaner"
 cask "qflipper"
 cask "redis-insight"
 cask "signal"
@@ -255,12 +247,16 @@ mas "Bitwarden", id: 1352778147
 mas "CodeRunner", id: 955297617
 mas "Compressor", id: 424390742
 mas "Cookie DNT", id: 1594049656
+mas "Easy CSV Editor", id: 1171346381
 mas "Extractor", id: 1626704817
 mas "Final Cut Pro", id: 424389933
 mas "Find Any File", id: 402569179
+mas "Fonti", id: 6738046462
+mas "FreeChat", id: 1084346074
 mas "GoPro Webcam", id: 6477835262
 mas "HP", id: 1474276998
 mas "Images", id: 6499503497
+mas "JuxtaText", id: 6504801865
 mas "Logic Pro", id: 634148309
 mas "loginsight", id: 6504901532
 mas "Magnet", id: 441258766
@@ -274,6 +270,7 @@ mas "Parallels Desktop", id: 1085114709
 mas "Patterns", id: 429449079
 mas "PD", id: 510365488
 mas "PDF - Compress, Reduce and Optimize", id: 1023345938
+mas "Pixelmator Pro", id: 1289583905
 mas "Postman Interceptor", id: 6460587883
 mas "ProFind", id: 1441703569
 mas "Shadowrocket", id: 932747118
@@ -281,10 +278,8 @@ mas "SingleFile", id: 6444322545
 mas "Super Agent", id: 1568262835
 mas "Surfshark", id: 1437809329
 mas "Telegram", id: 747648890
-mas "TempBox", id: 6575345984
 mas "UPDF", id: 1619925971
 mas "Webcam Recorder", id: 1508067444
-mas "WhatsApp", id: 310633997
 mas "Wipr", id: 1662217862
 mas "xIncognito", id: 1604606074
 mas "xReload", id: 1588834516

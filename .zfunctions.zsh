@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-# shellcheck shell=bash
 
 function irg() {
   local file
@@ -185,3 +184,52 @@ fgg() {
     [ $# -gt 0 ] && builtin fg "$@" || builtin fg
 }
 
+rgcsv() {
+  RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case -F "
+
+  fzf --disabled --ansi --bind "start:reload:$RG_PREFIX {q}" \
+      --bind "change:reload:$RG_PREFIX {q} || true" \
+      --delimiter : \
+      --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' \
+      --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+      --prompt 'Search exactly> '
+}
+
+turbo_csv() {
+    # CONFIGURAÇÃO DE PERFORMANCE
+    # LIMIT: Máximo de linhas mostradas no fzf por vez. 
+    # 300 é o suficiente para ver se achou o que queria. 
+    # Isso IMPEDE o travamento.
+    local LIMIT=300
+
+    # Comando base do Ripgrep
+    # -F: Texto exato (fundamental para os espaços)
+    # --max-count: Para de buscar no arquivo após N matches (economiza disco)
+    local rg_base="rg --column --line-number --no-heading --color=always --smart-case -F"
+
+    # Comando de Preview OTIMIZADO
+    # O truque aqui é usar o --line-range do bat duas vezes:
+    # 1:1 -> Mostra sempre a linha 1 (Cabeçalho do CSV)
+    # {2}:+2 -> Mostra a linha do match e mais 2 abaixo para contexto
+    # Sem pipes, sem sed, sem xsv. Apenas leitura crua e rápida.
+    local preview_cmd='bat --style=header,grid --color=always --line-range 1:1 --line-range {2}:+2 {1}'
+
+    local selection=$(
+        fzf --disabled --ansi \
+            --bind "start:reload:$rg_base {q} | head -n $LIMIT" \
+            --bind "change:reload:$rg_base {q} | head -n $LIMIT || true" \
+            --delimiter : \
+            --preview "$preview_cmd" \
+            --preview-window 'up,50%,border-bottom' \
+            --prompt '🚀 Fast CSV > ' \
+            --header 'Digite sua frase com espaços. Mostrando top 300 resultados.'
+    )
+
+    if [[ -n "$selection" ]]; then
+        local file=$(echo "$selection" | cut -d: -f1)
+        local line=$(echo "$selection" | cut -d: -f2)
+        
+        # Abre o Neovim na linha exata
+        nvim "$file" "+$line" -c "normal! zz"
+    fi
+}
