@@ -1,0 +1,39 @@
+options.wrap = false
+options.disp_date_fmt = '%m/%d/%Y'
+options.header_rows = 1
+options.default_width = 20
+Sheet.knownCols.timestamp.type = date
+options.motd_url = ""
+
+bindkey('ctrl+r', 'reload-sheet')
+BaseSheet.bindkey('J', 'go-down 10')
+BaseSheet.bindkey('K', 'go-up 10')
+BaseSheet.bindkey('0', 'go-col-first') 
+BaseSheet.bindkey('$', 'go-col-last')   
+BaseSheet.bindkey('gg', 'go-top')     
+BaseSheet.bindkey('G',  'go-bottom')   
+
+options.color_column_sep = "bold black" 
+options.color_status = "bold white on black"
+options.color_header = "bold green"
+options.color_top_status = "bold black"
+options.color_current_row = "bold black on yellow"
+options.color_selected_row = "bold white on red"
+options.color_null = "blue"
+options.color_error = "bold red"
+options.color_key_col = "bold cyan"
+options.disp_column_sep = "│"
+
+BaseSheet.addCommand('go-fast-right', 'cursorColIndex += 5', 'Move 5 columns right')
+BaseSheet.addCommand('go-fast-left',  'cursorColIndex -= 5', 'Move 5 columns left')
+
+BaseSheet.bindkey('w', 'go-fast-right')
+BaseSheet.bindkey('b', 'go-fast-left')
+
+BaseSheet.bindkey('e', 'go-fast-right') 
+BaseSheet.bindkey('i', 'edit-cell')     
+
+BaseSheet.bindkey('ge', 'go-fast-left')
+
+BaseSheet.addCommand('goto-col-num', 'cursorColIndex = int(input("Go to Col #: "))', 'Jump to specific column index')
+BaseSheet.bindkey('go', 'goto-col-num')
