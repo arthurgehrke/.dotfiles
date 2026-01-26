@@ -105,3 +105,55 @@ for _, ft in ipairs(filetypes) do
     command = 'set filetype=' .. ft.type,
   })
 end
+
+vim.api.nvim_create_user_command('RemoveComments', function()
+  local ft = vim.bo.filetype
+
+  local patterns = {
+    c = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    cpp = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    rust = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    go = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    javascript = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    typescript = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    javascriptreact = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    typescriptreact = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    java = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    php = { [[/\*\_.\{-}\*/]], [[//.*]] },
+    python = { [[#.*]] },
+    sh = { [[#.*]] },
+    bash = { [[#.*]] },
+    zsh = { [[#.*]] },
+    ruby = { [[=begin\_.\{-}=end]], [[#.*]] },
+    yaml = { [[#.*]] },
+    toml = { [[#.*]] },
+    dockerfile = { [[#.*]] },
+    makefile = { [[#.*]] },
+    lua = { [=[--\[\[\_.\{-}\]\]]=], [[--.*]] },
+    html = { [[]] },
+    xml = { [[]] },
+    markdown = { [[]] },
+    vim = { [[^\s*".*]] },
+    css = { [[/\*\_.\{-}\*/]] },
+    scss = { [[/\*\_.\{-}\*/]], [[//.*]] },
+  }
+
+  local pattern_list = patterns[ft]
+
+  if not pattern_list then
+    vim.notify('RemoveComments: Language \'' .. ft .. '\' not supported.', vim.log.levels.WARN)
+    return
+  end
+
+  local save_cursor = vim.fn.getcurpos()
+
+  for _, pattern in ipairs(pattern_list) do
+    local cmd = string.format('silent! keeppatterns %%s/%s//g', pattern)
+    vim.cmd(cmd)
+  end
+
+  vim.fn.setpos('.', save_cursor)
+  vim.notify('Comments removed for: ' .. ft, vim.log.levels.INFO)
+end, {
+  desc = 'Remove comments from current buffer based on filetype',
+})

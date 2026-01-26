@@ -59,34 +59,43 @@ function capitalize() {
   echo "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^\w\|\s\w/\U&/g'
 }
 
-function cf() {
-  cmd=$(complete-fzf --alias="$(alias)" --command="$*")
+_confirm_run() {
+  local cmd="$1"
+  [[ -z "$cmd" ]] && return
+
+  # Display the command in color
+  echo -n "\n\033[0;33mExecute?\033[0m \033[1;37m${cmd}\033[0m [y/N] "
+  
+  # Read a single key (-k 1)
+  read -k 1 key
+  echo # Newline after key press
+  
+  if [[ "$key" == "y" || "$key" == "Y" ]]; then
+    eval "$cmd"
+  else
+    echo "Cancelled."
+  fi
+}
+
+fh() {
+  local cmd
+  cmd=$(fc -rnl 1 | awk '!seen[$0]++' | fzf +s --tiebreak=index --header='[History -> Edit]' --query="$1")
+  
+  [[ -n "$cmd" ]] && print -z "$cmd"
+}
+
+cr() {
+  local cmd
+  cmd=$(fc -rnl 1 | awk '!seen[$0]++' | fzf --layout=reverse --prompt='Run> ' --header='[History -> Execute]')
   _confirm_run "$cmd"
 }
 
-function cr() {
-  cmd=$(history | sed 's/\s\+[0-9]\+\s\+//g' | sort -rn | awk '!x[$0]++' | fzf --layout=reverse --prompt='Cmd> ')
-  _confirm_run "$cmd"
-}
-
-## FZF FUNCTIONS ##
-
-# fo [FUZZY PATTERN] - Open the selected file with the default editor
-#   - Bypass fuzzy finder if there's only one match (--select-1)
-#   - Exit if there's no match (--exit-0)
 fo() {
   local files
   IFS=$'\n' files=("$(fzf-tmux --query="$1" --multi --select-1 --exit-0)")
   [[ -n "$files" ]] && "${EDITOR:-vim}" "${files[@]}"
 }
 
-# fh [FUZZY PATTERN] - Search in command history
-fh() {
-  print -z "$( ([ "$ZSH_NAME" != "" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')"
-}
-
-# fbr [FUZZY PATTERN] - Checkout specified branch
-# Include remote branches, sorted by most recent commit and limited to 30
 fgb() {
   local branches branch
   branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
@@ -95,9 +104,6 @@ fgb() {
   git checkout "$(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")"
 }
 
-# tm [SESSION_NAME | FUZZY PATTERN] - delete tmux session
-# Running `tm` will let you fuzzy-find a session mame to delete
-# Passing an argument to `ftm` will delete that session if it exists
 ftmk() {
   if [ "$1" ]; then
     tmux kill-session -t "$1"; return
@@ -178,7 +184,6 @@ fcf() {
     --bind "enter:execute:(nvim --server ./nvim/nvimsocket --remote {})"
 }
 
-# Keep the default fg functionality
 fgg() {
     [[ -z $(jobs) ]] && return 1
     [ $# -gt 0 ] && builtin fg "$@" || builtin fg
@@ -214,16 +219,17 @@ turbo_csv() {
     if [[ -n "$selection" ]]; then
         local file=$(echo "$selection" | cut -d: -f1)
         local line=$(echo "$selection" | cut -d: -f2)
-        
+
         nvim "$file" "+$line" -c "normal! zz"
     fi
 }
 
-udump() {
+
+function udump() {
     local term="$1"
 
     if [[ -z "$term" ]]; then
-        echo -n "Digite o termo exato a ser pesquisado: "
+        echo -n "Enter the exact search term: "
         read term
     fi
 
@@ -233,18 +239,136 @@ udump() {
     fi
 
     local safe_name=$(echo "$term" | tr ' ' '_')
-    local output_file="./result_${safe_name}.txt"
+    local output_dir="./${safe_name}"
+    local output_file="${output_dir}/result_${safe_name}.txt"
 
-    echo "🔍 Buscando por: '$term'..."
-    
+    echo "🔍 Searching for: '$term'..."
+
+    mkdir -p "$output_dir"
     ugrep -F -r -n -I --color=never "$term" . > "$output_file"
 
     if [[ -s "$output_file" ]]; then
         local count=$(wc -l < "$output_file" | tr -d ' ')
-        echo "✅ Success! $count saved on:"
+        echo "✅ Success! $count lines saved to:"
+        echo "📂Directory: $output_dir"
+        echo "📄File:      $(basename "$output_file")"
+    else
+        echo "⚠️  No results found."
+        rm -rf "$output_dir"
+    fi
+}
+
+function uconvert() {
+    local input_file="$1"
+
+    if [[ -z "$input_file" ]]; then
+        input_file=$(find . -maxdepth 2 -name "result_*.txt" -type f -print0 | xargs -0 ls -t 2>/dev/null | head -n 1)
+    fi
+
+    if [[ -z "$input_file" || ! -f "$input_file" ]]; then
+        echo "❌ Error: File not found or not specified."
+        return 1
+    fi
+
+    local output_file="${input_file%.*}.csv"
+
+    echo "⚙️  Converting '$input_file' to CSV..."
+
+    sed -E 's/^([^:]*):([0-9]*):/"\1",\2,/' "$input_file" > "$output_file"
+
+    if [[ -s "$output_file" ]]; then
+        echo "✅ Success! CSV file created:"
         echo "📄 $output_file"
     else
-        echo "⚠️  No result found."
-        rm "$output_file" # Remove o arquivo vazio para não poluir
+        echo "⚠️  Failed to create file."
     fi
+}
+
+# function udump() {
+#     local term="$1"
+
+#     if [[ -z "$term" ]]; then
+#         echo -n "Enter the exact search term: "
+#         read term
+#     fi
+
+#     if [[ -z "$term" ]]; then
+#         echo "❌ Empty search."
+#         return 1
+#     fi
+
+#     local safe_name=$(echo "$term" | tr ' ' '_')
+#     local output_file="./result_${safe_name}.txt"
+
+#     echo "🔍 Searching for: '$term'..."
+
+#     ugrep -F -r -n -I --color=never "$term" . > "$output_file"
+
+#     if [[ -s "$output_file" ]]; then
+#         local count=$(wc -l < "$output_file" | tr -d ' ')
+#         echo "✅ Success! $count lines saved to:"
+#         echo "📄 $output_file"
+#     else
+#         echo "⚠️  No results found."
+#         rm "$output_file"
+#     fi
+# }
+
+# function uconvert() {
+#     local input_file="$1"
+
+#     if [[ -z "$input_file" ]]; then
+#         echo "❌ Error: Please provide the .txt file to convert."
+#         echo "Usage: uconvert file.txt"
+#         return 1
+#     fi
+
+#     if [[ ! -f "$input_file" ]]; then
+#         echo "❌ Error: File '$input_file' not found."
+#         return 1
+#     fi
+
+#     local output_file="${input_file%.*}.csv"
+
+#     echo "⚙️  Converting '$input_file' to CSV..."
+
+#     sed -E 's/^([^:]*):([0-9]*):/"\1",\2,/' "$input_file" > "$output_file"
+
+#     if [[ -s "$output_file" ]]; then
+#         echo "✅ Success! CSV file created:"
+#         ls -lh "$output_file"
+#         echo "💡 Hint: The first two columns are now 'Source File' and 'Line'."
+#     else
+#         echo "⚠️  Failed to create file."
+#     fi
+# }
+
+function uclean() {
+  local input_file="$1"
+
+  if [[ -z "$input_file" ]]; then
+    input_file=$(ls -t result_*.txt 2>/dev/null | head -n 1)
+  fi
+
+  if [[ ! -f "$input_file" ]]; then
+    echo "❌ No input file found or specified."
+    return 1
+  fi
+
+  local output_file="${input_file%.*}_clean.csv"
+
+  echo "🧹 Cleaning empty columns in: $input_file ..."
+
+  sed -E 's/,,+/,/g; s/,+$//' "$input_file" > "$output_file"
+
+  if [[ -s "$output_file" ]]; then
+    echo "✅ Clean file saved to:"
+    echo "📄 $output_file"
+
+    echo "\n--- Preview ---"
+    head -n 3 "$output_file" | cut -c -100
+    echo "..."
+  else
+    echo "⚠️  Error processing file."
+  fi
 }
