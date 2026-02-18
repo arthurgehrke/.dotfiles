@@ -279,8 +279,12 @@ if command -v pipx &>/dev/null; then
   export PATH="$PIPX_HOME/bin:$PATH"
 fi
 
+# go 
+export PATH=$PATH:$(go env GOPATH)/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH:/bin
+export GOROOT=/usr/local/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 
 # export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
 # export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
@@ -309,14 +313,19 @@ if command -v composer &>/dev/null; then
   export PATH="$HOME/.composer/vendor/bin:$PATH"
 fi
 
-# nodenv (Node.js)
+# # nodenv (Node.js)
+# if command -v nodenv &>/dev/null; then
+#   export PATH="$HOME/.nodenv/bin:$PATH"
+#   eval "$(nodenv init -)"
+# fi
+
 if command -v nodenv &>/dev/null; then
   export PATH="$HOME/.nodenv/bin:$PATH"
   eval "$(nodenv init -)"
 fi
 
 if command -v pyenv &>/dev/null; then
-  export NODENV_VERSION=20.7.0
+  # export NODENV_VERSION=20.7.0
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH=$(pyenv root)/shims:$PATH
   # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
@@ -351,3 +360,10 @@ fi
 # fi
 
 # zprof
+
+. "$HOME/.cargo/env"
+
+# Android SDK Paths
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/build-tools/36.0.0
