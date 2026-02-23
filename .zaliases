@@ -1,22 +1,29 @@
 #!/usr/bin/env zsh
 
+# Reload and config
 alias reload="source ~/.zshrc && echo '🔁 .zshrc reloaded.'"
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias execshell="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
 
+# APIs and services
 alias dehashed='curl -s -u "progeny.tiles-3g@icloud.com:xS2D4+W++wl2s6ONgTZpJUc4hxpRv4xl67KcgT7RlQM4w0ScPgysjWk=" "https://api.dehashed.com/search?query="'
-
 alias torpath='cd /opt/homebrew/etc/tor'
 
-# python
+# Python
 alias mkvenv='function _mkvenv(){ python3 -m venv "$1" && echo "✅ Virtualenv created on $1. Activate with: source $1/bin/activate"; }; _mkvenv'
 alias mkvenv-activate='function _mkvenv_act(){ python3 -m venv "$1" && source "$1/bin/activate"; }; _mkvenv_act'
 alias mkvenv-global='function _mkvenv_global(){ mkdir -p ~/.virtualenvs && python3 -m venv "$HOME/.virtualenvs/$1" && echo "✅ Virtualenv global created on ~/.virtualenvs/$1. Active with: source ~/.virtualenvs/$1/bin/activate"; }; _mkvenv_global'
 
-alias cdicloud="cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents"
+# Directories
+alias cdicloud='cd "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
+# LS and display
 if [ -f "$(which lsd)" ]; then
   alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
 fi
@@ -25,53 +32,69 @@ if [ -f "$(which bat)" ]; then
   alias cat='bat'
 fi
 
-alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
-
-# alias ls="ls -lG"
-# alias ls='ls -G -F --color=auto'
-
-# alias ll='ls -lAGFp'
-alias ddk="killall com.docker.osx.hyperkit.linux"   # docker restart
-alias dps="docker ps"  
-alias dports='docker ps --format "table {{.Names}}\t{{.Ports}}"'
-
-# wireless en0, wired en1: PRIVATE_IP address: 172.20.1.91 or 192.168.1.253
-alias privip="ipconfig getifaddr en0"
-
-# Public ip like https://www.whatismyip.com/:
-# alias mac="curl http://canhazip.com"  # public IP
-# alias pubip="curl https://checkip.amazonaws.com"  # public IP
-alias pubip="curl -s ifconfig.me"  # public IP
-# alias ipa="ip a"  # analyze networking
-alias ipinfo="curl ipinfo.io"  # more verbose JSON containing country and zip of IP
-alias ipcity="curl -s ipinfo.io | jq -r .city"
-alias wanip4="dig @resolver1.opendns.com ANY myip.opendns.com +short"
-# alias wanip6="dig @resolver1.opendns.com AAAA myip.opendns.com +short -6"
-# https://blog.apnic.net/2021/06/17/how-a-small-free-ip-tool-survived/
-# alias wanip6="curl -s https://ipv6.icanhazip.com"
-# https://ipv4.icanhazip.com/
-alias ports="lsof -i -n -P | grep TCP"
-alias listening="lsof -nP +c 15 | grep LISTEN"
-   # rapportd          596 johndoe    9u     IPv6  0x93d60554f660a3a        0t0                 TCP *:50866 (LISTEN)
-
-
-alias find_mas_apps="find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print | sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##'"
-
+alias linfo="eza -l --created --header --icons --group-directories-first"
+alias lupdate="eza -l --created --header --icons --group-directories-first --sort=modified --reverse"
+alias lcreate="eza -l --created --header --icons --group-directories-first --sort=created --reverse"
+alias lz="eza -l"
+alias ld="eza -lD"
+alias lf="eza -lF --color=always | grep -v /"
+alias lh="eza -dl .* --group-directories-first"
 alias lts='ll --timesort'
 alias lsc="ls -ltU"
+alias openpreview='open -a Preview'
+
+# Photos
+alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
+
+# Docker
+alias ddk="killall com.docker.osx.hyperkit.linux"
+alias dps="docker ps"
+alias dports='docker ps --format "table {{.Names}}\t{{.Ports}}"'
+
+if [ "$(command -v docker)" ]; then
+  alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'
+  alias d-kali="docker run -ti --privileged --net='host' --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kali_base /bin/bash"
+  alias d-kali-new="docker run -ti --privileged --net=\"host\" --rm -e HOST_IP=$(ifconfig en0 | awk '/ *inet /{print $2}')  -v /Users/arthurgehrke/Documents/docker-data/kali:/home/shared -ti  kali_base /bin/bash"
+  alias d-debian='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-in-a-nutshell:1.0.0 /bin/bash'
+  alias d-redis='docker run -d -p 6379:6379 redis:alpine'
+  alias d-nodejs='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-nodejs-v8:1.0.0 /bin/bash'
+  alias d-swagger-editor='docker run --rm -d -p 80:8080 swaggerapi/swagger-editor && sleep 3 && open http://localhost'
+  alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
+fi
+
+# Network
+alias privip="ipconfig getifaddr en0"
+alias pubip="curl -s ifconfig.me"
+alias ipinfo="curl ipinfo.io"
+alias ipcity="curl -s ipinfo.io | jq -r .city"
+alias wanip4="dig @resolver1.opendns.com ANY myip.opendns.com +short"
+alias tcpports="lsof -i -n -P | grep TCP"
+alias listening="lsof -nP +c 15 | grep LISTEN"
+alias localip='ipconfig getifaddr en0'
+alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
+alias port='sudo lsof -nP i4TCP'
+
+# System
+alias find_mas_apps="find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print | sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##'"
+alias df='df -h'
+alias free='free -m'
+alias psmem='ps auxf | sort -nr -k 4 | head -5'
+alias pscpu='ps auxf | sort -nr -k 3 | head -5'
+
+# Browsers
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
 alias chromium-http='chromium --proxy-server=localhost:7777'
 
+# Git and diff
 alias difficdiff='git difftool --extcmd icdiff'
-# side-by-side diffs for uncommitted files
 alias ic='hg icdiff'
-# diff all changes since the base revision, including uncommitted
-# (from master if you are using bookmarks, for example)
 alias ica='hg icdiff -r .^'
-# diff the existing changes, excluding uncommitted
 alias ice='hg icdiff --ch .'
 
-# vim edit remote file
+# Vim
 vscp() {
   if [[ -z $1 ]]; then
     echo "usage: vscp [[user@]host1:]file1 ... [[user@]host2:]file2"
@@ -94,116 +117,55 @@ gvimscp() {
   fi
   declare -a targs=()
   for iarg in "$@"; do
-    # adapt syntax for vim
     targ="scp://$(echo "$iarg" | sed -e 's@:/@//@' | sed -e 's@:@/@')"
     targs=("${targs[@]}" "$targ")
   done
   gvim "${targs[@]}"
 }
 
+# Databases
 alias addiptomongo='atlas accessLists create '
+alias sqlcheat='find ${SQL_CHEATS_DIR:-~/repositories/sql-cheats} -type f -name "*.sql" | fzf --preview "bat --style=numbers --color=always {}"'
 
-alias lz="eza -l"
-alias ld= "eza -lD"
-alias lf="eza -lF --color=always | grep -v /"
-alias lh="eza -dl .* --group-directories-first"
-
-# easier to read disk human-readable sizes
-alias df='df -h'
-# show sizes in MB
-alias free='free -m'
-
-# get top process eating memory
-alias psmem='ps auxf | sort -nr -k 4 | head -5'
-# get top process eating cpu ##
-alias pscpu='ps auxf | sort -nr -k 3 | head -5'
-
+# Cleanup
 alias rmorigfiles="find . -name '*.orig' -delete"
 alias rmjsfiles="find . -type f -name '*.js' -exec rm {} +"
 alias rmdsfiles="find . -type f -name '*.DS_Store' -exec rm {} +"
 
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
-alias grep='grep --color=auto'
-
+# Zsh and Tmux
 alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
-
-# ip
-alias localip='ipconfig getifaddr en0'
-alias getip='ifconfig -l | xargs -n1 ipconfig getifaddr'
-
-# tmux
 alias tf="tmux refresh-client -S && tmux source-file ~/.tmux.conf"
+alias openhistory="nvim ~/.zhistory"
 
-# rg and fzf
+# Search and grep
+alias grep='grep --color=auto'
 alias frg='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
 alias frgp='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always --regexp {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
 alias skag='f() { sk --ansi -i -c "ag --color \"$1\"" }; f'
+alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}' | fzf --preview 'bat --style=numbers --color=always {} | head -200' --bind 'enter:execute(nvim {})+abort'"
+alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias fe="fzf -m --preview 'bat --color=always {}' --bind 'enter:become(nvim {+})'"
+alias preview="fzf --preview 'bat --color \"always\" {}'"
 
+# Homebrew
+alias brew_maintenance='brew update && brew upgrade && brew cleanup && brew autoremove'
 alias brewsync='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
 alias brewcleanfromfile='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
 alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
 alias brewdump='brew bundle dump --file=~/Brewfile'
 
-# View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-
-alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
-
+# Compilation
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
-alias rgall="rg --files --hidden --follow -g '!{node_modules,.git,Library,Pictures,.nvm,.npm,.local,.cargo,.pyenv,.pyenv-versions,repositories,Google Drive/Other computers/}' \
-  | fzf --preview 'bat --style=numbers --color=always {} | head -200' \
-  --bind 'enter:execute(nvim {})+abort'"
-alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-alias openhistory="nvim ~/.zhistory"
-
-alias fe="fzf -m --preview 'batcat --color=always {}' --bind 'enter:become(nvim {+})'"
-
+# Node
 alias nom="rm -rf node_modules && npm cache clean && npm install"
-alias preview="fzf --preview 'bat --color \"always\" {}'"
-
-alias openpreview='open -a Preview'
-alias port='sudo lsof -nP i4TCP'
-
 alias npmlist="npm list --depth=0"
 
-# alias sshagentstart="eval $(ssh-agent -s) && ssh-add -A"
-
-# brew install keychain
+# SSH
 if hash keychain 2>/dev/null; then
   alias ssh-agent-start='eval "$(keychain --eval)"; for k in ~/.ssh/*.pem; do [[ -f "$k" ]] && ssh-add "$k" 2>/dev/null; done'
-  # alias ssh-agent-start='eval "$(keychain --eval --agents ssh)"; \
-  #   for k in ~/.ssh/*; do \
-  #     [[ -f "$k" ]] || continue; \
-  #     [[ "$k" == *.pub ]] && continue; \
-  #     [[ "$k" == *known_hosts* ]] && continue; \
-  #     [[ "$k" == */config ]] && continue; \
-  #     ssh-add "$k" 2>/dev/null; \
-  #   done'
   alias ssh-agent-stop='keychain --stop all'
 fi
 
 alias chmod-pems='find ~/.ssh -type f -name "*.pem" -exec chmod 600 {} \;'
-
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-
-alias sqlcheat='find ${SQL_CHEATS_DIR:-~/repositories/sql-cheats} -type f -name "*.sql" | fzf --preview "bat --style=numbers --color=always {}"'
-
-if [ "$(command -v docker)" ]; then
-  alias d-prune='docker stop $(docker ps -a -q); docker image prune -a; docker system prune -f'
-  # https://medium.com/@airman604/kali-linux-in-a-docker-container-5a06311624eb
-  alias d-kali="docker run -ti --privileged --net='host' --rm --mount type=bind,src=${HOME}/dkali-root,dst=/root/host --mount src=kali-postgres,dst=/var/lib/postgresql kali_base /bin/bash"
-  alias d-kali-new="docker run -ti --privileged --net="host" --rm -e HOST_IP=$(ifconfig en0 | awk '/ *inet /{print $2}')  -v /Users/arthurgehrke/Documents/docker-data/kali:/home/shared -ti  kali_base /bin/bash"
-  alias d-debian='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-in-a-nutshell:1.0.0 /bin/bash'
-  alias d-redis='docker run -d -p 6379:6379 redis:alpine'
-  alias d-nodejs='docker run --rm -it -v ${HOME}/Downloads:/root/host weltraumschaf/debian-nodejs-v8:1.0.0 /bin/bash'
-  alias d-swagger-editor='docker run --rm -d -p 80:8080 swaggerapi/swagger-editor && sleep 3 && open http://localhost'
-  alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
-fi
