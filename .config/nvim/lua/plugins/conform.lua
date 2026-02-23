@@ -16,7 +16,7 @@ return {
       formatters_by_ft = {
         bash = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
         sh = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
-        markdown = { 'textlint', 'marksman', stop_after_first = true },
+        markdown = { stop_after_first = true },
         zsh = { 'shellharden', 'beautysh', stop_after_first = true },
         lua = { 'stylua' },
         python = { 'black', stop_after_first = true },
@@ -40,7 +40,6 @@ return {
         css = { 'prettier', 'stylelint', stop_after_first = true },
         scss = { 'prettier', 'stylelint' },
         sass = { 'prettier', 'stylelint' },
-
         ['_'] = { 'trim_whitespace' },
       },
     })
@@ -64,6 +63,6 @@ return {
     }
   end,
   init = function()
-    vim.o.formatexpr = 'v:lua.require\'conform\'.formatexpr()'
+    vim.o.formatexpr = 'v:lua.require(\'conform\').formatexpr()'
   end,
 }

@@ -10,6 +10,8 @@ return {
     'nvim-telescope/telescope-live-grep-args.nvim',
     'andrew-george/telescope-themes',
     { 'nvim-telescope/telescope-ui-select.nvim' },
+    'nvim-telescope/telescope-frecency.nvim',
+    'nvim-telescope/telescope-z.nvim',
   },
   keys = {
     {
@@ -17,35 +19,28 @@ return {
       function()
         require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true })
       end,
-      desc = '[file] [b]rowser',
+      desc = 'File Browser',
     },
     {
       'ff',
       function()
         require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
       end,
-      desc = '[f]ind [f]iles',
+      desc = 'Find Files',
     },
     {
       '<leader>fo',
       function()
         require('telescope.builtin').live_grep({ hidden = true, no_ignore = true })
       end,
-      desc = '[o]pen file browser',
+      desc = 'Live Grep',
     },
-    -- {
-    --   '<leader>;',
-    --   function()
-    --     require('telescope.builtin').live_grep({ hidden = true, no_ignore = true })
-    --   end,
-    --   desc = 'Grep (root dir)',
-    -- },
     {
       '<leader>;',
       function()
         require('telescope').extensions.live_grep_args.live_grep_args()
       end,
-      desc = 'Live Grep with args (root dir)',
+      desc = 'Live Grep Args Root',
     },
     {
       '<leader>f;',
@@ -58,64 +53,72 @@ return {
           ),
         })
       end,
-      desc = 'Live Grep literal (sem regex)',
+      desc = 'Live Grep Literal',
     },
     {
       '<leader>fr',
       function()
         require('telescope').extensions.recent_files.pick()
       end,
+      desc = 'Recent Files',
+    },
+    {
+      '<leader>fc',
+      function()
+        require('telescope').extensions.frecency.frecency({})
+      end,
+      desc = 'Frecency',
     },
     {
       '<leader>+',
       function()
         require('telescope.builtin').live_grep({ cwd = false })
       end,
-      desc = 'Grep (cwd)',
+      desc = 'Grep CWD',
     },
     {
       '<leader>gs',
       function()
         require('telescope.builtin').grep_string()
       end,
-      desc = 'Find word under cursor',
+      desc = 'Find Word Cursor',
     },
     { '<leader>fl', '<cmd>Telescope highlights<cr>', desc = 'Find Highlights' },
-    { '<leader>fz', '<cmd>Telescope zoxide list<cr>', desc = 'Find Directory' },
+    { '<leader>fz', '<cmd>Telescope z<cr>', desc = 'Find Directory Z' },
     {
       '<leader>gb',
       function()
         require('telescope.builtin').git_branches()
       end,
-      desc = '[g]it [b]ranches',
+      desc = 'Git Branches',
     },
     {
       '<leader>gbd',
       function()
         vim.cmd('GitBranchesByDate')
       end,
-      desc = '[g]it [b]ranches by [d]ate',
+      desc = 'Git Branches By Date',
     },
     {
       '<leader>gB',
       function()
         require('telescope.builtin').git_bcommits()
       end,
-      desc = '[g]it [B]uffer commits',
+      desc = 'Git Buffer Commits',
     },
     {
       '<leader>gc',
       function()
         require('telescope.builtin').git_commits()
       end,
-      desc = '[g]it [c]ommits (repo)',
+      desc = 'Git Commits Repo',
     },
     {
       '<leader>gS',
       function()
         require('telescope.builtin').git_status()
       end,
-      desc = '[g]it [S]tatus',
+      desc = 'Git Status',
     },
   },
   config = function()
@@ -127,18 +130,18 @@ return {
     local finders = require('telescope.finders')
     local conf = require('telescope.config').values
     local lga_actions = require('telescope-live-grep-args.actions')
-    local lga_shortcuts = require('telescope-live-grep-args.shortcuts')
+    local builtin = require('telescope.builtin')
 
     vim.keymap.set('n', '<leader>s/', function()
       builtin.live_grep({
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
       })
-    end, { desc = '[S]earch [/] in Open Files' })
+    end, { desc = 'Search Open Files' })
 
     vim.keymap.set('n', '<leader>sf', function()
       builtin.find_files({ hidden = true })
-    end, { desc = '[S]earch [F]iles' })
+    end, { desc = 'Search Files' })
 
     vim.keymap.set('n', '<leader>trw', function()
       require('telescope').extensions.live_grep_args.live_grep_args({
@@ -150,13 +153,15 @@ return {
 
     vim.keymap.set('n', '<leader>sg', function()
       require('telescope').extensions.live_grep_args.live_grep_args({
-        additional_args = { '--hidden' },
+        additional_args = function()
+          return { '--hidden' }
+        end,
       })
     end, {})
 
     vim.keymap.set('n', '<leader>sh', function()
       require('telescope').extensions.live_grep_args.live_grep_args({ cwd = '/Users/arthurgehrke' })
-    end, { desc = '[S]earch [H]ome' })
+    end, { desc = 'Search Home' })
 
     local my_action = transform_mod({
       edit_or_qf = function(prompt_bufnr)
@@ -173,17 +178,17 @@ return {
 
     local function git_branches_by_date()
       local output = vim.fn.systemlist(
-        'git for-each-ref --sort=-committerdate --format=\'%(refname:short) %(committerdate:relative)\' refs/heads/'
+        "git for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:relative)' refs/heads/"
       )
 
       pickers
         .new({}, {
-          prompt_title = 'Git Branches (by last commit)',
+          prompt_title = 'Git Branches By Date',
           finder = finders.new_table({
             results = output,
           }),
           sorter = conf.generic_sorter({}),
-          attach_mappings = function(prompt_bufnr, map)
+          attach_mappings = function(prompt_bufnr)
             actions.select_default:replace(function()
               actions.close(prompt_bufnr)
               local selection = actions_state.get_selected_entry()[1]
@@ -268,6 +273,7 @@ return {
           '--column',
           '--smart-case',
           '--hidden',
+          '--no-ignore-vcs',
         },
         mappings = {
           i = {
@@ -389,6 +395,12 @@ return {
           hijack_netrw = true,
           mappings = { ['i'] = {}, ['n'] = {} },
         },
+        frecency = {
+          show_scores = false,
+          show_unindexed = true,
+          ignore_patterns = { '*.git/*', '*/tmp/*' },
+          disable_devicons = false,
+        },
       },
     })
 
@@ -398,5 +410,7 @@ return {
     telescope.load_extension('recent_files')
     telescope.load_extension('themes')
     telescope.load_extension('ui-select')
+    telescope.load_extension('frecency')
+    telescope.load_extension('z')
   end,
 }

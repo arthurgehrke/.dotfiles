@@ -9,6 +9,23 @@ return {
       ensure_installed = {
         'stylua',
         'shfmt',
+        'black',
+        'prettier',
+        'prettierd',
+        'goimports',
+        'gofumpt',
+        'sql-formatter',
+        'jq',
+        'luacheck',
+        'shellcheck',
+        'yamllint',
+        'jsonlint',
+        'htmlhint',
+        'eslint_d',
+        'ruff',
+        'phpstan',
+        'vale',
+        'golangci-lint',
       },
     },
     config = function(_, opts)
@@ -35,27 +52,15 @@ return {
     end,
   },
   {
-    'mason-org/mason-lspconfig.nvim',
-    config = function()
-      require('mason-lspconfig').setup({
-        ensure_installed = { 'lua_ls', 'vtsls', 'eslint', 'ts_ls', 'angularls', 'html' },
-      })
-    end,
+    'williamboman/mason-lspconfig.nvim',
   },
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       'saghen/blink.cmp',
+      'williamboman/mason-lspconfig.nvim',
     },
-    -- opts = {
-    --   servers = {
-    --     lua_ls = {},
-    --     vue_ls = {},
-    --     vtsls = {},
-    --   },
-    -- },
-
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -151,7 +156,7 @@ return {
         gopls = {
           capabilities = capabilities,
           cmd = { 'gopls' },
-          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl',  },
+          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
           root_dir = util.root_pattern('go.work', 'go.mod', '.git'),
           settings = {
             gopls = {
@@ -163,6 +168,17 @@ return {
             },
           },
         },
+
+        r_language_server = {
+          settings = {
+            r = {
+              lsp = {
+                rich_documentation = true,
+              },
+            },
+          },
+        },
+
         -- pyright = {},
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -176,7 +192,24 @@ return {
         },
         vue_ls = {},
         eslint = {},
-        --
+
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = 'openFilesOnly',
+              },
+            },
+          },
+        },
+
+        ruff = {
+          on_attach = function(client, bufnr)
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -192,6 +225,9 @@ return {
             },
           },
         },
+        vtsls = {},
+        angularls = {},
+        html = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
@@ -200,7 +236,8 @@ return {
         'stylua', -- Used to format Lua code
       })
       require('mason-lspconfig').setup({
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        ensure_installed = vim.tbl_keys(servers),
+        -- ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
         handlers = {
           function(server_name)

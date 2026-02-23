@@ -23,68 +23,12 @@ return {
   },
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    'nvim-treesitter/nvim-treesitter-refactor',
     'JoosepAlviste/nvim-ts-context-commentstring',
   },
-  opts = {
-    auto_install = true,
-    highlight = {
-      enable = true,
-      disable = function(_, buf)
-        local max_filesize = 1000 * 1024 -- 1000 KB
-        local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
-
-        if filetype == 'tmux' then
-          return false -- keeps Treesitter to tmux, but without regex adds
-        end
-
-        if filetype == 'markdown' then
-          return true -- keeps Treesitter to tmux, but without regex adds
-        end
-
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-          return true
-        end
-      end,
-      additional_vim_regex_highlighting = false,
-    },
-    indent = { enable = true },
-    ensure_installed = {
-      'bash',
-      'c',
-      'css',
-      'dockerfile',
-      'git_config',
-      'gitcommit',
-      'html',
-      'javascript',
-      'jsdoc',
-      'json',
-      'json5',
-      'jsonc',
-      'lua',
-      'luadoc',
-      'luap',
-      'markdown',
-      'python',
-      'query',
-      'r',
-      'regex',
-      'ruby',
-      'rust',
-      'scss',
-      'sql',
-      'ssh_config',
-      'tmux',
-      'toml',
-      'tsx',
-      'typescript',
-      'vim',
-      'vimdoc',
-      'yaml',
-    },
-    context_commentstring = {
-      enable = true,
+  config = function()
+    vim.g.skip_ts_context_commentstring_module = true
+    require('ts_context_commentstring').setup({
       enable_autocmd = false,
       config = {
         javascript = {
@@ -96,38 +40,100 @@ return {
         },
         typescript = { __default = '// %s', __multiline = '/* %s */' },
       },
-    },
-    refactor = {
-      highlight_definitions = { enable = false },
-      highlight_current_scope = { enable = false },
-      smart_rename = {
+    })
+
+    local opts = {
+      auto_install = true,
+      highlight = {
         enable = true,
-        keymaps = {
-          smart_rename = 'grr',
+        disable = function(_, buf)
+          local max_filesize = 1000 * 1024
+          local filetype = vim.bo[buf].filetype
+
+          if filetype == 'tmux' then
+            return false
+          end
+
+          if filetype == 'markdown' then
+            return false
+          end
+
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+        end,
+        additional_vim_regex_highlighting = false,
+      },
+      indent = { enable = true },
+      ensure_installed = {
+        'bash',
+        'c',
+        'css',
+        'dockerfile',
+        'git_config',
+        'gitcommit',
+        'html',
+        'javascript',
+        'jsdoc',
+        'json',
+        'json5',
+        'jsonc',
+        'lua',
+        'luadoc',
+        'luap',
+        'markdown',
+        'python',
+        'query',
+        'r',
+        'rnoweb',
+        'regex',
+        'ruby',
+        'rust',
+        'scss',
+        'sql',
+        'ssh_config',
+        'tmux',
+        'toml',
+        'tsx',
+        'typescript',
+        'vim',
+        'vimdoc',
+        'yaml',
+        'go',
+        'vue',
+        'angular',
+      },
+      refactor = {
+        highlight_definitions = { enable = false },
+        highlight_current_scope = { enable = false },
+        smart_rename = {
+          enable = true,
+          keymaps = {
+            smart_rename = 'grr',
+          },
+        },
+        navigation = {
+          enable = false,
         },
       },
-      navigation = {
-        enable = false,
-      },
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ['af'] = '@function.outer',
+            ['if'] = '@function.inner',
+            ['ac'] = '@class.outer',
+            ['ic'] = '@class.inner',
+          },
+        },
+        move = {
+          enable = false,
         },
       },
-      move = {
-        enable = false,
-      },
-    },
-  },
-  ---@param opts TSConfig
-  config = function(_, opts)
+    }
+
     if type(opts.ensure_installed) == 'table' then
       opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
     end

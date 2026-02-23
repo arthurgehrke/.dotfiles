@@ -1,7 +1,7 @@
 return {
   'R-nvim/R.nvim',
   lazy = false,
-  enabled = false,
+  enabled = true,
   version = '~0.1.0',
   ft = { 'r', 'rmd' },
   keys = {
@@ -82,6 +82,10 @@ return {
       user_maps_only = true,
       hook = {
         on_filetype = function()
+          vim.opt_local.shiftwidth = 2
+          vim.opt_local.softtabstop = 2
+          vim.opt_local.expandtab = true
+
           -- This function will be called at the FileType event
           -- of files supported by R.nvim. This is an
           -- opportunity to create mappings local to buffers.

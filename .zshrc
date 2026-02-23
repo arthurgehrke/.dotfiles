@@ -6,18 +6,21 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 ##############################################################################
-# Homebrew Configurações
+# Homebrew Configs
 ##############################################################################
+BREW_PREFIX=$(brew --prefix 2>/dev/null || echo "/opt/homebrew")
+
 if type brew &>/dev/null; then
-  export PATH="$(brew --prefix)/bin:$PATH"
+  export PATH="$BREW_PREFIX/bin:$PATH"
   unset HOMEBREW_NO_AUTO_UPDATE
   export HOMEBREW_BUNDLE_FILE_GLOBAL="$HOME"/Brewfile
 fi
 
-
 ##############################################################################
 # Sourcing e Plugins
 ##############################################################################
+setopt EXTENDED_GLOB
+
 autoload -Uz compinit 
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
 	compinit;
@@ -30,10 +33,10 @@ source "$HOME"/.zprofile
 source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/simple-theme/.p10k.zsh
 
-source "$(brew --prefix)"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source "$(brew --prefix)"/share/powerlevel10k/powerlevel10k.zsh-theme
-source "$(brew --prefix)"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source "$(brew --prefix)"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source "$BREW_PREFIX"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source "$BREW_PREFIX"/share/powerlevel10k/powerlevel10k.zsh-theme
+source "$BREW_PREFIX"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source "$BREW_PREFIX"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 if [ -f "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh" ]; then
   source "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh"
@@ -128,8 +131,7 @@ setopt PUSHD_SILENT      # Do not print the directory stack after pushd or popd.
 setopt AUTO_PUSHD        # Make cd push the old directory onto the directory stack.
 setopt AUTOPARAMSLASH    # tab completing directory appends a slash
 setopt LIST_AMBIGUOUS
-setopt EXTENDED_GLOB # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns for filename generation, etc. (An initial unquoted ‘~’ always produces named directory expansion.)
-setopt ALWAYS_TO_END   
+setopt ALWAYS_TO_END  
 setopt NO_BEEP
 setopt COMPLETE_ALIASES
 setopt CASE_PATHS
@@ -280,7 +282,7 @@ if command -v pipx &>/dev/null; then
 fi
 
 # go 
-export PATH=$PATH:$(go env GOPATH)/bin
+export PATH=$PATH:$HOME/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH:/bin
 export GOROOT=/usr/local/go
@@ -324,14 +326,19 @@ if command -v nodenv &>/dev/null; then
   eval "$(nodenv init -)"
 fi
 
+# pyenv
 if command -v pyenv &>/dev/null; then
   # export NODENV_VERSION=20.7.0
   export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
   export PATH=$(pyenv root)/shims:$PATH
-  # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
-  # eval "$(pyenv virtualenv-init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
+
+export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH" || true
+
 # Rustup (via Homebrew)
 if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
   export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
@@ -359,11 +366,13 @@ fi
 #   fi
 # fi
 
-# zprof
-
-. "$HOME/.cargo/env"
-
+##############################################################################
 # Android SDK Paths
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/build-tools/36.0.0
+##############################################################################
+if [ -d "$HOME/Library/Android/sdk" ]; then
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+  export PATH="$PATH:$ANDROID_HOME/platform-tools"
+  export PATH="$PATH:$ANDROID_HOME/build-tools/36.0.0"
+fi
+
+# zprof
