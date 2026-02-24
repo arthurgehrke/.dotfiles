@@ -1,0 +1,7 @@
+default_profile = "default"
+
+[profiles.default]
+adapter = "sqlite"
+theme = "gruvbox"
+limit = 10000000
+keymap_name = ["vscode"]
