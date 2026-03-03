@@ -9,11 +9,6 @@ return {
     cmd = { 'NvimTreeFindFileToggle', 'NvimTreeToggle' },
     keys = {
       {
-        '<leader>ee',
-        '<cmd>NvimTreeToggle<CR>',
-        desc = '[E]xplorer Op[E]n',
-      },
-      {
         '<leader>f',
         '<cmd>NvimTreeFindFileToggle<CR>',
         desc = '[E]xplorer on [F]ile',
@@ -131,8 +126,8 @@ return {
           show_on_dirs = true,
           show_on_open_dirs = true,
         },
-        update_focused_file = { -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
-          enable = false,
+        update_focused_file = {
+          enable = true,
           update_cwd = false,
           update_root = {
             enable = true,
@@ -152,6 +147,9 @@ return {
           debounce_delay = 15,
           ignore_dirs = {
             'node_modules',
+            '.git',
+            'dist',
+            '.cache',
           },
         },
         renderer = {
@@ -309,7 +307,6 @@ return {
         },
         hijack_directories = {
           enable = true,
-          auto_open = true,
         },
       })
     end,

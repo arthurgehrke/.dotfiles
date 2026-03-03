@@ -9,9 +9,7 @@ return {
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
     'andrew-george/telescope-themes',
-    { 'nvim-telescope/telescope-ui-select.nvim' },
     'nvim-telescope/telescope-frecency.nvim',
-    'nvim-telescope/telescope-z.nvim',
   },
   keys = {
     {
@@ -84,7 +82,6 @@ return {
       desc = 'Find Word Cursor',
     },
     { '<leader>fl', '<cmd>Telescope highlights<cr>', desc = 'Find Highlights' },
-    { '<leader>fz', '<cmd>Telescope z<cr>', desc = 'Find Directory Z' },
     {
       '<leader>gb',
       function()
@@ -122,6 +119,7 @@ return {
     },
   },
   config = function()
+    local builtin = require('telescope.builtin')
     local telescope = require('telescope')
     local actions = require('telescope.actions')
     local transform_mod = require('telescope.actions.mt').transform_mod
@@ -131,6 +129,10 @@ return {
     local conf = require('telescope.config').values
     local lga_actions = require('telescope-live-grep-args.actions')
     local builtin = require('telescope.builtin')
+
+    vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#504945', bg = 'NONE' }) 
+    vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#83a598', bg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'TelescopeTitle', { fg = '#1d2021', bg = '#83a598', bold = true })
 
     vim.keymap.set('n', '<leader>s/', function()
       builtin.live_grep({
@@ -160,7 +162,7 @@ return {
     end, {})
 
     vim.keymap.set('n', '<leader>sh', function()
-      require('telescope').extensions.live_grep_args.live_grep_args({ cwd = '/Users/arthurgehrke' })
+      require('telescope').extensions.live_grep_args.live_grep_args({ cwd = vim.fn.expand('~') })
     end, { desc = 'Search Home' })
 
     local my_action = transform_mod({
@@ -178,7 +180,7 @@ return {
 
     local function git_branches_by_date()
       local output = vim.fn.systemlist(
-        "git for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:relative)' refs/heads/"
+        'git for-each-ref --sort=-committerdate --format=\'%(refname:short) %(committerdate:relative)\' refs/heads/'
       )
 
       pickers
@@ -205,18 +207,17 @@ return {
 
     telescope.setup({
       defaults = {
-        theme = 'dropdown',
-        path_display = { 'absolute' },
+        path_display = { 'truncate' },
         prompt_prefix = '   ',
         selection_caret = ' ',
         entry_prefix = '  ',
-        multi_icon = '',
+        multi_icon = '󰒍 ',
         file_sorter = require('telescope.sorters').get_fuzzy_file,
         generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
         set_env = { ['COLORTERM'] = 'truecolor' },
         results_title = false,
         color_devicons = true,
-        preview = { treesitter = false },
+        preview = { treesitter = true },
         sorting_strategy = 'ascending',
         selection_strategy = 'reset',
         layout_strategy = 'horizontal',
@@ -234,35 +235,23 @@ return {
           preview_cutoff = 120,
         },
         file_ignore_patterns = {
-          '__pycache__/*',
-          'node_modules/*',
-          'obj/Debug',
-          'bin/Debug',
+          '__pycache__/',
+          'node_modules/',
           '.dart_tool/',
           '.vscode/',
-          '.pyenv/**',
-          '.rbenv/**',
+          '.git/',
+          '.next/',
+          '.undo/',
+          'undodir/',
           '%.lock',
-          '%.pdb',
-          '%.so',
-          '%.dll',
-          '%.class',
-          '.rustup/**',
-          '%.exe',
-          '%.cache',
           '%.pdf',
           '%.dylib',
-          'dist/**',
-          'build/**',
-          'go/**',
-          '.rye/**',
-          '.git/**',
-          '.next/**',
-          '.undo/**',
-          'undodir/**',
-          '.undo',
-          'package%-lock.json',
-          'yarn%-lock.json',
+          '%.exe',
+          '%.so',
+          '%.pdb',
+          '%.class',
+          'dist/',
+          'build/',
         },
         vimgrep_arguments = {
           'rg',
@@ -285,7 +274,6 @@ return {
             ['<C-x>'] = false,
             ['<C-u>'] = false,
             ['<C-d>'] = false,
-            ['<Esc>'] = actions.close,
             ['<C-c>'] = actions.close,
             ['<C-s>'] = actions.select_horizontal,
             ['<C-v>'] = actions.select_vertical,
@@ -303,7 +291,6 @@ return {
             ['<C-p>'] = actions.move_selection_previous,
             ['gg'] = actions.move_to_top,
             ['G'] = actions.move_to_bottom,
-            ['<Esc>'] = actions.close,
             ['j'] = actions.move_selection_next,
             ['k'] = actions.move_selection_previous,
             ['H'] = actions.move_to_top,
@@ -330,34 +317,6 @@ return {
         lsp_workspace_symbols = { path_display = { 'shorten' } },
         find_files = {
           hidden = true,
-          find_command = {
-            'rg',
-            '--files',
-            '--hidden',
-            '--no-ignore-vcs',
-            '--glob',
-            '!.git',
-            '--glob',
-            '!node_modules',
-            '--glob',
-            '!dist',
-            '--glob',
-            '!build',
-            '--glob',
-            '!target',
-            '--glob',
-            '!vendor',
-            '--glob',
-            '!*.lock',
-            '--glob',
-            '!package-lock.json',
-            '--glob',
-            '!__pycache__',
-            '--glob',
-            '!bin',
-            '--glob',
-            '!undodir',
-          },
         },
       },
       extensions = {
@@ -387,9 +346,6 @@ return {
           case_mode = 'ignore_case',
           hidden = true,
         },
-        ['ui-selection'] = {
-          require('telescope.themes').get_dropdown({}),
-        },
         file_browser = {
           theme = 'ivy',
           hijack_netrw = true,
@@ -409,8 +365,6 @@ return {
     telescope.load_extension('live_grep_args')
     telescope.load_extension('recent_files')
     telescope.load_extension('themes')
-    telescope.load_extension('ui-select')
     telescope.load_extension('frecency')
-    telescope.load_extension('z')
   end,
 }

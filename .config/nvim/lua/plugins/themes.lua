@@ -3,14 +3,14 @@ return {
   {
     'eddyekofo94/gruvbox-flat.nvim',
     lazy = false,
-    enabled = true,
+    enabled = false,
     config = function()
       vim.cmd([[colorscheme gruvbox-flat]])
     end,
   },
   {
     'ellisonleao/gruvbox.nvim',
-    enabled = false,
+    enabled = true,
     lazy = false,
     -- disable = true,
     priority = 1000,
@@ -29,7 +29,7 @@ return {
         invert_selection = false,
         invert_signs = false,
         invert_tabline = false,
-        invert_intend_guides = false,
+        invert_indent_guides = false, 
         inverse = true,
         contrast = 'hard',
         palette_overrides = {},

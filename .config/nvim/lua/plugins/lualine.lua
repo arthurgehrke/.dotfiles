@@ -70,9 +70,14 @@ return {
         component_separators = '',
         section_separators = '',
         theme = {
-          -- setting defaults to statusline
-          normal = { c = { fg = colors.fg, bg = colors.bg } },
-          inactive = { c = { fg = colors.fg, bg = colors.bg } },
+          normal = { c = { fg = colors.white, bg = 'NONE' } },
+          insert = { c = { fg = colors.white, bg = 'NONE' } },
+          visual = { c = { fg = colors.white, bg = 'NONE' } },
+          replace = { c = { fg = colors.white, bg = 'NONE' } },
+          command = { c = { fg = colors.white, bg = 'NONE' } },
+          inactive = { c = { fg = colors.grey, bg = 'NONE' } },
+          -- normal = { c = { fg = colors.fg, bg = colors.bg } },
+          -- inactive = { c = { fg = colors.fg, bg = colors.bg } },
         },
       },
       sections = {

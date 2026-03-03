@@ -157,3 +157,10 @@ vim.api.nvim_create_user_command('RemoveComments', function()
 end, {
   desc = 'Remove comments from current buffer based on filetype',
 })
+
+vim.api.nvim_create_autocmd('VimResized', {
+  group = vim.api.nvim_create_augroup('Resizing', { clear = true }),
+  callback = function()
+    vim.cmd('tabdo wincmd =')
+  end,
+})
