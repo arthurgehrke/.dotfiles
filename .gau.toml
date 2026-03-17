@@ -1,0 +1,17 @@
+threads = 15
+timeout = 45
+retries = 5
+verbose = false
+subdomains = false
+parameters = false
+providers = ["wayback", "otx", "commoncrawl"]
+json = false
+[urlscan]
+  apikey = ""
+[filters]
+  extensions = [
+    "png", "jpg", "jpeg", "gif", "svg", "ico", "webp", 
+    "css", "scss", "woff", "woff2", "ttf", "eot", 
+    "mp4", "mp3", "webm", "avi", "mov", 
+    "pdf", "epub"
+  ]
