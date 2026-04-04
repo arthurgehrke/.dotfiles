@@ -33,8 +33,8 @@ if [ -f "$(which bat)" ]; then
 fi
 
 alias linfo="eza -l --created --header --icons --group-directories-first"
-alias lupdate="eza -l --created --header --icons --group-directories-first --sort=modified --reverse"
-alias lcreate="eza -l --created --header --icons --group-directories-first --sort=created --reverse"
+alias lscreate="eza -l --created --header --icons --group-directories-first --sort=created --reverse"
+alias lsupdate='(for f in *; do if [[ -d "$f" ]]; then t=$(find "$f" -type f -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/.venv/*" -exec stat -f "%m" {} + 2>/dev/null | sort -nr | head -n 1); echo "${t:-$(stat -f "%m" "$f")}|$f"; else echo "$(stat -f "%m" "$f")|$f"; fi; done) | sort -nr | cut -d"|" -f2 | tr "\n" "\0" | xargs -0 eza -ld --time=modified --header --icons --sort=none'
 alias lz="eza -l"
 alias ld="eza -lD"
 alias lf="eza -lF --color=always | grep -v /"

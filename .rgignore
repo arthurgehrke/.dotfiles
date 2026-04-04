@@ -53,3 +53,4 @@ pnpm-lock.yaml
 .config/nvim/undodir/
 \n# Added by Gemini CLI\ntmp/\n.gemini/\n*.tmp
 .gemini/
+.zsh_history

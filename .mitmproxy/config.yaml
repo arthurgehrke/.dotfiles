@@ -1,0 +1,32 @@
+# Exibe o host da requisição em vez do IP (facilita muito a leitura)
+showhost: true
+
+# Deixa a tela de inspeção mais limpa, focando apenas na aba ativa
+console_layout: single
+
+# Paleta de cores otimizada para terminais escuros (como o seu Alacritty)
+console_palette: dark
+
+# Ignora o tráfego desses domínios (regex suportado).
+# O tráfego deles passará direto sem ser interceptado ou exibido na lista.
+ignore_hosts:
+  # --- Ruídos vistos na sua sessão ---
+  - '.*gstatic\.com'
+  - '.*clients[0-9]*\.google\.com'
+  - '.*googleusercontent\.com'
+  - 'play\.google\.com'
+  - 'mail\.google\.com'
+  - '.*amazonaws\.com'
+  - '.*super-agent\.com'
+
+  # --- Ruídos de background do macOS e Apple ---
+  - '.*apple\.com'
+  - '.*icloud\.com'
+  - '.*mzstatic\.com'
+  - '.*aaplimg\.com'
+  - '.*cdn-apple\.com'
+
+  # --- Telemetria do Firefox/Chrome (Opcional) ---
+  - '.*mozilla\.com'
+  - '.*mozilla\.net'
+  - '.*telemetry.*'
