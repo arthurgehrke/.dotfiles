@@ -39,6 +39,7 @@ alias lz="eza -l"
 alias ld="eza -lD"
 alias lf="eza -lF --color=always | grep -v /"
 alias lh="eza -dl .* --group-directories-first"
+alias lsdsize='eza -l --sort=size --reverse --header --icons'
 alias lts='ll --timesort'
 alias lsc="ls -ltU"
 alias openpreview='open -a Preview'
@@ -95,6 +96,9 @@ alias ica='hg icdiff -r .^'
 alias ice='hg icdiff --ch .'
 
 # Vim
+nvimr() { nvim --noplugin -n -R "$@" }
+compdef '_files' nvimr
+
 vscp() {
   if [[ -z $1 ]]; then
     echo "usage: vscp [[user@]host1:]file1 ... [[user@]host2:]file2"
@@ -149,11 +153,28 @@ alias fe="fzf -m --preview 'bat --color=always {}' --bind 'enter:become(nvim {+}
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 
 # Homebrew
-alias brew_maintenance='brew update && brew upgrade && brew cleanup && brew autoremove'
-alias brewsync='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
-alias brewcleanfromfile='brew bundle --file=~/Brewfile --force cleanup && brew bundle --file=~/Brewfile'
-alias brewdumpforce='brew bundle dump --file=~/Brewfile --force'
-alias brewdump='brew bundle dump --file=~/Brewfile'
+alias brewup='brew update && brew upgrade --greedy && brew autoremove && brew cleanup -s'
+alias brewsync='brew bundle --file=~/Brewfile && brew bundle --file=~/Brewfile --force cleanup'
+alias brewdump='brew bundle dump --file=~/Brewfile --force'
+alias brewcheck='brew bundle check --file=~/Brewfile'
+alias brewleaves='brew leaves | xargs brew desc'
+alias brewdeps='brew deps --tree --installed'
+alias brewoutdated='brew outdated --greedy'
+alias brewsizes='du -sh $(brew --cellar)/* 2>/dev/null | sort -rh | head -20'
+alias brewcsizes='du -sh $(brew --caskroom)/* 2>/dev/null | sort -rh | head -20'
+alias brewsync='brew bundle --file=~/Brewfile && brew bundle --file=~/Brewfile --force cleanup'
+alias brewdump='brew bundle dump --file=~/Brewfile --force'
+alias brewcheck='brew bundle check --file=~/Brewfile --verbose'
+alias bi='brew install'
+alias bic='brew install --cask'
+alias bu='brew uninstall'
+alias buc='brew uninstall --cask'
+alias bs='brew search'
+alias bif='brew info'
+alias bl='brew list --formula'
+alias blc='brew list --cask'
+alias brewup='brew update && brew upgrade --greedy && brew autoremove && brew cleanup -s'
+alias brewfix='brew doctor && brew missing'
 
 # Compilation
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'

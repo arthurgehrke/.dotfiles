@@ -494,21 +494,28 @@ function findBigFiles() {
 }
 
 fo() {
-  local files
-  IFS=$'\n' files=("$(fzf-tmux --query="$1" --multi --select-1 --exit-0)")
-  [[ -n "$files" ]] && "${EDITOR:-vim}" "${files[@]}"
+  local file
+  file=$(
+    fd --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache \
+      | awk -F/ '{print NF, $0}' \
+      | sort -n \
+      | cut -d' ' -f2- \
+      | fzf-tmux --query="$1" --select-1 --exit-0
+  )
+  [[ -n "$file" ]] && "${EDITOR:-nvim}" "$file"
 }
 
 fcf() {
-    fdfind --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
+    fd --type f --hidden --exclude .git --exclude node_modules --exclude zig-cache | \
     fzf \
+    --query="$1" \
     --prompt="Find File ▶ " \
     --color dark \
     --color fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#98c379 \
     --color info:#98c379,prompt:#61afef,pointer:#e5c07b,marker:#e5c07b,spinner:#61afef,header:#61afef \
     --preview "bat --color=always --style=plain {1}" \
     --preview-window "right:60%:wrap" \
-    --bind "enter:execute:(nvim --server ./nvim/nvimsocket --remote {})"
+    --bind "enter:become(nvim {1})"
 }
 
 # Git
