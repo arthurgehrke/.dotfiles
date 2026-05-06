@@ -9,13 +9,12 @@ return {
     'nvim-telescope/telescope-file-browser.nvim',
     'nvim-telescope/telescope-live-grep-args.nvim',
     'andrew-george/telescope-themes',
-    'nvim-telescope/telescope-frecency.nvim',
   },
   keys = {
     {
-      '<leader>fb',
+      'fb',
       function()
-        require('telescope').extensions.file_browser.file_browser({ hidden = true, no_ignore = true })
+        require('telescope').extensions.file_browser.file_browser({ hidden = true })
       end,
       desc = 'File Browser',
     },
@@ -27,45 +26,37 @@ return {
       desc = 'Find Files',
     },
     {
-      '<leader>fo',
+      '<leader>fF',
       function()
-        require('telescope.builtin').live_grep({ hidden = true, no_ignore = true })
+        require('telescope.builtin').find_files({ hidden = true })
       end,
-      desc = 'Live Grep',
+      desc = 'Find Files (respeita .gitignore)',
     },
     {
       '<leader>;',
       function()
+        require('telescope').extensions.live_grep_args.live_grep_args({
+          additional_args = { '--fixed-strings' },
+        })
+      end,
+      desc = 'Live Grep Args (literal)',
+    },
+    {
+      '<leader>fe',
+      function()
         require('telescope').extensions.live_grep_args.live_grep_args()
       end,
-      desc = 'Live Grep Args Root',
+      desc = 'Live Grep Args (regex)',
     },
+    { '<leader>tr', '<cmd>Telescope resume<cr>', desc = 'Telescope Resume' },
     {
       '<leader>f;',
       function()
         require('telescope').extensions.live_grep_args.live_grep_args({
-          vimgrep_arguments = vim.tbl_extend(
-            'force',
-            require('telescope.config').values.vimgrep_arguments,
-            { '--fixed-strings' }
-          ),
+          additional_args = { '--fixed-strings' },
         })
       end,
       desc = 'Live Grep Literal',
-    },
-    {
-      '<leader>fr',
-      function()
-        require('telescope').extensions.recent_files.pick()
-      end,
-      desc = 'Recent Files',
-    },
-    {
-      '<leader>fc',
-      function()
-        require('telescope').extensions.frecency.frecency({})
-      end,
-      desc = 'Frecency',
     },
     {
       '<leader>+',
@@ -124,13 +115,179 @@ return {
     local actions = require('telescope.actions')
     local transform_mod = require('telescope.actions.mt').transform_mod
     local actions_state = require('telescope.actions.state')
+    local lga_actions = require('telescope-live-grep-args.actions')
+
     local pickers = require('telescope.pickers')
     local finders = require('telescope.finders')
-    local conf = require('telescope.config').values
-    local lga_actions = require('telescope-live-grep-args.actions')
-    local builtin = require('telescope.builtin')
+    local previewers = require('telescope.previewers')
+    local sorters = require('telescope.sorters')
 
-    vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#504945', bg = 'NONE' }) 
+    local function tokens(prompt)
+      local t = {}
+      for tok in prompt:gmatch('%S+') do
+        table.insert(t, tok:lower())
+      end
+      return t
+    end
+
+    local function buffer_line_multigrep(opts)
+      opts = opts or {}
+      local bufnr = vim.api.nvim_get_current_buf()
+      local bufname = vim.api.nvim_buf_get_name(bufnr)
+      local ft = vim.bo[bufnr].filetype
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+      local results = {}
+      for i, line in ipairs(lines) do
+        results[#results + 1] = { lnum = i, text = line }
+      end
+
+      local title = bufname ~= '' and vim.fn.fnamemodify(bufname, ':t') or '[No Name]'
+
+      pickers.new(opts, {
+        prompt_title = 'Line Multi Grep — ' .. title,
+        finder = finders.new_table({
+          results = results,
+          entry_maker = function(item)
+            return {
+              value = item,
+              display = string.format('%5d  %s', item.lnum, item.text),
+              ordinal = item.text,
+              lnum = item.lnum,
+              text = item.text,
+            }
+          end,
+        }),
+        sorter = sorters.Sorter:new({
+          scoring_function = function(_, prompt, _, entry)
+            if not prompt or prompt == '' then
+              return 1
+            end
+            local hay = entry.text:lower()
+            for _, tok in ipairs(tokens(prompt)) do
+              if not hay:find(tok, 1, true) then
+                return -1
+              end
+            end
+            return 1
+          end,
+          highlighter = function(_, prompt, display)
+            local positions = {}
+            if not prompt or prompt == '' then
+              return positions
+            end
+            local lower = display:lower()
+            local prefix_offset = display:find('%S%s') or 0
+            for _, tok in ipairs(tokens(prompt)) do
+              local from = 1
+              while true do
+                local s, e = lower:find(tok, from, true)
+                if not s then break end
+                if s > prefix_offset then
+                  for i = s, e do
+                    positions[#positions + 1] = i
+                  end
+                end
+                from = e + 1
+              end
+            end
+            return positions
+          end,
+        }),
+        previewer = previewers.new_buffer_previewer({
+          title = 'Line Preview',
+          get_buffer_by_name = function() return bufname ~= '' and bufname or 'line-multigrep' end,
+          define_preview = function(self, entry)
+            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+            if ft and ft ~= '' then
+              pcall(vim.api.nvim_buf_set_option, self.state.bufnr, 'filetype', ft)
+            end
+            vim.schedule(function()
+              if not vim.api.nvim_win_is_valid(self.state.winid) then return end
+              pcall(vim.api.nvim_win_set_cursor, self.state.winid, { entry.lnum, 0 })
+              vim.api.nvim_win_call(self.state.winid, function()
+                vim.cmd('normal! zz')
+              end)
+            end)
+          end,
+        }),
+        attach_mappings = function(prompt_bufnr, _)
+          actions.select_default:replace(function()
+            local entry = actions_state.get_selected_entry()
+            actions.close(prompt_bufnr)
+            if entry and entry.lnum then
+              vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
+              vim.cmd('normal! zz')
+            end
+          end)
+          return true
+        end,
+      }):find()
+    end
+
+    vim.keymap.set('n', '<leader>fg', buffer_line_multigrep, { desc = 'Line Multi Grep (buffer)' })
+
+    local make_entry = require('telescope.make_entry')
+
+    local function dir_line_multigrep(opts)
+      opts = opts or {}
+      opts.cwd = opts.cwd or vim.uv.cwd()
+      local base_entry_maker = make_entry.gen_from_vimgrep(opts)
+      local current_tokens = {}
+
+      local finder = finders.new_async_job({
+        command_generator = function(prompt)
+          if not prompt or prompt == '' then return nil end
+          current_tokens = tokens(prompt)
+          if #current_tokens == 0 then return nil end
+          return {
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--ignore-case',
+            '--hidden',
+            '--glob=!.git/',
+            '--glob=!node_modules/',
+            '--glob=!dist/',
+            '--glob=!build/',
+            '--glob=!.next/',
+            '--glob=!undodir/',
+            '-F',
+            '--',
+            current_tokens[1],
+          }
+        end,
+        entry_maker = function(line)
+          local entry = base_entry_maker(line)
+          if not entry then return nil end
+          if #current_tokens > 1 then
+            local hay = (entry.text or ''):lower()
+            for i = 2, #current_tokens do
+              if not hay:find(current_tokens[i], 1, true) then
+                return nil
+              end
+            end
+          end
+          return entry
+        end,
+        cwd = opts.cwd,
+      })
+
+      pickers.new(opts, {
+        debounce = 100,
+        prompt_title = 'Dir Line Multi Grep — ' .. vim.fn.fnamemodify(opts.cwd, ':t'),
+        finder = finder,
+        previewer = require('telescope.config').values.grep_previewer(opts),
+        sorter = sorters.empty(),
+      }):find()
+    end
+
+    vim.keymap.set('n', '<leader>fa', dir_line_multigrep, { desc = 'Line Multi Grep (dir)' })
+
+    vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = '#504945', bg = 'NONE' })
     vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = '#83a598', bg = 'NONE' })
     vim.api.nvim_set_hl(0, 'TelescopeTitle', { fg = '#1d2021', bg = '#83a598', bold = true })
 
@@ -178,48 +335,19 @@ return {
       end,
     })
 
-    local function git_branches_by_date()
-      local output = vim.fn.systemlist(
-        'git for-each-ref --sort=-committerdate --format=\'%(refname:short) %(committerdate:relative)\' refs/heads/'
-      )
-
-      pickers
-        .new({}, {
-          prompt_title = 'Git Branches By Date',
-          finder = finders.new_table({
-            results = output,
-          }),
-          sorter = conf.generic_sorter({}),
-          attach_mappings = function(prompt_bufnr)
-            actions.select_default:replace(function()
-              actions.close(prompt_bufnr)
-              local selection = actions_state.get_selected_entry()[1]
-              local branch = vim.split(selection, ' ')[1]
-              vim.cmd('Git checkout ' .. branch)
-            end)
-            return true
-          end,
-        })
-        :find()
-    end
-
-    vim.api.nvim_create_user_command('GitBranchesByDate', git_branches_by_date, {})
-
     telescope.setup({
       defaults = {
         path_display = { 'truncate' },
-        prompt_prefix = '   ',
-        selection_caret = ' ',
+        prompt_prefix = '   ',
+        selection_caret = ' ',
         entry_prefix = '  ',
         multi_icon = '󰒍 ',
-        file_sorter = require('telescope.sorters').get_fuzzy_file,
-        generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
         set_env = { ['COLORTERM'] = 'truecolor' },
         results_title = false,
         color_devicons = true,
-        preview = { treesitter = true },
-        sorting_strategy = 'ascending',
-        selection_strategy = 'reset',
+        preview = { treesitter = false, filesize_limit = 1 }, -- 1 MB
+        sorting_strategy = 'descending',
+        selection_strategy = 'follow',
         layout_strategy = 'horizontal',
         layout_config = {
           prompt_position = 'top',
@@ -235,23 +363,13 @@ return {
           preview_cutoff = 120,
         },
         file_ignore_patterns = {
-          '__pycache__/',
-          'node_modules/',
-          '.dart_tool/',
-          '.vscode/',
-          '.git/',
-          '.next/',
-          '.undo/',
-          'undodir/',
-          '%.lock',
-          '%.pdf',
-          '%.dylib',
-          '%.exe',
-          '%.so',
-          '%.pdb',
-          '%.class',
-          'dist/',
-          'build/',
+          '%.lock$',
+          '%.pdf$',
+          '%.dylib$',
+          '%.exe$',
+          '%.so$',
+          '%.pdb$',
+          '%.class$',
         },
         vimgrep_arguments = {
           'rg',
@@ -262,7 +380,15 @@ return {
           '--column',
           '--smart-case',
           '--hidden',
-          '--no-ignore-vcs',
+          '--glob=!.git/',
+          '--glob=!node_modules/',
+          '--glob=!dist/',
+          '--glob=!build/',
+          '--glob=!.next/',
+          '--glob=!.dart_tool/',
+          '--glob=!.undo/',
+          '--glob=!undodir/',
+          '--glob=!*.lock',
         },
         mappings = {
           i = {
@@ -306,17 +432,52 @@ return {
       pickers = {
         buffers = {
           sort_mru = true,
-          mappings = {
-            i = { ['<c-d>'] = actions.delete_buffer },
-          },
         },
-        live_grep = { preview = true },
+        live_grep = {
+          preview = true,
+          debounce = 100,
+        },
         grep_string = { preview = true },
         man_pages = { sections = { '2', '3' } },
         lsp_document_symbols = { path_display = { 'hidden' } },
-        lsp_workspace_symbols = { path_display = { 'shorten' } },
         find_files = {
+          theme = 'ivy',
           hidden = true,
+          find_command = {
+            'fd',
+            '--type',
+            'f',
+            '--type',
+            'l',
+            '--hidden',
+            '--follow',
+            '--exclude',
+            '.git',
+            '--exclude',
+            'node_modules',
+            '--exclude',
+            'dist',
+            '--exclude',
+            'build',
+            '--exclude',
+            '.next',
+            '--exclude',
+            '.dart_tool',
+            '--exclude',
+            'undodir',
+            '--exclude',
+            '.undo',
+            '--exclude',
+            '.cache',
+            '--exclude',
+            '.venv',
+            '--exclude',
+            '__pycache__',
+            '--exclude',
+            'target',
+            '--exclude',
+            '.DS_Store',
+          },
         },
       },
       extensions = {
@@ -344,27 +505,19 @@ return {
           override_generic_sorter = true,
           override_file_sorter = true,
           case_mode = 'ignore_case',
-          hidden = true,
         },
         file_browser = {
           theme = 'ivy',
           hijack_netrw = true,
           mappings = { ['i'] = {}, ['n'] = {} },
         },
-        frecency = {
-          show_scores = false,
-          show_unindexed = true,
-          ignore_patterns = { '*.git/*', '*/tmp/*' },
-          disable_devicons = false,
-        },
       },
     })
 
-    telescope.load_extension('file_browser')
     telescope.load_extension('fzf')
+    telescope.load_extension('file_browser')
     telescope.load_extension('live_grep_args')
     telescope.load_extension('recent_files')
     telescope.load_extension('themes')
-    telescope.load_extension('frecency')
   end,
 }

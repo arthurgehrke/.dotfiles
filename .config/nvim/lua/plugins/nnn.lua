@@ -4,7 +4,7 @@ return {
   enabled = false,
   keys = {
     {
-      '<leader>n',
+      '<leader>nn',
       function()
         local activeFilePath = vim.api.nvim_buf_get_name(0)
         vim.api.nvim_command(string.format('NnnPicker %s', activeFilePath))

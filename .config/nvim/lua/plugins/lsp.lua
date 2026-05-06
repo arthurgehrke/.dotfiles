@@ -7,9 +7,31 @@ return {
     opts_extend = { 'ensure_installed' },
     opts = {
       ensure_installed = {
-        'stylua', 'shfmt', 'black', 'prettier', 'prettierd', 'goimports',
-        'gofumpt', 'sql-formatter', 'jq', 'luacheck', 'shellcheck', 'yamllint',
-        'jsonlint', 'htmlhint', 'eslint_d', 'ruff', 'phpstan', 'vale', 'golangci-lint',
+        'stylua',
+        'shfmt',
+        'black',
+        'prettier',
+        'prettierd',
+        'beautysh',
+        'shellharden',
+        'goimports',
+        'gofumpt',
+        'sql-formatter',
+        'jq',
+        'luacheck',
+        'shellcheck',
+        'yamllint',
+        'yamlfix',
+        'jsonlint',
+        'htmlhint',
+        'htmlbeautifier',
+        'eslint_d',
+        'ruff',
+        'phpstan',
+        'vale',
+        'golangci-lint',
+        'sqlfluff',
+        'stylelint',
       },
     },
     config = function(_, opts)
@@ -34,74 +56,132 @@ return {
     end,
   },
   {
-    'williamboman/mason-lspconfig.nvim',
-  },
-  {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      'saghen/blink.cmp',
-      'williamboman/mason-lspconfig.nvim',
+      { 'mason-org/mason-lspconfig.nvim', opts = {} },
     },
+    init = function()
+      local icons = {
+        [vim.diagnostic.severity.ERROR] = '󰅚',
+        [vim.diagnostic.severity.WARN] = '󰀪',
+        [vim.diagnostic.severity.HINT] = '󰌶',
+        [vim.diagnostic.severity.INFO] = '󰋽',
+      }
+
+      vim.diagnostic.config({
+        signs = {
+          text = icons,
+          texthl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          },
+          numhl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          },
+        },
+        virtual_text = false,
+        float = {
+          focusable = false,
+          style = 'minimal',
+          border = 'rounded',
+          header = '',
+          prefix = '',
+          suffix = '',
+          source = true,
+          format = function(d)
+            if d.code then
+              return string.format('%s [%s]', d.message, d.code)
+            end
+            return d.message
+          end,
+        },
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+
+      vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Diagnostic Float' })
+      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostic Loclist' })
+
+      vim.keymap.set('n', ']e', function()
+        vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
+      end, { desc = 'Next Error' })
+
+      vim.keymap.set('n', '[e', function()
+        vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+      end, { desc = 'Prev Error' })
+
+      vim.keymap.set('n', ']w', function()
+        vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN })
+      end, { desc = 'Next Warning' })
+
+      vim.keymap.set('n', '[w', function()
+        vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN })
+      end, { desc = 'Prev Warning' })
+    end,
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+        group = vim.api.nvim_create_augroup('user-lsp-attach', { clear = true }),
         callback = function(event)
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          -- === SEUS ATALHOS DE LSP CONSOLIDADOS ===
           map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
           map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
           map('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
           map('gtD', vim.lsp.buf.type_definition, '[G]oto [T]ype [D]efinition')
-          
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-          
-          -- Splits com Definition
-          map('gvd', function() vim.cmd('vsplit'); vim.lsp.buf.definition() end, 'V-Split Goto Definition')
-          map('gsd', function() vim.cmd('split'); vim.lsp.buf.definition() end, 'Split Goto Definition')
 
-          -- Ações de Código
+          map('gvd', function()
+            vim.cmd('vsplit')
+            vim.lsp.buf.definition()
+          end, 'V-Split Goto Definition')
+          map('gsd', function()
+            vim.cmd('split')
+            vim.lsp.buf.definition()
+          end, 'Split Goto Definition')
+
           map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>ca', vim.lsp.buf.code_action, 'Code Action', { 'n', 'v' })
-          map('ca', function() vim.lsp.buf.code_action({ apply = true, context = { only = { 'source.fixAll' } } }) end, 'Fix All')
-          map('<leader>oi', function() vim.lsp.buf.code_action({ apply = true, context = { only = { 'source.organizeImports.ts' }, diagnostics = {} } }) end, 'Organize Imports')
+          map('ca', function()
+            vim.lsp.buf.code_action({ apply = true, context = { only = { 'source.fixAll' } } })
+          end, 'Fix All')
+          map('<leader>oi', function()
+            vim.lsp.buf.code_action({
+              apply = true,
+              context = { only = { 'source.organizeImports.ts' }, diagnostics = {} },
+            })
+          end, 'Organize Imports')
+          map('gq', function()
+            vim.lsp.buf.format({ async = false, timeout_ms = 2000 })
+          end, 'Format buffer')
 
-          -- Formatação
-          map('gq', function() vim.lsp.buf.format({ async = false, timeout_ms = 2000 }) end, 'Format buffer')
-
-          -- Inlay hints (se o servidor suportar)
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          local function client_supports_method(c, method, bufnr)
-            if vim.fn.has('nvim-0.11') == 1 then
-              return c:supports_method(method, bufnr)
-            else
-              return c.supports_method(method, { bufnr = bufnr })
-            end
-          end
-
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-            end, '[T]oggle Inlay [H]ints')
+          if client and client.name == 'clangd' then
+            vim.keymap.set('n', '<leader>lh', '<cmd>ClangdSwitchSourceHeader<cr>', { buffer = event.buf, desc = 'LSP: Switch Source/Header' })
           end
         end,
       })
 
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local util = require('lspconfig/util')
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+      vim.lsp.config('*', { capabilities = capabilities })
 
       local servers = {
         gopls = {
-          capabilities = capabilities,
           cmd = { 'gopls' },
           filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-          root_dir = util.root_pattern('go.work', 'go.mod', '.git'),
+          root_markers = { 'go.work', 'go.mod', '.git' },
           settings = {
             gopls = {
               completeUnimported = true,
@@ -111,8 +191,23 @@ return {
           },
         },
         rust_analyzer = {},
-        vue_ls = {},
-        eslint = {},
+        eslint = {
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'javascript.jsx',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+            'svelte',
+            'astro',
+          },
+          settings = {
+            workingDirectories = { mode = 'auto' },
+            format = false,
+          },
+        },
         pyright = {
           settings = {
             python = {
@@ -125,7 +220,7 @@ return {
           },
         },
         ruff = {
-          on_attach = function(client, bufnr)
+          on_attach = function(client, _)
             client.server_capabilities.hoverProvider = false
           end,
         },
@@ -134,27 +229,52 @@ return {
             Lua = { completion = { callSnippet = 'Replace' } },
           },
         },
-        
-        -- TypeScript/Angular:
-        vtsls = {},
-        -- ts_ls = {}, <-- COMENTADO para não conflitar com o vtsls
+        vtsls = {
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'javascript.jsx',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+          },
+          root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+          settings = {
+            vtsls = {
+              enableMoveToFileCodeAction = true,
+              autoUseWorkspaceTsdk = true,
+            },
+            typescript = {
+              updateImportsOnFileMove = { enabled = 'always' },
+              suggest = { completeFunctionCalls = true },
+            },
+            javascript = {
+              updateImportsOnFileMove = { enabled = 'always' },
+              suggest = { completeFunctionCalls = true },
+              implicitProjectConfig = { checkJs = true },
+            },
+          },
+        },
         angularls = {},
         html = {},
+        clangd = {
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--suggest-missing-includes',
+            '--clang-tidy',
+            '--header-insertion=iwyu',
+          },
+        },
       }
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { 'stylua' })
-      
+      for name, cfg in pairs(servers) do
+        vim.lsp.config(name, cfg)
+      end
+
       require('mason-lspconfig').setup({
-        ensure_installed = ensure_installed,
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        ensure_installed = vim.tbl_keys(servers),
+        automatic_enable = true,
       })
     end,
   },

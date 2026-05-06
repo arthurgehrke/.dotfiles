@@ -11,7 +11,7 @@ return {
         mode = 'buffers',
         indicator_icon = '|',
         buffer_close_icon = '',
-        odified_icon = '●',
+        modified_icon = '●',
         close_icon = '',
         themable = false,
         left_trunc_marker = '',

@@ -14,13 +14,13 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('plugins', {
   defaults = {
-    lazy = true,
+    lazy = false,
   },
   opts = {
     colorscheme = 'gruvbox',
   },
   change_detection = {
-    notify = false, -- I find the config changed notification super annoying
+    notify = false,
   },
   disabled_plugins = {
     'netrw',
@@ -39,7 +39,7 @@ require('lazy').setup('plugins', {
     '2html_plugin',
     'logipat',
     'rrhelper',
-        "2html_plugin",
+    '2html_plugin',
     'matchit',
     'ftplugin',
     'syntax',

@@ -28,7 +28,6 @@ return {
       { '<leader>gv', '<cmd>vertical Git<CR>', { desc = 'fugitive' } },
     },
   },
-  { 'akinsho/git-conflict.nvim', version = '*', config = true, lazy = true, event = 'VeryLazy' },
   {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },

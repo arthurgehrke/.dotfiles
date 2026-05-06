@@ -1,7 +1,4 @@
 return {
-  { 'folke/lazy.nvim', version = '*' },
-  { 'LazyVim/LazyVim', version = '*' },
-  { 'nvim-lua/popup.nvim' },
   {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',

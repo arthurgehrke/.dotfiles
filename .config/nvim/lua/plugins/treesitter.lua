@@ -1,72 +1,63 @@
 return {
-  'nvim-treesitter/nvim-treesitter',
-  lazy = false,
-  version = false,
-  build = function()
-    require('nvim-treesitter.install').update({ with_sync = true })()
-  end,
-  event = { 'BufReadPre', 'BufReadPost', 'BufNewFile' },
-  cmd = {
-    'TSBufDisable',
-    'TSBufEnable',
-    'TSBufToggle',
-    'TSDisable',
-    'TSEnable',
-    'TSToggle',
-    'TSInstall',
-    'TSInstallInfo',
-    'TSInstallSync',
-    'TSModuleInfo',
-    'TSUninstall',
-    'TSUpdate',
-    'TSUpdateSync',
-  },
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    'nvim-treesitter/nvim-treesitter-refactor',
-    'JoosepAlviste/nvim-ts-context-commentstring',
-  },
-  config = function()
-    vim.g.skip_ts_context_commentstring_module = true
-    require('ts_context_commentstring').setup({
-      enable_autocmd = false,
-      config = {
-        javascript = {
-          __default = '// %s',
-          jsx_element = '{/* %s */}',
-          jsx_fragment = '{/* %s */}',
-          jsx_attribute = '// %s',
-          comment = '// %s',
-        },
-        typescript = { __default = '// %s', __multiline = '/* %s */' },
-      },
-    })
+  {
+    'nvim-treesitter/nvim-treesitter',
+    commit = '90cd658',
+    main = 'nvim-treesitter',
+    -- build = ":TSUpdate",
+    event = { 'BufReadPost', 'BufNewFile' },
+    init = function()
+      local highlight = function(bufnr, lang)
+        -------------------[ treesitter highlights ]-------------------------------
+        if not vim.treesitter.language.add(lang) then
+          return vim.notify(string.format('Treesitter cannot load parser for language: %s', lang), vim.log.levels.INFO, { title = 'Treesitter' })
+        end
+        vim.treesitter.start(bufnr)
+      end
 
-    local opts = {
-      auto_install = true,
-      highlight = {
-        enable = true,
-        disable = function(_, buf)
-          local max_filesize = 1000 * 1024
-          local filetype = vim.bo[buf].filetype
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local ft = vim.bo.filetype
+          local bt = vim.bo.buftype
+          local buf = args.buf
 
-          if filetype == 'tmux' then
+          if bt ~= '' then
+            return
+          end -- don't run further.
+
+          local ok, treesitter = pcall(require, 'nvim-treesitter')
+          ---------------------[ treesitter indent ]-------------------------------
+
+          if not vim.tbl_contains({ 'python', 'html', 'yaml', 'markdown' }, ft) then
+            vim.bo.indentexpr = 'v:lua.require(\'nvim-treesitter\').indentexpr()'
+          end
+
+          --------------------[ treesitter parsers ]-------------------------------
+          if vim.fn.executable('tree-sitter') ~= 1 then
+            vim.api.nvim_echo({
+              {
+                'tree-sitter CLI not found. Parsers cannot be installed.',
+                'ErrorMsg',
+              },
+            }, true, {})
             return false
           end
 
-          if filetype == 'markdown' then
-            return false
+          if not vim.treesitter.language.get_lang(ft) then
+            return
           end
 
-          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
+          if vim.list_contains(treesitter.get_installed(), ft) then
+            highlight(buf, ft)
+          elseif vim.list_contains(treesitter.get_available(), ft) then
+            treesitter.install(ft):await(function()
+              highlight(buf, ft)
+            end)
           end
         end,
-        additional_vim_regex_highlighting = false,
-      },
-      indent = { enable = true },
-      ensure_installed = {
+      })
+    end,
+    opts = {
+      install = {
         'bash',
         'c',
         'css',
@@ -75,10 +66,8 @@ return {
         'gitcommit',
         'html',
         'javascript',
-        'jsdoc',
         'json',
         'json5',
-        'jsonc',
         'lua',
         'luadoc',
         'luap',
@@ -104,46 +93,20 @@ return {
         'vue',
         'angular',
       },
-      refactor = {
-        highlight_definitions = { enable = false },
-        highlight_current_scope = { enable = false },
-        smart_rename = {
-          enable = true,
-          keymaps = {
-            smart_rename = 'grr',
+    },
+    config = function(_, opts)
+      local treesitter = require('nvim-treesitter')
+      treesitter.setup(opts)
+      if vim.fn.executable('tree-sitter') ~= 1 then
+        vim.api.nvim_echo({
+          {
+            'tree-sitter CLI not found. Parsers cannot be installed.',
+            'ErrorMsg',
           },
-        },
-        navigation = {
-          enable = false,
-        },
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ['af'] = '@function.outer',
-            ['if'] = '@function.inner',
-            ['ac'] = '@class.outer',
-            ['ic'] = '@class.inner',
-          },
-        },
-        move = {
-          enable = false,
-        },
-      },
-    }
-
-    if type(opts.ensure_installed) == 'table' then
-      opts.ensure_installed = vim.fn.uniq(opts.ensure_installed)
-    end
-
-    vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-
-    require('nvim-treesitter.configs').setup(opts)
-
-    local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-    parser_config.tsx.filetype_to_parsername = { 'javascript', 'typescript.tsx' }
-  end,
+        }, true, {})
+        return false
+      end
+      treesitter.install(opts.install)
+    end,
+  },
 }

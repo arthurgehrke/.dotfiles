@@ -2,8 +2,6 @@ vim.opt.autowrite = true
 vim.opt.conceallevel = 2
 -- vim.opt.textwidth = 120
 
--- Faster scrolling
-vim.o.lazyredraw = true
 -- Decrease redraw time
 vim.o.redrawtime = 100
 
@@ -101,7 +99,6 @@ vim.o.updatetime = 250
 
 vim.opt.showcmd = false
 vim.opt.cmdheight = 1
-vim.opt.laststatus = 2
 
 -- completeopt is used to manage code suggestions
 -- menuone: show popup even when there is only one suggestion
@@ -123,15 +120,13 @@ vim.o.sidescrolloff = 10
 vim.o.emoji = false
 
 vim.opt.encoding = 'utf-8'
-vim.opt.lazyredraw = true
 
 -- no bells
 vim.opt.errorbells = false
 vim.opt.visualbell = false
 
 vim.opt.statusline = vim.opt.statusline:get() .. ' [%{&fileformat}]'
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldmethod = 'manual'
 vim.opt.foldenable = false
 
 vim.opt.termguicolors = true
@@ -156,46 +151,6 @@ vim.g.markdown_syntax_conceal = 0
 
 -- ripgrep
 vim.opt.rtp:append('/opt/homebrew/opt/fzf')
-
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = true,
-  -- float = { border = 'rounded' },
-  float = {
-    focusable = false,
-    style = 'minimal',
-    border = 'single',
-    -- source = 'always',
-    header = '',
-    prefix = '',
-  },
-  underline = true,
-  update_in_insert = true,
-  severty_sort = true,
-})
-
--- Use nerd font for gutter signs
-local signs = { Error = 'E', Warn = 'W', Hint = 'H', Info = 'I' }
--- local signs = { Error = '󰅚', Warn = '󰀪', Hint = '󰌶', Info = '󰋽' }
-
--- for type, icon in pairs(signs) do
---   local hl = 'DiagnosticSign' .. type
---   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
--- end
-
-for type, icon in pairs(signs) do
-  local name = 'DiagnosticSign' .. type
-  vim.diagnostic.config({
-    signs = {
-      [vim.diagnostic.severity[type:upper()]] = {
-        text = icon,
-        texthl = name,
-        numhl = name,
-      },
-      severity_sort = true
-    },
-  })
-end
 
 vim.g.loaded_perl_provider = 0
 vim.g.ruby_host_prog = '/usr/bin/ruby'
