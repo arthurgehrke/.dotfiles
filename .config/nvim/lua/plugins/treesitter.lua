@@ -97,15 +97,6 @@ return {
     config = function(_, opts)
       local treesitter = require('nvim-treesitter')
       treesitter.setup(opts)
-      if vim.fn.executable('tree-sitter') ~= 1 then
-        vim.api.nvim_echo({
-          {
-            'tree-sitter CLI not found. Parsers cannot be installed.',
-            'ErrorMsg',
-          },
-        }, true, {})
-        return false
-      end
       treesitter.install(opts.install)
     end,
   },

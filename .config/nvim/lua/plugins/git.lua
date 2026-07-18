@@ -1,8 +1,7 @@
 return {
   {
     'tpope/vim-fugitive',
-    lazy = true,
-    event = 'VeryLazy',
+    cmd = { 'G', 'Git', 'GBrowse', 'Gedit', 'Gdiffsplit', 'Gvdiffsplit' },
     keys = {
       { '<leader>ga', '<cmd>G add %<cr>', desc = '[G]it [A]dd' },
       { '<leader>gal', '<cmd>G add --all<cr>', desc = '[G]it [A]dd A[l]l' },
@@ -11,7 +10,7 @@ return {
       -- WARN: G commit --amend don't work with fugitive
       { '<leader>gca', '<cmd>vsplit<bar>term git commit --amend -v<cr>', desc = '[G]it [C]ommit [A]mend' },
       { '<leader>gcm', '<cmd>G commit -v<cr>', desc = '[G]it [C]o[M]mit' },
-      { '<leader>g', '<cmd>:G<cr>', desc = '[G]it' },
+      { '<leader>gts', '<cmd>G<cr>', desc = '[G]it [S]tatus' },
       { '<leader>gfa', '<cmd>G fetch --all -p<cr>', desc = '[G]it [F]etch [A]ll' },
       { '<leader>gi', '<cmd>G init<cr>', desc = '[G]it [I]nit' },
       { '<leader>gma', '<cmd>G merge --abort<cr>', desc = '[G]it [M]erge [A]bort' },
@@ -22,120 +21,104 @@ return {
       { '<leader>gpo', '<cmd>G push origin -u HEAD<cr>', desc = '[G]it [P]ush [O]rigin' },
       { '<leader>gu', ':G reset --soft HEAD~1', desc = '[G]it [U]ndo' },
       { '<leader>sum', ':G stash -um ', desc = 'Git [S]tash [UM]' },
-      { '<Leader>ge', ':Gedit :<CR>' },
-      { '<Leader>gb', ':GBrowse<CR>' },
-      { '<Leader>gb', ':\'<,\'>GBrowse<CR>', mode = 'v' },
-      { '<leader>gv', '<cmd>vertical Git<CR>', { desc = 'fugitive' } },
+      { '<leader>ge', ':Gedit :<cr>', desc = '[G]it [E]dit' },
+      { '<leader>gb', ':GBrowse<cr>', desc = '[G]it [B]rowse' },
+      { '<leader>gb', ':\'<,\'>GBrowse<cr>', mode = 'v', desc = '[G]it [B]rowse (visual)' },
+      { '<leader>gv', '<cmd>vertical Git<cr>', desc = '[G]it [V]ertical' },
     },
   },
   {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
-    config = function()
-      local gitsigns = require('gitsigns')
-
-      local function gitsigns_keymap_attach(bufnr)
-        local function opts(desc)
-          return { desc = 'git: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    opts = {
+      signs = {
+        add = { text = '│' },
+        change = { text = '│' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      attach_to_untracked = true,
+      auto_attach = true,
+      signcolumn = true,
+      numhl = false,
+      linehl = false,
+      word_diff = false,
+      watch_gitdir = { interval = 1000, follow_files = true },
+      current_line_blame = true,
+      current_line_blame_opts = {
+        virt_text = true,
+        virt_text_pos = 'eol',
+        delay = 1000,
+        ignore_whitespace = true,
+      },
+      current_line_blame_formatter = '      <author>, <author_time:%R> - <summary>',
+      sign_priority = 6,
+      update_debounce = 100,
+      status_formatter = nil,
+      max_file_length = 40000,
+      preview_config = {
+        border = 'single',
+        style = 'minimal',
+        relative = 'cursor',
+        row = 0,
+        col = 1,
+      },
+      on_attach = function(bufnr)
+        local gs = require('gitsigns')
+        local function map(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, {
+            desc = 'git: ' .. desc,
+            buffer = bufnr,
+            silent = true,
+            nowait = true,
+          })
         end
 
+        -- Navigation
         vim.keymap.set('n', ']c', function()
           if vim.wo.diff then
             return ']c'
           end
           vim.schedule(function()
-            gitsigns.next_hunk()
+            gs.nav_hunk('next')
           end)
           return '<Ignore>'
-        end, { expr = true })
+        end, { expr = true, buffer = bufnr, desc = 'git: next hunk' })
 
         vim.keymap.set('n', '[c', function()
           if vim.wo.diff then
             return '[c'
           end
           vim.schedule(function()
-            gitsigns.prev_hunk()
+            gs.nav_hunk('prev')
           end)
           return '<Ignore>'
-        end, { expr = true })
+        end, { expr = true, buffer = bufnr, desc = 'git: prev hunk' })
 
-        vim.keymap.set('n', '<space>hr', '<cmd>Gitsigns reset_hunk<CR>', opts('Reset Hunk'))
-        vim.keymap.set('n', '<space>hR', '<cmd>Gitsigns reset_buffer<CR>', opts('Reset Buffer'))
-        vim.keymap.set('n', '<space>hp', '<cmd>Gitsigns preview_hunk<CR>', opts('Preview Hunk'))
-        vim.keymap.set('n', '<space>hb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>', opts('Blame Line'))
-        vim.keymap.set('n', '<space>hs', '<cmd>Gitsigns stage_hunk<CR>', opts('Stage Hunk'))
-        vim.keymap.set('n', '<space>hS', '<cmd>Gitsigns stage_buffer<CR>', opts('Stage Buffer'))
-        vim.keymap.set('n', '<space>hU', '<cmd>Gitsigns reset_buffer_index<CR>', opts('Reset Buffer Index'))
-        vim.keymap.set('n', '<space>hu', '<cmd>Gitsigns undo_stage_hunk<CR>', opts('Undo Staging Hunk'))
-        vim.keymap.set(
-          'n',
-          '<leader>tb',
-          '<cmd>Gitsigns toggle_current_line_blame<CR>',
-          opts('Toggle Current Line Blame')
-        )
+        -- Actions
+        map('n', '<leader>hs', '<cmd>Gitsigns stage_hunk<cr>', 'Stage Hunk')
+        map('n', '<leader>hr', '<cmd>Gitsigns reset_hunk<cr>', 'Reset Hunk')
+        map('v', '<leader>hs', ':Gitsigns stage_hunk<cr>', 'Stage Hunk (visual)')
+        map('v', '<leader>hr', ':Gitsigns reset_hunk<cr>', 'Reset Hunk (visual)')
+        map('n', '<leader>hS', '<cmd>Gitsigns stage_buffer<cr>', 'Stage Buffer')
+        map('n', '<leader>hR', '<cmd>Gitsigns reset_buffer<cr>', 'Reset Buffer')
+        map('n', '<leader>hu', '<cmd>Gitsigns undo_stage_hunk<cr>', 'Undo Stage Hunk')
+        map('n', '<leader>hU', '<cmd>Gitsigns reset_buffer_index<cr>', 'Reset Buffer Index')
+        map('n', '<leader>hp', '<cmd>Gitsigns preview_hunk<cr>', 'Preview Hunk')
+        map('n', '<leader>hb', function()
+          gs.blame_line({ full = true })
+        end, 'Blame Line')
+        map('n', '<leader>tb', '<cmd>Gitsigns toggle_current_line_blame<cr>', 'Toggle Line Blame')
+        map('n', '<leader>gd', gs.diffthis, 'Diff This')
+        map('n', '<leader>gD', function()
+          gs.diffthis('~')
+        end, 'Diff This ~')
 
-        vim.keymap.set({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-
-        vim.keymap.set('v', '<space>hr', ':Gitsigns reset_hunk<CR>', opts('ResetHunk (Visual)'))
-        vim.keymap.set('v', '<space>hs', ':Gitsigns stage_hunk<CR>', opts('StageHunk (Visual)'))
-        vim.keymap.set('n', '<leader>gd', gitsigns.diffthis)
-        vim.keymap.set('n', '<leader>gD', function()
-          gitsigns.diffthis('~')
-        end)
-      end
-
-      gitsigns.setup({
-        signs = {
-          add = { text = '│' },
-          change = { text = '│' },
-          delete = { text = '_' },
-          topdelete = { text = '‾' },
-          changedelete = { text = '~' },
-          untracked = { text = '┆' },
-          -- add = { text = '+' },
-          -- change = { text = '~' },
-          -- delete = { text = '_' },
-          -- topdelete = { text = '‾' },
-          -- changedelete = { text = '~' },
-        },
-        -- signcolumn = true,
-        -- numhl = false,
-        -- linehl = false,
-        -- word_diff = false,
-        -- update_debounce = 50,
-        -- watch_gitdir = {
-        --   interval = 1000,
-        --   follow_files = true,
-        -- },
-        attach_to_untracked = true,
-        auto_attach = true,
-        on_attach = gitsigns_keymap_attach,
-        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
-        watch_gitdir = { interval = 1000, follow_files = true },
-        current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
-        current_line_blame_opts = {
-          virt_text = true,
-          virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-          delay = 1000,
-          ignore_whitespace = true,
-        },
-        current_line_blame_formatter = '      <author>, <author_time:%R> - <summary>',
-        sign_priority = 6,
-        update_debounce = 100,
-        status_formatter = nil, -- Use default
-        max_file_length = 40000,
-        preview_config = {
-          -- Options passed to nvim_open_win
-          border = 'single',
-          style = 'minimal',
-          relative = 'cursor',
-          row = 0,
-          col = 1,
-        },
-      })
-    end,
+        -- Text object
+        map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<cr>', 'Select Hunk')
+      end,
+    },
   },
 }

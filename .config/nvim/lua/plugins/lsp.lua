@@ -59,7 +59,7 @@ return {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      { 'mason-org/mason-lspconfig.nvim', opts = {} },
+      'mason-org/mason-lspconfig.nvim',
     },
     init = function()
       local icons = {
@@ -238,7 +238,6 @@ return {
             'typescriptreact',
             'typescript.tsx',
           },
-          root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
           settings = {
             vtsls = {
               enableMoveToFileCodeAction = true,
@@ -251,12 +250,37 @@ return {
             javascript = {
               updateImportsOnFileMove = { enabled = 'always' },
               suggest = { completeFunctionCalls = true },
-              implicitProjectConfig = { checkJs = true },
+            },
+            ['js/ts'] = {
+              implicitProjectConfig = {
+                checkJs = true,
+              },
             },
           },
         },
-        angularls = {},
+        angularls = {
+          root_dir = function(bufnr, on_dir)
+            local root = vim.fs.root(bufnr, { 'angular.json', 'nx.json' })
+            if root then
+              on_dir(root)
+            end
+          end,
+        },
         html = {},
+        emmet_language_server = {
+          filetypes = {
+            'html',
+            'css',
+            'sass',
+            'scss',
+            'less',
+            'javascriptreact',
+            'typescriptreact',
+            'vue',
+            'svelte',
+            'pug',
+          },
+        },
         clangd = {
           cmd = {
             'clangd',

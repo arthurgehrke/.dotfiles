@@ -13,33 +13,56 @@ return {
   },
   config = function()
     require('conform').setup({
+      formatters = {
+        custom_stylua = {
+          command = 'stylua',
+          args = {
+            '--respect-ignores',
+            '--stdin-filepath',
+            '$FILENAME',
+            '--config-path',
+            vim.fn.stdpath('config') .. '/.stylua.toml',
+            '-',
+          },
+        },
+        global_prettier = {
+          command = 'prettier',
+          args = {
+            '--stdin-filepath',
+            '$FILENAME',
+            '--config',
+            vim.fn.stdpath('config') .. '/prettierrc.json',
+            '--log-level',
+            'silent',
+          },
+        },
+      },
       formatters_by_ft = {
         bash = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
         sh = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
         zsh = { 'shfmt', 'shellharden', 'beautysh', stop_after_first = true },
-        markdown = { 'prettierd', 'prettier', stop_after_first = true }, 
-        lua = { 'stylua' },
+        markdown = { 'global_prettier' },
+        lua = { 'custom_stylua' },
         python = { 'black', stop_after_first = true },
         go = { 'goimports', 'gofumpt' },
         sql = { 'sql-formatter' },
         psql = { 'sqlfluff' },
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        json = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
-        jsonc = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
-        json5 = { 'jq', 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'global_prettier' },
+        typescript = { 'global_prettier' },
+        javascriptreact = { 'global_prettier' },
+        typescriptreact = { 'global_prettier' },
+        json = { 'jq', 'global_prettier', stop_after_first = true },
+        jsonc = { 'jq', 'global_prettier', stop_after_first = true },
+        json5 = { 'jq', 'global_prettier', stop_after_first = true },
         yaml = { 'yamlfix' },
         rust = { 'rustfmt' },
         html = { 'htmlbeautifier' },
-        css = { 'prettier', 'stylelint', stop_after_first = true },
-        scss = { 'prettier', 'stylelint', stop_after_first = true },
-        sass = { 'prettier', 'stylelint', stop_after_first = true },
+        css = { 'global_prettier', 'stylelint', stop_after_first = true },
+        scss = { 'global_prettier', 'stylelint', stop_after_first = true },
+        sass = { 'global_prettier', 'stylelint', stop_after_first = true },
         ['_'] = { 'trim_whitespace' },
       },
     })
-
     vim.api.nvim_create_user_command('Format', function(args)
       local range = nil
       if args.count ~= -1 then
@@ -51,7 +74,6 @@ return {
       end
       require('conform').format({ async = true, lsp_format = 'fallback', range = range })
     end, { range = true })
-
     require('conform').formatters.shfmt = {
       prepend_args = function(self, ctx)
         return { '-i', '2' }

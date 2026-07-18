@@ -1,0 +1,39 @@
+font-family = GeistMono Nerd Font Mono
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Regular
+font-style-bold-italic = Bold
+font-size = 13.5
+font-thicken = true
+
+theme = "Gruvbox Dark"
+background-opacity = 1.0
+
+cursor-style = block
+cursor-style-blink = false
+cursor-opacity = 1.0
+cursor-invert-fg-bg = true
+
+title = " "
+window-title-font-family = ""
+# macos-titlebar-style = hidden
+macos-titlebar-proxy-icon = hidden
+macos-option-as-alt = left
+window-save-state = never
+window-padding-balance = true
+resize-overlay = never
+
+mouse-hide-while-typing = false
+copy-on-select = clipboard
+clipboard-paste-protection = false
+
+scrollback-limit = 100000
+shell-integration = detect
+shell-integration-features = no-cursor
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+keybind = clear
+keybind = super+v=paste_from_clipboard
+keybind = super+c=copy_to_clipboard
+keybind = super+shift+v=paste_from_selection

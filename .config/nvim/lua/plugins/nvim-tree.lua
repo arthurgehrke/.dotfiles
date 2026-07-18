@@ -150,6 +150,8 @@ return {
             '.git',
             'dist',
             '.cache',
+            'CloudStorage',
+            '.Trash',
           },
         },
         renderer = {
@@ -175,7 +177,7 @@ return {
           icons = {
             web_devicons = {
               file = {
-                enable = true,
+                enable = false,
                 -- color = false,
               },
               folder = {
@@ -188,10 +190,10 @@ return {
             padding = ' ',
             diagnostics_placement = 'signcolumn',
             symlink_arrow = ' ➛ ',
-            webdev_colors = true,
+            webdev_colors = false,
             show = {
-              file = true,
-              folder = true,
+              file = false,
+              folder = false,
               folder_arrow = true,
               git = true,
               modified = true,

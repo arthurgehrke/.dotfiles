@@ -9,39 +9,38 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('plugins', {
   defaults = {
     lazy = false,
   },
-  opts = {
-    colorscheme = 'gruvbox',
-  },
+  checker = { enabled = true, notify = false },
   change_detection = {
+    enabled = true,
     notify = false,
   },
-  disabled_plugins = {
-    'netrw',
-    'netrwPlugin',
-    'netrwSettings',
-    'netrwFileHandlers',
-    'gzip',
-    'zip',
-    'zipPlugin',
-    'tar',
-    'tarPlugin',
-    'getscript',
-    'getscriptPlugin',
-    'vimball',
-    'vimballPlugin',
-    '2html_plugin',
-    'logipat',
-    'rrhelper',
-    '2html_plugin',
-    'matchit',
-    'ftplugin',
-    'syntax',
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        'netrw',
+        'netrwPlugin',
+        'netrwSettings',
+        'netrwFileHandlers',
+        'gzip',
+        'zip',
+        'zipPlugin',
+        'tar',
+        'tarPlugin',
+        'getscript',
+        'getscriptPlugin',
+        'vimball',
+        'vimballPlugin',
+        '2html_plugin',
+        'logipat',
+        'rrhelper',
+        'matchit',
+      },
+    },
   },
 })

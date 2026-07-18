@@ -144,85 +144,93 @@ return {
 
       local title = bufname ~= '' and vim.fn.fnamemodify(bufname, ':t') or '[No Name]'
 
-      pickers.new(opts, {
-        prompt_title = 'Line Multi Grep — ' .. title,
-        finder = finders.new_table({
-          results = results,
-          entry_maker = function(item)
-            return {
-              value = item,
-              display = string.format('%5d  %s', item.lnum, item.text),
-              ordinal = item.text,
-              lnum = item.lnum,
-              text = item.text,
-            }
-          end,
-        }),
-        sorter = sorters.Sorter:new({
-          scoring_function = function(_, prompt, _, entry)
-            if not prompt or prompt == '' then
-              return 1
-            end
-            local hay = entry.text:lower()
-            for _, tok in ipairs(tokens(prompt)) do
-              if not hay:find(tok, 1, true) then
-                return -1
+      pickers
+        .new(opts, {
+          prompt_title = 'Line Multi Grep — ' .. title,
+          finder = finders.new_table({
+            results = results,
+            entry_maker = function(item)
+              return {
+                value = item,
+                display = string.format('%5d  %s', item.lnum, item.text),
+                ordinal = item.text,
+                lnum = item.lnum,
+                text = item.text,
+              }
+            end,
+          }),
+          sorter = sorters.Sorter:new({
+            scoring_function = function(_, prompt, _, entry)
+              if not prompt or prompt == '' then
+                return 1
               end
-            end
-            return 1
-          end,
-          highlighter = function(_, prompt, display)
-            local positions = {}
-            if not prompt or prompt == '' then
-              return positions
-            end
-            local lower = display:lower()
-            local prefix_offset = display:find('%S%s') or 0
-            for _, tok in ipairs(tokens(prompt)) do
-              local from = 1
-              while true do
-                local s, e = lower:find(tok, from, true)
-                if not s then break end
-                if s > prefix_offset then
-                  for i = s, e do
-                    positions[#positions + 1] = i
-                  end
+              local hay = entry.text:lower()
+              for _, tok in ipairs(tokens(prompt)) do
+                if not hay:find(tok, 1, true) then
+                  return -1
                 end
-                from = e + 1
               end
-            end
-            return positions
-          end,
-        }),
-        previewer = previewers.new_buffer_previewer({
-          title = 'Line Preview',
-          get_buffer_by_name = function() return bufname ~= '' and bufname or 'line-multigrep' end,
-          define_preview = function(self, entry)
-            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
-            if ft and ft ~= '' then
-              pcall(vim.api.nvim_buf_set_option, self.state.bufnr, 'filetype', ft)
-            end
-            vim.schedule(function()
-              if not vim.api.nvim_win_is_valid(self.state.winid) then return end
-              pcall(vim.api.nvim_win_set_cursor, self.state.winid, { entry.lnum, 0 })
-              vim.api.nvim_win_call(self.state.winid, function()
-                vim.cmd('normal! zz')
+              return 1
+            end,
+            highlighter = function(_, prompt, display)
+              local positions = {}
+              if not prompt or prompt == '' then
+                return positions
+              end
+              local lower = display:lower()
+              local prefix_offset = display:find('%S%s') or 0
+              for _, tok in ipairs(tokens(prompt)) do
+                local from = 1
+                while true do
+                  local s, e = lower:find(tok, from, true)
+                  if not s then
+                    break
+                  end
+                  if s > prefix_offset then
+                    for i = s, e do
+                      positions[#positions + 1] = i
+                    end
+                  end
+                  from = e + 1
+                end
+              end
+              return positions
+            end,
+          }),
+          previewer = previewers.new_buffer_previewer({
+            title = 'Line Preview',
+            get_buffer_by_name = function()
+              return bufname ~= '' and bufname or 'line-multigrep'
+            end,
+            define_preview = function(self, entry)
+              vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+              if ft and ft ~= '' then
+                pcall(vim.api.nvim_buf_set_option, self.state.bufnr, 'filetype', ft)
+              end
+              vim.schedule(function()
+                if not vim.api.nvim_win_is_valid(self.state.winid) then
+                  return
+                end
+                pcall(vim.api.nvim_win_set_cursor, self.state.winid, { entry.lnum, 0 })
+                vim.api.nvim_win_call(self.state.winid, function()
+                  vim.cmd('normal! zz')
+                end)
               end)
+            end,
+          }),
+          attach_mappings = function(prompt_bufnr, _)
+            actions.select_default:replace(function()
+              local entry = actions_state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              if entry and entry.lnum then
+                vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
+                vim.cmd('normal! zz')
+              end
             end)
+            return true
           end,
-        }),
-        attach_mappings = function(prompt_bufnr, _)
-          actions.select_default:replace(function()
-            local entry = actions_state.get_selected_entry()
-            actions.close(prompt_bufnr)
-            if entry and entry.lnum then
-              vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
-              vim.cmd('normal! zz')
-            end
-          end)
-          return true
-        end,
-      }):find()
+        })
+        :find()
     end
 
     vim.keymap.set('n', '<leader>fg', buffer_line_multigrep, { desc = 'Line Multi Grep (buffer)' })
@@ -237,9 +245,13 @@ return {
 
       local finder = finders.new_async_job({
         command_generator = function(prompt)
-          if not prompt or prompt == '' then return nil end
+          if not prompt or prompt == '' then
+            return nil
+          end
           current_tokens = tokens(prompt)
-          if #current_tokens == 0 then return nil end
+          if #current_tokens == 0 then
+            return nil
+          end
           return {
             'rg',
             '--color=never',
@@ -262,7 +274,9 @@ return {
         end,
         entry_maker = function(line)
           local entry = base_entry_maker(line)
-          if not entry then return nil end
+          if not entry then
+            return nil
+          end
           if #current_tokens > 1 then
             local hay = (entry.text or ''):lower()
             for i = 2, #current_tokens do
@@ -276,13 +290,15 @@ return {
         cwd = opts.cwd,
       })
 
-      pickers.new(opts, {
-        debounce = 100,
-        prompt_title = 'Dir Line Multi Grep — ' .. vim.fn.fnamemodify(opts.cwd, ':t'),
-        finder = finder,
-        previewer = require('telescope.config').values.grep_previewer(opts),
-        sorter = sorters.empty(),
-      }):find()
+      pickers
+        .new(opts, {
+          debounce = 100,
+          prompt_title = 'Dir Line Multi Grep — ' .. vim.fn.fnamemodify(opts.cwd, ':t'),
+          finder = finder,
+          previewer = require('telescope.config').values.grep_previewer(opts),
+          sorter = sorters.empty(),
+        })
+        :find()
     end
 
     vim.keymap.set('n', '<leader>fa', dir_line_multigrep, { desc = 'Line Multi Grep (dir)' })
@@ -443,6 +459,7 @@ return {
         find_files = {
           theme = 'ivy',
           hidden = true,
+          no_ignore = true,
           find_command = {
             'fd',
             '--type',
@@ -451,6 +468,8 @@ return {
             'l',
             '--hidden',
             '--follow',
+            '--no-ignore',
+            '--strip-cwd-prefix',
             '--exclude',
             '.git',
             '--exclude',
