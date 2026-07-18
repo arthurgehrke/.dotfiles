@@ -8,11 +8,11 @@ fi
 ##############################################################################
 # Homebrew Configs
 ##############################################################################
-BREW_PREFIX=$(brew --prefix 2>/dev/null || echo "/opt/homebrew")
+BREW_PREFIX="/opt/homebrew"
 
 if type brew &>/dev/null; then
   export PATH="$BREW_PREFIX/bin:$PATH"
-  unset HOMEBREW_NO_AUTO_UPDATE
+  export HOMEBREW_SANDBOX_DENY_PATHS="/Users/arthurgehrke/Applications (Parallels)"
   export HOMEBREW_BUNDLE_FILE_GLOBAL="$HOME"/Brewfile
 fi
 
@@ -20,23 +20,25 @@ fi
 # Sourcing e Plugins
 ##############################################################################
 setopt EXTENDED_GLOB
+export LS_COLORS="$LS_COLORS:ow=:tw=:"
+autoload -Uz compinit
 
-autoload -Uz compinit 
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
+  compinit
 else
-	compinit -C;
-fi;
+  compinit -C
+fi
 
 source "$HOME"/.zaliases
-source "$HOME"/.zprofile
 source "$HOME"/.zfunctions.zsh
 source "$HOME"/.themes/zsh/simple-theme/.p10k.zsh
+[ -f ~/.zsecrets ] && source ~/.zsecrets
 
 source "$BREW_PREFIX"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source "$BREW_PREFIX"/share/powerlevel10k/powerlevel10k.zsh-theme
 source "$BREW_PREFIX"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source "$BREW_PREFIX"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+FAST_THEME_NAME="$HOME/.themes/zsh-fast-syntax-highlighting/default.ini"
+source "$BREW_PREFIX"/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 if [ -f "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh" ]; then
   source "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh"
@@ -48,44 +50,15 @@ fi
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
 unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[default]=fg=#ebdbb2,bold
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=#fb4934
-# ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934,standout
-ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=#fb4934
-ZSH_HIGHLIGHT_STYLES[alias]=fg=#fe8019,bold
-ZSH_HIGHLIGHT_STYLES[builtin]=fg=#b8bb26,bold
-ZSH_HIGHLIGHT_STYLES[function]=fg=#d3869b,bold
-ZSH_HIGHLIGHT_STYLES[command]=fg=#83a598,bold
-ZSH_HIGHLIGHT_STYLES[precommand]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=#b8bb26,bold
-ZSH_HIGHLIGHT_STYLES[path]=fg=#8ec07c,underline
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]=fg=#d79921,underline
-ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=#b16286,underline
-ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=fg=#d79921,underline
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=#fabd2f,bold,underline
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=#d79921,bold
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=#8ec07c,bold
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=#d3869b,bold
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=#b16286,bold
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]=fg=#cc241d,bold
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=#fe8019,bold
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=#fabd2f,bold
-ZSH_HIGHLIGHT_STYLES[comment]=fg=#928374,bold
-ZSH_HIGHLIGHT_STYLES[redirection]=fg=#fe8019,bold
-ZSH_HIGHLIGHT_STYLES[assign]=fg=#b16286,bold
-
 ##############################################################################
 # Configurações Gerais
 ##############################################################################
 export LANG=en_US.UTF-8
-export EDITOR='nvim'
-export VISUAL="$EDITOR"
+export VISUAL=nvim
+export EDITOR=nvim
 export PAGER=less
+
+export NVIM_NOTTYFAST=1
 
 # if [[ "$TERM" != "xterm-256color" ]]; then
 #   export TERM="xterm-256color"
@@ -94,15 +67,6 @@ export PAGER=less
 export DISABLE_AUTO_TITLE=true
 export DISABLE_MAGIC_FUNCTIONS=true
 
-# ls com cores
-if [ -x /usr/bin/dircolors ]; then
-  if [ -r ~/.dircolors ]; then
-    eval "$(dircolors -b ~/.dircolors)"
-  else
-    eval "$(dircolors -b)"
-  fi
-fi
-
 ##############################################################################
 # History
 ##############################################################################
@@ -110,28 +74,21 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=500000000
 export SAVEHIST=500000000
 export HISTFILESIZE=50000000
-# export HISTTIMEFORMAT="[%F %T] "
-# export HIST_STAMPS="yyyy-mm-dd"
 
 HISTCONTROL=ignoredups
 setopt BANG_HIST
-# setopt HIST_EXPIRE_DUPS_FIRST
-# setopt HIST_IGNORE_ALL_DUPS
-# setopt HIST_IGNORE_SPACE 
-# setopt HIST_SAVE_NO_DUPS
-unsetopt EXTENDED_HISTORY
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
 setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
 setopt INTERACTIVECOMMENTS
-setopt SHARE_HISTORY
-setopt INC_APPEND_HISTORY
 setopt IGNORE_EOF
 setopt PUSHD_IGNORE_DUPS # Do not store duplicates in the stack.
 setopt PUSHD_SILENT      # Do not print the directory stack after pushd or popd.
 setopt AUTO_PUSHD        # Make cd push the old directory onto the directory stack.
 setopt AUTOPARAMSLASH    # tab completing directory appends a slash
 setopt LIST_AMBIGUOUS
-setopt ALWAYS_TO_END  
+setopt ALWAYS_TO_END
 setopt NO_BEEP
 setopt COMPLETE_ALIASES
 setopt CASE_PATHS
@@ -142,22 +99,25 @@ setopt NO_NOMATCH
 
 unsetopt GLOB_COMPLETE
 unsetopt MENU_COMPLETE
-# zstyle ':completion:*' menu select
-zstyle ':completion:*' menu select=2
-# zstyle ':completion:*' completer _complete
-zstyle ':completion:*' completer _complete _approximate
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
+
+zmodload zsh/complist
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' completer _complete
+# zstyle ':completion:*' completer _complete _approximate
+zstyle ':completion:*' matcher-list \
+  'm:{[:lower:]}={[:upper:]}'
 # zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+l:|=* r:|=*'
 zstyle ':completion::complete:*' use-cache on
 zstyle ':completion::complete:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' file-sort modification
 zstyle ':completion:*' sort false
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' select-prompt ''
+zstyle ':completion:*' list-prompt ''
 
 ##############################################################################
 # KeyMappings
 ##############################################################################
-autoload -U promptinit && promptinit
 autoload -U add-zsh-hook
 autoload -Uz edit-command-line
 autoload -Uz modify-current-argument
@@ -165,7 +125,6 @@ autoload -Uz history-substring-search-up history-substring-search-down
 
 bindkey -e
 
-# navigation
 bindkey -e '^l' forward-char
 bindkey -e '^h' backward-char
 bindkey -e '^e' forward-word
@@ -176,15 +135,13 @@ bindkey -e '^f' end-of-line
 bindkey -e '^g' backward-kill-word
 bindkey -e '^I' expand-or-complete-prefix
 
-# history
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
-# Autossugestões
 bindkey -e '^y' accept-search
 bindkey -e '^o' autosuggest-accept
 
-bindkey -r ^M accept-search
+bindkey '^M' accept-line
 
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^R' fzf-history-widget
@@ -259,11 +216,6 @@ if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
 fi
 
-# ngrok
-if command -v ngrok &>/dev/null; then
-  eval "$(ngrok completion)"
-fi
-
 ##############################################################################
 # Path
 ##############################################################################
@@ -281,12 +233,9 @@ if command -v pipx &>/dev/null; then
   export PATH="$PIPX_HOME/bin:$PATH"
 fi
 
-# go 
-export PATH=$PATH:$HOME/go/bin
+# go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH:/bin
-export GOROOT=/usr/local/go
-export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
+export PATH=$GOPATH/bin:$HOME/.local/bin:$PATH
 
 # export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
 # export CPPFLAGS="-I/opt/homebrew/opt/openssl/include"
@@ -305,10 +254,10 @@ fi
 # export JAVA_HOME="/opt/homebrew/opt/openjdk@11/"
 # export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-if command -v jenv &>/dev/null; then
-  export PATH="$HOME/.jenv/bin:$PATH"
-  eval "$(jenv init - --no-rehash)"
-fi
+# if command -v jenv &>/dev/null; then
+#   export PATH="$HOME/.jenv/bin:$PATH"
+#   eval "$(jenv init - --no-rehash)"
+# fi
 
 # Composer (PHP)
 if command -v composer &>/dev/null; then
@@ -345,25 +294,9 @@ if [ -d "/opt/homebrew/opt/rustup/bin" ]; then
 fi
 
 # Cargo (Rust)
-if command -v cargo &>/dev/null; then
-  export CARGO_HOME="$HOME/.cargo"
-  export PATH="$CARGO_HOME/bin:$PATH"
-  
-  # Verifica se o arquivo de ambiente do Cargo existe antes de carregá-lo
-  if [ -f "$CARGO_HOME/env" ]; then
-    source "$CARGO_HOME/env"
-  fi
-fi
-
-# # chruby (Ruby)
-# if [ -f "/opt/homebrew/opt/chruby/share/chruby/chruby.sh" ]; then
-#   source "/opt/homebrew/opt/chruby/share/chruby/chruby.sh"
-#   source "/opt/homebrew/opt/chruby/share/chruby/auto.sh"
-
-#   # Definir versão padrão do Ruby, se necessário
-#   if command -v ruby &>/dev/null; then
-#     chruby ruby-3.4.2
-#   fi
+# if command -v cargo &>/dev/null; then
+#   export CARGO_HOME="$HOME/.cargo"
+#   export PATH="$CARGO_HOME/bin:$PATH"
 # fi
 
 ##############################################################################
@@ -374,5 +307,3 @@ if [ -d "$HOME/Library/Android/sdk" ]; then
   export PATH="$PATH:$ANDROID_HOME/platform-tools"
   export PATH="$PATH:$ANDROID_HOME/build-tools/36.0.0"
 fi
-
-# zprof

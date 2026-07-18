@@ -12,7 +12,7 @@
 #
 #   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
@@ -45,7 +45,6 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     status                  # exit code of the last command
-    command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
     goenv                   # go environment (https://github.com/syndbg/goenv)
@@ -496,7 +495,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
   # sagging, try setting POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY to a number lower than the output
   # of `git ls-files | wc -l`. Alternatively, add `bash.showDirtyState = false` to the repository's
   # config: `git config bash.showDirtyState false`.
-  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=-1
+  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=8192
 
 
   # Don't show Git status in prompt for repositories whose workdir matches this pattern.
