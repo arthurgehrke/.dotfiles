@@ -11,6 +11,8 @@ alias restart="exec $SHELL -l"
 alias dehashed='curl -s -u "progeny.tiles-3g@icloud.com:xS2D4+W++wl2s6ONgTZpJUc4hxpRv4xl67KcgT7RlQM4w0ScPgysjWk=" "https://api.dehashed.com/search?query="'
 alias torpath='cd /opt/homebrew/etc/tor'
 
+alias cdicloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
+
 # Python
 alias mkvenv='function _mkvenv(){ python3 -m venv "$1" && echo "✅ Virtualenv created on $1. Activate with: source $1/bin/activate"; }; _mkvenv'
 alias mkvenv-activate='function _mkvenv_act(){ python3 -m venv "$1" && source "$1/bin/activate"; }; _mkvenv_act'
@@ -32,14 +34,14 @@ if [ -f "$(which bat)" ]; then
   alias cat='bat'
 fi
 
-alias linfo="eza -l --created --header --icons --group-directories-first"
-alias lscreate="eza -l --created --header --icons --group-directories-first --sort=created --reverse"
-alias lsupdate='(for f in *; do if [[ -d "$f" ]]; then t=$(find "$f" -type f -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/.venv/*" -exec stat -f "%m" {} + 2>/dev/null | sort -nr | head -n 1); echo "${t:-$(stat -f "%m" "$f")}|$f"; else echo "$(stat -f "%m" "$f")|$f"; fi; done) | sort -nr | cut -d"|" -f2 | tr "\n" "\0" | xargs -0 eza -ld --time=modified --header --icons --sort=none'
-alias lz="eza -l"
-alias ld="eza -lD"
-alias lf="eza -lF --color=always | grep -v /"
-alias lh="eza -dl .* --group-directories-first"
-alias lsdsize='eza -l --sort=size --reverse --header --icons'
+alias linfo="ls -lhO"
+alias lscreate="ls -lUr"
+alias lsupdate='(for f in *; do if [[ -d "$f" ]]; then t=$(find "$f" -type f -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/.venv/*" -exec stat -f "%m" {} + 2>/dev/null | sort -nr | head -n 1); echo "${t:-$(stat -f "%m" "$f")}|$f"; else echo "$(stat -f "%m" "$f")|$f"; fi; done) | sort -nr | cut -d"|" -f2 | tr "\n" "\0" | xargs -0 ls -ld'
+alias lz="ls -l"
+alias ld="ls -ld */"
+alias lf="ls -lF | grep -v /"
+alias lh="ls -ld .*"
+alias lsdsize='ls -lShr'
 alias lts='ll --timesort'
 alias lsc="ls -ltU"
 alias openpreview='open -a Preview'

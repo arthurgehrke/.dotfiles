@@ -3,6 +3,8 @@
 # *
 !~/dotfiles/**
 
+.zsecrets
+
 .DS_Store
 
 .docker/
@@ -112,3 +114,5 @@
 /Sites
 
 /repositories
+
+**/.claude/settings.local.json

@@ -307,3 +307,10 @@ if [ -d "$HOME/Library/Android/sdk" ]; then
   export PATH="$PATH:$ANDROID_HOME/platform-tools"
   export PATH="$PATH:$ANDROID_HOME/build-tools/36.0.0"
 fi
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/arthurgehrke/.local/bin:$PATH"
+
+# Added by osmedeus
+export PATH="/Users/arthurgehrke/osmedeus-base/external-binaries:$PATH"
