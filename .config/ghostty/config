@@ -14,8 +14,11 @@ cursor-style-blink = false
 cursor-opacity = 1.0
 cursor-invert-fg-bg = true
 
-title = " "
+title = "Ghostty"
 window-title-font-family = ""
+window-padding-balance = true
+window-padding-x = 0
+window-padding-y = 0
 # macos-titlebar-style = hidden
 macos-titlebar-proxy-icon = hidden
 macos-option-as-alt = left

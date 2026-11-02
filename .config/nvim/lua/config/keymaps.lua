@@ -10,13 +10,13 @@ end, { desc = 'Vimgrep for pattern & Glob' })
 
 vim.keymap.set('n', '<leader>dt', function()
   if vim.diagnostic.is_enabled() then
-    utils.notify('Diagnostic disabled')
+    vim.notify('Diagnostics disabled', vim.log.levels.INFO)
     vim.diagnostic.enable(false)
   else
-    utils.notify('Diagnostic enabled')
+    vim.notify('Diagnostics enabled', vim.log.levels.INFO)
     vim.diagnostic.enable()
   end
-end)
+end, { desc = 'Toggle diagnostics' })
 
 vim.keymap.set('n', '<leader>x', '<cmd> bd <CR>', { desc = 'Close Tab' })
 vim.keymap.set('n', '<leader>X', '<cmd> bd! <CR>', { desc = 'Force Close Tab' })
@@ -81,7 +81,7 @@ cmd('Cwd', function()
   vim.cmd(':pwd')
 end, { desc = 'cd current file\'s directory' })
 cmd('Swd', function()
-  vim.cmd(':cd %:p:h')
+  vim.cmd(':lcd %:p:h')
   vim.cmd(':pwd')
 end, { desc = 'cd current file\'s directory' })
 
