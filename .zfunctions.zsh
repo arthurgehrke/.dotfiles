@@ -18,9 +18,12 @@ _confirm_run() {
 
 function extract_alfred_clipboard_txt() {
   local db="$1" out="${2:-saida.txt}"
-  [[ -f "$db" ]] || { echo "arquivo não encontrado: $db" >&2; return 1 }
+  [[ -f "$db" ]] || {
+    echo "arquivo não encontrado: $db" >&2
+    return 1
+  }
   local table=$(sqlite3 "$db" "SELECT name FROM sqlite_master WHERE type='table' LIMIT 1;")
-  sqlite3 -header -column "$db" "SELECT * FROM $table;" > "$out"
+  sqlite3 -header -column "$db" "SELECT * FROM $table;" >"$out"
   echo "salvo em $out"
 }
 
@@ -32,15 +35,14 @@ function isgwspace() {
   local search_script='
     q="$1"
     [ -z "$q" ] && exit 0
-    
-    # Divide os termos digitados em variáveis posicionais
+
+    set -f
     set -- $q
     nome="$1"
     letra="$2"
-    shift 2
+    if [ "$#" -ge 2 ]; then shift 2; else shift "$#"; fi
     termo="$*"
-    
-    # Constrói o pattern dependendo de quantas palavras o usuário já digitou no fzf
+
     if [ -n "$termo" ]; then
       pattern="(?i)${nome}\\s+${letra}\\S*\\s.*${termo}"
     elif [ -n "$letra" ]; then
@@ -48,8 +50,7 @@ function isgwspace() {
     else
       pattern="(?i)${nome}"
     fi
-    
-    # Adicionados os globs -g "*.csv" e -g "*.txt" para restringir os tipos de arquivos
+
     rg --column --line-number --no-heading --color=always --smart-case --hidden \
        --ignore-file "$HOME/.rgignore" -g "*.csv" -g "*.txt" --pcre2 -- "$pattern" || true
   '
@@ -84,27 +85,23 @@ function isgwspace() {
             START_LINE=$((LINE - CONTEXT))
             END_LINE=$((LINE + CONTEXT))
             PADDING=0
-            
-            # Se o match for no começo do arquivo, calcula as linhas vazias necessárias
-            # para manter o scroll do fzf sempre perfeitamente centralizado.
+
             if [ "$START_LINE" -lt 1 ]; then
               PADDING=$((1 - START_LINE))
               START_LINE=1
             fi
-            
+
             printf "\033[1;33m--- File Info ---\033[0m\n"
             printf "Path: %s\n" "$(realpath "$FILE")"
             stat -t "%d/%m/%Y %H:%M:%S" -f "Created on: %SB | Modified: %Sm | Size: %z bytes" "$FILE" 2>/dev/null || stat -c "Modified: %y | Size: %s bytes" "$FILE"
             printf "Type: "
             file -b "$FILE"
             printf "\033[1;36m>>> Match at line %s\033[0m\n\n" "$LINE"
-            
-            # Aplica o padding se necessário
+
             if [ "$PADDING" -gt 0 ]; then
               for i in $(seq 1 $PADDING); do echo ""; done
             fi
-            
-            # Executa o bat com quebra de linha (wrap) ativada
+
             bat --style=full --color=always --wrap=character --highlight-line "$LINE" --line-range "$START_LINE:$END_LINE" "$FILE"
           '
     )
@@ -129,6 +126,22 @@ function isgwspace() {
   done
 }
 
+lsyesterday() {
+  setopt local_options extended_glob
+  zmodload zsh/datetime
+  local agora=$EPOCHSECONDS hoje ontem d
+  local -a arquivos
+
+  strftime -s d '%Y-%m-%d' $agora
+  strftime -r -s hoje '%Y-%m-%d' $d
+  strftime -s d '%Y-%m-%d' $(( hoje - 43200 ))
+  strftime -r -s ontem '%Y-%m-%d' $d
+
+  arquivos=( (^(node_modules|.git)/)#^.DS_Store(.DNomms+$(( agora - hoje ))ms-$(( agora - ontem + 1 ))) )
+
+  (( $#arquivos )) && ls -lt -- $arquivos || echo "Nenhum arquivo modificado ontem."
+}
+
 function alfclip() {
   local db="$HOME/Library/Application Support/Alfred/Databases/clipboard.alfdb"
   [[ -f "$db" ]] || {
@@ -146,55 +159,123 @@ function alfclip() {
 }
 
 function irg() {
-  local file
-  local line
+  emulate -L zsh
+  setopt local_options pipe_fail
 
   local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden --ignore-file $HOME/.rgignore"
   local INITIAL_QUERY="${*:-}"
 
-  read -r file line <<<"$(
-    FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
-      fzf --ansi \
-      --disabled \
-      --query "$INITIAL_QUERY" \
-      --color "hl:-1:underline,hl+:-1:underline:reverse" \
-      --header='?:preview | CTRL-R:ripgrep | CTRL-F:fzf | CTRL-O:open & return' \
-      --bind '?:toggle-preview' \
-      --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-      --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
-      --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
-      --bind "start:unbind(ctrl-r)" \
-      --bind 'ctrl-o:execute(nvim {1} +{2})' \
-      --prompt '1. ripgrep> ' \
-      --height 40% \
-      --layout=reverse \
-      --delimiter : \
-      --preview-window 'up,50%,border-bottom,~2,+{2}+2/2' \
-      --preview 'bat --style=full --color=always --highlight-line {2} {1}' | awk -F: '{print $1, $2}'
-  )"
+  local FZF_HEIGHT="100%"
 
-  if [[ -n "$file" ]]; then
-    nvim "$file" "+$line"
-  fi
+  FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+    fzf --ansi \
+    --disabled \
+    --query "$INITIAL_QUERY" \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --header='?:preview | CTRL-R:ripgrep | CTRL-F:fzf | ENTER/CTRL-O:abrir (volta ao sair) | ESC:sair' \
+    --bind '?:toggle-preview' \
+    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+    --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG_PREFIX {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+    --bind "start:unbind(ctrl-r)" \
+    --bind 'enter:execute(nvim {1} +{2})' \
+    --bind 'ctrl-o:execute(nvim {1} +{2})' \
+    --prompt '1. ripgrep> ' \
+    --height "$FZF_HEIGHT" \
+    --layout=reverse \
+    --delimiter : \
+    --preview-window 'up,40%,border-bottom,~2,+{2}+2/2' \
+    --preview 'bat --style=full --color=always --highlight-line {2} {1}'
 }
 
-# ---------------------------------------------------------------------------
-# irgo - irg com OCR: busca interativa em PDF, Word, planilhas, imagens e txt.
-#
-# Depende de: textgrep (no PATH), rg, fzf, bat, nvim.
-#
-#   irgo                      # busca no diretorio atual
-#   irgo "clausula"           # ja abre com a consulta
-#   irgo "eduardo" ~/Downloads/last
-#   irgo "" contrato.pdf      # um arquivo so
-#
-# Como funciona: o textgrep extrai o texto de tudo (OCR incluso) para um indice
-# em ~/.cache/textgrep/index e o rg busca nesse indice, que e texto puro e
-# instantaneo. O rodape do preview mostra o arquivo real e a localizacao
-# (pagina, celula, paragrafo). A indexacao e incremental: so o que mudou.
-#
-# Ajuste o modo de extracao com:  IRGO_INDEX_ARGS="--ocr auto -z"
-# ---------------------------------------------------------------------------
+function img() {
+  emulate -L zsh
+  setopt local_options pipe_fail
+
+  local RG="rg --column --line-number --no-heading --color=always --smart-case --hidden --ignore-file $HOME/.rgignore"
+  local q="${*:-}"
+  local sel
+
+  sel=$(FZF_DEFAULT_COMMAND="$RG ${(q)q}" \
+    fzf --ansi --disabled --multi --marker='●' \
+    --query "$q" \
+    --delimiter : \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --header='?:preview | TAB/ALT-ENTER:marcar ● | CTRL-S:salvar marcados | CTRL-R:ripgrep | CTRL-F:fzf | ENTER:abrir | ESC:sair' \
+    --bind '?:toggle-preview' \
+    --bind "change:reload:sleep 0.1; $RG {q} || true" \
+    --bind "ctrl-f:unbind(change,ctrl-f)+change-prompt(2. fzf> )+enable-search+rebind(ctrl-r)+transform-query(echo {q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f)" \
+    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(1. ripgrep> )+disable-search+reload($RG {q} || true)+rebind(change,ctrl-f)+transform-query(echo {q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r)" \
+    --bind "start:unbind(ctrl-r)" \
+    --bind 'enter:execute(nvim {1} +{2})' \
+    --bind 'tab:toggle+down' \
+    --bind 'alt-enter:toggle+down' \
+    --bind 'ctrl-s:accept' \
+    --prompt '1. ripgrep> ' \
+    --height 100% --layout=reverse \
+    --preview-window 'up,40%,border-bottom,~2,+{2}+2/2' \
+    --preview 'bat --style=full --color=always --highlight-line {2} {1}') || return 0
+
+  [[ -z $sel ]] && return 0
+
+  local dest="$PWD/"
+  vared -p "Salvar em (caminho absoluto + arquivo): " dest
+  dest=${dest/#\~/$HOME}
+  [[ -z $dest || $dest == */ ]] && {
+    print -u2 "Caminho inválido."
+    return 1
+  }
+  mkdir -p -- "${dest:h}" || return 1
+
+  local l f n abs
+  for l in ${(f)sel}; do
+    f=${l%%:*}
+    n=${${l#*:}%%:*}
+    abs=${f:A}
+    {
+      print -r -- "### ${abs:t} — ${abs}:${n}"
+      awk -v n="$n" -v m=50 '
+        NR < n - m { next }
+        { a[NR] = $0 }
+        NR >= n + m { exit }
+        END {
+          lo = (n - m > 1) ? n - m : 1
+          hi = NR
+          s = n; while (s > lo && a[s-1] ~ /[^ \t]/) s--
+          e = n; while (e < hi && a[e+1] ~ /[^ \t]/) e++
+          for (i = s; i <= e; i++) print a[i]
+        }' "$f"
+      print
+    } >>"$dest"
+  done
+  print "Salvo em $dest"
+}
+
+function ifg() {
+  emulate -L zsh
+  setopt local_options pipe_fail
+
+  local INITIAL_QUERY="${*:-}"
+
+  FZF_DEFAULT_COMMAND="rg --files --hidden" \
+    fzf \
+    --exact \
+    --query "$INITIAL_QUERY" \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --header='Enter/CTRL-O:abrir (volta ao sair) | ?:preview | ESC:sair' \
+    --bind '?:toggle-preview' \
+    --bind 'enter:execute(nvim {})' \
+    --bind 'ctrl-o:execute(nvim {})' \
+    --prompt 'arquivo> ' \
+    --height 100% \
+    --layout=reverse \
+    --delimiter / \
+    --nth=-1 \
+    --preview-window 'up,70%,border-bottom' \
+    --preview 'bat --style=full --color=always -- {} 2>/dev/null || echo "(sem preview -- binario ou bat indisponivel)"' \
+    >/dev/null
+}
+
 function irgo() {
   emulate -L zsh
   setopt local_options pipe_fail
@@ -215,7 +296,6 @@ function irgo() {
   fi
   ROOT=${ROOT:A}
 
-  # 1. indice (incremental; imprime o diretorio no stdout, progresso no stderr)
   local IDX
   IDX=$(textgrep --index "$ROOT" ${=IRGO_INDEX_ARGS:---ocr both}) || return 1
   [[ -d "$IDX/files" ]] || {
@@ -223,7 +303,6 @@ function irgo() {
     return 1
   }
 
-  # 2. bat e opcional (no Debian chama batcat)
   local BAT=""
   command -v bat >/dev/null && BAT=bat
   [[ -z $BAT ]] && command -v batcat >/dev/null && BAT=batcat
@@ -234,8 +313,6 @@ function irgo() {
     VIEW="nl -ba {1}"
   fi
 
-  # o motor e o textgrep: ele dobra acentos, chama o rg no espelho normalizado
-  # e devolve a linha ORIGINAL ja destacada, no formato arquivo:linha:texto
   local RG_PREFIX="textgrep --rg $(printf %q "$IDX")"
   local PREVIEW="textgrep --resolve {1} {2} | sed -e '1s|^|arquivo: |' -e '2s|^|local:   |'; echo; $VIEW"
 
@@ -264,7 +341,6 @@ function irgo() {
       --preview "$PREVIEW"
   ) || return 0
 
-  # 3. Enter: abre o original (ou o texto extraido, se for binario)
   [[ -n "$sel" ]] || return 0
   local file="${sel%%:*}"
   local rest="${sel#*:}"
@@ -288,7 +364,6 @@ function irgf() {
   fi
 
   local quoted_file=$(printf %q "$target_file")
-  # Multi-word queries become AND lookaheads; \Q...\E keeps each term literal
   local search_script='q="$1"; file="$2"; [ -z "$q" ] && exit 0; pattern=""; for w in $q; do pattern="${pattern}(?=.*\\Q${w}\\E)"; done; pattern="${pattern}.*"; rg --column --line-number --no-heading --color=always --smart-case --hidden --pcre2 --ignore-file "$HOME/.rgignore" -- "$pattern" "$file" || true'
   local quoted_script=$(printf %q "$search_script")
 
@@ -311,7 +386,7 @@ function irgf() {
     --preview-window 'up,50%,border-bottom,~2,+{1}+2/2' \
     --preview "bat --style=full --color=always --highlight-line {1} $quoted_file" >/dev/null
 }
-compdef '_arguments "1: :( )" "2:file:_files"' irgf
+(($+functions[compdef])) && compdef '_arguments "1: :( )" "2:file:_files"' irgf
 
 function ing() {
   local file
@@ -346,14 +421,14 @@ function ing() {
             [ "$START_LINE" -lt 1 ] && START_LINE=1
             HEADER_LINES=6
             SCROLL_TO=$((LINE - START_LINE + HEADER_LINES))
-            
+
             printf "\033[1;33m--- File Info ---\033[0m\n"
             printf "Path: %s\n" "$(realpath "$FILE")"
             stat -t "%d/%m/%Y %H:%M:%S" -f "Created on: %SB | Modified: %Sm | Size: %z bytes" "$FILE"
             printf "Type: "
             file -b "$FILE"
             printf "\033[1;36m>>> Match at line %s\033[0m\n\n" "$LINE"
-            
+
             bat --style=full --color=always --highlight-line "$LINE" --line-range "$START_LINE:$END_LINE" "$FILE"
           ' | awk -F: '{print $1, $2}'
   )"
@@ -397,27 +472,23 @@ function isg() {
             START_LINE=$((LINE - CONTEXT))
             END_LINE=$((LINE + CONTEXT))
             PADDING=0
-            
-            # Se o match for no começo do arquivo, calcula as linhas vazias necessárias
-            # para manter o scroll do fzf sempre perfeitamente centralizado.
+
             if [ "$START_LINE" -lt 1 ]; then
               PADDING=$((1 - START_LINE))
               START_LINE=1
             fi
-            
+
             printf "\033[1;33m--- File Info ---\033[0m\n"
             printf "Path: %s\n" "$(realpath "$FILE")"
             stat -t "%d/%m/%Y %H:%M:%S" -f "Created on: %SB | Modified: %Sm | Size: %z bytes" "$FILE" 2>/dev/null || stat -c "Modified: %y | Size: %s bytes" "$FILE"
             printf "Type: "
             file -b "$FILE"
             printf "\033[1;36m>>> Match at line %s\033[0m\n\n" "$LINE"
-            
-            # Aplica o padding se necessário
+
             if [ "$PADDING" -gt 0 ]; then
               for i in $(seq 1 $PADDING); do echo ""; done
             fi
-            
-            # Executa o bat com quebra de linha (wrap) ativada
+
             bat --style=full --color=always --wrap=character --highlight-line "$LINE" --line-range "$START_LINE:$END_LINE" "$FILE"
           '
     )
@@ -446,9 +517,6 @@ function itg() {
   local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case --hidden"
   local INITIAL_QUERY="${*:-}"
 
-  # Column-anchored AND: cada termo (separado por espaço OU vírgula) ancora na
-  # próxima coluna delimitada por vírgula. Ex: "417401 02 28" -> col1~417401,
-  # col2~02, col3~28. NF==0 -> nada (rg falha, fica vazio).
   local BUILD='awk "{gsub(/,/,\" \"); if(NF==0)exit; printf \"^\"; for(i=1;i<=NF;i++){printf \"[^,]*\"\$i\"[^,]*\"; if(i<NF) printf \",\"}}"'
 
   local INITIAL_PATTERN=""
@@ -487,33 +555,27 @@ function itg() {
 function vdiff() {
   local file1_line file2_line file1 file2
 
-  # 1. Seleciona o primeiro arquivo
   file1_line=$(lsd --long --timesort --color=always | fzf --ansi \
     --prompt="1. Arquivo Base > " \
     --layout=reverse --height=60% --header="Selecione o arquivo ORIGINAL")
 
   [[ -z "$file1_line" ]] && return
 
-  # Limpa as cores (ANSI) com perl e pega a última palavra (o nome do arquivo) com awk
   file1=$(echo "$file1_line" | perl -pe 's/\x1b\[[0-9;]*[mK]//g' | awk '{print $NF}')
 
-  # 2. Seleciona o segundo arquivo
   file2_line=$(lsd --long --timesort --color=always | fzf --ansi \
     --prompt="2. Arquivo Modificado > " \
     --layout=reverse --height=60% --header="Selecione o arquivo para comparar")
 
   [[ -z "$file2_line" ]] && return
 
-  # Repete a limpeza para o segundo arquivo
   file2=$(echo "$file2_line" | perl -pe 's/\x1b\[[0-9;]*[mK]//g' | awk '{print $NF}')
 
-  # 3. Trava de segurança: impede o nvim de abrir se não encontrar o arquivo
   if [[ ! -f "$file1" || ! -f "$file2" ]]; then
     echo "Erro: Não foi possível ler os arquivos. (1: $file1, 2: $file2)"
     return 1
   fi
 
-  # 4. A mágica do bash: ordena em memória antes de abrir o diff!
   echo "Ordenando arquivos e abrindo diff..."
   nvim -d <(sort "$file1") <(sort "$file2")
 }
@@ -537,11 +599,11 @@ fg() {
       --prompt="Live Grep ▶ " \
       --preview "bat --color=always --style=plain {1} --highlight-line {2}" \
       --preview-window "right:60%:wrap" \
-      --bind "enter:execute:(${EDITOR:-nvim} {1} +{2})"
+      --bind "enter:execute(${EDITOR:-nvim} {1} +{2})"
 }
 
 rgcsv() {
-  RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case -F "
+  local RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case -F "
 
   fzf --disabled --ansi --bind "start:reload:$RG_PREFIX {q}" \
     --bind "change:reload:$RG_PREFIX {q} || true" \
@@ -600,7 +662,6 @@ turbo_csv() {
   fi
 }
 
-# Ugrep and Data Processing
 function udump() {
   local term="$1"
 
@@ -690,7 +751,6 @@ function uclean() {
   fi
 }
 
-# File Management
 function findBigFiles() {
   find ~/Documents/ -size +100M -ls | sort -k7nr
 }
@@ -755,7 +815,6 @@ fnf() {
   fi
 }
 
-# Git
 fgb() {
   local branches branch
   branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
@@ -765,16 +824,17 @@ fgb() {
 }
 
 fzstash() {
-  local out q k sha
-  while out=$(
+  local raw q k sha
+  local -a parts
+  while raw=$(
     git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
       fzf --ansi --no-sort --query="$q" --print-query \
         --expect=ctrl-d,ctrl-b
   ); do
-    mapfile -t out <<<"$out"
-    q="${out[0]}"
-    k="${out[1]}"
-    sha="${out[-1]}"
+    parts=("${(@f)raw}")
+    q="${parts[1]}"
+    k="${parts[2]}"
+    sha="${parts[-1]}"
     sha="${sha%% *}"
     [[ -z "$sha" ]] && continue
     if [[ "$k" == 'ctrl-d' ]]; then
@@ -788,7 +848,6 @@ fzstash() {
   done
 }
 
-# History
 fh() {
   local cmd
   cmd=$(fc -rnl 1 | awk '!seen[$0]++' | fzf +s --tiebreak=index --header='[History -> Edit]' --query="$1")
@@ -802,7 +861,6 @@ cr() {
   _confirm_run "$cmd"
 }
 
-# String Manipulation
 function upper() {
   echo "$*" | tr '[:lower:]' '[:upper:]'
 }
@@ -812,16 +870,15 @@ function lower() {
 }
 
 function capitalize() {
-  echo "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^\w\|\s\w/\U&/g'
+  print -r -- "${(C)${(L)*}}"
 }
 
-# Network
 function geoip() {
   curl ipinfo.io/"$1"
 }
 
-# Tmux and Process Control
 ftmk() {
+  local session
   if [ "$1" ]; then
     tmux kill-session -t "$1"
     return
@@ -834,16 +891,14 @@ fgg() {
   [ $# -gt 0 ] && builtin fg "$@" || builtin fg
 }
 
-# Environment
 pyenv-brew-relink() {
-  rm -f "$HOME/.pyenv/versions/*-brew"
+  rm -f "$HOME"/.pyenv/versions/*-brew(N)
   for i in "$(brew --cellar)"/python*; do
-    ln -s -f "$p" "$HOME/.pyenv/versions/${i##/*/}-brew"
+    ln -s -f "$i" "$HOME/.pyenv/versions/${i##/*/}-brew"
   done
   pyenv rehash
 }
 
-# CSV: pick file → pick column → show column data
 frgcsv() {
   local file
   if [[ -n "$1" && -f "$1" ]]; then
@@ -863,7 +918,7 @@ frgcsv() {
       --preview "idx=\$(echo {} | awk '{print \$1}'); xsv select \$idx '$file' 2>/dev/null | head -200 | csvlook 2>/dev/null || xsv select \$idx '$file' | head -200" \
       --preview-window 'right,60%,border-left' \
       --height 60% --layout=reverse \
-      --header='Enter: print column | Ctrl-V: open in visidata') || return
+      --header='Enter: print column') || return
   [[ -z "$col" ]] && return
 
   local idx=$(echo "$col" | awk '{print $1}')
@@ -871,7 +926,6 @@ frgcsv() {
     xsv select "$idx" "$file" | bat --paging=always --style=plain
 }
 
-# Docker container picker
 fdc() {
   command -v docker >/dev/null || {
     echo "docker not found"
@@ -895,7 +949,6 @@ fdc() {
   docker exec -it "$id" sh -c 'command -v bash >/dev/null && exec bash || exec sh'
 }
 
-# Kill process via fzf
 fkill() {
   local sig="${1:-15}"
   local pids
@@ -913,7 +966,6 @@ fkill() {
   echo "Sent SIG$sig to: $(echo $pids | tr '\n' ' ')"
 }
 
-# Environment variables fuzzy picker with value preview
 fenv() {
   local sel
   sel=$(env | sort |
@@ -922,14 +974,13 @@ fenv() {
       --preview 'echo {} | cut -d= -f2- | bat --color=always --style=plain --language=bash' \
       --preview-window 'down,40%,border-top,wrap' \
       --header='Enter: copy value to clipboard | Ctrl-N: copy name' \
-      --bind 'ctrl-n:execute-silent(echo -n {1} | pbcopy)+abort' \
+      --bind 'ctrl-n:execute-silent(echo -n {} | cut -d= -f1 | tr -d "\n" | pbcopy)+abort' \
       --layout=reverse --height 70%) || return
   [[ -z "$sel" ]] && return
   echo "$sel" | cut -d= -f2- | tr -d '\n' | pbcopy
   echo "Copied value of: $(echo $sel | cut -d= -f1)"
 }
 
-# Listening ports picker → kill process on selected port
 fport() {
   local row
   row=$(lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null |
@@ -949,11 +1000,6 @@ fport() {
   [[ "$ans" == "y" || "$ans" == "Y" ]] && kill "$pid" && echo "killed $pid"
 }
 
-##############################################################################
-# CSV/TXT helpers (vellasc / remessas) — termos AND, vírgula vira ".".
-##############################################################################
-
-# _csv_pcre <termos...> -> regex column-anchored AND (espaço/vírgula = próxima coluna)
 _csv_pcre() {
   printf '%s' "$*" | awk '{
     gsub(/,/, " ")
@@ -966,8 +1012,6 @@ _csv_pcre() {
   }'
 }
 
-# csvg <termos...>  -> grep coluna-a-coluna em todos .csv/.txt do diretório atual
-# Ex: csvg 417401 02 2028   -> col1~417401, col2~02, col3~2028
 csvg() {
   if [ "$" -eq 0 ]; then
     echo "uso: csvg <termo1> [termo2 ...]" >&2
@@ -979,10 +1023,6 @@ csvg() {
   rg --color=always --line-number --no-heading --smart-case -P "$pat" -g '*.csv' -g '*.txt'
 }
 
-# itgf <arquivo|dir> [termos...] -> mesma UI do itg.
-#   arquivo: restringe a 1 arquivo.
-#   dir (ex: .): busca em *.csv e *.txt do diretório (recursivo).
-# Ex: itgf . 417401 02,28
 itgf() {
   local target="$1"
   shift
@@ -992,10 +1032,8 @@ itgf() {
   fi
 
   local INITIAL_QUERY="${*:-}"
-  # Column-anchored AND (mesmo que itg).
   local BUILD='awk "{gsub(/,/,\" \"); if(NF==0)exit; printf \"^\"; for(i=1;i<=NF;i++){printf \"[^,]*\"\$i\"[^,]*\"; if(i<NF) printf \",\"}}"'
 
-  # Monta um comando que injeta o padrão -P como argumento de rg.
   local RG_RUN
   if [[ -d "$target" ]]; then
     RG_RUN="rg --column --line-number --no-heading --color=always --smart-case --hidden -g '*.csv' -g '*.txt' -P \"\$(echo {q} | $BUILD)\" $(printf %q "$target") 2>/dev/null || true"
@@ -1003,7 +1041,6 @@ itgf() {
     RG_RUN="rg --column --line-number --no-heading --color=always --smart-case --hidden -P \"\$(echo {q} | $BUILD)\" -- $(printf %q "$target") 2>/dev/null || true"
   fi
 
-  # Pattern inicial column-aware para FZF_DEFAULT_COMMAND
   local INITIAL_PATTERN=""
   if [[ -n "$INITIAL_QUERY" ]]; then
     INITIAL_PATTERN=$(printf '%s' "$INITIAL_QUERY" | awk '{gsub(/,/," "); if(NF==0)exit; printf "^"; for(i=1;i<=NF;i++){printf "[^,]*"$i"[^,]*"; if(i<NF) printf ","}}')
@@ -1034,19 +1071,15 @@ itgf() {
     >/dev/null
 }
 
-# csvfind <numero> -> procura um valor exato em coluna (delim vírgula) em todos .csv/.txt
-# Casa apenas se for um campo completo, evitando match dentro de outro número.
 csvfind() {
   local needle="$1"
   if [[ -z "$needle" ]]; then
     echo "uso: csvfind <valor>" >&2
     return 1
   fi
-  # boundaries de campo CSV: início-de-linha ou vírgula, e fim ou vírgula.
   rg --color=always --line-number --no-heading -P "(^|,)\Q$needle\E(,|$)" -g '*.csv' -g '*.txt'
 }
 
-# csvcol <arquivo> <N> -> imprime a N-ésima coluna (1-based, delim vírgula).
 csvcol() {
   local file="$1" n="$2"
   if [[ -z "$file" || -z "$n" || ! -f "$file" ]]; then
@@ -1056,7 +1089,6 @@ csvcol() {
   awk -F',' -v c="$n" 'NF>=c {print $c}' "$file"
 }
 
-# csvcount <arquivo...> -> conta linhas úteis (ignora cabeçalho se 1ª col não for número)
 csvcount() {
   if [ "$" -eq 0 ]; then
     echo "uso: csvcount <arquivo> [arquivo...]" >&2
@@ -1075,7 +1107,6 @@ csvcount() {
   printf '%8d  TOTAL\n' "$total"
 }
 
-# csvuniq <arquivo> -> imprime linhas únicas pela 1ª coluna, preservando ordem
 csvuniq() {
   local file="$1"
   if [[ -z "$file" || ! -f "$file" ]]; then
@@ -1085,7 +1116,6 @@ csvuniq() {
   awk -F',' '!seen[$1]++' "$file"
 }
 
-# csvdiff <A> <B> -> valores da 1ª coluna que estão em A mas não em B
 csvdiff() {
   local a="$1" b="$2"
   if [[ ! -f "$a" || ! -f "$b" ]]; then
