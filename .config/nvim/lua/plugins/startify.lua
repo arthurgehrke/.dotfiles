@@ -18,19 +18,68 @@ return {
 
       g.startify_custom_header = fn['startify#pad'](g.ascii)
 
+      -- Histórico de onde o nvim foi lançado (arquivos/dirs passados como argumento, ou o cwd)
+      local launch_file = fn.stdpath('data') .. '/launch_history'
+      local launch_max = 30
+
+      local function read_launches()
+        if fn.filereadable(launch_file) == 0 then
+          return {}
+        end
+        return fn.readfile(launch_file)
+      end
+
+      local launches = read_launches()
+
+      local function record_launch()
+        local targets = {}
+        for _, arg in ipairs(fn.argv()) do
+          table.insert(targets, (fn.fnamemodify(arg, ':p'):gsub('/$', '')))
+        end
+        if #targets == 0 then
+          targets = { fn.getcwd() }
+        end
+
+        local entries, seen = {}, {}
+        for _, p in ipairs(vim.list_extend(targets, read_launches())) do
+          if p ~= '' and not seen[p] then
+            seen[p] = true
+            table.insert(entries, p)
+          end
+        end
+        fn.writefile(vim.list_slice(entries, 1, launch_max), launch_file)
+      end
+
+      record_launch()
+
+      local function launch_list()
+        local items = {}
+        for _, p in ipairs(launches) do
+          local is_dir = fn.isdirectory(p) == 1
+          if is_dir or fn.filereadable(p) == 1 then
+            local e = fn.fnameescape(p)
+            table.insert(items, {
+              line = fn.fnamemodify(p, ':~') .. (is_dir and '/' or ''),
+              cmd = is_dir and ('cd ' .. e .. ' | edit ' .. e) or ('edit ' .. e),
+            })
+          end
+        end
+        return items
+      end
+
       g.startify_session_dir = '~/.config/nvim/session'
       g.startify_lists = {
         { type = 'dir', header = { '   Projetos Recentes (' .. fn.getcwd() .. ')' } },
         { type = 'files', header = { '   Arquivos Recentes' } },
         { type = 'commands', header = { '   Comandos Rápidos' } },
+        { type = launch_list, header = { '   󰋚  Lançamentos do Nvim' } },
       }
 
       g.startify_commands = {
         { f = { '  Find File', 'Telescope find_files' } },
         { r = { '  Find Word', 'Telescope live_grep' } },
         { G = { '  Git Status (Fugitive)', 'G' } },
-        { D = { '  Diff View', 'DiffviewOpen' } },
-        { ts = { '  Treesitter Update', 'TSUpdateSync' } },
+        { ts = { '  Treesitter Update', 'TSUpdate' } },
         { ch = { '  Check Health', 'checkhealth' } },
         { lc = { '  Check Plugins', 'Lazy check' } },
         { ls = { '  Sync Plugins', 'Lazy sync' } },
@@ -52,10 +101,7 @@ return {
 
       vim.g.startify_session_before_save = {
         'silent! helpclose',
-        'silent! Neotree action=close',
         'silent! cclose',
-        'silent! SymbolsOutlineClose',
-        'silent! BuCloseDiffview',
         'silent! BuCloseFugitive',
       }
 

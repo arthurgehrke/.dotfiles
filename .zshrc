@@ -20,6 +20,7 @@ fi
 # Sourcing e Plugins
 ##############################################################################
 setopt EXTENDED_GLOB
+typeset -U path PATH
 export LS_COLORS="$LS_COLORS:ow=:tw=:"
 autoload -Uz compinit
 
@@ -31,7 +32,6 @@ fi
 
 source "$HOME"/.zaliases
 source "$HOME"/.zfunctions.zsh
-source "$HOME"/.themes/zsh/simple-theme/.p10k.zsh
 [ -f ~/.zsecrets ] && source ~/.zsecrets
 
 source "$BREW_PREFIX"/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -39,6 +39,7 @@ source "$BREW_PREFIX"/share/powerlevel10k/powerlevel10k.zsh-theme
 source "$BREW_PREFIX"/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 FAST_THEME_NAME="$HOME/.themes/zsh-fast-syntax-highlighting/default.ini"
 source "$BREW_PREFIX"/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source "$HOME"/.themes/zsh/simple-theme/.p10k.zsh
 
 if [ -f "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh" ]; then
   source "$HOME/.zsh/plugins/zsh-directory-history/zsh-directory-history.plugin.zsh"
@@ -314,3 +315,6 @@ export PATH="/Users/arthurgehrke/.local/bin:$PATH"
 
 # Added by osmedeus
 export PATH="/Users/arthurgehrke/osmedeus-base/external-binaries:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+# Added by Kiro CLI
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="${PATH:+$PATH:}$HOME/.local/bin" ;; esac

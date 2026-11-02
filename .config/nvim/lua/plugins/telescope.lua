@@ -1,6 +1,7 @@
 return {
   'nvim-telescope/telescope.nvim',
-  lazy = false,
+  version = '*',
+  lazy = true,
   cmd = { 'Telescope' },
   dependencies = {
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
@@ -10,6 +11,33 @@ return {
     'nvim-telescope/telescope-live-grep-args.nvim',
     'andrew-george/telescope-themes',
   },
+  init = function()
+    local function find_selection_with_grep()
+      local mode = vim.fn.visualmode()
+      local lines = vim.fn.getregion(vim.fn.getpos('\'<'), vim.fn.getpos('\'>'), { type = mode })
+      local text = vim.trim(lines[1] or '')
+
+      if text == '' then
+        vim.notify('Nenhuma seleção para pesquisar', vim.log.levels.WARN)
+        return
+      end
+      if #lines > 1 then
+        vim.notify('Seleção com várias linhas: usando só a primeira', vim.log.levels.INFO)
+      end
+
+      local root = vim.fs.root(0, { '.git' }) or vim.uv.cwd()
+
+      require('telescope.builtin').live_grep({
+        cwd = root,
+        default_text = text,
+        prompt_title = 'Grep: ' .. text,
+        additional_args = { '--fixed-strings', '--hidden', '--no-ignore' },
+      })
+    end
+
+    vim.api.nvim_create_user_command('FindSelectionWithGrep', find_selection_with_grep, { range = true })
+    vim.keymap.set('v', '<leader>fs', ':FindSelectionWithGrep<CR>', { desc = 'Grep da seleção (raiz)', silent = true })
+  end,
   keys = {
     {
       'fb',
@@ -21,9 +49,49 @@ return {
     {
       'ff',
       function()
-        require('telescope.builtin').find_files({ hidden = true, no_ignore = true })
+        require('telescope.builtin').find_files({
+          hidden = true,
+          no_ignore = true,
+          find_command = {
+            'fd',
+            '--type',
+            'f',
+            '--type',
+            'l',
+            '--hidden',
+            '--follow',
+            '--no-ignore',
+            '--strip-cwd-prefix',
+            '--exclude',
+            '.git',
+            '--exclude',
+            'node_modules',
+            '--exclude',
+            'dist',
+            '--exclude',
+            'build',
+            '--exclude',
+            '.next',
+            '--exclude',
+            '.dart_tool',
+            '--exclude',
+            'undodir',
+            '--exclude',
+            '.undo',
+            '--exclude',
+            '.cache',
+            '--exclude',
+            '.venv',
+            '--exclude',
+            '__pycache__',
+            '--exclude',
+            'target',
+            '--exclude',
+            '.DS_Store',
+          },
+        })
       end,
-      desc = 'Find Files',
+      desc = 'Find All Files',
     },
     {
       '<leader>fF',
@@ -61,7 +129,7 @@ return {
     {
       '<leader>+',
       function()
-        require('telescope.builtin').live_grep({ cwd = false })
+        require('telescope.builtin').live_grep({ cwd = vim.uv.cwd() })
       end,
       desc = 'Grep CWD',
     },
@@ -459,7 +527,6 @@ return {
         find_files = {
           theme = 'ivy',
           hidden = true,
-          no_ignore = true,
           find_command = {
             'fd',
             '--type',
@@ -468,7 +535,6 @@ return {
             'l',
             '--hidden',
             '--follow',
-            '--no-ignore',
             '--strip-cwd-prefix',
             '--exclude',
             '.git',

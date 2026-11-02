@@ -1,7 +1,7 @@
 return {
   {
     'mason-org/mason.nvim',
-    cmd = 'Mason',
+    lazy = false,
     keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
     build = ':MasonUpdate',
     opts_extend = { 'ensure_installed' },
@@ -9,29 +9,16 @@ return {
       ensure_installed = {
         'stylua',
         'shfmt',
-        'black',
         'prettier',
-        'prettierd',
         'beautysh',
         'shellharden',
         'goimports',
         'gofumpt',
         'sql-formatter',
-        'jq',
-        'luacheck',
-        'shellcheck',
-        'yamllint',
         'yamlfix',
-        'jsonlint',
-        'htmlhint',
         'htmlbeautifier',
-        'eslint_d',
         'ruff',
-        'phpstan',
-        'vale',
-        'golangci-lint',
         'sqlfluff',
-        'stylelint',
       },
     },
     config = function(_, opts)
@@ -59,6 +46,7 @@ return {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
+      { 'mason-org/mason.nvim', lazy = false },
       'mason-org/mason-lspconfig.nvim',
     },
     init = function()
@@ -163,7 +151,11 @@ return {
             })
           end, 'Organize Imports')
           map('gq', function()
-            vim.lsp.buf.format({ async = false, timeout_ms = 2000 })
+            require('conform').format({
+              async = false,
+              lsp_format = 'fallback',
+              timeout_ms = 2000,
+            })
           end, 'Format buffer')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)

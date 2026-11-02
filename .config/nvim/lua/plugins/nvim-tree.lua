@@ -140,7 +140,7 @@ return {
           ignore = false,
           show_on_dirs = true,
           show_on_open_dirs = true,
-          timeout = 400,
+          timeout = 5000, -- `git status` in large repos (e.g. with node_modules/pgdata) takes >1s; 400ms made nvim-tree drop git icons
         },
         filesystem_watchers = {
           enable = true,

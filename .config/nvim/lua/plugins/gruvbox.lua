@@ -2,7 +2,7 @@ return {
   'ellisonleao/gruvbox.nvim',
   lazy = false,
   priority = 1000,
-  -- enabled = false,
+  enabled = false,
   config = function()
     require('gruvbox').setup({
       terminal_colors = false,
@@ -18,11 +18,8 @@ return {
       inverse = true,
       contrast = 'soft',
       palette_overrides = {
-
         bright_yellow = '#c9a554',
-
         neutral_yellow = '#b69244',
-
         faded_yellow = '#a8893a',
       },
       overrides = {},

@@ -1,15 +1,18 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    commit = '90cd658',
     main = 'nvim-treesitter',
-    -- build = ":TSUpdate",
-    event = { 'BufReadPost', 'BufNewFile' },
+    lazy = false,
+    build = ':TSUpdate',
     init = function()
       local highlight = function(bufnr, lang)
         -------------------[ treesitter highlights ]-------------------------------
         if not vim.treesitter.language.add(lang) then
-          return vim.notify(string.format('Treesitter cannot load parser for language: %s', lang), vim.log.levels.INFO, { title = 'Treesitter' })
+          return vim.notify(
+            string.format('Treesitter cannot load parser for language: %s', lang),
+            vim.log.levels.INFO,
+            { title = 'Treesitter' }
+          )
         end
         vim.treesitter.start(bufnr)
       end
@@ -24,7 +27,7 @@ return {
             return
           end -- don't run further.
 
-          local ok, treesitter = pcall(require, 'nvim-treesitter')
+          local treesitter = require('nvim-treesitter')
           ---------------------[ treesitter indent ]-------------------------------
 
           if not vim.tbl_contains({ 'python', 'html', 'yaml', 'markdown' }, ft) then
@@ -32,25 +35,16 @@ return {
           end
 
           --------------------[ treesitter parsers ]-------------------------------
-          if vim.fn.executable('tree-sitter') ~= 1 then
-            vim.api.nvim_echo({
-              {
-                'tree-sitter CLI not found. Parsers cannot be installed.',
-                'ErrorMsg',
-              },
-            }, true, {})
-            return false
-          end
-
-          if not vim.treesitter.language.get_lang(ft) then
+          local lang = vim.treesitter.language.get_lang(ft)
+          if not lang then
             return
           end
 
-          if vim.list_contains(treesitter.get_installed(), ft) then
-            highlight(buf, ft)
-          elseif vim.list_contains(treesitter.get_available(), ft) then
-            treesitter.install(ft):await(function()
-              highlight(buf, ft)
+          if vim.list_contains(treesitter.get_installed(), lang) then
+            highlight(buf, lang)
+          elseif vim.list_contains(treesitter.get_available(), lang) then
+            treesitter.install(lang):await(function()
+              highlight(buf, lang)
             end)
           end
         end,
@@ -82,7 +76,6 @@ return {
         'scss',
         'sql',
         'ssh_config',
-        'tmux',
         'toml',
         'tsx',
         'typescript',
