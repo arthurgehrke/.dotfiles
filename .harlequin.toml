@@ -7,14 +7,12 @@ limit = 10000000
 keymap_name = ["vscode"]
 
 [profiles.default.keymap]
-# Panel navigation shortcuts
 "ctrl+h" = "focus_catalog"
 "ctrl+j" = "focus_results"
 "ctrl+k" = "focus_query_editor"
 "ctrl+l" = "focus_next"
 "ctrl+x" = "quit"
 
-# Cursor movement shortcuts (using alt to preserve SQL typing)
 "alt+h" = "cursor_left"
 "alt+j" = "cursor_down"
 "alt+k" = "cursor_up"
@@ -26,5 +24,3 @@ keymap_name = ["vscode"]
 "alt+g" = "cursor_page_up"
 "shift+alt+g" = "cursor_page_down"
 "alt+y" = "copy"
-# "alt+t" = "scroll_home"
-# "alt+b" = "scroll_end"

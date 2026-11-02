@@ -1,16 +1,11 @@
-# Colors (High Contrast)
-
-# Default colors
 [colors.primary]
 background = '#444444'
 foreground = '#dddddd'
 
-# Colors the cursor will use if `custom_cursor_colors` is true
 [colors.cursor]
 text = '#aaaaaa'
 cursor = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#ff0000'
@@ -21,7 +16,6 @@ magenta = '#ff00ff'
 cyan    = '#00ffff'
 white   = '#ffffff'
 
-# Bright colors
 [colors.bright]
 black   = '#000000'
 red     = '#ff0000'

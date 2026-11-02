@@ -1,6 +1,3 @@
-# Colors (Taerminal)
-
-# Default colors
 [colors.primary]
 background = '#26282a'
 foreground = '#f0f0f0'
@@ -9,7 +6,6 @@ foreground = '#f0f0f0'
 background = '#f0f0f0'
 foreground = '#26282a'
 
-# Normal colors
 [colors.normal]
 black   = '#26282a'
 red     = '#ff8878'
@@ -20,7 +16,6 @@ magenta = '#ffb2fe'
 cyan    = '#a2e1f8'
 white   = '#f1f1f1'
 
-# Bright colors
 [colors.bright]
 black   = '#6f6f6f'
 red     = '#fe978b'

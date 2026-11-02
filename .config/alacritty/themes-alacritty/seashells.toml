@@ -1,7 +1,3 @@
-# Colors (SeaShells)
-# Source  https//raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SeaShells.itermcolors
-
-# Default colors
 [colors.primary]
 background = '#061923'
 foreground = '#e5c49e'
@@ -14,7 +10,6 @@ cursor = '#feaf3c'
 text = '#ffe9d7'
 background = '#265b75'
 
-# Normal colors
 [colors.normal]
 black = '#1d485f'
 red = '#db662d'
@@ -25,7 +20,6 @@ magenta = '#77dbf4'
 cyan = '#5fb1c2'
 white = '#e5c49e'
 
-# Bright colors
 [colors.bright]
 black = '#545d65'
 red = '#dd998a'

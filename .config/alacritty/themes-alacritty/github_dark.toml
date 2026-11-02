@@ -1,11 +1,7 @@
-# github Alacritty Colors
-
-# Default colors
 [colors.primary]
 background = '#24292e'
 foreground = '#d1d5da'
 
-# Normal colors
 [colors.normal]
 black   = '#586069'
 red     = '#ea4a5a'
@@ -16,7 +12,6 @@ magenta = '#b392f0'
 cyan    = '#39c5cf'
 white   = '#d1d5da'
 
-# Bright colors
 [colors.bright]
 black   = '#959da5'
 red     = '#f97583'

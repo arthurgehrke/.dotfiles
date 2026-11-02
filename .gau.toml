@@ -10,8 +10,8 @@ json = false
   apikey = ""
 [filters]
   extensions = [
-    "png", "jpg", "jpeg", "gif", "svg", "ico", "webp", 
-    "css", "scss", "woff", "woff2", "ttf", "eot", 
-    "mp4", "mp3", "webm", "avi", "mov", 
+    "png", "jpg", "jpeg", "gif", "svg", "ico", "webp",
+    "css", "scss", "woff", "woff2", "ttf", "eot",
+    "mp4", "mp3", "webm", "avi", "mov",
     "pdf", "epub"
   ]

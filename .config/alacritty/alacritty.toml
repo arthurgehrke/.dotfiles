@@ -109,9 +109,7 @@ history = 100000
 decorations = "full"
 startup_mode = "Maximized"
 option_as_alt = "OnlyLeft"
-# dynamic_title = false
 dynamic_padding = true
-# padding = {x = 1, y = 1}
 padding = { x = 0, y = 0 }
 dimensions = {columns = 150, lines = 50}
 title = "Alacritty"

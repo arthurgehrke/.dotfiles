@@ -1,6 +1,3 @@
-# Colors (Challenger Deep)
-
-# Default colors
 [colors.primary]
 background = '#1e1c31'
 foreground = '#cbe1e7'
@@ -9,7 +6,6 @@ foreground = '#cbe1e7'
 text = '#ff271d'
 cursor = '#fbfcfc'
 
-# Normal colors
 [colors.normal]
 black   = '#141228'
 red     = '#ff5458'
@@ -20,7 +16,6 @@ magenta = '#906cff'
 cyan    = '#63f2f1'
 white   = '#a6b3cc'
 
-# Bright colors
 [colors.bright]
 black   = '#565575'
 red     = '#ff8080'

@@ -1,6 +1,5 @@
 vim.g.skip_ts_context_commentstring_module = true
 
--- Garante que arquivos .env tenham um filetype com commentstring '#'
 vim.filetype.add({
   filename = {
     ['.env'] = 'sh',
@@ -50,9 +49,6 @@ return {
           extra = true,
         },
         pre_hook = function(ctx)
-          -- ts_context_commentstring devolve nil quando não há parser TS
-          -- (caso típico de .env, conf, sh sem TS). Fazemos fallback
-          -- para o commentstring do buffer ou para '#%s'.
           local ok, result = pcall(ts_pre_hook, ctx)
           if ok and result and result ~= '' then
             return result
@@ -72,8 +68,6 @@ return {
       ft.set('config', '#%s')
       ft.set('dotenv', '#%s')
 
-      -- Reforça o commentstring para qualquer .env via autocmd,
-      -- caso outro plugin sobrescreva
       vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
         pattern = { '.env', '.env.*', '*.env' },
         callback = function()

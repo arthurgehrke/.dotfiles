@@ -1,6 +1,3 @@
-# Colors (Vesper)
-# Source https://github.com/raunofreiberg/vesper
-
 [colors.primary]
 background = '#101010'
 foreground = '#ffffff'

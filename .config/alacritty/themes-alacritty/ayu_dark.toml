@@ -1,11 +1,7 @@
-# Colors (Ayu Dark)
-
-# Default colors
 [colors.primary]
 background = '#0A0E14'
 foreground = '#B3B1AD'
 
-# Normal colors
 [colors.normal]
 black   = '#01060E'
 red     = '#EA6C73'
@@ -16,7 +12,6 @@ magenta = '#FAE994'
 cyan    = '#90E1C6'
 white   = '#C7C7C7'
 
-# Bright colors
 [colors.bright]
 black   = '#686868'
 red     = '#F07178'

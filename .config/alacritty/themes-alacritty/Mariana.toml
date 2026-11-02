@@ -1,17 +1,11 @@
-# Mariana (ported from Sublime Text 4)
-# Source https//github.com/mbadolato/iTerm2-Color-Schemes/blob/master/alacritty/Mariana.yml
-
-# Default colors
 [colors.primary]
 background = '#343d46'
 foreground = '#d8dee9'
 
-# Cursor colors
 [colors.cursor]
 cursor = '#fcbb6a'
 text = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black = '#000000'
 blue = '#6699cc'
@@ -22,7 +16,6 @@ red = '#ec5f66'
 white = '#f7f7f7'
 yellow = '#f9ae58'
 
-# Bright colors
 [colors.bright]
 black = '#333333'
 blue = '#85add6'
@@ -33,7 +26,6 @@ red = '#f97b58'
 white = '#ffffff'
 yellow = '#fac761'
 
-# Selection colors
 [colors.selection]
 background = '#4e5a65'
 text = '#d8dee9'

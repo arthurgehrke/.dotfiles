@@ -1,6 +1,3 @@
-# Colors (PaperColor - Dark)
-
-# Default colors
 [colors.primary]
 background = '#1c1c1c'
 foreground = '#808080'
@@ -9,7 +6,6 @@ foreground = '#808080'
 text = '#1c1c1c'
 cursor = '#808080'
 
-# Normal colors
 [colors.normal]
 black   = '#1c1c1c'
 red     = '#af005f'
@@ -20,7 +16,6 @@ magenta = '#808080'
 cyan    = '#d7875f'
 white   = '#d0d0d0'
 
-# Bright colors
 [colors.bright]
 black   = '#585858'
 red     = '#5faf5f'

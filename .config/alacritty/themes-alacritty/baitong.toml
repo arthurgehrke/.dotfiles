@@ -1,5 +1,3 @@
-# Colors (Baitong)
-
 [colors.primary]
 background = '#112a2a'
 foreground = '#33ff33'
@@ -32,7 +30,6 @@ foreground = '#ffffff'
 text = '#112a2a'
 background = '#1AE642'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#f77272'
@@ -43,7 +40,6 @@ magenta = '#ff66ff'
 cyan    = '#87CEFA'
 white   = '#dbdbd9'
 
-# Bright colors
 [colors.bright]
 black   = '#ffffff'
 red     = '#f77272'

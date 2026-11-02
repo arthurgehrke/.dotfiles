@@ -1,11 +1,7 @@
-# Colors (Wombat)
-
-# Default colors
 [colors.primary]
 background = '#1f1f1f'
 foreground = '#e5e1d8'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#f7786d'
@@ -16,7 +12,6 @@ magenta = '#ef88ff'
 cyan    = '#90fdf8'
 white   = '#e5e1d8'
 
-# Bright colors
 [colors.bright]
 black   = '#b4b4b4'
 red     = '#f99f92'

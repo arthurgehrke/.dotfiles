@@ -1,11 +1,7 @@
-# Colors (Tomorrow Night Bright)
-
-# Default colors
 [colors.primary]
 background = '#000000'
 foreground = '#eaeaea'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#d54e53'
@@ -16,7 +12,6 @@ magenta = '#c397d8'
 cyan    = '#70c0ba'
 white   = '#424242'
 
-# Bright colors
 [colors.bright]
 black   = '#666666'
 red     = '#ff3334'

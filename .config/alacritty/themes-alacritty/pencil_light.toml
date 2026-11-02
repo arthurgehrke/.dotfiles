@@ -1,11 +1,7 @@
-# Colors (Pencil Light)
-
-# Default Colors
 [colors.primary]
 background = '#f1f1f1'
 foreground = '#424242'
 
-# Normal colors
 [colors.normal]
 black   = '#212121'
 red     = '#c30771'
@@ -16,7 +12,6 @@ magenta = '#523c79'
 cyan    = '#20a5ba'
 white   = '#e0e0e0'
 
-# Bright colors
 [colors.bright]
 black   = '#212121'
 red     = '#fb007a'

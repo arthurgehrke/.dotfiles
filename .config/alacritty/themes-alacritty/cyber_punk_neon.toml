@@ -1,7 +1,3 @@
-# Cyber Punk Neon
-# Source https//github.com/Roboron3042/Cyberpunk-Neon
-
-# Default colors
 [colors.primary]
 background = '#000b1e'
 foreground = '#0abdc6'
@@ -10,7 +6,6 @@ foreground = '#0abdc6'
 text   = '#000b1e'
 cursor = '#0abdc6'
 
-# Normal colors
 [colors.normal]
 black   = '#123e7c'
 red     = '#ff0000'
@@ -21,7 +16,6 @@ magenta = '#711c91'
 cyan    = '#0abdc6'
 white   = '#d7d7d5'
 
-# Bright colors
 [colors.bright]
 black   = '#1c61c2'
 red     = '#ff0000'

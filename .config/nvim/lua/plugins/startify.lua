@@ -18,7 +18,6 @@ return {
 
       g.startify_custom_header = fn['startify#pad'](g.ascii)
 
-      -- Histórico de onde o nvim foi lançado (arquivos/dirs passados como argumento, ou o cwd)
       local launch_file = fn.stdpath('data') .. '/launch_history'
       local launch_max = 30
 

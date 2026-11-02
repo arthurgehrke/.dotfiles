@@ -1,6 +1,3 @@
-# Colors (Kanagawa Dragon)
-# Source https//github.com/rebelot/kanagawa.nvim
-
 [colors.primary]
 background = '#181616'
 foreground = '#c5c9c5'

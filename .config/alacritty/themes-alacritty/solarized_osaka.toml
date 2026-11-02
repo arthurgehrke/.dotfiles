@@ -1,12 +1,7 @@
-# Colors (Solarized Osaka)
-# Source https://github.com/craftzdog/solarized-osaka.nvim
-
-# Default colors
 [colors.primary]
 background = '#001a1d'
 foreground = '#839496'
 
-# Normal colors
 [colors.normal]
 black   = '#073642'
 red     = '#dc322f'
@@ -17,7 +12,6 @@ magenta = '#d33682'
 cyan    = '#2aa198'
 white   = '#eee8d5'
 
-# Bright colors
 [colors.bright]
 black   = '#4c4c4c'
 red     = '#cb4b16'

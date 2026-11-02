@@ -1,6 +1,3 @@
-# -----------------------------
-# Navigation (Vim-style)
-# -----------------------------
 bind generic h scroll-left
 bind generic j move-down
 bind generic k move-up
@@ -10,9 +7,6 @@ bind generic gg move-first-line      # gg → top of the list
 bind generic G move-last-line        # G  → bottom of the list
 bind main    G move-last-line        # also in main view
 
-# -----------------------------
-# View switching
-# -----------------------------
 bind generic v none                  # disable generic 'v' to avoid conflict
 bind generic vm view-main
 bind generic vd view-diff
@@ -28,17 +22,11 @@ bind generic vg view-grep
 bind generic vp view-pager
 bind generic vh view-help
 
-# -----------------------------
-# Search (Vim-style)
-# -----------------------------
 bind generic / search                # / → forward search
 bind generic ? search-back           # ? → backward search
 bind generic n find-next             # n → next match
 bind generic N find-prev             # N → previous match
 
-# -----------------------------
-# Toggle view elements
-# -----------------------------
 bind generic s :toggle sort-order
 bind generic S :toggle sort-field
 bind generic <Hash> :toggle line-number
@@ -58,37 +46,19 @@ bind generic c :toggle show-changes
 bind generic O :toggle commit-order
 bind generic T :toggle commit-title-overflow
 
-# -----------------------------
-# Refresh and options
-# -----------------------------
 bind generic r refresh
 bind generic o options               # Open options menu
 
-# -----------------------------
-# Clipboard (macOS pbcopy)
-# -----------------------------
 bind generic y !bash -c "echo -n '%(commit)' | pbcopy"
 
-# -----------------------------
-# Stage view
-# -----------------------------
 bind stage 1 stage-update-line      # Stage selected line
 
-# -----------------------------
-# Status view
-# -----------------------------
 bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 bind status S !?git stash save --keep-index %(prompt)
 
-# -----------------------------
-# Stash view
-# -----------------------------
 bind stash D !?git stash drop %(stash)
 bind stash A !?git stash apply %(stash)
 
-# -----------------------------
-# Main view
-# -----------------------------
 bind main <F4> !git difftool -d %(commit)^!
 bind main B !git rebase -i %(commit)
 
@@ -109,14 +79,6 @@ bind generic	%	:toggle file-filter
 set main-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
 set stash-view = date:display=relative author:display=full commit-title:graph=v2,refs=true
 set tree-view  = mode author:display=full date:display=relative id file-size file-name
-
-# Optional configurations (uncomment if needed):
-# set blame-view  = date:default author:full file-name:auto id:yes,color line-number:no,interval=1 text
-# set grep-view   = file-name:no line-number:yes,interval=1 text
-# set refs-view   = line-number:no id:no date:default author:full ref commit-title
-# set stash-view  = line-number:no,interval=1 id:no date:default author:full commit-title
-# set status-view = line-number:no,interval=1 status:short file-name
-# set tree-view   = line-number:no,interval=1 mode author:full file-size date:default id:no file-name
 
 color "diff --"			yellow	default
 color "--- "			yellow	default

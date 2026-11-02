@@ -429,7 +429,7 @@ return {
         set_env = { ['COLORTERM'] = 'truecolor' },
         results_title = false,
         color_devicons = true,
-        preview = { treesitter = false, filesize_limit = 1 }, -- 1 MB
+        preview = { treesitter = false, filesize_limit = 1 },
         sorting_strategy = 'descending',
         selection_strategy = 'follow',
         layout_strategy = 'horizontal',

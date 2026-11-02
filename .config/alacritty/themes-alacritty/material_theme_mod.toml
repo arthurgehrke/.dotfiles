@@ -1,11 +1,7 @@
-# Colors (Material Theme)
-
-# Default colors
 [colors.primary]
 background = '#1e282d'
 foreground = '#c4c7d1'
 
-# Normal colors
 [colors.normal]
 black   = '#666666'
 red     = '#eb606b'
@@ -16,7 +12,6 @@ magenta = '#ff2f90'
 cyan    = '#aeddff'
 white   = '#ffffff'
 
-# Bright colors
 [colors.bright]
 black   = '#a1a1a1'
 red     = '#eb606b'

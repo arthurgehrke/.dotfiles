@@ -1,11 +1,7 @@
-# Colors (Horizon Dark)
-
-# Primary colors
 [colors.primary]
 background = '#1c1e26'
 foreground = '#e0e0e0'
 
-# Normal colors
 [colors.normal]
 black = '#16161c'
 red = '#e95678'
@@ -16,7 +12,6 @@ magenta = '#ee64ac'
 cyan = '#59e1e3'
 white = '#d5d8da'
 
-# Bright colors
 [colors.bright]
 black = '#5b5858'
 red = '#ec6a88'

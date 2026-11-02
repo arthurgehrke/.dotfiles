@@ -53,7 +53,6 @@ return {
         vim.keymap.set('n', '<C-d>', api.tree.change_root_to_node, opts('CD'))
         vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
         vim.keymap.set('n', '<C-k>', api.node.show_info_popup, opts('Info'))
-        -- vim.keymap.set('n', '<C-r>', api.fs.rename_sub, opts('Rename: Omit Filename'))
         vim.keymap.set('n', '<C-v>', api.node.open.vertical, opts('Open: Vertical Split'))
         vim.keymap.set('n', '<C-s>', api.node.open.horizontal, opts('Open: Horizontal Split'))
         vim.keymap.set('n', '<BS>', api.node.navigate.parent_close, opts('Close Directory'))
@@ -85,7 +84,6 @@ return {
         vim.keymap.set('n', 'q', api.tree.close, opts('Close'))
         vim.keymap.set('n', 'r', api.fs.rename, opts('Rename'))
         vim.keymap.set('n', 'R', api.tree.reload, opts('Refresh'))
-        -- vim.keymap.set('n', 's',     api.node.run.system,                   opts('Run System')) -- open external fcking program
         vim.keymap.set('n', 'S', api.tree.search_node, opts('Search'))
         vim.keymap.set('n', 'U', api.tree.toggle_custom_filter, opts('Toggle Hidden'))
         vim.keymap.set('n', 'W', api.tree.collapse_all, opts('Collapse'))
@@ -104,7 +102,7 @@ return {
         hijack_netrw = true,
         prefer_startup_root = true,
         open_on_tab = false,
-        update_cwd = false, -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
+        update_cwd = false,
         diagnostics = {
           enable = false,
           show_on_dirs = false,
@@ -140,7 +138,7 @@ return {
           ignore = false,
           show_on_dirs = true,
           show_on_open_dirs = true,
-          timeout = 5000, -- `git status` in large repos (e.g. with node_modules/pgdata) takes >1s; 400ms made nvim-tree drop git icons
+          timeout = 5000,
         },
         filesystem_watchers = {
           enable = true,
@@ -178,7 +176,6 @@ return {
             web_devicons = {
               file = {
                 enable = false,
-                -- color = false,
               },
               folder = {
                 enable = false,
@@ -213,13 +210,10 @@ return {
                 empty = '',
                 empty_open = '',
                 open = '',
-                -- open = '',
                 symlink = '',
                 symlink_open = '',
               },
               git = {
-                -- unstaged = '',
-                -- unstaged = '󰰲',
                 unstaged = '',
                 staged = '✓',
                 unmerged = '',
@@ -227,7 +221,6 @@ return {
                 untracked = '󰛄',
                 deleted = '',
                 ignored = '',
-                -- ignored = '◌',
               },
             },
           },
@@ -259,7 +252,6 @@ return {
             '^.next$',
             '.DS_Store',
             'tmp',
-            -- 'logs',
           },
         },
         log = {

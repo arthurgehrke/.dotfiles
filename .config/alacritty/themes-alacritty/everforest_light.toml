@@ -1,11 +1,7 @@
-# Colors (Everforest Light)
-
-# Default colors
 [colors.primary]
 background = '#fdf6e3'
 foreground = '#5c6a72'
 
-# Normal colors
 [colors.normal]
 black   = '#5c6a72'
 red     = '#f85552'
@@ -16,7 +12,6 @@ magenta = '#df69ba'
 cyan    = '#35a77c'
 white   = '#e0dcc7'
 
-# Bright Colors
 [colors.bright]
 black   = '#5c6a72'
 red     = '#f85552'

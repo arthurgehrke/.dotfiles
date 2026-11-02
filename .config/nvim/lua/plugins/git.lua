@@ -7,7 +7,6 @@ return {
       { '<leader>gal', '<cmd>G add --all<cr>', desc = '[G]it [A]dd A[l]l' },
       { '<leader>gap', '<cmd>G add % -p<cr>', desc = '[G]it [A]dd [P]artial' },
       { '<leader>gbm', ':G branch -m ', desc = '[G]it [B]ranch [M]ove' },
-      -- WARN: G commit --amend don't work with fugitive
       { '<leader>gca', '<cmd>vsplit<bar>term git commit --amend -v<cr>', desc = '[G]it [C]ommit [A]mend' },
       { '<leader>gcm', '<cmd>G commit -v<cr>', desc = '[G]it [C]o[M]mit' },
       { '<leader>gts', '<cmd>G<cr>', desc = '[G]it [S]tatus' },
@@ -76,7 +75,6 @@ return {
           })
         end
 
-        -- Navigation
         vim.keymap.set('n', ']c', function()
           if vim.wo.diff then
             return ']c'
@@ -97,7 +95,6 @@ return {
           return '<Ignore>'
         end, { expr = true, buffer = bufnr, desc = 'git: prev hunk' })
 
-        -- Actions
         map('n', '<leader>hs', '<cmd>Gitsigns stage_hunk<cr>', 'Stage Hunk')
         map('n', '<leader>hr', '<cmd>Gitsigns reset_hunk<cr>', 'Reset Hunk')
         map('v', '<leader>hs', ':Gitsigns stage_hunk<cr>', 'Stage Hunk (visual)')
@@ -116,7 +113,6 @@ return {
           gs.diffthis('~')
         end, 'Diff This ~')
 
-        -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<cr>', 'Select Hunk')
       end,
     },

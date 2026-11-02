@@ -1,14 +1,11 @@
-# Default colors
 [colors.primary]
 background = '#171d23'
 foreground = '#ffffff'
 
-# Cursor colors
 [colors.cursor]
 text   = '#fafafa'
 cursor = '#008b94'
 
-# Normal colors
 [colors.normal]
 black   = '#333f4a'
 red     = '#d95468'
@@ -18,7 +15,6 @@ magenta = '#b62d65'
 cyan    = '#70e1e8'
 white   = '#b7c5d3'
 
-# Bright colors
 [colors.bright]
 black   = '#41505e'
 red     = '#d95468'

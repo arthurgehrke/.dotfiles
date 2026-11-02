@@ -1,6 +1,3 @@
-# Alacritty's default color scheme pre-0.13 (based on tomorrow_night)
-# https://github.com/alacritty/alacritty/blob/v0.12.3/alacritty/src/config/color.rs
-
 [colors.primary]
 foreground = "#c5c8c6"
 background = "#1d1f21"

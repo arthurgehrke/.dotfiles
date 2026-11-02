@@ -1,11 +1,7 @@
-# Colors (Dracula)
-
-# Default colors
 [colors.primary]
 background = '#282a36'
 foreground = '#f8f8f2'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#ff5555'
@@ -16,7 +12,6 @@ magenta = '#ff79c6'
 cyan    = '#8be9fd'
 white   = '#bbbbbb'
 
-# Bright colors
 [colors.bright]
 black   = '#555555'
 red     = '#ff5555'

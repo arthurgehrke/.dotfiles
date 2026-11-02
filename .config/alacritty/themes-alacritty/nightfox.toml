@@ -1,11 +1,7 @@
-# Colors (NightFox)
-
-# Default colors
 [colors.primary]
 background = '#192330'
 foreground = '#cdcecf'
 
-# Normal colors
 [colors.normal]
 black   = '#393b44'
 red     = '#c94f6d'
@@ -16,7 +12,6 @@ magenta = '#9d79d6'
 cyan    = '#63cdcf'
 white   = '#dfdfe0'
 
-# Bright colors
 [colors.bright]
 black   = '#575860'
 red     = '#d16983'

@@ -57,7 +57,6 @@ return {
       t = colors.red,
     }
 
-    -- cache de devicon por filetype: evita require + 2 lookups a cada redraw
     local icon_cache = {}
     local function get_icon()
       local ft = vim.bo.filetype
@@ -81,8 +80,8 @@ return {
         },
         component_separators = '',
         section_separators = '',
-        globalstatus = true, -- combina com laststatus = 3
-        refresh = { statusline = 200 }, -- 5 redraws/seg, suficiente
+        globalstatus = true,
+        refresh = { statusline = 200 },
         theme = {
           normal = { c = { fg = colors.white, bg = 'NONE' } },
           insert = { c = { fg = colors.white, bg = 'NONE' } },

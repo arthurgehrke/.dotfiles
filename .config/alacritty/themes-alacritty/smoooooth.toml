@@ -1,5 +1,3 @@
-# Color theme ported from iTerm 2 Smoooooth
-
 [colors.primary]
 foreground = '#dbdbdb'
 background = '#14191e'

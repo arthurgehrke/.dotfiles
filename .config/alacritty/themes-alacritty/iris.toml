@@ -1,11 +1,7 @@
-# Colors (Iris)
-
-# Default colors
 [colors.primary]
 background = '#272537'
 foreground = '#e8e6e9'
 
-# Normal colors
 [colors.normal]
 black   = '#111133'
 red     = '#d61d52'
@@ -16,7 +12,6 @@ magenta = '#8650d3'
 cyan    = '#52afb7'
 white   = '#9f9aa7'
 
-# Bright colors
 [colors.bright]
 black   = '#484867'
 red     = '#e15877'

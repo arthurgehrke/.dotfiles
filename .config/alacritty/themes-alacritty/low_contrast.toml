@@ -1,6 +1,3 @@
-# Colors (Dim)
-
-# Default colors
 [colors.primary]
 background = '#333333'
 foreground = '#dddddd'
@@ -9,7 +6,6 @@ foreground = '#dddddd'
 text = '#aaaaaa'
 cursor = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#bb0000'
@@ -20,7 +16,6 @@ magenta = '#bb00bb'
 cyan    = '#00bbbb'
 white   = '#bbbbbb'
 
-# Bright colors
 [colors.bright]
 black   = '#000000'
 red     = '#bb0000'

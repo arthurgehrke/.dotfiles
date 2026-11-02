@@ -1,11 +1,7 @@
-# Colors (NoctixLux)
-
-# Default colors
 [colors.primary]
 background = '#fef8ec'
 foreground = '#005661'
 
-# Normal colors
 [colors.normal]
 black = '#003b42'
 red = '#e34e1c'
@@ -16,7 +12,6 @@ magenta = '#ff5792'
 cyan = '#00bdd6'
 white = '#8ca6a6'
 
-# Bright colors
 [colors.bright]
 black = '#004d57'
 red = '#ff4000'

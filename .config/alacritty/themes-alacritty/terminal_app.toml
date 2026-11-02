@@ -1,11 +1,7 @@
-# Colors (Terminal.app)
-
-# Default colors
 [colors.primary]
 background = '#000000'
 foreground = '#b6b6b6'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#990000'
@@ -16,7 +12,6 @@ magenta = '#b200b2'
 cyan    = '#00a6b2'
 white   = '#bfbfbf'
 
-# Bright colors
 [colors.bright]
 black   = '#666666'
 red     = '#e50000'

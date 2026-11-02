@@ -1,12 +1,7 @@
-# Colors (Zenburn)
-# Orginally designed by jnurmine for vim.
-
-# Default colors
 [colors.primary]
 background = '#3A3A3A'
 foreground = '#DCDCCC'
 
-# Normal colors
 [colors.normal]
 black   = '#1E2320'
 red     = '#D78787'
@@ -17,7 +12,6 @@ magenta = '#DC8CC3'
 cyan    = '#8CD0D3'
 white   = '#DCDCCC'
 
-# Bright colors
 [colors.bright]
 black   = '#709080'
 red     = '#DCA3A3'

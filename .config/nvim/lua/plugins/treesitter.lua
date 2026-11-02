@@ -6,7 +6,6 @@ return {
     build = ':TSUpdate',
     init = function()
       local highlight = function(bufnr, lang)
-        -------------------[ treesitter highlights ]-------------------------------
         if not vim.treesitter.language.add(lang) then
           return vim.notify(
             string.format('Treesitter cannot load parser for language: %s', lang),
@@ -25,16 +24,14 @@ return {
 
           if bt ~= '' then
             return
-          end -- don't run further.
+          end
 
           local treesitter = require('nvim-treesitter')
-          ---------------------[ treesitter indent ]-------------------------------
 
           if not vim.tbl_contains({ 'python', 'html', 'yaml', 'markdown' }, ft) then
             vim.bo.indentexpr = 'v:lua.require(\'nvim-treesitter\').indentexpr()'
           end
 
-          --------------------[ treesitter parsers ]-------------------------------
           local lang = vim.treesitter.language.get_lang(ft)
           if not lang then
             return

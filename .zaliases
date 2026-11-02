@@ -1,31 +1,26 @@
 #!/usr/bin/env zsh
 
-# Reload and config
 alias reload="source ~/.zshrc && echo '🔁 .zshrc reloaded.'"
 alias config='/usr/bin/git --git-dir=$HOME/.config/.dotfiles/.git --work-tree=$HOME'
 alias confighideuntracked='config config --local status.showUntrackedFiles no'
 alias execshell="exec ${SHELL} -l"
 alias restart="exec $SHELL -l"
 
-# APIs and services
 alias dehashed='curl -s -u "progeny.tiles-3g@icloud.com:xS2D4+W++wl2s6ONgTZpJUc4hxpRv4xl67KcgT7RlQM4w0ScPgysjWk=" "https://api.dehashed.com/search?query="'
 alias torpath='cd /opt/homebrew/etc/tor'
 
 alias cdicloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
 
-# Python
 alias mkvenv='function _mkvenv(){ python3 -m venv "$1" && echo "✅ Virtualenv created on $1. Activate with: source $1/bin/activate"; }; _mkvenv'
 alias mkvenv-activate='function _mkvenv_act(){ python3 -m venv "$1" && source "$1/bin/activate"; }; _mkvenv_act'
 alias mkvenv-global='function _mkvenv_global(){ mkdir -p ~/.virtualenvs && python3 -m venv "$HOME/.virtualenvs/$1" && echo "✅ Virtualenv global created on ~/.virtualenvs/$1. Active with: source ~/.virtualenvs/$1/bin/activate"; }; _mkvenv_global'
 
-# Directories
 alias cdicloud='cd "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# LS and display
 if [ -f "$(which lsd)" ]; then
   alias l='ls' ls='lsd' ll='lsd --long' la='ls --all --long' lt='ll --timesort'
 fi
@@ -46,10 +41,8 @@ alias lts='ll --timesort'
 alias lsc="ls -ltU"
 alias openpreview='open -a Preview'
 
-# Photos
 alias adjustphototimestamp='pipx run osxphotos timewarp --date-added-from-photo'
 
-# Docker
 alias ddk="killall com.docker.osx.hyperkit.linux"
 alias dps="docker ps"
 alias dports='docker ps --format "table {{.Names}}\t{{.Ports}}"'
@@ -65,7 +58,6 @@ if [ "$(command -v docker)" ]; then
   alias d-jenkins='docker run --rm -d -p 8080:8080 -p 50000:50000 jenkins/jenkins'
 fi
 
-# Network
 alias privip="ipconfig getifaddr en0"
 alias pubip="curl -s ifconfig.me"
 alias ipinfo="curl ipinfo.io"
@@ -80,24 +72,20 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 alias ports='sudo lsof -nP 2>/dev/null | grep LISTEN | sed -re "s/ +/ /g" | cut -d " " -f 1,3,9 | sort -u | column -t'
 alias port='sudo lsof -nP i4TCP'
 
-# System
 alias find_mas_apps="find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print | sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##'"
 alias df='df -h'
 alias free='free -m'
 alias psmem='ps auxf | sort -nr -k 4 | head -5'
 alias pscpu='ps auxf | sort -nr -k 3 | head -5'
 
-# Browsers
 alias chromium-socks='chromium --proxy-server=socks5://localhost:8080'
 alias chromium-http='chromium --proxy-server=localhost:7777'
 
-# Git and diff
 alias difficdiff='git difftool --extcmd icdiff'
 alias ic='hg icdiff'
 alias ica='hg icdiff -r .^'
 alias ice='hg icdiff --ch .'
 
-# Vim
 nvimr() { nvim --noplugin -n -R "$@" }
 compdef '_files' nvimr
 
@@ -129,22 +117,18 @@ gvimscp() {
   gvim "${targs[@]}"
 }
 
-# Databases
 alias addiptomongo='atlas accessLists create '
 alias sqlcheat='find ${SQL_CHEATS_DIR:-~/repositories/sql-cheats} -type f -name "*.sql" | fzf --preview "bat --style=numbers --color=always {}"'
 
-# Cleanup
 alias rmorigfiles="find . -name '*.orig' -delete"
 alias rmjsfiles="find . -type f -name '*.js' -exec rm {} +"
 alias rmdsfiles="find . -type f -name '*.DS_Store' -exec rm {} +"
 
-# Zsh and Tmux
 alias zshconfig='nvim ~/.zshrc'
 alias zshsource='source ~/.zshrc'
 alias tf="tmux refresh-client -S && tmux source-file ~/.tmux.conf"
 alias openhistory="nvim ~/.zhistory"
 
-# Search and grep
 alias grep='grep --color=auto'
 alias frg='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
 alias frgp='fzf --ansi --phony --prompt "🔍 rg > " --bind "change:reload:bash -c '\''rg --glob \"*.log\" --ignore-case --line-number --no-heading --color=always --regexp {q} || true'\''" --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --delimiter : --bind "enter:execute(nvim {1} +{2})"'
@@ -154,7 +138,6 @@ alias filespreview="fzf --preview 'bat --style=numbers --color=always --line-ran
 alias fe="fzf -m --preview 'bat --color=always {}' --bind 'enter:become(nvim {+})'"
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 
-# Homebrew
 alias brewup='brew update && brew upgrade --greedy && brew autoremove && brew cleanup -s'
 alias brewsync='brew bundle --file=~/Brewfile && brew bundle --file=~/Brewfile --force cleanup'
 alias brewdump='brew bundle dump --file=~/Brewfile --force'
@@ -178,14 +161,11 @@ alias blc='brew list --cask'
 alias brewup='brew update && brew upgrade --greedy && brew autoremove && brew cleanup -s'
 alias brewfix='brew doctor && brew missing'
 
-# Compilation
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
 
-# Node
 alias nom="rm -rf node_modules && npm cache clean && npm install"
 alias npmlist="npm list --depth=0"
 
-# SSH
 if hash keychain 2>/dev/null; then
   alias ssh-agent-start='eval "$(keychain --eval)"; for k in ~/.ssh/*.pem; do [[ -f "$k" ]] && ssh-add "$k" 2>/dev/null; done'
   alias ssh-agent-stop='keychain --stop all'

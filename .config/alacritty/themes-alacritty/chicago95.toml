@@ -1,12 +1,7 @@
-# Windows 95 Color Scheme
-# To have the authentic experience in Chicago95 GTK Theme.
-
-# Default colors
 [colors.primary]
 background = '#000000'
 foreground = '#C0C7C8'
 
-# Normal colors
 [colors.normal]
 black   = '#000000'
 red     = '#A80000'
@@ -17,7 +12,6 @@ magenta = '#A800A8'
 cyan    = '#00A8A8'
 white   = '#A8A8A8'
 
-# Bright colors
 [colors.bright]
 black   = '#545454'
 red     = '#FC5454'

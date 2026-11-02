@@ -1,11 +1,9 @@
 [colors.primary]
 background = '#1c1917'
 foreground = '#d6d0cd'
-# Bright and dim foreground colors
 dim_foreground = '#d6d0cd'
 bright_foreground = '#d6d0cd'
 
-# Cursor colors
 [colors.cursor]
 text = '#1c1917'
 cursor = '#d6d0cd'
@@ -14,7 +12,6 @@ cursor = '#d6d0cd'
 text = '#1c1917'
 cursor = '#d6d0cd'
 
-# Search colors
 [colors.search]
 matches = { foreground = '#1c1917', background = '#24201e' }
 focused_match = { foreground = '#1c1917', background = '#2a2522' }
@@ -23,17 +20,14 @@ focused_match = { foreground = '#1c1917', background = '#2a2522' }
 foreground = '#1c1917'
 background = '#b8aea8'
 
-# Keyboard regex hints
 [colors.hints]
 start = { foreground = '#1c1917', background = '#c4b392' }
 end = { foreground = '#1c1917', background = '#24201e' }
 
-# Selection colors
 [colors.selection]
 text = '#d6d0cd'
 background = '#2a2522'
 
-# Normal colors
 [colors.normal]
 black = '#2a2421'
 red = '#d49191'
@@ -44,7 +38,6 @@ magenta = '#b696b1'
 cyan = '#98acc8'
 white = '#ddd9d6'
 
-# Bright colors
 [colors.bright]
 black = '#2e2622'
 red = '#d89393'
@@ -55,7 +48,6 @@ magenta = '#b997b4'
 cyan = '#9bb0ca'
 white = '#e1dbd9'
 
-# Dim colors
 [colors.dim]
 black = '#2a2421'
 red = '#d18989'

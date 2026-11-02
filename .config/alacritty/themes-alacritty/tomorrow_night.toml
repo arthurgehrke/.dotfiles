@@ -1,6 +1,3 @@
-# Colors (Tomorrow Night)
-
-# Default colors
 [colors.primary]
 background = '#1d1f21'
 foreground = '#c5c8c6'
@@ -9,7 +6,6 @@ foreground = '#c5c8c6'
 text = '#1d1f21'
 cursor = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black   = '#1d1f21'
 red     = '#cc6666'
@@ -20,7 +16,6 @@ magenta = '#b294bb'
 cyan    = '#70c0ba'
 white   = '#373b41'
 
-# Bright colors
 [colors.bright]
 black   = '#666666'
 red     = '#ff3334'

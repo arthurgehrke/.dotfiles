@@ -1,11 +1,7 @@
-# Gnome (Gnome Terminal Default)
-
-# Default colors
 [colors.primary]
 background = '#1e1e1e'
 foreground = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black      = '#171421'
 red        = '#c01c28'
@@ -16,7 +12,6 @@ magenta    = '#a347ba'
 cyan       = '#2aa1b3'
 white      = '#d0cfcc'
 
-# Bright colors
 [colors.bright]
 black      = '#5e5c64'
 red        = '#f66151'

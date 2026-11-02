@@ -1,6 +1,3 @@
-# Colors (Alabaster Dark)
-# author tonsky
-
 [colors.primary]
 background = '#0E1415'
 foreground = '#CECECE'
